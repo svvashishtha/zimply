@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white" >
+
+<com.application.zimply.widgets.CustomTextView
+    android:id="@+id/label"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/text_color1"
+    android:padding="@dimen/margin_small"
+    android:text="@string/question1"
+    android:textSize="@dimen/font_medium"/>
+
+    <FrameLayout
+        android:id="@+id/expandable_container"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/label"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_height="wrap_content">
+
+        <ExpandableListView
+            android:id="@+id/expandable_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/height48"
+            android:groupIndicator="@null" />
+    </FrameLayout>
+
+
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/next_bt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height48"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/next"
+        android:visibility="gone"
+        android:textSize="@dimen/font_large"
+        android:background="@drawable/blue_button_background"
+        android:textColor="@android:color/white" />
+</RelativeLayout>

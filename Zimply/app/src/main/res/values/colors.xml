@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="app_primary_color">#FFFFFF</color>
+    <color name="app_primary_color_dark">#666666</color>
+    <color name="home_page_bg_color">#F3F3F3</color>
+    <color name="heading_text_color">#535353</color>
+    <color name="text_color1">#585858</color>
+    <color name="btn_green_color_normal">#81C48F</color>
+    <color name="btn_green_color_pressed">#76b082</color>
+    <color name="drawericon_color">#666666</color>
+    <color name="black_trans_seventy">#B3000000</color>
+    <color name="transparent_black_color">#44000000</color>
+    <color name="transparent_black_color_light">#20000000</color>
+    <color name="white_card_selected_color">#E7E7E7</color>
+    <color name="separator_color">#EEEEEE</color>
+    <color name="red_text_color">#F44336</color>
+    <color name="actionbar_grad_start_color">#E0E0E0</color>
+    <color name="apptheme_color">#0093b8</color>
+    <color name="zhl_dark_custom">#66e4e4e4</color>
+
+    <!-- Color Pallete for loading images -->
+    <color name="color_pallete_1">#B3EFFF</color>
+    <color name="color_pallete_2">#FFFD8A</color>
+    <color name="color_pallete_4">#FFD07E</color>
+    <color name="color_pallete_5">#FE8479</color>
+    <color name="color_pallete_6">#FF9191</color>
+    <color name="color_pallete_7">#B9BCFF</color>
+
+    <!-- Default colors -->
+    <color name="white">#ffffff</color>
+    <color name="font_color">#ff2d2d2a</color>
+    <color name="zhl">#f4f4f4</color>
+    <color name="zhl1.5">#EDEDED</color>
+    <color name="selected_background">#f2f2f2</color>
+    <color name="transparent1">#00000000</color>
+    <color name="black">#000000</color>
+    <color name="zimply_darker">#1d1d1d</color>
+    <color name="zdhl5">#7D7D7D</color>
+    <color name="blue_trans_twenty">#6600a6e4</color>
+   <!-- <color name="blue_button">#1ca4c9</color>
+    <color name="blue_button_pressed">#1286a3</color>-->
+    <color name="blue_button">@color/z_blue_color</color>
+    <color name="blue_button_pressed">#0084a5</color>
+    <color name="orange_button">#f29129</color>
+    <color name="orange_button_pressed">#ba6c18</color>
+    <color name="zhl_dark">#e4e4e4</color>
+    <color name="zhl_darker">#a5a5a5</color>
+    <color name="black_trans_twenty">#33000000</color>
+    <color name="hire_designer_normal_color">#80C58F</color>
+    <color name="hire_designer_selected_color">#76b484</color>
+    <color name="zdark">#2D2D2D</color>
+    <color name="zhl_lighter">#faf8f8</color>
+    <color name="zhl_trans_more">#18f4f4f4</color>
+    <color name="translucent_dark_light">#20000000</color>
+    <color name="translucent_dark2">#DD000000</color>
+    <color name="white_trans_eighty">#baffffff</color>
+    <color name="white_trans_twenty">#33ffffff</color>
+    <color name="white_trans_forty">#5cffffff</color>
+    <color name="white_trans_fifty">#80ffffff</color>
+    <color name="transparent_super_white">#66ffffff</color>
+    <color name="photo_background">#1b1b1b</color>
+    <color name="photo_image_default">#939393</color>
+    <color name="z_color_pallete_1">#B3EFFF</color>
+    <color name="z_color_pallete_2">#FFFD8A</color>
+    <color name="z_color_pallete_4">#FFD07E</color>
+    <color name="z_color_pallete_5">#FE8479</color>
+    <color name="z_color_pallete_6">#FF9191</color>
+    <color name="z_color_pallete_7">#B9BCFF</color>
+    <color name="z_indicator_color">#9E9E9E</color>
+    <color name="z_tab_deactive_color">#4A4A4A</color>
+    <color name="z_text_color_dark">#212121</color>
+    <color name="z_text_color_light">#757575</color>
+    <color name="z_chat_message_color">#58FA58</color>
+    <color name="z_black_50_percent_transparent">#80000000</color>
+    <color name="z_grey_color">#BDBDBD</color>
+    <color name="z_blue_color">#0093b8</color>
+    <color name="z_fab_blue_bg">#017896</color>
+    <color name="z_preogressbar_background_color">#ececec</color>
+    <color name="z_progressbar_progress_color">@color/z_text_color_light</color>
+    <color name="green_text_color">#76b082</color>
+    <color name="z_darker">#1d1d1d</color>
+    <color name="zhl_darkest">#9a9a9a</color>
+    <color name="z_red">#CB202D</color>
+    <color name="z_red_trans_fifty">#80CB202D</color>
+    <color name="z_red_feedback">#AB000D</color>
+    <color name="grey_bg_pressed_color">#E0E0E0</color>
+    <color name="facebook_button_color">#3B5999</color>
+    <color name="facebook_button_color_pressed">#2c53a7</color>
+    <color name="google_plus_button_color">#DD4C39</color>
+    <color name="google_plus_button_pressed_color">#e73a2b</color>
+    <color name="transparent_black_color_dark">#BB251F27</color>
+    <color name="transparent_black_edittext_color">#E5E5E5</color>
+    <color name="edittext_dim_white_color">#C3C3C3</color>
+    <color name="login_signup_btn_normal">#443F43</color>
+    <color name="login_signup_btn_pressed">#383638</color>
+    <color name="z_actionbar_grad_start_color">#E0E0E0</color>
+    <color name="z_rate_btn_color_border">#5f5f5f</color>
+    <color name="z_rate_btn_color_grey_filled">#bbbbbb</color>
+    <color name="z_rate_btn_blue_color">#00B6E6</color>
+    <color name="z_rate_btn_blue_pressed_color">#00a3ce</color>
+    <color name="z_background_tab_pressed">#6633B5E5</color>
+    <color name="pager_bg">#F4F4F4</color>
+    <color name="pager_tab_normal_color">#707D7D7D</color>
+    <color name="pager_tab_selected_color">#323232</color>
+    <color name="seek_bar_thumb_color">#009688</color>
+    <color name="transparent_grey_color">#AA7D7D7D</color>
+
+    <color name="filter_red">#20d4a4</color>
+    <color name="filter_red_feedback">#AB000D</color>
+    <color name="fab_checkin_color">#9777a8</color>
+    <color name="fab_ordering_color">#e67706</color>
+    <color name="fab_cashless_color">#7dc31e</color>
+    <color name="fab_review_color_pressed">#e048a0dc</color>
+    <color name="fab_photo_color_pressed">#e0eeaf4b</color>
+    <color name="fab_checkin_color_pressed">#e09777a8</color>
+    <color name="feet_button_background">#7c7c7c</color>
+
+    <!-- Translucent shades -->
+    <color name="translucent_dark">#99000000</color>
+    <color name="translucent_darker">#AA000000</color>
+    <color name="translucent_dark3">#CC000000</color>
+    <color name="translucent_dark_restaurant">#CC000000</color>
+    <color name="translucent_dark_ad">#AF000000</color>
+    <color name="translucent_dark_toast">#aa000000</color>
+
+    <!-- Should be more than toolbar elevation at all times -->
+    <item name="dropdown_elevation" type="dimen">6dp</item>
+
+    <color name="parallax_overlay_black_trans">#BF252935</color>
+
+    <color name="z_new_collection_color_normal">#BDBDBD</color>
+    <color name="z_new_collection_color_pressed">#9E9E9E</color>
+    <color name="z_red_btn_color_pressed">#F0585D</color>
+    <color name="z_red_btn_color_normal">#FF7E82</color>
+
+</resources>

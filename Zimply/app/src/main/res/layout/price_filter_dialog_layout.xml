@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_card_bg"
+    android:orientation="vertical" >
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/under_cat_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="@string/under_500"
+        android:textSize="@dimen/font_medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/under_cat_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="@string/under_1000"
+        android:textSize="@dimen/font_medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/under_cat_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="@string/under_2500"
+        android:textSize="@dimen/font_medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/under_cat_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="@string/under_5000"
+        android:textSize="@dimen/font_medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/under_cat_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="@string/under_10000"
+        android:textSize="@dimen/font_medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/under_cat_6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="@string/above_10000"
+        android:textSize="@dimen/font_medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+</LinearLayout>

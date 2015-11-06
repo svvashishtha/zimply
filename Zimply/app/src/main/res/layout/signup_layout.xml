@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:clickable="true"
+              android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:background="@android:color/transparent"
+            app:theme="@style/Toolbar_Theme"
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp" />
+
+        <LinearLayout
+            android:id="@+id/facebook_login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height48"
+            android:layout_margin="@dimen/margin_medium"
+            android:background="@drawable/facebook_btn_bg"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="@dimen/height48"
+                android:layout_height="match_parent"
+                android:background="@color/transparent_black_color"
+                android:src="@drawable/ic_fb" />
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/margin_medium"
+                android:text="Sign up via Facebook"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/google_login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height48"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_marginLeft="@dimen/margin_medium"
+            android:layout_marginRight="@dimen/margin_medium"
+            android:background="@drawable/google_plus_btn_bg"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="@dimen/height48"
+                android:layout_height="match_parent"
+                android:background="@color/transparent_black_color"
+                android:src="@drawable/ic_google" />
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/margin_medium"
+                android:text="Sign up via Google"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin_medium"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingRight="@dimen/margin_large" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@color/white" />
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/margin_small"
+                android:paddingRight="@dimen/margin_small"
+                android:text="OR SIGNUP USING EMAIL"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_small"
+                android:textStyle="italic" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@color/white" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height48"
+            android:layout_marginBottom="@dimen/margin_mini"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:background="@drawable/login_edittext_bg"
+            android:gravity="center_vertical"
+            android:hint="Name"
+            android:imeOptions="actionNext|normal"
+            android:inputType="textCapWords"
+            android:paddingLeft="@dimen/margin_small"
+            android:textColor="@color/text_color1"
+            android:textColorHint="@color/edittext_dim_white_color"
+            android:textSize="@dimen/font_medium" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height48"
+            android:layout_marginBottom="@dimen/margin_mini"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:background="@drawable/login_edittext_bg"
+            android:gravity="center_vertical"
+            android:hint="Email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="@dimen/margin_small"
+            android:textColor="@color/text_color1"
+            android:textColorHint="@color/edittext_dim_white_color"
+            android:textSize="@dimen/font_medium" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height48"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:background="@drawable/login_edittext_bg"
+            android:gravity="center_vertical"
+            android:hint="Password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:paddingLeft="@dimen/margin_small"
+            android:textColor="@color/text_color1"
+            android:textColorHint="@color/edittext_dim_white_color"
+            android:textSize="@dimen/font_medium" />
+
+        <Button
+            android:id="@+id/signup_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:background="@drawable/login_signup_btn_normal"
+            android:text="SIGNUP"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_medium" />
+
+        <LinearLayout
+            android:id="@+id/login_layout_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="@dimen/margin_small" >
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingRight="@dimen/margin_small"
+                android:text="Already have an account?"
+                android:textColor="@color/drawericon_color"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_horizontal"
+                android:text="Login"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+    </LinearLayout>
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/terms_string"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="@string/agree_terms_click_signup"
+        android:textColor="@color/text_color1"
+        android:layout_gravity="bottom"/>
+</LinearLayout>

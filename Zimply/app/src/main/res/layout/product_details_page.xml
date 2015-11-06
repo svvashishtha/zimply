@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/bottom_action_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/add_to_cart"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/blue_button_background"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:text="@string/add_to_cart"
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/white" />
+
+            <ProgressBar
+                android:id="@+id/progress_add_to_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/buy_now"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/green_btn_rectangle_bg"
+                android:gravity="center"
+                android:text="@string/buy_now"
+                android:textSize="@dimen/font_medium"
+                android:textAllCaps="true"
+                android:textColor="@color/white" />
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@drawable/actionbar_bg"
+        android:layout_alignParentTop="true"
+        app:theme="@style/Toolbar_Theme" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/photos_viewpager"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:background="@color/pager_bg"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/photos_viewpager">
+
+        <include layout="@layout/product_tab_info"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app1="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_card_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/whitebuttoncustomback"
+        android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/cover_img_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pro_cover_img_height" >
+
+        <com.application.zimply.widgets.RoundedImageView
+            android:id="@+id/cover_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app1:riv_corner_radius_top_left="3dp"
+            app1:riv_corner_radius_top_right="3dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent_black_color" />
+    </FrameLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_small">
+    <ImageView
+        android:id="@+id/expert_pic"
+        android:layout_width="@dimen/z_item_height_48"
+        android:layout_height="@dimen/z_item_height_48"
+        android:layout_marginRight="@dimen/margin_small"
+        android:background="@drawable/square"
+        android:padding="1dp"
+        android:scaleType="fitCenter"
+       />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/expert_pic"
+
+        android:text="2 KM"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_small"
+        android:visibility="gone" />
+
+    <com.application.zimply.widgets.CustomTextViewBold
+        android:id="@+id/expert_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/expert_pic"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:paddingRight="@dimen/margin_small"
+        android:singleLine="true"
+        android:textColor="@color/heading_text_color"
+        android:textSize="@dimen/font_medium" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/expert_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/expert_name"
+        android:layout_toRightOf="@id/expert_pic"
+        android:drawableLeft="@drawable/category_icon"
+        android:drawablePadding="@dimen/margin_mini"
+        android:ellipsize="end"
+        android:paddingRight="@dimen/margin_large"
+        android:paddingTop="@dimen/margin_small"
+        android:singleLine="true"
+        android:text="Architecture,Interior Design"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_mini" />
+</RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_large"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <com.application.zimply.widgets.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9.25"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_medium" />
+
+        <RatingBar
+            android:id="@+id/product_rating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:progressDrawable="@drawable/custom_small_rating_bar_selector"
+            android:rating="4.5"
+            android:stepSize="0.5" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(20 Ratings)"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

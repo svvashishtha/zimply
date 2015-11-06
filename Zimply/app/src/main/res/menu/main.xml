@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:zimply="http://schemas.android.com/apk/res-auto"
+    tools:context="com.application.zimply.MainActivity" >
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_action_action_search_menu"
+        android:orderInCategory="100"
+        android:title="@string/search_text"
+        android:visible="false"
+        zimply:showAsAction="always"/>
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_action_content_filter_list"
+        android:orderInCategory="100"
+        android:title="@string/cart_text"
+        android:visible="true"
+        zimply:showAsAction="always"/>
+    <item
+        android:id="@+id/cart"
+        android:icon="@drawable/ic_action_action_shopping_cart"
+        android:orderInCategory="100"
+        android:title="@string/cart_text"
+        android:visible="true"
+        zimply:showAsAction="always"/>
+
+</menu>

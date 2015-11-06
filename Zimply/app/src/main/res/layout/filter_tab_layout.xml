@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Filters"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_large"
+                android:visibility="invisible" />
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/cancel_text"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/z_item_height_48"
+                android:layout_gravity="end"
+                android:layout_marginRight="@dimen/margin_mini"
+                android:drawableLeft="@drawable/ic_cross"
+                android:gravity="center"
+                android:textColor="@color/heading_text_color" />
+        </LinearLayout>
+        <!-- The Tab rests directly below the Toolbar, attached below it -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/white_card_without_border_normal"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabIndicatorColor="@color/z_blue_color"
+                app:tabSelectedTextColor="@color/z_blue_color"
+
+                app:tabTextColor="@color/pager_tab_normal_color" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/pager_bg"></android.support.v4.view.ViewPager>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/z_item_height_48"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/reset_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@drawable/grey_card_without_border"
+            android:gravity="center"
+            android:text="Reset"
+            android:textAllCaps="true"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/apply_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/greenbtn_bg"
+            android:gravity="center"
+            android:text="Apply"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
+</FrameLayout>

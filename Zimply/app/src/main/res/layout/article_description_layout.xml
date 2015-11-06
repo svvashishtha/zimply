@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@drawable/actionbar_bg"
+        app:theme="@style/Toolbar_Theme" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.application.zimply.widgets.CustomScrollView
+            android:id="@+id/parent_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <FrameLayout
+                    android:id="@+id/image_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <ImageView
+                        android:id="@+id/featured_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                    <View
+                        android:id="@+id/dim_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent_black_color"
+                        android:visibility="gone" />
+
+                    <include
+                        layout="@layout/overflow_options_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <com.application.zimply.widgets.CustomTextViewBold
+                            android:id="@+id/title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_small"
+                            android:layout_marginLeft="@dimen/margin_small"
+                            android:layout_marginRight="@dimen/margin_small"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_xxlarge"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/more_info"
+                            android:layout_width="@dimen/height48"
+                            android:layout_height="@dimen/height48"
+                            android:background="@drawable/action_bar_item_bg"
+                            android:scaleType="center"
+                            android:src="@drawable/ic_navigation_more_vert" />
+                    </LinearLayout>
+
+                    <com.application.zimply.widgets.CustomTextView
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_large" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_mini"
+                        android:layout_marginRight="@dimen/margin_mini"
+                        android:layout_marginTop="@dimen/margin_mini"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <com.application.zimply.widgets.CircularImageView
+                            android:id="@+id/publisher_img"
+                            android:layout_width="@dimen/height48"
+                            android:layout_height="@dimen/height48"
+                            android:scaleType="centerCrop" />
+
+                        <com.application.zimply.widgets.CustomTextView
+                            android:id="@+id/publisher_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:textColor="@color/text_color1"
+                            android:textSize="@dimen/font_medium" />
+                    </LinearLayout>
+
+                    <com.application.zimply.widgets.VideoEnabledWebView
+                        android:id="@+id/content_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="vertical" >
+                    </com.application.zimply.widgets.VideoEnabledWebView>
+                </LinearLayout>
+            </LinearLayout>
+        </com.application.zimply.widgets.CustomScrollView>
+
+        <include layout="@layout/progress_layout" />
+    </FrameLayout>
+
+</LinearLayout>

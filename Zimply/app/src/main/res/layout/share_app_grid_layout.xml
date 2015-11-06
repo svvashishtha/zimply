@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.application.zimply.widgets.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:gravity="bottom"
+        sothree:umanoDragView="@+id/dragView"
+        sothree:umanoOverlay="true"
+        sothree:umanoPanelHeight="200dp"
+        sothree:umanoParalaxOffset="100dp"
+        sothree:umanoShadowHeight="4dp" >
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:background="@android:color/transparent" >
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:background="@drawable/z_feed_item_bg"
+            android:clickable="true"
+            android:focusable="false"
+            android:orientation="vertical" >
+
+            <com.application.zimply.widgets.ZHeaderGridView
+                android:id="@+id/collection_images_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:horizontalSpacing="@dimen/z_margin_small"
+                android:numColumns="2"
+                android:paddingLeft="@dimen/z_margin_small"
+                android:paddingRight="@dimen/z_margin_small"
+                android:paddingTop="@dimen/z_margin_small"
+                android:verticalSpacing="@dimen/z_margin_small" >
+            </com.application.zimply.widgets.ZHeaderGridView>
+        </LinearLayout>
+    </com.application.zimply.widgets.SlidingUpPanelLayout>
+
+</RelativeLayout>

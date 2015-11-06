@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white"
+    android:clickable="true" >
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/question4"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_medium"/>
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/next_bt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height48"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/blue_button_background"
+        android:gravity="center"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/done"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_large" />
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/name_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label"
+        android:layout_marginTop="@dimen/margin_large">
+    <com.application.zimply.widgets.CustomEdittext
+        android:id="@+id/name_et"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:hint="Name"
+        android:inputType="textCapWords"
+        android:maxLines="1"
+
+        android:singleLine="true"
+        android:textColor="@color/font_color"
+        android:textColorHint="@color/zhl_darker"
+        android:textSize="@dimen/font_medium" />
+    </android.support.design.widget.TextInputLayout>
+<View
+    android:id="@+id/separator1"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_below="@id/name_view"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="@color/separator_color"
+    />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/phone_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/separator1">
+    <com.application.zimply.widgets.CustomEdittext
+        android:id="@+id/phone_et"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="center_horizontal"
+
+        android:background="@android:color/transparent"
+        android:hint="10 digit Mobile number"
+        android:inputType="number"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/font_color"
+        android:textColorHint="@color/zhl_darker"
+        android:textSize="@dimen/font_medium" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/phone_view"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:background="@color/separator_color"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/location_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/separator2">
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/location_et"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="@android:color/transparent"
+        android:hint="@string/select_location"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/font_color"
+        android:textColorHint="@color/zhl_darker"
+        android:textSize="@dimen/font_medium" />
+    </android.support.design.widget.TextInputLayout>
+    <View
+        android:id="@+id/separator3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/location_view"
+        android:background="@color/separator_color"
+        />
+    <LinearLayout
+        android:id="@+id/subzone_search_list_view_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/separator3"
+        android:background="@color/zhl"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/separator_color" />
+
+        <ListView
+            android:id="@+id/subzone_search_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/zhl"
+            android:cacheColorHint="@android:color/transparent"
+            android:childDivider="@color/transparent1"
+            android:divider="@color/zhl_darker"
+            android:dividerHeight="1dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

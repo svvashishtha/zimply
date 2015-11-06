@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical" >
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/experts_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/abc_action_bar_default_height_material" >
+    </android.support.v7.widget.RecyclerView>
+
+    <include layout="@layout/progress_layout" />
+
+   <!-- <include layout="@layout/new_filter_layout" />-->
+    <!--<include layout="@layout/filter_layout" /> -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@drawable/actionbar_bg"
+        app:theme="@style/Toolbar_Theme" />
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/cart_item_true"
+        android:layout_width="@dimen/cart_count_size_bg"
+        android:layout_height="@dimen/cart_count_size_bg"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="@drawable/blue_circle_bg"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/cart_item_count_text" />
+
+        <ImageView
+            android:id="@+id/filter_applied"
+            android:layout_width="@dimen/cart_count_size_bg"
+            android:layout_height="@dimen/cart_count_size_bg"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/blue_circle_bg"
+            android:gravity="center"
+            android:padding="@dimen/margin_mini"
+            android:src="@drawable/ic_action_tick"
+            android:textColor="@color/white"
+            android:textSize="@dimen/cart_item_count_text"
+            android:visibility="gone" />
+
+    </FrameLayout>
+</FrameLayout>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app1="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cat3"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:background="@drawable/ic_card_bg"
+    android:orientation="vertical" >
+
+    <com.application.zimply.widgets.RoundedImageView
+        android:id="@+id/cat_img"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_top_66"
+        android:scaleType="centerCrop"
+        app1:riv_corner_radius_top_left="3dp"
+        app1:riv_corner_radius_top_right="3dp" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/cat_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="Home Decor"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_medium" />
+
+</LinearLayout>

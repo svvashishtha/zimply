@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/add_address_root"
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:clickable="true"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/save_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:layout_marginBottom="@dimen/size10"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10">
+
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/greenbtn_bg"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/size12"
+            android:singleLine="true"
+            android:textAllCaps="true"
+            android:text="@string/save_address"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size18" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/save_view"
+        android:background="@color/white"
+        android:clickable="true"
+        android:clipToPadding="false"
+        android:padding="@dimen/margin_small"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:clipToPadding="false"
+            android:clickable="true"
+
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small">
+                <com.application.zimply.widgets.CustomEdittext
+                    android:id="@+id/phone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_phone"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:padding="@dimen/size12"
+                    android:maxLength="10"
+                    android:singleLine="true"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_medium" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small">
+
+                <com.application.zimply.widgets.CustomEdittext
+                    android:id="@+id/email"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_mail"
+                    android:inputType="textEmailAddress|textAutoComplete"
+                    android:maxLines="1"
+                    android:padding="@dimen/size12"
+                    android:singleLine="true"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_medium" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small">
+                <com.application.zimply.widgets.CustomEdittext
+                    android:id="@+id/name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+
+                    android:hint="@string/enter_name"
+                    android:inputType="textPersonName|textAutoCorrect"
+                    android:maxLines="1"
+                    android:padding="@dimen/size12"
+                    android:singleLine="true"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_medium" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small">
+                <com.application.zimply.widgets.CustomEdittext
+                    android:id="@+id/address_line1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|top"
+                    android:hint="@string/address_line1"
+                    android:inputType="textPostalAddress|textAutoCorrect"
+                    android:lines="2"
+                    android:padding="@dimen/size12"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_medium" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small">
+                <com.application.zimply.widgets.CustomEdittext
+                    android:id="@+id/address_line2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|top"
+                    android:hint="@string/address_line2"
+                    android:inputType="textPostalAddress|textAutoCorrect"
+                    android:lines="2"
+                    android:padding="@dimen/size12"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_medium" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small">
+                    <com.application.zimply.widgets.CustomEdittext
+                        android:id="@+id/city"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/select_city"
+                        android:inputType="textAutoCorrect"
+                        android:maxLines="1"
+                        android:padding="@dimen/size12"
+                        android:singleLine="true"
+                        android:textColor="@color/zhl_darkest"
+                        android:textSize="@dimen/font_medium" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ListView
+                    android:id="@+id/city_list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"></ListView>
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small">
+                <com.application.zimply.widgets.CustomEdittext
+                    android:id="@+id/state"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/select_state"
+                    android:inputType="textAutoCorrect"
+                    android:maxLines="1"
+                    android:padding="@dimen/size12"
+                    android:singleLine="true"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_medium" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small">
+                <com.application.zimply.widgets.CustomEdittext
+                    android:id="@+id/pincode"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/pin_code_et_hint"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:maxLength="6"
+                    android:padding="@dimen/size12"
+                    android:singleLine="true"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_medium" />
+            </android.support.design.widget.TextInputLayout>
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/is_available_pincode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/font_small"
+                android:textColor="@color/red_text_color"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/margin_medium"
+                android:paddingRight="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <include layout="@layout/progress_layout"
+        />
+</RelativeLayout>

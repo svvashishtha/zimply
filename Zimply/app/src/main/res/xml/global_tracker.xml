@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="ga_trackingId">UA-64477399-5</string>
+
+    <integer name="ga_sessionTimeout">30</integer>
+
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- Enable automatic exception tracking -->
+
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
+    <screenName name="com.application.zimply.activities.AboutUsPage">AboutUs</screenName>
+    <screenName name="com.application.zimply.activities.ArticleDescriptionActivity">Article Description</screenName>
+    <screenName name="com.application.zimply.activities.ArticleListingActivity">Article Listing</screenName>
+    <screenName name="com.application.zimply.activities.BaseLoginSignupActivity">Base Login Signup</screenName>
+    <screenName name="com.application.zimply.activities.ExpertProfileActivity">Expert Profile</screenName>
+    <screenName name="com.application.zimply.activities.ExpertListActivity">Expert List</screenName>
+    <screenName name="com.application.zimply.activities.FilterActivity">Filters</screenName>
+    <screenName name="com.application.zimply.activities.ForgotPassword">Forgot Password</screenName>
+    <screenName name="com.application.zimply.activities.HomeActivity">Home</screenName>
+    <screenName name="com.application.zimply.activities.LoginActivity">Login</screenName>
+    <screenName name="com.application.zimply.activities.PhotoDetailsActivity">Photo Details</screenName>
+    <screenName name="com.application.zimply.activities.SignupActivity">Sign up</screenName>
+    <screenName name="com.application.zimply.activities.AllFilterClassActivity">Filter
+        Activity(AllFilterClassActivity)
+    </screenName>
+    <screenName name="com.application.zimply.activities.FeedbackActivity">Feed Back</screenName>
+    <screenName name="com.application.zimply.activities.PostPaymentThankYouActivity">Payment
+        successful
+    </screenName>
+    <screenName name="com.application.zimply.activities.ProductCheckoutActivity">Product
+        checkout(order Summary,Select Address)
+    </screenName>
+    <screenName name="com.application.zimply.activities.ProductDetailsActivity">Product Description
+        page
+    </screenName>
+    <screenName name="com.application.zimply.activities.PurchaseListActivity">Order history
+    </screenName>
+    <screenName name="com.application.zimply.activities.SearchActivity">Search Experts</screenName>
+    <screenName name="com.application.zimply.activities.SearchProductsActivity">Search Products
+    </screenName>
+    <screenName name="com.application.zimply.activities.SearchResultsActivity">Search Results
+    </screenName>
+    <screenName name="com.application.zimply.activities.SelectCity">Select city</screenName>
+    <screenName name="com.application.zimply.activities.SharingOptionsActivity">Sharing options
+    </screenName>
+    <screenName name="com.application.zimply.activities.SplashActivity">Splash Screen</screenName>
+    <screenName name="com.application.zimply.activities.UrlRouter">Shared Intent received
+    </screenName>
+    <screenName name="com.application.zimply.activities.UserFavouritesActivity">User Favourites
+        view
+    </screenName>
+    <screenName name="com.application.zimply.activities.UserProfileActivity">User profile
+    </screenName>
+
+
+</resources>

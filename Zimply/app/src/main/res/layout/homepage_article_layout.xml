@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_card_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/whitebuttoncustomback"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/aticle_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <View
+                android:id="@+id/dim_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent_black_color"
+                android:visibility="gone" />
+
+            <include
+                layout="@layout/overflow_options_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <com.application.zimply.widgets.CustomTextViewBold
+            android:id="@+id/article_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small"
+            android:paddingTop="@dimen/margin_small"
+            android:text="6 reasons why one should buy new furniture?"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small"
+            android:paddingTop="@dimen/margin_mini">
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/article_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_small"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fadingEdgeLength="10dp"
+                android:includeFontPadding="false"
+                android:maxLines="3"
+                android:text="Interesting home logics"
+                android:textColor="@color/transparent_grey_color"
+                android:textSize="@dimen/font_small" />
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/article_date"
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="08 Aug"
+                android:textColor="@color/transparent_grey_color"
+                android:textSize="@dimen/font_small" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

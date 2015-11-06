@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/category_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/padding_top_72"
+        android:paddingBottom="@dimen/margin_xxlarge">
+    </android.support.v7.widget.RecyclerView>
+
+    <include layout="@layout/progress_layout" />
+
+    <include layout="@layout/filter_layout" />
+
+</FrameLayout>

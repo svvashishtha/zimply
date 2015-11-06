@@ -1,0 +1,185 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="z_item_height_48">48dp</dimen>
+
+    <!-- Margin values -->
+
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_mini">4dp</dimen>
+    <dimen name="margin_midsmall">12dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <!-- Text Sizes -->
+    <dimen name="font_mini">10sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+    <dimen name="font_medium">14sp</dimen>
+    <dimen name="font_large">16sp</dimen>
+    <dimen name="font_xlarge">18sp</dimen>
+    <dimen name="font_xxlarge">20sp</dimen>
+    <dimen name="font_xxxlarge">24sp</dimen>
+    <dimen name="cart_count_size_bg">18dp</dimen>
+    <dimen name="cart_item_count_text">12sp</dimen>
+
+    <!-- App Dimensions -->
+    <dimen name="product_img_size">150dp</dimen>
+    <dimen name="product_img_size_new">164dp</dimen>
+    <dimen name="product_card_img_height">215dp</dimen>
+    <dimen name="pro_image_size">64dp</dimen>
+    <dimen name="pro_img_margin_top_negative">-32dp</dimen>
+    <dimen name="pro_cover_img_height">96dp</dimen>
+    <dimen name="padding_top_66">64dp</dimen>
+    <dimen name="padding_top_132">128dp</dimen>
+    <dimen name="sub_cat_img_size">64dp</dimen>
+    <dimen name="filter_layout_height">120dp</dimen>
+    <dimen name="corner_radius_four">4dp</dimen>
+    <dimen name="padding_top_72">72dp</dimen>
+    <!-- Action bar -->
+    <dimen name="height48">48dp</dimen>
+    <dimen name="size13">13dp</dimen>
+    <dimen name="height10">10dp</dimen>
+    <dimen name="size16">16dp</dimen>
+    <dimen name="size14">14dp</dimen>
+    <dimen name="user_profile_cover_img_height">190dp</dimen>
+    <dimen name="z_margin_medium">12dp</dimen>
+    <dimen name="corner_radius">2dp</dimen>
+    <dimen name="z_margin_small">8dp</dimen>
+    <dimen name="z_margin_mini">4dp</dimen>
+    <dimen name="z_margin_large">16dp</dimen>
+    <dimen name="zi_font_mini">8sp</dimen>
+    <dimen name="zi_font_small">12sp</dimen>
+    <dimen name="zi_font_large">16sp</dimen>
+    <dimen name="zi_font_xlarge">24sp</dimen>
+    <dimen name="z_margin_xlarge">24dp</dimen>
+    <dimen name="header_item_size">36dp</dimen>
+    <dimen name="size5">5dp</dimen>
+    <dimen name="size20">20dp</dimen>
+    <dimen name="size12">12dp</dimen>
+    <dimen name="z_font_mini">12sp</dimen>
+    <dimen name="height150">150dp</dimen>
+    <dimen name="pro_card_height">200dp</dimen>
+    <dimen name="pager_indicator_radius">6dp</dimen>
+    <dimen name="padding_top_56">56dp</dimen>
+
+    <dimen name="padding_top_112">112dp</dimen>
+    <dimen name="padding_top_168">168dp</dimen>
+
+    <dimen name="size_20">20dp</dimen>
+    <dimen name="size_30">25dp</dimen>
+    <dimen name="padding_top_136">136dp</dimen>
+
+    <!-- ShowcaseView Import  -->
+    <dimen name="button_margin">12dp</dimen>
+    <dimen name="text_padding">24dp</dimen>
+    <dimen name="action_bar_offset">66dp</dimen>
+    <dimen name="showcase_radius">94dp</dimen>
+    <dimen name="showcase_radius_inner">125dp</dimen>
+    <dimen name="showcase_radius_outer">110dp</dimen>
+    <dimen name="showcase_radius_showcase">5dp</dimen>
+
+    <dimen name="showcase_radius_small">34dp</dimen>
+    <dimen name="showcase_radius_inner_small">40dp</dimen>
+    <dimen name="showcase_radius_outer_small">50dp</dimen>
+    <dimen name="showcase_radius_showcase_small">5dp</dimen>
+
+    <dimen name="showcase_radius_large">50dp</dimen>
+    <dimen name="showcase_radius_inner_large">80dp</dimen>
+    <dimen name="showcase_radius_outer_large">100dp</dimen>
+    <dimen name="showcase_radius_showcase_large">5dp</dimen>
+
+    <dimen name="showcase_radius_x_large">70dp</dimen>
+    <dimen name="showcase_radius_x_inner_large">90dp</dimen>
+    <dimen name="showcase_radius_x_outer_large">110dp</dimen>
+    <dimen name="showcase_radius_x_showcase_large">5dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
+    <!-- FAB -->
+    <dimen name="fab_icon_size">24dp</dimen>
+    <dimen name="fab_plus_icon_size">20dp</dimen>
+    <dimen name="fab_plus_icon_stroke">2dp</dimen>
+    <dimen name="fab_shadow_offset">3dp</dimen>
+    <dimen name="fab_shadow_radius">9dp</dimen>
+    <dimen name="fab_stroke_width">1dp</dimen>
+    <dimen name="drawer_stat_width">105dp</dimen>
+    <dimen name="fab_elevation">3dp</dimen>
+    <dimen name="fab_size_primary">56dp</dimen>
+    <dimen name="fab_size_secondary">52dp</dimen>
+    <dimen name="fab_actions_spacing">12dp</dimen>
+    <dimen name="fab_labels_margin">8dp</dimen>
+
+    <!-- Sizes -->
+    <dimen name="size3">3.65dp</dimen>
+    <dimen name="size7">7dp</dimen>
+    <dimen name="size8">8dp</dimen>
+    <dimen name="size9">9dp</dimen>
+    <dimen name="size10">10dp</dimen>
+    <dimen name="size11">11dp</dimen>
+    <dimen name="size15">15dp</dimen>
+    <dimen name="size17">17dp</dimen>
+    <dimen name="size18">18dp</dimen>
+    <dimen name="size19">19dp</dimen>
+    <dimen name="size21">21dp</dimen>
+    <dimen name="size22">22dp</dimen>
+    <dimen name="size23">23dp</dimen>
+    <dimen name="size24">24dp</dimen>
+    <dimen name="size26">26dp</dimen>
+    <dimen name="size30">30dp</dimen>
+    <dimen name="size32">32dp</dimen>
+    <dimen name="size35">35dp</dimen>
+    <dimen name="size38">38dp</dimen>
+    <dimen name="size40">40dp</dimen>
+    <dimen name="size42">42dp</dimen>
+    <dimen name="size45">45dp</dimen>
+    <dimen name="size46">46dp</dimen>
+    <dimen name="size47">47dp</dimen>
+    <dimen name="size50">50dp</dimen>
+    <dimen name="size11_user">11dp</dimen>
+    <dimen name="size18_user">18dp</dimen>
+    <dimen name="size_tabs">12dp</dimen>
+    <dimen name="size13_rest">13dp</dimen>
+    <dimen name="size17_feed">17dp</dimen>
+    <dimen name="size14_rest">14dp</dimen>
+    <dimen name="size16_rest">16dp</dimen>
+
+    <!-- Heights -->
+    <dimen name="height0_5">0.5dp</dimen>
+    <dimen name="height1">1dp</dimen>
+    <dimen name="height2">2dp</dimen>
+    <dimen name="height3">3dp</dimen>
+    <dimen name="height4">4dp</dimen>
+    <dimen name="height5">5dp</dimen>
+    <dimen name="height6">6dp</dimen>
+    <dimen name="height7">7dp</dimen>
+    <dimen name="height12">12dp</dimen>
+    <dimen name="height14">14dp</dimen>
+    <dimen name="height15">15dp</dimen>
+    <dimen name="height16">16dp</dimen>
+    <dimen name="height32">32dp</dimen>
+    <dimen name="height35">35dp</dimen>
+    <dimen name="height42">42dp</dimen>
+    <dimen name="height46">46dp</dimen>
+    <dimen name="height54">54dp</dimen>
+    <dimen name="height55">55dp</dimen>
+    <dimen name="height58">58dp</dimen>
+    <dimen name="height75">75dp</dimen>
+    <dimen name="height170">170dp</dimen>
+    <dimen name="height300">300dp</dimen>
+    <dimen name="speedial_circle_size">60dp</dimen>
+    <dimen name="size30_res">32dp</dimen>
+
+    <!-- Toolbar sizes -->
+    <item name="toolbar_padding" type="dimen">16dp</item>
+    <item name="toolbar_text_left_margin" type="dimen">72dp</item>
+    <item name="first_toolbar_element_width" type="dimen">40dp</item>
+    <item name="toolbar_elevation" type="dimen">4dp</item>
+    <item name="toolbar_height" type="dimen">@dimen/height46</item>
+    <item name="toolbar_height_product" type="dimen">50dp</item>
+    <dimen name="fab_margin">16dp</dimen>
+
+
+
+
+</resources>

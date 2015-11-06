@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/address_snippet_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:layout_marginLeft="@dimen/margin_mini"
+        android:layout_marginRight="@dimen/margin_mini"
+        android:background="@color/white">
+
+        <com.application.zimply.widgets.CustomTextViewBold
+            android:id="@+id/delivery_address_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:padding="@dimen/margin_medium"
+            android:text="Delivery Address"
+            android:textSize="@dimen/font_large" />
+
+        <ImageView
+            android:id="@+id/location_img"
+            android:layout_width="@dimen/size_30"
+            android:layout_height="@dimen/size_30"
+            android:layout_alignBottom="@+id/address"
+            android:layout_alignLeft="@+id/phone_img"
+            android:layout_alignStart="@+id/phone_img"
+            android:layout_marginTop="@dimen/size10"
+            android:src="@drawable/location" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/address"
+
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/phone"
+            android:layout_alignStart="@+id/phone"
+            android:layout_below="@+id/delivery_address_text"
+            android:gravity="bottom"
+            android:padding="@dimen/size10"
+            android:text="fbskgbsdf" />
+
+        <ImageView
+            android:id="@+id/phone_img"
+            android:layout_width="@dimen/size_30"
+            android:layout_height="@dimen/size_30"
+            android:layout_alignBottom="@id/phone"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/address"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:src="@drawable/phone" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/phone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/address"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/size10"
+            android:layout_marginTop="@dimen/size10"
+            android:layout_toRightOf="@id/phone_img"
+            android:padding="@dimen/size10" />
+
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/change"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/z_item_height_48"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/phone"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_toLeftOf="@id/delete"
+            android:background="@color/blue_button"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_medium"
+
+            android:paddingRight="@dimen/margin_medium"
+            android:text="CHANGE"
+            android:textColor="@color/white" />
+
+
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:app1="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/drawer_user_container"
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/height150"
+             android:gravity="center_vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@drawable/photo_feedback">
+    <ImageView
+        android:id="@+id/drawer_user_info_background_image_blurr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_corner_layout"
+        android:scaleType="centerCrop" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_black_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingLeft="@dimen/margin_large"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/margin_medium" >
+
+        <com.application.zimply.widgets.CircularImageView
+            android:id="@+id/user_img"
+            android:layout_width="@dimen/abc_action_bar_default_height_material"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:scaleType="centerCrop"
+            app:border="true"
+            app1:border_width="2dp"
+            app1:border_color="@color/white"/>
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/drawer_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size16"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</FrameLayout>

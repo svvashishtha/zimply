@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.application.zimply.utils.fadingActionBar.ParallaxRootLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/parallax_header_container" />
+
+    <com.application.zimply.utils.fadingActionBar.ObservableScrollView
+        android:id="@+id/parallax_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/parallax_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/parallax_content_top_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+<!--
+                    <RelativeLayout
+                        android:id="@+id/obp_gradient"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@color/parallax_overlay_black_trans">
+
+                        <View
+                            android:id="@+id/obp_gradient_top"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true" />
+
+                        <View
+                            android:id="@+id/obp_gradient_middle"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/obp_gradient_bottom"
+                            android:layout_below="@+id/obp_gradient_top"
+                            android:visibility="gone" />
+
+                        <View
+                            android:id="@+id/obp_gradient_bottom"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true" />
+                    </RelativeLayout>
+-->
+                </RelativeLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </com.application.zimply.utils.fadingActionBar.ObservableScrollView>
+
+</com.application.zimply.utils.fadingActionBar.ParallaxRootLayout>

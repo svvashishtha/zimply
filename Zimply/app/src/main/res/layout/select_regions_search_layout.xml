@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@color/white_card_selected_color"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/search_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/z_item_height_48"
+            android:drawablePadding="@dimen/margin_small"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/font_medium"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small"
+            android:hint="Search Your City"
+            android:textColorHint="@color/hint_foreground_material_light"
+            android:background="@drawable/white_card_bg"
+            android:drawableLeft="@drawable/ic_action_action_search_menu_blue"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/categories_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:background="@android:color/white"
+            android:layout_marginTop="@dimen/margin_small" >
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <include layout="@layout/progress_layout" />
+
+
+
+</FrameLayout>

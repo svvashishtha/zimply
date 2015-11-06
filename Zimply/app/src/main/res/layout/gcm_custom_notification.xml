@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/notif_search_image"
+    android:padding="5dp" >
+
+    <ImageView
+        android:id="@+id/iv_notification_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp" />
+
+    <TextView
+        android:id="@+id/tv_notification_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/z_margin_small"
+        android:layout_toRightOf="@+id/iv_notification_logo"
+        android:padding="4dp"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/font_medium" />
+
+    <TextView
+        android:id="@+id/tv_notification_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_notification_title"
+        android:layout_marginLeft="@dimen/z_margin_small"
+        android:layout_toRightOf="@+id/iv_notification_logo"
+        android:textColor="@android:color/white" />
+
+    <ImageButton
+        android:id="@+id/iv_notification_right_small_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        android:padding="10dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_notification_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/z_margin_mini"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

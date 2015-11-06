@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.application.zimply.widgets.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_small"
+        android:textColor="@color/heading_text_color"
+        android:padding="@dimen/margin_small"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:text="@string/suggested_expert_cat"
+        ></com.application.zimply.widgets.CustomTextView>
+</LinearLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_medium"
+            android:text="@string/question2"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium"
+            android:textStyle="bold" />
+
+        <include layout="@layout/slider_option_layout" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/budget_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xxlarge"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_medium"
+            android:paddingRight="@dimen/margin_medium"
+            android:paddingTop="@dimen/margin_medium"
+            android:text="@string/question3"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/button_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/budget_label"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_medium"
+            android:paddingRight="@dimen/margin_medium">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium">
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/button1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/z_item_height_48"
+                    android:layout_weight="1"
+                    android:background="@color/feet_button_background"
+                    android:ems="6"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_mini"
+                    android:text="@string/budget_1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_medium" />
+
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent" />
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/button2"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/z_item_height_48"
+                    android:layout_weight="1"
+                    android:background="@color/feet_button_background"
+                    android:ems="6"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_mini"
+                    android:text="@string/budget_2"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:orientation="horizontal">
+
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/button3"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/z_item_height_48"
+                    android:layout_weight="1"
+                    android:background="@color/feet_button_background"
+                    android:ems="6"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_mini"
+                    android:text="@string/budget_3"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_medium" />
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent" />
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/button4"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/z_item_height_48"
+                    android:layout_weight="1"
+                    android:background="@color/feet_button_background"
+                    android:ems="6"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_mini"
+                    android:text="@string/budget_4"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_medium" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_height="wrap_content">
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/button5"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/z_item_height_48"
+                    android:layout_weight="1"
+                    android:background="@color/feet_button_background"
+                    android:ems="6"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_mini"
+                    android:text="@string/budget_5"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_medium" />
+
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/next_bt"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height48"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/blue_button_background"
+            android:gravity="center"
+            android:text="@string/next"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_medium"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

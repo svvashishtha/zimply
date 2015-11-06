@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="facebook_app_id">1627136784211860</string>
+    <string name="app_name">Zimply</string>
+    <string name="empty_string"/>
+    <string name="read_articles_text">Read Articles</string>
+    <string name="see_all_text">See all</string>
+    <string name="shop_cat_text">Shop Categories</string>
+    <string name="deals_of_day_text">Deals of the day</string>
+    <string name="featured_home_experts_text">Featured Home Experts</string>
+    <string name="featured_products_text">Featured Products</string>
+    <string name="cart_text">Cart</string>
+    <string name="search_text">Search</string>
+    <string name="experts_text">Experts</string>
+    <string name="sub_categories">Sub Categories</string>
+    <string name="photos_text">Photos</string>
+    <string name="browse_more_photos_text">Browse more photos</string>
+    <string name="articles_text">Articles</string>
+    <string name="shop_categories_text">Shop Categories</string>
+    <string name="categories_text">Categories</string>
+    <string name="filters_text">Filters</string>
+    <string name="sort_by_text">Sort By</string>
+    <string name="sort_by_location">Location</string>
+    <string name="try_again_text">Try again</string>
+    <string name="Rs">\u20B9</string>
+    <string name="about_version">v1.0.7</string>
+    <string name="about_text">Zimply brings you closer to your dream home interiors. Explore amazing ideas for your decor matching your tastes &amp; Shop from our endless stream of curated products, in multiple categories. If you decide to hire an expert, simply do it in a tap and get multiple ideas from relevant professionals in your location.\nFurnish your home simply.</string>
+    <string name="about_us_terms_of_use">Terms of Use</string>
+    <string name="about_us_faq">FAQ</string>
+    <string name="about_us">About</string>
+    <string name="shop">Shop</string>
+    <string name="get_list_look">Get this Look</string>
+    <string name="any_text">Any</string>
+    <string name="under_500">Under \u20B9 500</string>
+    <string name="under_1000">\u20B9 500 to \u20B9 1000</string>
+    <string name="under_2500">\u20B9 1000 to \u20B9 2500</string>
+    <string name="under_5000">\u20B9 2500 to \u20B9 5000</string>
+    <string name="under_10000">\u20B9 5000 to \u20B9 10000</string>
+    <string name="above_10000">Above \u20B9 10000</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="buy_now">Buy now</string>
+    <string name="product_description">Product Description</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="rate_us">Rate us on play store</string>
+    <string name="profile_text">Profile</string>
+    <string name="add_to_fav">Add to Favourites</string>
+    <string name="view_page_src">View page source</string>
+    <string name="share">Share</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="question1">What kind of expert are you looking for?</string>
+    <string name="question2">What is your floor area?</string>
+    <string name="question3">What is the maximum you are willing to spend?</string>
+    <string name="question4">Almost there! Just need the following details.</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="location">Location</string>
+    <string name="anything_else">Any other specific requirement or detail</string>
+    <string name="unit_1">Square meters</string>
+    <string name="unit_2">yard2</string>
+    <string name="unit_3">Square feet</string>
+    <string name="unit_4">hc2</string>
+    <string name="budget_1">&lt; \u20B9 1 lakh</string>
+    <string name="budget_2">\u20B9 1–5 lakhs</string>
+    <string name="budget_3">\u20B9 5–10 lakhs</string>
+    <string name="budget_4">\u20B9 10–50 lakhs</string>
+    <string name="budget_5">&gt; \u20B9 50 lakhs</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_email">If you have something to say that doesn\'t fit here, please shoot us an email at android@zimply.in</string>
+    <string name="feedback_hint">Write something...</string>
+    <string name="feedback_email_subject">Zimply Android App Feedback</string>
+    <string name="support_email_subject">Zimply Android App Support</string>
+    <string name="send_mail">Send Mail</string>
+    <string name="no_email_clients">There are no email clients installed.</string>
+    <string name="no_internet_message">Seems like you are not connected to the internet. Please try again later.</string>
+    <string name="feedback_title">Feedback</string>
+    <string name="err_occurred">An error occurred. Please try again.</string>
+    <string name="sending_details">Sending details. Please wait...</string>
+    <string name="select_location">Select City</string>
+    <string name="additional_requests">Anything else you might want to add?</string>
+    <string name="favourites_text">Favourites</string>
+    <string name="logout">Logout</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="cancel_order_cofirm">Are you sure you want to cancel the order?</string>
+    <string name="return_order">Cancel Order</string>
+    <string name="return_order_cofirm">Are you sure you want to cancel the order?</string>
+    <string name="okay_text">OKAY</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="z_notifications_text">Notifications</string>
+    <string name="z_try_again_text">Something went wrong.\nTap to retry</string>
+
+    <string name="notiphi_app_token">a53f6002a44e422e8b54e75ca49b4c26</string>
+    <string name="notiphi_app_secret">urt30skrK+H0/M/EDEVhHIF44KNrVRi12Jvq1TUsaRt8k7tmOH7pSg0JIM7eVMV9nDwZAJT7ap1UKYzGkUKELg==</string>
+
+    <string name="vendor_gcm_sender_id" translatable="false">747396934818</string>
+    <string name="rs_text">\u20B9</string>
+
+    <string name="search_categories">Search Categories</string>
+
+    <string name="search_category_hint">Search Your Category</string>
+    <string name="search_location_hint">Search Your Location</string>
+    <string name="search_suggestions">Search Suggestions</string>
+    <string name="search_experts">Search Experts</string>
+    <string name="unit1_short">sq. mt.</string>
+    <string name="unit3_short">sq. ft.</string>
+    <string name="service_not_available">Location Service is not available.</string>
+    <string name="gps_network_not_enabled">Location Service is not enabled.</string>
+    <string name="open_location_settings">Enable Location</string>
+    <string name="suggested_expert_cat">Suggested Expert Categories</string>
+    <string name="suggested_product_cat">Suggested Product Categories</string>
+    <string name="title_activity_select_city">SelectCity</string>
+
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="my_location">Use my Location</string>
+
+    <string name="agree_terms_click_signup">By creating an account, you agree to Zimply\'s Terms of Use and Privacy Policy</string>
+    <string name="agree_terms_click_logging">By logging in, you agree to Zimply\'s Terms of Service and Privacy Policy</string>
+    <string name="pin_code_et_hint">Pin code</string>
+    <string name="check">Check</string>
+    <string name="description">Description</string>
+    <string name="specifications">Specifications</string>
+    <string name="return_policy">Return Policy</string>
+    <string name="delivered_in">Delivered in</string>
+    <string name="shipping_charge">Shipping Charge</string>
+    <string name="expected_delivery_date">Expected Delivery Date: </string>
+    <string name="product_price">Product Price</string>
+    <string name="discount">Discount</string>
+    <string name="shipping_charges">Shipping Charges</string>
+    <string name="recent_searches">Recent Searches</string>
+    <string name="email">Email</string>
+    <string name="address_line1">Address (line 1)</string>
+    <string name="address_line2">Address (line 2)</string>
+    <string name="select_city">Select city</string>
+    <string name="select_state">Select state</string>
+    <string name="enter_phone">Phone</string>
+    <string name="enter_mail">Email</string>
+    <string name="enter_name">Name</string>
+    <string name="use_this_address">USE THIS ADDRESS</string>
+    <string name="add_new">Add new</string>
+    <string name="delivery_address">Devliery address</string>
+
+    <string name="z_demo_min_label">Min</string>
+    <string name="z_demo_max_label">Max</string>
+
+    <string name="save_address">Save address</string>
+    <string name="add_address">Add address</string>
+    <string name="add_new_address">Or Add new address</string>
+    <string name="title_activity_post_payment_thank_you">PostPaymentThankYouActivity</string>
+    <string name="delhi_ncr_available">*Only available in Delhi/NCR</string>
+
+    <string name="update">Update</string>
+
+    <string name="error_text">Something went wrong, please try after some time</string>
+
+    <string name="call_hint">Hola!\nWe are here to help you from 9 a.m. to 9 p.m. from Monday to Friday.</string>
+    <string name="call_us">Call Us</string>
+
+    <string name="products_title">Products</string>
+    <string name="experts_title">Experts</string>
+
+
+</resources>

@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/height48"
+    android:layout_centerHorizontal="true"
+    android:background="@drawable/z_dark_drawable"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/header_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="@dimen/size16" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/header_subtitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size16"
+        android:visibility="gone" />
+</LinearLayout>

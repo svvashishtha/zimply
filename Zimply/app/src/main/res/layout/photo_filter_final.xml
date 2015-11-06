@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_large"
+    android:background="@drawable/ic_card_bg">
+    <RelativeLayout
+        android:id="@+id/message_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/blue_button" >
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/hurrey"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_small"
+            android:text="Thankyou!"
+            android:gravity="center"
+            android:textSize="@dimen/font_medium"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/white" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/thank_you_message"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_small"
+            android:layout_below="@id/hurrey"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_small"
+            android:text="We will get in touch with you very soon"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_below="@id/message_container"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_height="wrap_content">
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/additional_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:gravity="center"
+        android:text="@string/additional_requests"
+        android:textColor="@color/font_color" />
+
+    <com.application.zimply.widgets.CustomEdittext
+        android:id="@+id/additional_details_et"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/additional_label"
+        android:background="@color/zhl"
+        android:gravity="top"
+        android:padding="@dimen/margin_small"
+        android:hint="Type message"
+        android:lines="4"
+        android:textColor="@color/font_color" />
+</LinearLayout>
+</RelativeLayout>
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/finish_bt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height48"
+        android:background="@drawable/blue_button_background"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:textSize="@dimen/font_large"
+        android:layout_centerHorizontal="true"
+        android:text="Done"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

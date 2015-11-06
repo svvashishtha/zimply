@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/about_us_main"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white" >
+    
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@drawable/actionbar_bg"
+        android:layout_alignParentTop="true"
+        app:theme="@style/Toolbar_Theme" />
+
+    <View
+        android:id="@+id/separator5"
+        android:layout_width="fill_parent"
+        android:layout_height=".5dp"
+        android:layout_above="@+id/about_us_faq_container"
+        android:background="@color/separator_color" />
+
+    <LinearLayout
+        android:id="@id/about_us_faq_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/separator4"
+        android:background="@drawable/whitebuttoncustomback"
+        android:orientation="horizontal" >
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/about_us_faq_conditions"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/about_us_faq"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
+
+    <View
+        android:id="@id/separator4"
+        android:layout_width="fill_parent"
+        android:layout_height=".5dp"
+        android:layout_above="@+id/about_us_terms_conditions_container"
+        android:background="@color/separator_color" />
+
+    <LinearLayout
+        android:id="@id/about_us_terms_conditions_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/separator3"
+        android:background="@drawable/whitebuttoncustomback"
+        android:orientation="horizontal" >
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/about_us_terms_conditions"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/about_us_terms_of_use"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator3"
+        android:layout_width="fill_parent"
+        android:layout_height=".5dp"
+        android:layout_above="@+id/about_us_privacy_policy_container"
+        android:background="@color/separator_color" />
+
+    <LinearLayout
+        android:id="@id/about_us_privacy_policy_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/whitebuttoncustomback"
+        android:orientation="horizontal" >
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/about_us_privacy_policy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/privacy_policy"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="fill_parent"
+        android:layout_height=".5dp"
+        android:layout_above="@id/about_us_terms_conditions_container"
+        android:background="@color/separator_color" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/separator5"
+        android:layout_below="@id/toolbar" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/home_logo_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/zimply_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center" />
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/home_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/about_version"
+                    android:textColor="@color/font_color"
+                    android:textSize="@dimen/font_medium" />
+            </LinearLayout>
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/about_us_body"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:lineSpacingMultiplier="1.2"
+                android:text="@string/about_text"
+                android:textColor="@color/font_color"
+                android:textSize="@dimen/font_medium" />
+
+            <com.google.android.gms.plus.PlusOneButton
+                xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
+                android:id="@+id/plus_one_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                plus:annotation="inline"
+                plus:size="standard" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

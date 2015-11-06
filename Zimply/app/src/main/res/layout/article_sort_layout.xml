@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+              android:background="@drawable/white_card_bg"
+              android:padding="@dimen/margin_small"
+              android:orientation="vertical" >
+
+
+    <com.application.zimply.widgets.CustomTextView
+        android:layout_width="match_parent"
+        android:text="Sort By"
+        android:textSize="@dimen/font_medium"
+        android:textStyle="bold"
+        android:textColor="@color/heading_text_color"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_height="@dimen/z_item_height_48">
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/featured_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="Featured"
+            android:gravity="center"
+            android:textColor="@color/filter_item_text_selector"
+            android:background="@drawable/filter_item_selector_bg"
+            android:layout_height="match_parent"/>
+        <View
+            android:layout_width="@dimen/margin_small"
+            android:layout_height="match_parent"></View>
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/latest_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Latest"
+            android:textColor="@color/filter_item_text_selector"
+            android:background="@drawable/filter_item_selector_bg"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+</LinearLayout>

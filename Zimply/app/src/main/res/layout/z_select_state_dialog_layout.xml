@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical" >
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/z_item_height_48">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Select City"
+        android:textColor="@color/heading_text_color"
+        android:textSize="@dimen/font_large" />
+
+    <ImageView
+        android:id="@+id/cancel_dialog"
+        android:layout_width="@dimen/height48"
+        android:layout_height="@dimen/height48"
+        android:layout_gravity="end|center_vertical"
+        android:background="@drawable/action_bar_item_bg"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_cross" />
+</FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+    <ListView
+        android:id="@+id/hj_common_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:fadingEdge="none"
+        android:paddingBottom="@dimen/z_margin_medium" >
+    </ListView>
+
+</LinearLayout>

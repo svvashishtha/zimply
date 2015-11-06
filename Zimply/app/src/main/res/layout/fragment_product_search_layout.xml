@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/recent_searches_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="@dimen/size_30"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/recent_searches_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/recent_searches"
+            android:textColor="@color/font_color"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/size10"
+            android:textSize="@dimen/size14"/>
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/recent_searches_header"
+            android:background="@color/zhl_dark"/>
+
+        <ListView
+            android:id="@+id/recent_searches_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/margin_small"
+            android:clipToPadding="false"
+            android:layout_below="@id/separator"
+            android:cacheColorHint="@android:color/transparent"
+            android:childDivider="@color/transparent1"
+            android:divider="@color/separator_color"
+            android:dividerHeight="1dp" />
+
+        <ProgressBar
+            android:id="@+id/progress_recent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            style="?android:progressBarStyleSmallInverse"
+            android:background="@color/white"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/listview_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/zhl"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/list_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="No results found"
+            android:textColor="@color/font_color"
+            android:visibility="gone"
+            android:textSize="@dimen/size14"/>
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/zhl"
+            android:paddingTop="@dimen/margin_small"
+            android:clipToPadding="false"
+            android:cacheColorHint="@android:color/transparent"
+            android:childDivider="@color/transparent1"
+            android:divider="@color/separator_color"
+            android:dividerHeight="1dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:visibility="gone"
+        android:background="@color/white">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

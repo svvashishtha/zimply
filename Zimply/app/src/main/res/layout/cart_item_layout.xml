@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/white_card_bg"
+              android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/product_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small"
+            android:scaleType="fitCenter"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingTop="@dimen/margin_small">
+            <com.application.zimply.widgets.CustomTextViewBold
+                android:id="@+id/product_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Granite Cheese Platter"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_large" />
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/expected_delivery_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/product_name"
+                android:layout_marginTop="@dimen/margin_mini"
+                android:text="@string/expected_delivery_date"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_small"
+                android:visibility="invisible" />
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/expected_delivery_date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/product_name"
+                android:layout_marginTop="@dimen/margin_mini"
+                android:layout_toEndOf="@id/expected_delivery_date"
+                android:layout_toRightOf="@id/expected_delivery_date"
+                android:text="25 Aug 2016"
+                android:textColor="@color/zhl_darkest"
+                android:textSize="@dimen/font_mini"
+                android:visibility="invisible" />
+            <LinearLayout
+                android:id="@+id/quantity_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_small"
+                android:paddingTop="@dimen/margin_small">
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_mini"
+                    android:text="Quantity"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_small" />
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/cart_quantity"
+                    android:layout_width="@dimen/header_item_size"
+                    android:layout_height="@dimen/header_item_size"
+                    android:layout_gravity="center"
+                    android:background="@drawable/white_card_rectangle"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_small"
+                    android:text="0"
+                    android:textColor="@color/blue_button"
+                    android:textSize="@dimen/font_medium" />
+
+
+
+
+                <!--<LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_up_black" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_down_black" />
+                </LinearLayout>-->
+                <!--<ImageButton
+                    android:id="@+id/cart_positive"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_medium"
+                    android:background="@null"
+                    android:src="@drawable/plus" />-->
+            </LinearLayout>
+            <!-- <com.application.zimply.widgets.CustomTextView
+                 android:textColor="@color/green_text_color"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/total_price"
+                 android:text="\u20B9 2934"
+                 android:textSize="@dimen/font_xlarge"
+                 android:layout_marginRight="@dimen/margin_large"
+                 android:layout_marginBottom="@dimen/margin_large"
+                 android:layout_alignParentRight="true"
+                 android:layout_alignParentBottom="true"
+                 />-->
+            <TableLayout
+                android:id="@+id/table_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="bottom">
+
+                <TableRow>
+
+                    <com.application.zimply.widgets.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:text="@string/product_price"
+                        android:textColor="@color/zhl_darkest"
+                        android:textSize="@dimen/font_medium" />
+
+                    <com.application.zimply.widgets.CustomTextViewBold
+                        android:id="@+id/product_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_column="2"
+                        android:layout_marginLeft="@dimen/margin_medium"
+                        android:text="\u20B9 2434"
+                        android:textColor="@color/zhl_darkest"
+                        android:textSize="@dimen/font_medium" />
+                </TableRow>
+
+                <!--    <TableRow>
+
+                        <com.application.zimply.widgets.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:text="@string/discount"
+                            android:textColor="@color/green_text_color"
+                            android:textSize="@dimen/font_medium" />
+
+                        <com.application.zimply.widgets.CustomTextView
+                            android:id="@+id/discount_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:gravity="right"
+                            android:layout_marginLeft="@dimen/margin_medium"
+                            android:text="\u20B9 500"
+                            android:textColor="@color/green_text_color"
+                            android:textSize="@dimen/font_medium" />
+                    </TableRow>-->
+
+
+                <!--    <TableRow>
+
+                        <com.application.zimply.widgets.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:text="@string/shipping_charges"
+                            android:textColor="@color/zhl_darkest"
+                            android:textSize="@dimen/font_medium" />
+
+                        <com.application.zimply.widgets.CustomTextView
+                            android:id="@+id/shipping_charges_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="2"
+                            android:layout_marginLeft="@dimen/margin_medium"
+                            android:text="\u20B9 500"
+                            android:gravity="right"
+                            android:textColor="@color/zhl_darkest"
+                            android:textSize="@dimen/font_medium" />
+                    </TableRow>-->
+            </TableLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/cancel_cart_item"
+            android:layout_width="@dimen/z_item_height_48"
+            android:layout_height="@dimen/z_item_height_48"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_cross" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

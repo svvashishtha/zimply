@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/filter_item_blue_selected_bg"
+              android:gravity="center_vertical"
+              android:minHeight="@dimen/height48"
+              android:id="@+id/parent"
+              android:orientation="horizontal" >
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/filter_item_text_selector"
+        android:gravity="center_vertical"
+        android:padding="@dimen/margin_small"
+        android:text="Home Decor"
+        android:textSize="@dimen/font_medium" />
+
+    <ImageView
+        android:id="@+id/forward_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:src="@drawable/ic_forward_black"
+        />
+
+</LinearLayout>

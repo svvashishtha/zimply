@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/margin_medium"
+    android:paddingLeft="@dimen/margin_small"
+    android:paddingRight="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_medium" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/height48"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside" />
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/text_expand"
+        android:layout_width="@dimen/height48"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_xxlarge" />
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/text_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_midsmall"
+        android:layout_weight="1"
+        android:text="Architect"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_medium" />
+</LinearLayout>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_small"
+            android:orientation="vertical">
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:text="Choose Budget"
+                android:textSize="@dimen/font_medium"
+                android:textStyle="bold"
+                android:textColor="@color/heading_text_color"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/z_item_height_48"
+                android:paddingTop="@dimen/margin_small"
+                android:orientation="horizontal">
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/budget1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent"></View>
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/budget2"
+                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:layout_weight="1"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/z_item_height_48"
+                android:paddingTop="@dimen/margin_small"
+                android:orientation="horizontal">
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/budget3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent"></View>
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/budget4"
+                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:layout_weight="1"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:text="Choose Style"
+                android:textSize="@dimen/font_medium"
+                android:textStyle="bold"
+                android:textColor="@color/heading_text_color"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/z_item_height_48"
+                android:paddingTop="@dimen/margin_small"
+                android:orientation="horizontal">
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/style1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Modern"
+                    android:gravity="center"
+                    android:textSize="@dimen/font_medium"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent"></View>
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/style2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Eclectic"
+                    android:gravity="center"
+                    android:textSize="@dimen/font_medium"
+                    android:textColor="@color/filter_item_text_selector"
+
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/z_item_height_48"
+                android:paddingTop="@dimen/margin_small"
+                android:orientation="horizontal">
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/style3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Traditional/Classic"
+                    android:gravity="center"
+                    android:textSize="@dimen/font_medium"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent"></View>
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/style4"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:text="Minimalist"
+                    android:gravity="center"
+                    android:textSize="@dimen/font_medium"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+
+            </LinearLayout>
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:text="Choose Size"
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/heading_text_color"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/z_item_height_48"
+                android:paddingTop="@dimen/margin_small"
+                android:orientation="horizontal">
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/size1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Compact"
+                    android:gravity="center"
+                    android:textSize="@dimen/font_medium"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent"></View>
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/size2"
+                    android:layout_width="0dp"
+                    android:text="Medium"
+                    android:gravity="center"
+                    android:textSize="@dimen/font_medium"
+                    android:layout_weight="1"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/z_item_height_48"
+                android:paddingTop="@dimen/margin_small"
+                android:orientation="horizontal">
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/size3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Large"
+                    android:gravity="center"
+                    android:textSize="@dimen/font_medium"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent"></View>
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/size4"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Expensive"
+                    android:gravity="center"
+                    android:textSize="@dimen/font_medium"
+                    android:textColor="@color/filter_item_text_selector"
+                    android:background="@drawable/filter_item_selector_bg"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

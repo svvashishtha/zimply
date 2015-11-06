@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/title_textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@color/heading_text_color"
+        android:textSize="@dimen/font_xlarge" />
+
+    <RelativeLayout
+        android:id="@+id/search_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/barcode_icon"
+            android:layout_width="@dimen/z_item_height_48"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/margin_small"
+            android:layout_height="@dimen/z_item_height_48"
+            android:src="@drawable/ic_barcodescanner"
+            />
+        <RelativeLayout
+            android:id="@+id/clear_text_view_category"
+            android:layout_width="@dimen/size_20"
+            android:layout_height="@dimen/size_20"
+            android:layout_toLeftOf="@id/barcode_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_large"
+            android:background="@drawable/cross_circle_border"
+            android:visibility="gone"/>
+
+        <com.application.zimply.widgets.CustomEdittext
+            android:id="@+id/search_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/clear_text_view_category"
+            android:layout_marginLeft="@dimen/margin_mini"
+            android:layout_marginRight="@dimen/margin_mini"
+            android:background="@color/white"
+            android:imeOptions="actionSearch"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_action_action_search_menu"
+            android:gravity="center_vertical"
+            android:hint="@string/search_category_hint"
+            android:maxLines="1"
+            android:padding="@dimen/margin_small"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="@dimen/font_medium" />
+
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

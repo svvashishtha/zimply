@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/title_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textColor="@color/heading_text_color"
+            android:textSize="@dimen/font_large" />
+
+        <com.application.zimply.widgets.CustomEdittext
+            android:id="@+id/search_edittext"
+            android:layout_width="match_parent"
+            android:textColor="@color/text_color1"
+            android:hint="Search For City"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textColorHint="@color/zhl_darkest"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/search_icon"
+        android:layout_width="@dimen/abc_action_bar_default_height_material"
+        android:layout_gravity="center_vertical"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:scaleType="centerInside"
+        android:background="@drawable/action_bar_item_bg"
+        android:src="@drawable/ic_action_action_search_menu"/>
+</LinearLayout>

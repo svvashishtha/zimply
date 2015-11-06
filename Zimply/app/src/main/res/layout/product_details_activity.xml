@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/product_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/product_overlay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/fade"
+        android:orientation="horizontal"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:id="@+id/dropdown_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/simple_shape"
+        android:visibility="gone"
+        android:elevation="@dimen/dropdown_elevation">
+
+        <View
+            android:id="@+id/blank"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeParent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/zhl">
+        <FrameLayout
+            android:id="@+id/product_page_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+        <include layout="@layout/progress_layout"></include>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/bottom_action_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/add_to_cart"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/blue_button_background"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:text="@string/add_to_cart"
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/white" />
+
+            <ProgressBar
+                android:id="@+id/progress_add_to_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+            <com.application.zimply.widgets.CustomTextView
+                android:id="@+id/buy_now"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/green_btn_rectangle_bg"
+                android:gravity="center"
+                android:text="@string/buy_now"
+                android:textSize="@dimen/font_medium"
+                android:textAllCaps="true"
+                android:textColor="@color/white" />
+
+        </FrameLayout>
+    </LinearLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/prod_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@color/white"
+        android:layout_gravity="top"
+        app:theme="@style/Toolbar_Theme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"/>
+
+</FrameLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:id="@+id/parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical" >
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/experts_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/margin_small"
+        android:background="@color/pager_bg"
+        android:paddingBottom="@dimen/margin_medium">
+    </android.support.v7.widget.RecyclerView>
+
+    <include layout="@layout/progress_layout" />
+
+    <include layout="@layout/filter_layout" />
+
+    <!--<WebView
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        android:orientation="vertical" >
+    </WebView>-->
+</FrameLayout>

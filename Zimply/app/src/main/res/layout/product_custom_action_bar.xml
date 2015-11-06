@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_height_product"
+    android:layout_gravity="fill"
+    android:background="@color/white">
+
+    <FrameLayout
+        android:id="@+id/cart_view"
+        android:layout_width="@dimen/toolbar_height_product"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:onClick="actionBarSelected">
+
+        <ImageView
+            android:id="@+id/cart_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:src="@drawable/ic_action_action_shopping_cart"
+            android:textColor="@color/white" />
+
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/cart_item_true"
+            android:layout_width="@dimen/cart_count_size_bg"
+            android:layout_height="@dimen/cart_count_size_bg"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/blue_circle_bg"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/cart_item_count_text" />
+    </FrameLayout>
+    <!--</RelativeLayout>-->
+
+
+    <ImageView
+        android:id="@+id/back_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/toolbar_height_product"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:clickable="true"
+        android:gravity="center"
+        android:onClick="actionBarSelected"
+        android:src="@drawable/ic_back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size18" />
+
+    <ImageView
+        android:id="@+id/share_product"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/cart_view"
+        android:src="@drawable/share_blank" />
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toLeftOf="@id/share_product"
+        android:layout_toRightOf="@id/back_icon"
+        android:clickable="false"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:onClick="actionBarSelected"
+        android:paddingLeft="@dimen/height2"
+        android:paddingRight="@dimen/height2"
+        android:textColor="@color/font_color"
+        android:textSize="@dimen/size18" />
+</RelativeLayout>

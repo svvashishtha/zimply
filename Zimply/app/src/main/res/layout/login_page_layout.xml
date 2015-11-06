@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent" >
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </android.support.v4.view.ViewPager>
+
+            <com.application.zimply.widgets.CirclePageIndicator
+                android:id="@+id/pager_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/margin_medium"
+                app:centered="true"
+                app:fillColor="@color/text_color1"
+                app:pageColor="@color/white"
+                app:radius="@dimen/pager_indicator_radius"
+                app:strokeColor="@android:color/transparent"
+                app:strokeWidth="0dp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_small" >
+
+                <ImageButton
+                    android:id="@+id/sign_in_facebook_button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/height48"
+                    android:layout_weight="1"
+                    android:background="@drawable/facebook_btn_bg"
+                    android:gravity="center"
+                    android:src="@drawable/ic_fb" />
+
+                <View
+                    android:layout_width="@dimen/margin_large"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
+
+                <ImageButton
+                    android:id="@+id/sign_in_google_button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/height48"
+                    android:layout_weight="1"
+                    android:background="@drawable/google_plus_btn_bg"
+                    android:gravity="center"
+                    android:src="@drawable/ic_google" />
+            </LinearLayout>
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:gravity="center_horizontal"
+                android:text="OR"
+                android:textColor="@color/drawericon_color"
+                android:textSize="@dimen/font_medium" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/separator_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height48"
+                android:orientation="horizontal" >
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/signup"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/margin_small"
+                    android:paddingTop="@dimen/margin_small"
+                    android:text="SIGN UP"
+                    android:textColor="@color/drawericon_color"
+                    android:textSize="@dimen/font_medium" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/separator_color" />
+
+                <com.application.zimply.widgets.CustomTextView
+                    android:id="@+id/login"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/margin_small"
+                    android:paddingTop="@dimen/margin_small"
+                    android:text="LOGIN"
+                    android:textColor="@color/drawericon_color"
+                    android:textSize="@dimen/font_medium" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/skip_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@drawable/action_bar_item_bg"
+        android:padding="@dimen/margin_small"
+        android:text="SKIP"
+        android:textColor="@color/text_color1" />
+
+</FrameLayout>

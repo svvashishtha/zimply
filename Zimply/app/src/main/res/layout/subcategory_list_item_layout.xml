@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app1="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_card_bg"
+    android:orientation="horizontal" >
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/sub_cat_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:text="Bedroom"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_medium" />
+
+    <com.application.zimply.widgets.RoundedImageView
+        android:id="@+id/sub_cat_img"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/padding_top_66"
+        android:scaleType="centerCrop"
+        app1:riv_corner_radius_top_left="3dp"
+        app1:riv_corner_radius_top_right="3dp" />
+
+</LinearLayout>

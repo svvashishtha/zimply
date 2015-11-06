@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+
+              android:background="@drawable/white_card_bg"
+              android:orientation="vertical">
+
+    <com.application.zimply.widgets.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:text="Summary"
+        android:textStyle="bold"
+        android:textColor="@color/heading_text_color"
+        android:textSize="@dimen/font_medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/separator_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small">
+        <com.application.zimply.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Total Sum"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/total_sum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="10000"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small">
+        <com.application.zimply.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Shipping Charges"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/shipping_charges"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="6.99"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:padding="@dimen/margin_small">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.application.zimply.widgets.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Payment"
+
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimply.widgets.CustomTextViewBold
+                android:id="@+id/total_payment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/z_margin_mini"
+                android:text="20000"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_large" />
+
+        </LinearLayout>
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/check_out"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/z_item_height_48"
+            android:background="@color/blue_button"
+            android:drawableRight="@drawable/ic_hardware_keyboard_arrow_right"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_medium"
+            android:paddingRight="@dimen/margin_medium"
+            android:text="Check out"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_medium" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

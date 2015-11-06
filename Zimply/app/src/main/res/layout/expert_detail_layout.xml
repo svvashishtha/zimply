@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pager_bg"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@drawable/actionbar_bg"
+        app:theme="@style/Toolbar_Theme" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/experts_data_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            android:paddingBottom="@dimen/padding_top_66" >
+        </android.support.v7.widget.RecyclerView>
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/hire_designer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height48"
+            android:layout_gravity="bottom"
+            android:background="@drawable/blue_button_background"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:text="Hire Expert"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_large" />
+    </FrameLayout>
+
+</LinearLayout>

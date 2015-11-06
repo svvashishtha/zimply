@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/header_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/margin_small"
+        android:text="@string/suggested_product_cat"
+        android:textColor="@color/heading_text_color"
+        android:textSize="@dimen/font_small"
+        android:textStyle="bold" />
+</LinearLayout>

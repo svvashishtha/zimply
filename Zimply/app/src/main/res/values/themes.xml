@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Action bar theme -->
+    <style name="ZimplyActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/app_primary_color</item>
+        <item name="colorPrimaryDark">@color/app_primary_color_dark</item>
+        <item name="android:color">@color/black</item>
+    </style>
+
+    <style name="ZGalleryTheme" parent="@style/ZimplyActionBarTheme">
+        <item name="colorPrimary">@color/zdark</item>
+        <item name="colorPrimaryDark">@color/zdark</item>
+        <item name="colorAccent">@color/zhl_lighter</item>
+    </style>
+
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="ZDialogTheme" parent="@style/Theme.AppCompat.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/black_trans_seventy</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="Theme.AppCompat.Translucent">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="ProductPageTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="colorPrimaryDark">@color/black</item>
+    </style>
+
+    <style name="ToolbarBaseTransparentTheme" parent="Theme.AppCompat">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:background">@color/white</item>
+        <item name="colorPrimaryDark">@color/zhl_dark</item>
+        <item name="colorAccent">@color/white_trans_fifty</item>
+        <item name="colorControlNormal">@color/drawericon_color</item>
+    </style>
+
+</resources>

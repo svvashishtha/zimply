@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/z_margin_large">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/z_margin_small"
+        android:drawableTop="@drawable/ic_acceptbig"
+        android:gravity="center"
+        android:text="Order Placed successfully"
+        android:textColor="@color/heading_text_color"
+        android:textSize="@dimen/font_large"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/amount_paid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/z_margin_medium"
+        android:gravity="center"
+        android:text="Rs 200"
+        android:textColor="@color/green_text_color"
+        android:textSize="@dimen/font_medium"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/z_margin_mini"
+        android:gravity="center"
+        android:text="Amount to be paid through Cash on Delivery"
+        android:textColor="@color/z_grey_color"
+        android:textSize="@dimen/font_mini"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="144dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/z_margin_medium"
+        android:background="@color/z_indicator_color" />
+
+    <TextView
+        android:id="@+id/address_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/z_margin_medium"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_small"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="H.No. 85 type-1V, Laxmi Bai Nagar,New Delhi\nNear INA Metro Station\nNew Delhi - 110082\nDelhi"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_small" />
+
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone: 09873443137"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_small"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/z_margin_xlarge"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/z_margin_medium"
+            android:gravity="center"
+            android:text="For any query, contact us on "
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/z_font_mini" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="011-41032607"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_small"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/continue_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height48"
+            android:layout_marginTop="@dimen/z_margin_large"
+            android:background="@drawable/z_signup_btn_selector"
+            android:paddingLeft="@dimen/z_margin_large"
+            android:paddingRight="@dimen/z_margin_large"
+            android:text="Continue Exploring"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
+
+</LinearLayout>
