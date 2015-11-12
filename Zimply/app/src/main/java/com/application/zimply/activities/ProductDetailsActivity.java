@@ -50,6 +50,7 @@ import com.application.zimply.objects.AllProducts;
 import com.application.zimply.preferences.AppPreferences;
 import com.application.zimply.serverapis.RequestTags;
 import com.application.zimply.utils.CommonLib;
+import com.application.zimply.utils.JSONUtils;
 import com.application.zimply.utils.UiUtils;
 import com.application.zimply.utils.UploadManager;
 import com.application.zimply.utils.UploadManagerCallback;
@@ -107,6 +108,7 @@ public class ProductDetailsActivity extends ActionBarActivity
     private int DROPDOWN_INVISIBLE = 912;
     private Activity mContext;
     private boolean isLoading, userLoading;
+    private boolean isOfflinePurchase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,12 +227,14 @@ public class ProductDetailsActivity extends ActionBarActivity
                         String userId = AppPreferences.getUserID(mContext);
                         if (AppPreferences.isUserLogIn(ProductDetailsActivity.this)) {
                             if (!(addToCart.getText().toString().equalsIgnoreCase("Go To Cart"))) {
+                                isOfflinePurchase = false;
                                 String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
                                 List<NameValuePair> nameValuePair = new ArrayList<>();
                                 nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
                                 nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(mContext)));
-                                UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART, product.getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+
+                                UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, product.getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
 
                             } else {
                                 Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckoutActivity.class);
@@ -271,7 +275,32 @@ public class ProductDetailsActivity extends ActionBarActivity
             }
         });
 
-        findViewById(R.id.buy_now).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.buy_offline).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLoading) {
+                    Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
+                                /*Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                                intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+                                PackageManager packageMgr = getPackageManager();
+                                List<ResolveInfo> activities = packageMgr.queryIntentActivities(intent, 0);
+                                if (activities.size() > 0) {
+                                    startActivityForResult(intent, 0);
+                                } else {
+                                    Toast.makeText(ProductDetailsActivity.this ,"Barcode scanner is not available in your device",Toast.LENGTH_SHORT ).show();
+
+                                }*/
+                                Intent intent = new Intent(ProductDetailsActivity.this,BarcodeScannerActivity.class);
+                                startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
+                            }else{
+                                Toast.makeText(ProductDetailsActivity.this,"No network available",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+            }
+        });
+       /* findViewById(R.id.buy_now).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isLoading) {
@@ -285,12 +314,12 @@ public class ProductDetailsActivity extends ActionBarActivity
                                 intent.putExtra("OrderSummaryFragment", true);
                                 startActivity(intent);
                             } else {
-                                String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                                String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_PRODUCT_DETAIL_URL;
                                 List<NameValuePair> nameValuePair = new ArrayList<>();
                                 nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
                                 nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(mContext)));
-                                UploadManager.getInstance().makeAyncRequest(url, BUY_NOW, product.getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+                                UploadManager.getInstance().makeAyncRequest(url, BUY_NOW, product.getSlug(), OBJECT_ADD_TO_CART_PRODUCT_DETAIL, null, nameValuePair, null);
                             }
 
                         } else {
@@ -303,7 +332,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                     }
                 }
             }
-        });
+        });*/
 
         toggleButtonsState(true);
         findViewById(R.id.relativeParent).setBackgroundColor(getResources().getColor(R.color.white));
@@ -630,7 +659,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         if (AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
             ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
         else
-            ((TextView) findViewById(R.id.add_to_cart)).setText("Add To Cart");
+            ((TextView) findViewById(R.id.add_to_cart)).setText("Buy Online");
         ((TextView) mActionBarCustomView.findViewById(R.id.title)).setText(product.getName());
 
         ((TextView) findViewById(R.id.specification_title)).setOnClickListener(new View.OnClickListener() {
@@ -696,8 +725,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         if (progressDialog != null)
             progressDialog.dismiss();
 
-        isRequestFailed = !status;
-        if (requestType == ADD_TO_CART && status && !destroyed) {
+        if (requestType == ADD_TO_CART_PRODUCT_DETAIL && status && !destroyed) {
             isLoading = false;
             String message = "An error occurred. Please try again...";
             if (progressDialog != null) {
@@ -709,13 +737,22 @@ public class ProductDetailsActivity extends ActionBarActivity
                 if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
                     message = jsonObject.getString("success");
                 if (message != null) {
-                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) product.getId(), 1));
-                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
-                    cartCount.setVisibility(View.VISIBLE);
-                    cartCount.setText(AllProducts.getInstance().getCartCount() + "");
-                    addToCart.setText("Go To Cart");
-                } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
 
+                    if(isOfflinePurchase ){
+                        AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int)scannedProductId, 1));
+                        AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                        cartCount.setVisibility(View.VISIBLE);
+                        cartCount.setText(AllProducts.getInstance().getCartCount() + "");
+                        moveToCartActivity();
+                        isOfflinePurchase = false;
+                    }else {
+                        AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) product.getId(), 1));
+                        AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                        cartCount.setVisibility(View.VISIBLE);
+                        cartCount.setText(AllProducts.getInstance().getCartCount() + "");
+                        addToCart.setText("Go To Cart");
+                    }
+                } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
                 }
                 if (progressDialog != null)
@@ -750,12 +787,13 @@ public class ProductDetailsActivity extends ActionBarActivity
                 }
             }
         }
+        isRequestFailed = !status;
     }
 
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
 
-        if ((requestType == ADD_TO_CART || requestType == BUY_NOW) && !destroyed) {
+        if ((requestType == ADD_TO_CART_PRODUCT_DETAIL || requestType == BUY_NOW) && !destroyed) {
             progressDialog = ProgressDialog.show(this, null, "Adding to cart. Please wait");
             // isLoading = true;
         } else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
@@ -910,7 +948,7 @@ public class ProductDetailsActivity extends ActionBarActivity
 
     private void toggleButtonsState(boolean clickable) {
         findViewById(R.id.add_to_cart).setClickable(clickable);
-        findViewById(R.id.buy_now).setClickable(clickable);
+        findViewById(R.id.buy_offline).setClickable(clickable);
     }
 
     private void setUpIndexingApi() {
@@ -986,7 +1024,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             if (product != null && AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
                 ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
             else
-                ((TextView) findViewById(R.id.add_to_cart)).setText("Add To Cart");
+                ((TextView) findViewById(R.id.add_to_cart)).setText("Buy Online");
         } else {
             ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
             if (objs != null) {
@@ -999,7 +1037,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             if (product != null && AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
                 ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
             else
-                ((TextView) findViewById(R.id.add_to_cart)).setText("Add To Cart");
+                ((TextView) findViewById(R.id.add_to_cart)).setText("Buy Online");
         }
         checkCartCount();
     }
@@ -1095,4 +1133,69 @@ public class ProductDetailsActivity extends ActionBarActivity
         }
     }
 
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == REQUEST_TYPE_FROM_SEARCH) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                //Toast.makeText(this , "CONTENT"+contents,Toast.LENGTH_SHORT).show();
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                //Toast.makeText(this , "FORMAT:"+format,Toast.LENGTH_SHORT).show();
+                JSONObject obj = JSONUtils.getJSONObject(contents);
+                // Intent workintent = new Intent(this, ProductDetailsActivity.class);
+                scannedProductId=(long) JSONUtils.getIntegerfromJSON(obj, "id");
+
+                addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
+                // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
+                // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
+                // startActivity(workintent );
+                // Handle successful scan
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+            }
+        }
+    }
+
+    long scannedProductId;
+
+    public void addScannedObjToCart(long id,String slug) {
+        if (AppPreferences.isUserLogIn(this)) {
+            if (AllProducts.getInstance().cartContains((int) id)) {
+                Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
+                moveToCartActivity();
+            } else {
+                isOfflinePurchase = true;
+                String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                List<NameValuePair> nameValuePair = new ArrayList<>();
+                nameValuePair.add(new BasicNameValuePair("product_id", id + ""));
+                nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+                nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
+                UploadManager.getInstance().addCallback(this);
+                UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, slug, ObjectTypes.OBJECT_ADD_TO_CART, null, nameValuePair, null);
+            }
+        } else {
+            ArrayList<NonLoggedInCartObj> oldObj = ((ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT));
+            if (oldObj == null) {
+                oldObj = new ArrayList<NonLoggedInCartObj>();
+            }
+            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1);
+            if (oldObj.contains(item)) {
+                Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
+            } else {
+                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                // checkCartCount();
+                oldObj.add(item);
+                GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
+            }
+            moveToCartActivity();
+
+        }
+    }
+
+    public void moveToCartActivity(){
+        Intent intent = new Intent(this, ProductCheckoutActivity.class);
+        intent.putExtra("OrderSummaryFragment", false);
+        startActivity(intent);
+    }
 }

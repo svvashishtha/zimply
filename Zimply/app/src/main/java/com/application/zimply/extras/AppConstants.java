@@ -143,4 +143,8 @@ public interface AppConstants {
 
 
     int BANNER_TYPE_WEBVIEW = 1;
+    int BANNER_TYPE_SCAN_OFFLINE = 2;
+
+    int REQUEST_TYPE_FROM_SEARCH = 10000;
+    int REQUEST_TYPE_FROM_PRODUCT = 10001;
 }

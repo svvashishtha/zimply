@@ -39,6 +39,8 @@
     <string name="under_10000">\u20B9 5000 to \u20B9 10000</string>
     <string name="above_10000">Above \u20B9 10000</string>
     <string name="add_to_cart">Add to cart</string>
+    <string name="buy_offline">Buy Offline</string>
+    <string name="buy_online">Buy Online</string>
     <string name="buy_now">Buy now</string>
     <string name="product_description">Product Description</string>
     <string name="privacy_policy">Privacy Policy</string>
@@ -162,5 +164,6 @@
     <string name="products_title">Products</string>
     <string name="experts_title">Experts</string>
 
-
+    <string name="cash_on_counter_text">Cash on Counter</string>
+    <string name="pay_online_text">Pay Online</string>
 </resources>

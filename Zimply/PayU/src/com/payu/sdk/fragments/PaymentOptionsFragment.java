@@ -113,6 +113,8 @@ public class PaymentOptionsFragment extends Fragment implements PaymentListener 
                 getResponse.execute(postParams);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
+
+
             }
 
         } else {
@@ -147,7 +149,7 @@ public class PaymentOptionsFragment extends Fragment implements PaymentListener 
 
                 availableModesList.toString();
 
-                availableOptionsList.retainAll(availableModesList);
+                    availableOptionsList.retainAll(availableModesList);
 
                 availableOptionsList.toString();
 

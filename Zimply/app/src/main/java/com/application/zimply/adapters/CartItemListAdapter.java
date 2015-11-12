@@ -84,11 +84,13 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
 //                });
             } else if (position == 0) {
                 ((TextView) holder.itemView.findViewById(R.id.delivery_address_text)).setText("Shipping Address");
-                holder.phone.setText(shippingAddress.getPhone());
-                String addressString = shippingAddress.getName() + ", " + shippingAddress.getLine1() +
-                        (shippingAddress.getLine2().trim().length()>0?", "+shippingAddress.getLine2():"") + ", " + shippingAddress.getCity() + ", " + shippingAddress.getPincode();
+                if(shippingAddress!=null ) {
+                    holder.phone.setText((shippingAddress.getPhone() != null) ? shippingAddress.getPhone() : "");
+                    String addressString = shippingAddress.getName() + ", " + shippingAddress.getLine1() +
+                            (shippingAddress.getLine2().trim().length() > 0 ? ", " + shippingAddress.getLine2() : "") + ", " + shippingAddress.getCity() + ", " + shippingAddress.getPincode();
 
-                holder.address.setText(addressString);
+                    holder.address.setText(addressString);
+                }
                 holder.change.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

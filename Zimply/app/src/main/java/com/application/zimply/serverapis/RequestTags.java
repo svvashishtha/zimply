@@ -44,6 +44,9 @@ public interface RequestTags {
 
     int PLACE_ORDER_SUCCESS_REQUEST_TAG = 0x07;
     int ADD_TO_CART = 0x008;
+    int ADD_TO_CART_SEARCH = 0x0111;
+    int ADD_TO_CART_PRODUCT_DETAIL = 0x0112;
+
     int QUANTITY_UPDATE = 0x009;
     int BUY_NOW = 0x0010;
 

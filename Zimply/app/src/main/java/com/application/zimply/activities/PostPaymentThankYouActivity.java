@@ -20,6 +20,7 @@ import com.application.zimply.objects.AllProducts;
  */
 public class PostPaymentThankYouActivity extends ActionBarActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,9 +35,26 @@ public class PostPaymentThankYouActivity extends ActionBarActivity {
                 ", " + addressObject.getLine2() + ", " + addressObject.getCity() + ", " + addressObject.getPincode();
 
         TextView priceText = (TextView) findViewById(R.id.amount_paid);
+
+        int paymentType = getIntent().getIntExtra("payment_type",2);
+
+        if(paymentType == 4){
+            ((TextView)findViewById(R.id.view_order)).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PostPaymentThankYouActivity.this,
+                            PurchaseListActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }else{
+            ((TextView)findViewById(R.id.view_order)).setVisibility(View.GONE);
+        }
+
         priceText.setText(getString(R.string.Rs)
                 + " "
-                + (bundle.getString("billing_amount")));
+                + (Double.parseDouble(bundle.getString("billing_amount"))));
 
         TextView name = (TextView) findViewById(R.id.address_name);
         name.setText(addressObject.getName());
@@ -56,5 +74,14 @@ public class PostPaymentThankYouActivity extends ActionBarActivity {
             }
         });
         AllProducts.getInstance().setCartCount(0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        super.onBackPressed();
     }
 }

@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.application.zimply.R;
-import com.application.zimply.activities.PostPaymentThankYouActivity;
+import com.application.zimply.activities.AppPaymentOptionsActivity;
 import com.application.zimply.activities.ProductCheckoutActivity;
 import com.application.zimply.adapters.CartItemListAdapter;
 import com.application.zimply.application.AppApplication;
@@ -38,7 +38,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class OrderSummaryFragment extends ZFragment implements GetRequestListener, ObjectTypes,
@@ -340,24 +339,15 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     private void nextFragment() {
         if (mActivity != null) {
-            //((ProductCheckoutActivity) mActivity).setAddressSelectionFragment(null);
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("furl",
-                    "https://dl.dropboxusercontent.com/s/z69y7fupciqzr7x/furlWithParams.html");
-            params.put("surl",
-                    "https://dl.dropboxusercontent.com/s/dtnvwz5p4uymjvg/success.html");
-            transactionId = "0nf7" + System.currentTimeMillis();
-            params.put(PayU.TXNID, transactionId);
-            params.put(PayU.USER_CREDENTIALS, "test:test");
-            params.put(PayU.PRODUCT_INFO, "My Product");
-            params.put(PayU.FIRSTNAME,shippingAddress.getName());
-            params.put(PayU.EMAIL, shippingAddress.getEmail());
 
-            PayU.getInstance(getActivity()).startPaymentProcess(
-                    Double.parseDouble(cartObject.getCart().getTotal_price()), params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
-                            PayU.PaymentMode.NB, PayU.PaymentMode.DC,
-                            PayU.PaymentMode.EMI,
-                            PayU.PaymentMode.STORED_CARDS});
+            Intent intent = new Intent(getActivity() , AppPaymentOptionsActivity.class);
+            intent.putExtra("total_amount",cartObject.getCart().getTotal_price());
+            intent.putExtra("order_id",orderId);
+            intent.putExtra("name",shippingAddress.getName());
+            intent.putExtra("email",shippingAddress.getEmail());
+            intent.putExtra("address",shippingAddress);
+            startActivity(intent);
+
 
         }
     }
@@ -444,73 +434,73 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
 
+        if(!destroyed ){
+            //todo decide whether to show loading here or not\
+            if (zProgressDialog != null)
+                zProgressDialog.dismiss();
+            if (requestType == QUANTITY_UPDATE) {
+                if (status) {
 
-        //todo decide whether to show loading here or not\
-        if (zProgressDialog != null)
-            zProgressDialog.dismiss();
-        if (requestType == QUANTITY_UPDATE) {
-            if (status) {
-
-                JSONObject jsonObject = (JSONObject) response;
-                try {
-                    long price = jsonObject.getInt("price");
-                    if (price != -1) {
-                        cartObject.getCart().setPrice(Float.parseFloat(cartObject.getCart().getPrice()) + price -
-                                (Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getPrice())
-                                        * Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQuantity())) + "");
-                        cartObject.getCart().setTotal_shipping(Float.parseFloat(cartObject.getCart().getTotal_shipping()) +
-                                (updatedQuantity - Integer.parseInt(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQuantity())) *
-                                        cartObject.getCart().getDetail().get(quantityUpdatePosition).getIndividualShipping_charge() + "");
+                    JSONObject jsonObject = (JSONObject) response;
+                    try {
+                        long price = jsonObject.getInt("price");
+                        if (price != -1) {
+                            cartObject.getCart().setPrice(Float.parseFloat(cartObject.getCart().getPrice()) + price -
+                                    (Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getPrice())
+                                            * Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQuantity())) + "");
+                            cartObject.getCart().setTotal_shipping(Float.parseFloat(cartObject.getCart().getTotal_shipping()) +
+                                    (updatedQuantity - Integer.parseInt(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQuantity())) *
+                                            cartObject.getCart().getDetail().get(quantityUpdatePosition).getIndividualShipping_charge() + "");
                         /*cartObject.getCart().setTotal_price((Float.parseFloat(cartObject.getCart().getTotal_price()) -
                                 cartObject.getCart().getDetail().get(quantityUpdatePosition).getIndividualTotal_price()) +
                                 ((updatedQuantity *
                                         cartObject.getCart().getDetail().get(quantityUpdatePosition).getIndividualShipping_charge())
                                         + price) + "");*/
-                        cartObject.getCart().setTotal_price(Float.parseFloat(cartObject.getCart().getPrice()) +
-                                Float.parseFloat(cartObject.getCart().getTotal_shipping()) + "");
+                            cartObject.getCart().setTotal_price(Float.parseFloat(cartObject.getCart().getPrice()) +
+                                    Float.parseFloat(cartObject.getCart().getTotal_shipping()) + "");
 
-                        cartObject.getCart().getDetail().get(quantityUpdatePosition).setQuantity(updatedQuantity + "");
-                        cartObject.getCart().getDetail().get(quantityUpdatePosition).setIndividualTotal_price(
-                                Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getPrice())
-                                        * updatedQuantity);
-                        setAdapterData();
-                        quantityUpdatePosition = -1;
-                        updatedQuantity = -1;
+                            cartObject.getCart().getDetail().get(quantityUpdatePosition).setQuantity(updatedQuantity + "");
+                            cartObject.getCart().getDetail().get(quantityUpdatePosition).setIndividualTotal_price(
+                                    Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getPrice())
+                                            * updatedQuantity);
+                            setAdapterData();
+                            quantityUpdatePosition = -1;
+                            updatedQuantity = -1;
 
-                        // AllProducts.getInstance().setCartCount(getCartQuantity());
+                            // AllProducts.getInstance().setCartCount(getCartQuantity());
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else
-                Toast.makeText(mActivity, "An error ocurred.", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(mActivity, "An error ocurred.", Toast.LENGTH_SHORT).show();
 
 
-        } else if (requestType == PLACE_ORDER_REQUEST_TAG) {
-            if(status){
-                orderId = JSONUtils.getStringfromJSON(((JSONObject)response),"order_id");
-                nextFragment();
-            }else{
-                Toast.makeText(getActivity() , "Could not place order. Try again",Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestType == PLACE_ORDER_SUCCESS_REQUEST_TAG) {
-            if (!destroyed && status) {
-
-                if (JSONUtils.getIntegerfromJSON(((JSONObject)response), "payment_status") == 1) {
-                    Toast.makeText(getActivity(), "Order placed successfully", Toast.LENGTH_LONG).show();
-                    Intent postPaymentIntent = new Intent(getActivity(), PostPaymentThankYouActivity.class);
-                    postPaymentIntent.putExtra("address", billingAddress);
-                    //todo confirm price here
-                    postPaymentIntent.putExtra("billing_amount", cartObject.getCart().getTotal_price());
-                    startActivity(postPaymentIntent);
-                    getActivity().finish();
+            } else if (requestType == PLACE_ORDER_REQUEST_TAG) {
+                if(status){
+                    orderId = JSONUtils.getStringfromJSON(((JSONObject)response),"order_id");
+                    nextFragment();
                 }else{
+                    Toast.makeText(getActivity() , "Could not place order. Try again",Toast.LENGTH_SHORT).show();
+                }
+            } /*else if (requestType == PLACE_ORDER_SUCCESS_REQUEST_TAG) {
+                if (status) {
+
+                    if (JSONUtils.getIntegerfromJSON(((JSONObject) response), "payment_status") == 1) {
+                        Toast.makeText(getActivity(), "Order placed successfully", Toast.LENGTH_LONG).show();
+                        Intent postPaymentIntent = new Intent(getActivity(), PostPaymentThankYouActivity.class);
+                        postPaymentIntent.putExtra("address", billingAddress);
+                        //todo confirm price here
+                        postPaymentIntent.putExtra("billing_amount", cartObject.getCart().getTotal_price());
+                        startActivity(postPaymentIntent);
+                        getActivity().finish();
+                    } else {
+                        Toast.makeText(getActivity(), "Could not place order. Try again", Toast.LENGTH_LONG).show();
+                    }
+                } else {
                     Toast.makeText(getActivity(), "Could not place order. Try again", Toast.LENGTH_LONG).show();
                 }
-            } else {
-                Toast.makeText(getActivity(), "Could not place order. Try again", Toast.LENGTH_LONG).show();
-            }
-
+            }*/
         }
     }
 
@@ -525,7 +515,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
-        if (isAdded())
+        if (!destroyed && isAdded() &&(requestType == QUANTITY_UPDATE || requestType == PLACE_ORDER_REQUEST_TAG))
             zProgressDialog = ProgressDialog.show(mActivity, null, "Loading...");
     }
 
@@ -553,13 +543,14 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                     System.out.println("Payu Data::"
                             + data.getStringExtra("result"));
                 }
-                    paymentSuccess = false;
-                    sendPaymentSuccessFullRequest();
+                paymentSuccess = false;
+                sendPaymentSuccessFullRequest();
             }
         }
     }
 
     public void sendOrderPlaceRequest() {
+
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PLACE_ORDER_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));

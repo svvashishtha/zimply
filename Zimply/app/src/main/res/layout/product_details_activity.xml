@@ -56,13 +56,13 @@
             android:layout_weight="1">
 
             <com.application.zimply.widgets.CustomTextView
-                android:id="@+id/add_to_cart"
+                android:id="@+id/buy_offline"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/blue_button_background"
                 android:gravity="center"
                 android:textAllCaps="true"
-                android:text="@string/add_to_cart"
+                android:text="@string/buy_offline"
                 android:textSize="@dimen/font_medium"
                 android:textColor="@color/white" />
 
@@ -81,13 +81,13 @@
             android:layout_weight="1">
 
             <com.application.zimply.widgets.CustomTextView
-                android:id="@+id/buy_now"
+                android:id="@+id/add_to_cart"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:background="@drawable/green_btn_rectangle_bg"
                 android:gravity="center"
-                android:text="@string/buy_now"
+                android:text="@string/buy_online"
                 android:textSize="@dimen/font_medium"
                 android:textAllCaps="true"
                 android:textColor="@color/white" />

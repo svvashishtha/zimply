@@ -17,7 +17,6 @@ import com.application.zimply.fragments.EditAddressFragment;
 import com.application.zimply.fragments.MyCartFragment;
 import com.application.zimply.fragments.OrderSummaryFragment;
 import com.application.zimply.fragments.ZFragment;
-import com.payu.sdk.PayU;
 
 public class ProductCheckoutActivity extends BaseActivity {
 
@@ -245,11 +244,11 @@ public class ProductCheckoutActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == PayU.RESULT) {
+       /* if (requestCode == PayU.RESULT) {
             if (orderSummaryFrag != null) {
                 orderSummaryFrag.onActivityResult(requestCode, resultCode, intent);
             }
-        }
+        }*/
 
         super.onActivityResult(requestCode, resultCode, intent);
     }

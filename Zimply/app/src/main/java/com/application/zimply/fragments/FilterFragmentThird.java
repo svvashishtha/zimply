@@ -195,6 +195,8 @@ public class FilterFragmentThird extends BaseFragment
                         nameValuePairs.add(new BasicNameValuePair("pro_slug", filterObj.getPro_slug()));
                         nameValuePairs.add(new BasicNameValuePair("area", filterObj.getArea()));
                         nameValuePairs.add(new BasicNameValuePair("area_unit", "" + filterObj.getArea_unit()));
+                        nameValuePairs.add(new BasicNameValuePair("received_from","mobile"));
+
 
                         if (filterObj.getPhoto_slug() == null && filterObj.getPro_slug() == null) {
                             nameValuePairs.add(new BasicNameValuePair("type", "" + 0));

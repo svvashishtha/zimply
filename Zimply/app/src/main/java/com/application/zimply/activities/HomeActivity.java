@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,17 +41,20 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.zimply.R;
 import com.application.zimply.adapters.MenuAdapter;
 import com.application.zimply.application.AppApplication;
 import com.application.zimply.baseobjects.BannerObject;
+import com.application.zimply.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimply.baseobjects.ErrorObject;
 import com.application.zimply.baseobjects.HomeArticleObj;
 import com.application.zimply.baseobjects.HomeExpertObj;
 import com.application.zimply.baseobjects.HomeObject;
 import com.application.zimply.baseobjects.HomePhotoObj;
 import com.application.zimply.baseobjects.HomeProductObj;
+import com.application.zimply.baseobjects.NonLoggedInCartObj;
 import com.application.zimply.baseobjects.ShopCategoryObject;
 import com.application.zimply.baseobjects.SignupObject;
 import com.application.zimply.extras.AppConstants;
@@ -70,6 +74,7 @@ import com.application.zimply.objects.AllProducts;
 import com.application.zimply.preferences.AppPreferences;
 import com.application.zimply.serverapis.RequestTags;
 import com.application.zimply.utils.CommonLib;
+import com.application.zimply.utils.JSONUtils;
 import com.application.zimply.utils.UploadManager;
 import com.application.zimply.utils.UploadManagerCallback;
 import com.application.zimply.utils.ZTracker;
@@ -78,11 +83,16 @@ import com.application.zimply.utils.fab.FABUnit;
 import com.application.zimply.widgets.CircularImageView;
 import com.crashlytics.android.Crashlytics;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Home Activity for a user who opens the app
@@ -205,13 +215,17 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 switch (position) {
                     case FRAGMENT_PHOTO:
                         showFAB(false);
+                        ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.fab_filter);
                         searchItem.setVisible(false);
                         break;
                     case FRAGMENT_EXPERT:
                         showFAB(false);
+                        ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.fab_filter);
                         searchItem.setVisible(true);
                         break;
                     case FRAGMENT_PRODUCT:
+                        showFAB(false);
+                        ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.ic_barcodescanner);
                         searchItem.setVisible(true);
                         if (isDestroyed)
                             return;
@@ -347,7 +361,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
     public void loadBanner(){
         String url = AppApplication.getInstance().getBaseUrl()+AppConstants.BANNER_URL;
-        GetRequestManager.getInstance().makeAyncRequest(url,RequestTags.BANNER_REQUEST_TAG,ObjectTypes.OBJECT_TYPE_BANNER_OBJECT);
+        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.BANNER_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_BANNER_OBJECT);
     }
 
     public void toggleFilterVisibility(boolean visibility) {
@@ -493,10 +507,24 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     public void fabSelected(View view) {
         switch (view.getId()) {
             case R.id.fab_post_request:
-                Intent intent = new Intent(this, FilterActivity.class);
-                intent.putExtra("pro_slug", "");
-                intent.putExtra("type", AppConstants.ITEM_TYPE_PHOTO);
-                startActivity(intent);
+                if(pager.getCurrentItem() == 0 || pager.getCurrentItem() == 2) {
+                    Intent intent = new Intent(this, FilterActivity.class);
+                    intent.putExtra("pro_slug", "");
+                    intent.putExtra("type", AppConstants.ITEM_TYPE_PHOTO);
+                    startActivity(intent);
+                }else if(pager.getCurrentItem() == 3){
+                    /*Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+                    PackageManager packageMgr = getPackageManager();
+                    List<ResolveInfo> activities = packageMgr.queryIntentActivities(intent, 0);
+                    if (activities.size() > 0) {
+                        startActivityForResult(intent, 0);
+                    } else {
+                        showToast("Barcode scanner is not available in your device");
+                    }*/
+                    Intent intent = new Intent(HomeActivity.this,BarcodeScannerActivity.class);
+                    startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
+                }
                 break;
         }
     }
@@ -566,10 +594,10 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     case 2:
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
                             intent = new Intent(HomeActivity.this, MyWishlist.class);
-                            intent.putExtra("url", AppConstants.USER_WISHLIST );
+                            intent.putExtra("url", AppConstants.USER_WISHLIST);
                             mDrawer.closeDrawers();
                             startActivity(intent);
-                        }else{
+                        } else {
                             showToast("Please Login to continue");
                             intent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
                             isToLoginPage = true;
@@ -744,8 +772,68 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     fragment.onActivityResult(requestCode, resultCode, data);
                 }
             }
+        }else if (requestCode == REQUEST_TYPE_FROM_SEARCH) {
+            if (resultCode == RESULT_OK) {
+                String contents = data.getStringExtra("SCAN_RESULT");
+                //Toast.makeText(this , "CONTENT"+contents,Toast.LENGTH_SHORT).show();
+                String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+                //Toast.makeText(this , "FORMAT:"+format,Toast.LENGTH_SHORT).show();
+                JSONObject obj = JSONUtils.getJSONObject(contents);
+                // Intent workintent = new Intent(this, ProductDetailsActivity.class);
+                productId=(long) JSONUtils.getIntegerfromJSON(obj, "id");
+
+                addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
+                // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
+                // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
+                // startActivity(workintent );
+                // Handle successful scan
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+            }
         }
     }
+
+    public void addScannedObjToCart(long id,String slug) {
+        if (AppPreferences.isUserLogIn(this)) {
+            if (AllProducts.getInstance().cartContains((int) id)) {
+                Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
+                moveToCartActivity();
+            } else {
+
+                String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                List<NameValuePair> nameValuePair = new ArrayList<>();
+                nameValuePair.add(new BasicNameValuePair("product_id", id + ""));
+                nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+                nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
+                UploadManager.getInstance().addCallback(this);
+                UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART, slug, ObjectTypes.OBJECT_ADD_TO_CART, null, nameValuePair, null);
+            }
+        } else {
+            ArrayList<NonLoggedInCartObj> oldObj = ((ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT));
+            if (oldObj == null) {
+                oldObj = new ArrayList<NonLoggedInCartObj>();
+            }
+            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1);
+            if (oldObj.contains(item)) {
+                Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
+            } else {
+                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                // checkCartCount();
+                oldObj.add(item);
+                GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
+            }
+            moveToCartActivity();
+
+        }
+    }
+
+    public void moveToCartActivity(){
+        Intent intent = new Intent(this, ProductCheckoutActivity.class);
+        intent.putExtra("OrderSummaryFragment", false);
+        startActivity(intent);
+    }
+
 
     public void setRateUsLayout() {
         if (!AppPreferences.isAppRated(this)) {
@@ -886,6 +974,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
         super.onResume();
     }
+
+
+
 
     private void loadData() {
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.HOMEPAGE_URL + "?product_width="
@@ -1073,18 +1164,18 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             }
         }
     }
-public void showBanner(BannerObject obj){
-    Bundle bundle = new Bundle();
+    public void showBanner(BannerObject obj){
+        Bundle bundle = new Bundle();
 
-    bundle.putSerializable("banner_obj", obj);
+        bundle.putSerializable("banner_obj", obj);
 
-    final BannerDialogFragment dialog = BannerDialogFragment
-            .newInstance(bundle);
-    dialog.setStyle(DialogFragment.STYLE_NORMAL,
-            R.style.HJCustomDialogTheme);
+        final BannerDialogFragment dialog = BannerDialogFragment
+                .newInstance(bundle);
+        dialog.setStyle(DialogFragment.STYLE_NORMAL,
+                R.style.HJCustomDialogTheme);
 
-    dialog.show(getSupportFragmentManager(), "BannerTag");
-}
+        dialog.show(getSupportFragmentManager(), "BannerTag");
+    }
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
         CommonLib.ZLog("err", "request failed");
@@ -1104,54 +1195,47 @@ public void showBanner(BannerObject obj){
         super.onDestroy();
     }
 
+    ProgressDialog progressDialog;
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object object) {
+        if (requestType == ADD_TO_CART && !isDestroyed) {
+            progressDialog = ProgressDialog.show(this, null, "Adding to cart. Please wait");
+            // isLoading = true;
+        }
     }
+
+    long productId;
 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
         if (isDestroyed)
             return;
-//        if (requestType == MARK_FAVOURITE_REQUEST_TAG) {
-//            if (status) {
-//                if (status && data != null && response != null) {
-//                    if (data instanceof HomePhotoObj) {
-//                        for (HomePhotoObj photo : photos) {
-//                            if (photo.getSlug().equals(((HomePhotoObj) data).getSlug())) {
-//                                photo.setFavorite_item_id(String.valueOf(response));
-//                                photo.setIs_favourite(true);
-//                            }
-//                        }
-//                    } else if (data instanceof HomeArticleObj) {
-//                        for (HomeArticleObj article : articles) {
-//                            if (article.getSlug().equals(((HomeArticleObj) data).getSlug())) {
-//                                article.setFavorite_item_id(String.valueOf(response));
-//                                article.setIs_favourite(true);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        } else if (requestType == MARK_UN_FAVOURITE_REQUEST_TAG) {
-//            if (status && data != null && response != null) {
-//                if (data instanceof HomePhotoObj) {
-//                    for (HomePhotoObj photo : photos) {
-//                        if (photo.getSlug().equals(((HomePhotoObj) data).getSlug())) {
-//                            photo.setFavorite_item_id(String.valueOf(response));
-//                            photo.setIs_favourite(false);
-//                        }
-//                    }
-//                } else if (data instanceof HomeArticleObj) {
-//                    for (HomeArticleObj article : articles) {
-//                        if (article.getSlug().equals(((HomeArticleObj) data).getSlug())) {
-//                            article.setFavorite_item_id(String.valueOf(response));
-//                            article.setIs_favourite(false);
-//                        }
-//                    }
-//                }
-//            }
-//        } else
-        if (requestType == SIGNUP_REQUEST_TAG_BASE) {
+        if (requestType == ADD_TO_CART && status ) {
+
+            String message = "An error occurred. Please try again...";
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+            try {
+
+                JSONObject jsonObject = ((JSONObject) response);
+                if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
+                    message = jsonObject.getString("success");
+                if (message != null) {
+                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int)productId, 1));
+                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                    moveToCartActivity();
+                } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
+
+                    message = jsonObject.getString("error");
+                }
+                if (progressDialog != null)
+                    progressDialog.dismiss();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if (requestType == SIGNUP_REQUEST_TAG_BASE) {
             if (status) {
                 reloadUserInfo = true;
                 AppPreferences.setIsUserLogin(this, true);

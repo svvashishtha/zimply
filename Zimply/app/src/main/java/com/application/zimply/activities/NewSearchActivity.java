@@ -1,8 +1,7 @@
 package com.application.zimply.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,22 +22,36 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.zimply.R;
+import com.application.zimply.application.AppApplication;
+import com.application.zimply.baseobjects.BaseCartProdutQtyObj;
+import com.application.zimply.baseobjects.NonLoggedInCartObj;
+import com.application.zimply.extras.AppConstants;
+import com.application.zimply.extras.ObjectTypes;
 import com.application.zimply.fragments.ExpertSearchFragment;
 import com.application.zimply.fragments.ProductSearchFragment;
 import com.application.zimply.managers.GetRequestManager;
+import com.application.zimply.objects.AllProducts;
+import com.application.zimply.preferences.AppPreferences;
+import com.application.zimply.serverapis.RequestTags;
 import com.application.zimply.utils.CommonLib;
 import com.application.zimply.utils.JSONUtils;
 import com.application.zimply.utils.NoSwipeViewPager;
+import com.application.zimply.utils.UploadManager;
+import com.application.zimply.utils.UploadManagerCallback;
 import com.application.zimply.widgets.ZPagerSlidingTabStrip;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.List;
 
-public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabStrip.OnTabClickListener {
+public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabStrip.OnTabClickListener ,AppConstants,RequestTags,UploadManagerCallback{
 
     private boolean destroyed = false;
     View actionBarView;
@@ -128,7 +141,6 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         if (CommonLib.isAndroidL())
             findViewById(R.id.tab_thin_line).setVisibility(View.GONE);
 
-
         setUpTabs();
 
 
@@ -138,11 +150,11 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         actionBarView = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar, false);
         actionBarView.findViewById(R.id.title_textview).setVisibility(View.GONE);
         actionBarView.findViewById(R.id.search_frame).setVisibility(View.VISIBLE);
-        actionBarView.findViewById(R.id.barcode_icon).setVisibility(View.GONE);
+        //actionBarView.findViewById(R.id.barcode_icon).setVisibility(View.GONE);
         actionBarView.findViewById(R.id.barcode_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                /*Intent intent = new Intent("com.google.zxing.client.android.SCAN");
                 intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
                 PackageManager packageMgr = getPackageManager();
                 List<ResolveInfo> activities = packageMgr.queryIntentActivities(intent, 0);
@@ -150,7 +162,9 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                     startActivityForResult(intent, 0);
                 } else {
                     showToast("Barcode scanner is not available in your device");
-                }
+                }*/
+                Intent intent = new Intent(NewSearchActivity.this,BarcodeScannerActivity.class);
+                startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
             }
         });
 
@@ -179,6 +193,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
     public void onDestroy() {
         destroyed = true;
         GetRequestManager.getInstance().removeCallbacks(this);
+        UploadManager.getInstance().removeCallback(this);
         super.onDestroy();
     }
 
@@ -291,6 +306,12 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
     private void setPageChangeListenerOnTabs(ZPagerSlidingTabStrip tabs, final int tabsUnselectedColor,
                                              final int tabsSelectedColor, final TextView homeSearchHeader, final TextView homeNearbyHeader) {
         tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -371,6 +392,52 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         });
     }
 
+    @Override
+    public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
+        if (requestType == ADD_TO_CART_SEARCH && status && !destroyed) {
+
+            String message = "An error occurred. Please try again...";
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+            try {
+
+                JSONObject jsonObject = ((JSONObject) response);
+                if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
+                    message = jsonObject.getString("success");
+                if (message != null) {
+                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int)productId, 1));
+                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                    moveToCartActivity();
+                } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
+
+                    message = jsonObject.getString("error");
+                }
+                if (progressDialog != null)
+                    progressDialog.dismiss();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void moveToCartActivity(){
+        Intent intent = new Intent(this, ProductCheckoutActivity.class);
+        intent.putExtra("OrderSummaryFragment", false);
+        startActivity(intent);
+    }
+    ProgressDialog progressDialog;
+
+    long productId;
+    @Override
+    public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
+        if (requestType == ADD_TO_CART_SEARCH && !destroyed) {
+            progressDialog = ProgressDialog.show(this, null, "Adding to cart. Please wait");
+            // isLoading = true;
+        }
+    }
+
     private class HomePagerAdapter extends FragmentStatePagerAdapter {
 
         public HomePagerAdapter(FragmentManager fm) {
@@ -417,23 +484,62 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 0) {
+        if (requestCode == REQUEST_TYPE_FROM_SEARCH) {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 //Toast.makeText(this , "CONTENT"+contents,Toast.LENGTH_SHORT).show();
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 //Toast.makeText(this , "FORMAT:"+format,Toast.LENGTH_SHORT).show();
                 JSONObject obj = JSONUtils.getJSONObject(contents);
-                Intent workintent = new Intent(this, ProductDetailsActivity.class);
-                intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
-                workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
-                startActivity(workintent );
+                // Intent workintent = new Intent(this, ProductDetailsActivity.class);
+                productId=(long) JSONUtils.getIntegerfromJSON(obj, "id");
+
+                addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
+                // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
+                // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
+                // startActivity(workintent );
                 // Handle successful scan
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
+                Toast.makeText(this,"Not a valid QR Code",Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+    public void addScannedObjToCart(long id,String slug){
+        if (AppPreferences.isUserLogIn(this)) {
+            if(AllProducts.getInstance().cartContains((int)id)){
+                Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
+                moveToCartActivity();
+            }else {
+                String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                List<NameValuePair> nameValuePair = new ArrayList<>();
+                nameValuePair.add(new BasicNameValuePair("product_id", id + ""));
+                nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+                nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
+                UploadManager.getInstance().addCallback(this);
+                UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_SEARCH, slug, ObjectTypes.OBJECT_ADD_TO_CART, null, nameValuePair, null);
+            }
+        }else{
+            ArrayList<NonLoggedInCartObj> oldObj = ((ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT));
+            if (oldObj == null) {
+                oldObj = new ArrayList<NonLoggedInCartObj>();
+            }
+            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1);
+            if (oldObj.contains(item)) {
+                Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
+            } else {
+                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                // checkCartCount();
+                oldObj.add(item);
+                GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
+            }
+            moveToCartActivity();
+
+        }
+    }
+
 
 
 }

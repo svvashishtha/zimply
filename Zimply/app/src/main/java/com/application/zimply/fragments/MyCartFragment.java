@@ -390,7 +390,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
-        if (isAdded() && mActivity != null)
+        if (isAdded() && mActivity != null && requestType == QUANTITY_UPDATE)
             zProgressDialog = ProgressDialog.show(mActivity, null, "Loading...");
     }
 }

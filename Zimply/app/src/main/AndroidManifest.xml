@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <permission
         android:name="com.application.zimply.permission.C2D_MESSAGE"
@@ -163,12 +164,17 @@
             android:name=".activities.MyWishlist"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
+        <activity
+            android:name=".activities.BarcodeScannerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseTheme" />
 
         <activity
             android:name=".activities.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateVisible" />
+
         <activity
             android:name=".activities.SearchProductsActivity"
             android:screenOrientation="portrait"
@@ -184,6 +190,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".activities.AppPaymentOptionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <activity
             android:name=".activities.NewSearchActivity"
             android:screenOrientation="portrait"

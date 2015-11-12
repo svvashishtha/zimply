@@ -2,17 +2,23 @@ package com.application.zimply.fragments;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.application.zimply.R;
 import com.application.zimply.baseobjects.BannerObject;
+import com.application.zimply.extras.AppConstants;
 import com.application.zimply.managers.ImageLoaderManager;
 import com.application.zimply.utils.ZWebView;
+
+import java.util.List;
 
 /**
  * Created by Umesh Lohani on 11/4/2015.
@@ -39,11 +45,24 @@ public class BannerDialogFragment extends BaseDialogFragment{
         bannerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ZWebView.class);
-                intent.putExtra("title", obj.getName());
-                intent.putExtra("url", obj.getSlug());
-                getActivity().startActivity(intent);
+                if(obj.getType() == AppConstants.BANNER_TYPE_WEBVIEW) {
+                    Intent intent = new Intent(getActivity(), ZWebView.class);
+                    intent.putExtra("title", obj.getName());
+                    intent.putExtra("url", obj.getSlug());
+                    getActivity().startActivity(intent);
+                }else if(obj.getType() == AppConstants.BANNER_TYPE_SCAN_OFFLINE){
+                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+                    PackageManager packageMgr = getActivity().getPackageManager();
+                    List<ResolveInfo> activities = packageMgr.queryIntentActivities(intent, 0);
+                    if (activities.size() > 0) {
+                        getActivity().startActivityForResult(intent, 0);
+                    } else {
+                        Toast.makeText(getActivity() , "Barcode scanner is not available in your device",Toast.LENGTH_SHORT).show();
+                    }
+                }
                 dismiss();
+
             }
         });
 
@@ -58,13 +77,14 @@ public class BannerDialogFragment extends BaseDialogFragment{
         getActivity().getWindowManager().getDefaultDisplay()
                 .getMetrics(metrics);
 
+
         dialog.setCanceledOnTouchOutside(true);
 
-        new ImageLoaderManager(getActivity()).setImageFromUrl(obj.getBanner(), bannerImage, "users", metrics.widthPixels,metrics.heightPixels/3,false,false);
+        new ImageLoaderManager(getActivity()).setImageFromUrl(obj.getBanner(), bannerImage, "users", metrics.widthPixels,metrics.heightPixels,false,false);
 
         dialog.setContentView(view);
         // parent.setVisibility(View.GONE);
-        dialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,
+        dialog.getWindow().setLayout(metrics.widthPixels,
                 LayoutParams.WRAP_CONTENT);
 
         return dialog;
