@@ -23,6 +23,25 @@ public class AllProducts {
 
     int cartCount;
 
+    int offineCartCount , onlineCartCount;
+
+
+    public int getOffineCartCount() {
+        return offineCartCount;
+    }
+
+    public int getOnlineCartCount() {
+        return onlineCartCount;
+    }
+
+    public void setOffineCartCount(int offineCartCount) {
+        this.offineCartCount = offineCartCount;
+    }
+
+    public void setOnlineCartCount(int onlineCartCount) {
+        this.onlineCartCount = onlineCartCount;
+    }
+
     ArrayList<BaseCartProdutQtyObj> cartObjs;
     private ArrayList<CategoryObject> product_category;
     private ArrayList<CategoryTree> category_tree;

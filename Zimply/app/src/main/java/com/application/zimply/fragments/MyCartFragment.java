@@ -144,7 +144,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
         if(objs!=null){
             url+="&ids="+getProductIdStrings(objs)+"&quantity="+getProductQuantityString(objs)+"&buying_channels="+getProductBuyingChannels(objs);
         }
-        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.GET_CART_DETAILS+buyingChannel, OBJECT_TYPE_CART);
+        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.GET_CART_DETAILS + buyingChannel, OBJECT_TYPE_CART);
 
     }
 
@@ -181,11 +181,23 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                 changeViewVisiblity(cartList, View.VISIBLE);
                 cartObject = (CartObject) obj;
                 setAdapterData(cartObject);
-                AllProducts.getInstance().setCartCount(getCartQuantity());
+                if(buyingChannel == BUYING_CHANNEL_OFFLINE){
+                    AllProducts.getInstance().setOffineCartCount(getCartQuantity());
+                }else{
+                    AllProducts.getInstance().setOnlineCartCount(getCartQuantity());
+                }
+
+                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getOffineCartCount()+AllProducts.getInstance().getOnlineCartCount());
             }else{
                 showNullCaseView("No Items in cart");
                 changeViewVisiblity(cartList, View.GONE);
-                AllProducts.getInstance().setCartCount(0);
+                if(buyingChannel == BUYING_CHANNEL_OFFLINE){
+                    AllProducts.getInstance().setOffineCartCount(0);
+                }else{
+                    AllProducts.getInstance().setOnlineCartCount(0);
+                }
+
+                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getOffineCartCount()+AllProducts.getInstance().getOnlineCartCount());
             }
 
             if(requestTag.equalsIgnoreCase(GET_CART_DETAILS+buyingChannel)){
