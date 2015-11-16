@@ -11,9 +11,20 @@ public class NonLoggedInCartObj implements Serializable{
 
     int quantity;
 
-    public NonLoggedInCartObj(String productId ,int quantity){
+    int sellingChannel;
+
+    public NonLoggedInCartObj(String productId ,int quantity ,int sellingChannel){
         this.productId = productId;
         this.quantity =quantity;
+        this.sellingChannel = sellingChannel;
+    }
+
+    public void setSellingChannel(int sellingChannel) {
+        this.sellingChannel = sellingChannel;
+    }
+
+    public int getSellingChannel() {
+        return sellingChannel;
     }
 
     public String getProductId() {

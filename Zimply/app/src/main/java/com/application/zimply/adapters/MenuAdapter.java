@@ -15,8 +15,8 @@ import com.application.zimply.utils.CommonLib;
 public class MenuAdapter extends BaseAdapter {
 
     Context mContext;
-    private String[] subItems = {"Change Location", "Favourites","Wishlist", "My Orders", "Feedback", "Rate us on Playstore", "Support", "About", "Logout"};
-    private int[] mainIcons = {R.drawable.ic_location_nav_drawer, R.drawable.ic_fav,R.drawable.ic_wishlist, R.drawable.order_history, R.drawable.ic_feedback, R.drawable.ic_rate_us, R.drawable.ic_action_support, R.drawable.ic_aboutus, R.drawable.ic_logout};
+    private String[] subItems = {"Change Location","Wishlist","My Bookings" ,"My Orders", "Feedback", "Rate us on Playstore", "Support", "About", "Logout"};
+    private int[] mainIcons = {R.drawable.ic_location_nav_drawer, R.drawable.ic_wishlist, R.drawable.ic_fav,R.drawable.order_history, R.drawable.ic_feedback, R.drawable.ic_rate_us, R.drawable.ic_action_support, R.drawable.ic_aboutus, R.drawable.ic_logout};
 
 	public MenuAdapter(Context context) {
 		this.mContext = context;

@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.application.zimply.R;
 import com.application.zimply.baseobjects.AddressObject;
-import com.application.zimply.objects.AllProducts;
 
 
 /**
@@ -73,7 +72,7 @@ public class PostPaymentThankYouActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        AllProducts.getInstance().setCartCount(0);
+        // AllProducts.getInstance().setCartCount(0);
     }
 
     @Override

@@ -62,13 +62,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         if (getItemViewType(position) == TYPE_CATEGORY) {
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             ((ProductsCategoryViewHolder) holder).parentFrame.setLayoutParams(lp);
-            ((ProductsCategoryViewHolder) holder).categoryName.setText(objs.get(position - 1).getName());
-            if (objs.get(position - 1).getImage() != null) {
-                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(objs.get(position - 1).getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
+            ((ProductsCategoryViewHolder) holder).categoryName.setText(objs.get(position).getName());
+            if (objs.get(position ).getImage() != null) {
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(objs.get(position).getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
             }
         } else {
 
-            if (position == objs.size() + 1) {
+            if (position == objs.size()) {
                 ProductsTitleViewHolder productsTitleViewHolder = (ProductsTitleViewHolder) holder;
                 int cityId = Integer.parseInt(AppPreferences.getSavedCityId(mContext));
 
@@ -86,7 +86,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public int getItemCount() {
         if (objs != null)
-            return objs.size() + 2;
+            return objs.size() + 1;
         return 0;
     }
 
@@ -94,9 +94,8 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     public int getItemViewType(int position) {
         /*if (position == 0) {
             return TYPE_HEADER;
-        } else */if (position == 0) {
-            return TYPE_TITLE;
-        } else if (position == objs.size() + 1) {
+        } else */
+        if (position == objs.size()) {
             return TYPE_TITLE;
         } else {
             return TYPE_CATEGORY;
@@ -117,8 +116,8 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ProductListingActivity.class);
-                    intent.putExtra("category_id", objs.get(getAdapterPosition() - 1).getId());
-                    intent.putExtra("category_name", objs.get(getAdapterPosition() - 1).getName());
+                    intent.putExtra("category_id", objs.get(getAdapterPosition()).getId());
+                    intent.putExtra("category_name", objs.get(getAdapterPosition()).getName());
                     intent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
                     mContext.startActivity(intent);
                 }

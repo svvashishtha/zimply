@@ -48,6 +48,7 @@ public class SelectCity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         citiesListFragment = CitiesListFragment.newInstance();
         citiesListFragment.setFragmentInteractionListener(new CitiesListFragment.FragmentInteractionListener() {
 
@@ -60,7 +61,6 @@ public class SelectCity extends BaseActivity {
                 AppPreferences.setIsLocationSaved(SelectCity.this, true);
                 CommonLib.hideKeyBoard(SelectCity.this, searchEditText);
                 startHomeActivity();
-
             }
 
             @Override

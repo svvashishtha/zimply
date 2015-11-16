@@ -8,14 +8,14 @@
         android:icon="@drawable/ic_action_action_search_menu"
         android:orderInCategory="100"
         android:title="@string/search_text"
-        android:visible="false"
+        android:visible="true"
         zimply:showAsAction="always"/>
     <item
         android:id="@+id/filter"
         android:icon="@drawable/ic_action_content_filter_list"
         android:orderInCategory="100"
         android:title="@string/cart_text"
-        android:visible="true"
+        android:visible="false"
         zimply:showAsAction="always"/>
     <item
         android:id="@+id/cart"

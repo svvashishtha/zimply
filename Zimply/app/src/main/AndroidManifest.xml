@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.application.zimply" >
+          package="com.application.zimply" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -120,7 +120,7 @@
             android:theme="@style/ZDialogTheme" />
 
         <activity android:name=".activities.ProductPhotoZoomActivity"
-            android:screenOrientation="portrait"
+                  android:screenOrientation="portrait"
                   android:theme="@style/AppBaseTheme"/>
         <activity
             android:name=".activities.ArticleDescriptionActivity"
@@ -166,6 +166,10 @@
             android:theme="@style/AppBaseTheme" />
         <activity
             android:name=".activities.BarcodeScannerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseTheme" />
+        <activity
+            android:name=".activities.BookedForReviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
 
@@ -216,6 +220,11 @@
             android:name="com.payu.sdk.ProcessPaymentActivity"
             android:configChanges="orientation|screenSize" >
         </activity>
+        <activity
+            android:name=".activities.ProductDemoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activities.UrlRouter"
             android:excludeFromRecents="true"

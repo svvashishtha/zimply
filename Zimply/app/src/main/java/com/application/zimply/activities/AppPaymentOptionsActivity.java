@@ -15,6 +15,7 @@ import com.application.zimply.application.AppApplication;
 import com.application.zimply.baseobjects.AddressObject;
 import com.application.zimply.extras.AppConstants;
 import com.application.zimply.extras.ObjectTypes;
+import com.application.zimply.objects.AllProducts;
 import com.application.zimply.preferences.AppPreferences;
 import com.application.zimply.serverapis.RequestTags;
 import com.application.zimply.utils.JSONUtils;
@@ -45,6 +46,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
     int PAYMENT_TYPE_CASH=4;
     int PAYMENT_TYPE_CARD = 2;
 
+    int buyingChannel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             email = getIntent().getStringExtra("email");
             totalPrice =Double.parseDouble(getIntent().getStringExtra("total_amount"));
             addressObj = (AddressObject)getIntent().getSerializableExtra("address");
+            buyingChannel = getIntent().getIntExtra("buying_channel",0);
         }
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         addToolbarView(toolbar);
@@ -155,6 +159,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         list.add(new BasicNameValuePair("order_id",orderId));
         list.add(new BasicNameValuePair("transaction_id",transactionId));
         list.add(new BasicNameValuePair("payment_status",((paymentSuccess)?1:3)+"" ));
+        list.add(new BasicNameValuePair("buying_channel", buyingChannel+ ""));
         UploadManager.getInstance().makeAyncRequest(url, PLACE_ORDER_SUCCESS_REQUEST_TAG, "", ObjectTypes.OBJECT_TYPE_PLACE_ORDER,
                 null, list, null);
 
@@ -171,6 +176,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         list.add(new BasicNameValuePair("order_id",orderId));
         list.add(new BasicNameValuePair("transaction_id",transactionId));
         list.add(new BasicNameValuePair("payment_status", 1 + ""));
+        list.add(new BasicNameValuePair("buying_channel", buyingChannel+ ""));
         UploadManager.getInstance().makeAyncRequest(url, PLACE_ORDER_SUCCESS_REQUEST_TAG, "", ObjectTypes.OBJECT_TYPE_PLACE_ORDER,
                 null, list, null);
 
@@ -204,14 +210,16 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             }
             if ( status) {
                 if (JSONUtils.getIntegerfromJSON(((JSONObject) response), "payment_status") == 1) {
+                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() - JSONUtils.getIntegerfromJSON(((JSONObject) response), "cart_count"));
                     Toast.makeText(this, "Order placed successfully", Toast.LENGTH_LONG).show();
                     Intent postPaymentIntent = new Intent(this, PostPaymentThankYouActivity.class);
                     postPaymentIntent.putExtra("address", addressObj);
                     //todo confirm price here
                     postPaymentIntent.putExtra("billing_amount", totalPrice+"");
-                    postPaymentIntent.putExtra("payment_type",paymentType);
-                    startActivity(postPaymentIntent);
+                    postPaymentIntent.putExtra("payment_type", paymentType);
                     finish();
+                    startActivity(postPaymentIntent);
+
                 }else{
                     Toast.makeText(this, "Could not place order. Try again", Toast.LENGTH_SHORT).show();
                 }

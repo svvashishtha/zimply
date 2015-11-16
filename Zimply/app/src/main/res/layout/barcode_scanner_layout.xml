@@ -20,10 +20,6 @@
 
     </me.dm7.barcodescanner.zxing.ZXingScannerView>
 
-    <com.application.zimply.widgets.CustomTextView
-        android:id="@+id/received_product_name"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/z_item_height_48"/>
+
 
 </LinearLayout>

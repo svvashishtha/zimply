@@ -114,25 +114,28 @@ public class AllProducts {
     }
 
     public boolean cartContains(int productId){
-        for(BaseCartProdutQtyObj obj: cartObjs){
-            if(obj.getId() == productId){
-                return true;
+        if(cartObjs!=null && cartObjs.size()>0){
+            for(BaseCartProdutQtyObj obj: cartObjs){
+                if(obj.getId() == productId){
+                    return true;
+                }
             }
         }
         return false;
     }
 
     public void removeCartItem(int productId){
-
-        for(int i=0;i<cartObjs.size();i++){
-            if(cartObjs.get(i).getId() == productId){
-                cartObjs.remove(i);
-                return;
+        if(cartObjs!=null){
+            for(int i=0;i<cartObjs.size();i++) {
+                if (cartObjs.get(i).getId() == productId) {
+                    cartObjs.remove(i);
+                    return;
+                }
             }
         }
     }
 
     public Object parseWishlistData(String responseString){
-     return new Gson().fromJson(responseString , MyWishListObject.class);
+        return new Gson().fromJson(responseString , MyWishListObject.class);
     }
 }

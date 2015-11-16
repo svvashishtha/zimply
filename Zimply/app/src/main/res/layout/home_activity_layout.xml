@@ -61,6 +61,8 @@
                 <!-- The Tab rests directly below the Toolbar, attached below it -->
                 <FrameLayout
                     android:layout_width="match_parent"
+                    android:visibility="gone"
+
                     android:layout_height="@dimen/abc_action_bar_default_height_material">
                     <android.support.design.widget.TabLayout
                         android:id="@+id/indicator"
@@ -69,11 +71,13 @@
                         app:tabSelectedTextColor="@color/z_blue_color"
                         app:tabTextColor="@color/pager_tab_normal_color"
                         android:background="@color/white"
+                        android:visibility="gone"
                         android:layout_height="match_parent"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:visibility="gone"
                         android:orientation="horizontal">
                         <View
                             android:layout_width="0dp"
@@ -110,7 +114,7 @@
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="96dp"
+                android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
                 android:background="@color/pager_bg">
             </android.support.v4.view.ViewPager>
         </android.support.design.widget.CoordinatorLayout>

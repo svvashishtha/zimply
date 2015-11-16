@@ -56,9 +56,11 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     boolean paymentSuccess;
     private RecyclerView mListView;
     private Activity mActivity;
-    private boolean destroyed, address;
+    private boolean isDestroyed, address;
     private boolean billing = false, shipping = false;
     private static OrderSummaryFragment fragment;
+
+    int buyingChannel=-1;
 
 
     public static OrderSummaryFragment newInstance(Bundle bundle) {
@@ -78,7 +80,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     @Override
     public void onDestroyView() {
 
-        destroyed = true;
+        isDestroyed = true;
         GetRequestManager.getInstance().removeCallbacks(this);
         UploadManager.getInstance().removeCallback(this);
 
@@ -102,7 +104,9 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                     shippingAddress = (AddressObject) savedInstanceState.getSerializable("addressShipping");
                 if(savedInstanceState.containsKey("cartObject"))
                     cartObject = (CartObject) savedInstanceState.getSerializable("cartObject");
+                buyingChannel = savedInstanceState.getInt("buying_channel");
             } else if (getArguments() != null) {
+                buyingChannel = getArguments().getInt("buying_channel");
                 if(getArguments().containsKey("addressBilling"))
                     billingAddress = (AddressObject) getArguments().getSerializable("addressBilling");
                 if(getArguments().containsKey("addressShipping"))
@@ -111,7 +115,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                     cartObject = (CartObject) getArguments().getSerializable("cartObject");
             }
         }
-        destroyed = false;
+        isDestroyed = false;
 
         GetRequestManager.getInstance().addCallbacks(this);
 
@@ -136,17 +140,28 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     private void loadAddressData() {
         address = true;
-        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_ADDRESSES + "?userid=" + AppPreferences.getUserID(mActivity);
+        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_ADDRESSES + "?src=mob&userid=" + AppPreferences.getUserID(mActivity)+"&buying_channel="+buyingChannel;
         GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.GET_ADDRESS_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_GET_ADDRESSES);
 
     }
 
+    public String getProductBuyingChannels( ArrayList<NonLoggedInCartObj> objs){
+        StringBuilder s = new StringBuilder();
+        for(int i=0;i<objs.size();i++){
+            s.append(objs.get(i).getSellingChannel()+"");
+            if(i!= objs.size()-1) {
+                s.append(".");
+            }
+        }
+        return s.toString();
+    }
+
     private void loadCartData() {
-        String url = AppApplication.getInstance().getBaseUrl() + GET_CART_URL + "?userid=" + AppPreferences.getUserID(mActivity);
+        String url = AppApplication.getInstance().getBaseUrl() + GET_CART_URL + "?src=mob&userid=" + AppPreferences.getUserID(mActivity)+"&buying_channel="+buyingChannel;
         ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(getActivity()), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
 
         if (objs != null) {
-            url += "&ids=" + getProductIdStrings(objs) + "&quantity=" + getProductQuantityString(objs);
+            url += "&ids=" + getProductIdStrings(objs) + "&quantity=" + getProductQuantityString(objs)+"&buying_channels="+getProductBuyingChannels(objs);
         }
         GetRequestManager.getInstance().makeAyncRequest(url, GET_CART_DETAILS, OBJECT_TYPE_CART);
     }
@@ -209,7 +224,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !destroyed) {
+        if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !isDestroyed) {
             {
                 // view.findViewById(R.id.save).setVisibility(View.GONE);
                 showLoadingView();
@@ -226,7 +241,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     public void onRequestCompleted(String requestTag, Object obj) {
         if (zProgressDialog != null)
             zProgressDialog.dismiss();
-        if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !destroyed) {
+        if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !isDestroyed) {
 
             addressObjectArrayList = (ArrayList<AddressObject>) obj;
             if (addressObjectArrayList.size() > 0) {
@@ -327,7 +342,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !destroyed) {
+        if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !isDestroyed) {
             {
                 Toast.makeText(mActivity, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
@@ -346,6 +361,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             intent.putExtra("name",shippingAddress.getName());
             intent.putExtra("email",shippingAddress.getEmail());
             intent.putExtra("address",shippingAddress);
+            intent.putExtra("buying_channel",buyingChannel);
             startActivity(intent);
 
 
@@ -434,7 +450,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
 
-        if(!destroyed ){
+        if(!isDestroyed){
             //todo decide whether to show loading here or not\
             if (zProgressDialog != null)
                 zProgressDialog.dismiss();
@@ -507,7 +523,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
 
     public void onDestroy() {
-        destroyed = true;
+        isDestroyed = true;
         UploadManager.getInstance().removeCallback(this);
         GetRequestManager.getInstance().removeCallbacks(this);
         super.onDestroy();
@@ -515,7 +531,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
-        if (!destroyed && isAdded() &&(requestType == QUANTITY_UPDATE || requestType == PLACE_ORDER_REQUEST_TAG))
+        if (!isDestroyed && isAdded() &&(requestType == QUANTITY_UPDATE || requestType == PLACE_ORDER_REQUEST_TAG))
             zProgressDialog = ProgressDialog.show(mActivity, null, "Loading...");
     }
 

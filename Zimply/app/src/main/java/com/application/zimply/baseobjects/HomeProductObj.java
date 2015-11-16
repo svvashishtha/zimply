@@ -33,6 +33,16 @@ public class HomeProductObj implements Serializable{
 	private String discountFactor;
 	private String image;
 
+	private boolean is_o2o;
+
+	public boolean is_o2o() {
+		return is_o2o;
+	}
+
+	public void setIs_o2o(boolean is_o2o) {
+		this.is_o2o = is_o2o;
+	}
+
 	public ArrayList<String> getThumbs() {
 		return thumbs;
 	}

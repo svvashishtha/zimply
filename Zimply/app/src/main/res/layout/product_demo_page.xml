@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@drawable/actionbar_bg"
+        app:theme="@style/Toolbar_Theme" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/margin_medium"
+        android:orientation="vertical">
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/store_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_large"
+            android:text="@string/request_for_demo_regisered"/>
+
+
+        <com.application.zimply.widgets.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:textColor="@color/heading_text_color"
+            android:text="Store Address"/>
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/store_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_small"
+            android:lineSpacingExtra="2dp"
+            android:text="Blue Hut Furnishers\nJail Road, Tilak Nagar\nNew Delhi-1110023"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/cancel_booking"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Cancel Booking"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingRight="@dimen/margin_large"
+            android:textColor="@color/white"
+            android:background="@drawable/blue_button_background"
+            android:layout_height="@dimen/z_item_height_48"/>
+    </LinearLayout>
+
+</LinearLayout>

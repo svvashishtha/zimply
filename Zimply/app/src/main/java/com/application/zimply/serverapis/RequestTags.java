@@ -25,7 +25,7 @@ public interface RequestTags {
     String ORDERLISTREQUESTTAG = "orderlistrequesttag";
     String CHECKPINCODEREQUESTTAG = "checkpincoderequesttag";
     String PRO_REQUEST_TAGS = "pro_request_tags";
-
+    String BOOKED_HISTORY_REQUEST_TAG=  "bookedhistoryrequesttag";
     String BANNER_REQUEST_TAG="bannerrequesttag";
 
 
@@ -35,6 +35,8 @@ public interface RequestTags {
     String GET_USER_DATA = "userdatatag";
     String NON_LOGGED_IN_CART_CACHE="nonloggedincartcache";
     String USER_WISHLIST = "userwishlist";
+
+
     int SIGNUP_REQUEST_TAG_BASE = 0x01;
     int SIGNUP_REQUEST_TAG_SIGNUP = 0x02;
     int SIGNUP_REQUEST_TAG_LOGIN = 0x03;
@@ -46,7 +48,8 @@ public interface RequestTags {
     int ADD_TO_CART = 0x008;
     int ADD_TO_CART_SEARCH = 0x0111;
     int ADD_TO_CART_PRODUCT_DETAIL = 0x0112;
-
+    int MARK_PRODUCT_REVIEW_TAG = 0x0113;
+    int CANCEL_PRODUCT_REVIEW_TAG = 0x0114;
     int QUANTITY_UPDATE = 0x009;
     int BUY_NOW = 0x0010;
 

@@ -59,7 +59,15 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
         super.onResume();
         scannerView.setResultHandler(this);
         scannerView.startCamera();
+        //  new Handler().postDelayed(r,1000);
+
     }
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            scannerView.startCamera();
+        }
+    };
 
     @Override
     public void onPause() {
@@ -100,4 +108,6 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
             this.finish();
         }
     }
+
+
 }

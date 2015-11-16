@@ -18,7 +18,7 @@
         android:onClick="fabSelected"
         fab:fab_colorNormal="@color/white"
         fab:fab_colorPressed="@color/zhl"
-        fab:fab_icon="@drawable/fab_filter"
+        fab:fab_icon="@drawable/ic_barcodescanner"
         fab:fab_size="normal" />
 
 <!--

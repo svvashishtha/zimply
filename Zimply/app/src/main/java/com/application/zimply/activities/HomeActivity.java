@@ -64,8 +64,6 @@ import com.application.zimply.firstRunOverlay.ShowcaseView;
 import com.application.zimply.firstRunOverlay.ViewTarget;
 import com.application.zimply.fragments.ArticleListingFragment;
 import com.application.zimply.fragments.BannerDialogFragment;
-import com.application.zimply.fragments.ExpertCategoryFragment;
-import com.application.zimply.fragments.PhotosListingFragment;
 import com.application.zimply.fragments.PhotosListingFragmentWebView;
 import com.application.zimply.fragments.ProductsListFragment;
 import com.application.zimply.managers.GetRequestListener;
@@ -102,10 +100,12 @@ import java.util.List;
 public class HomeActivity extends BaseActivity implements OnClickListener,
         RequestTags, GetRequestListener, UploadManagerCallback, AppConstants, FABControl.OnFloatingActionsMenuUpdateListener {
 
+
+    //OnPageChangeListener commented
     private static final int FRAGMENT_PHOTO = 0;
     private static final int FRAGMENT_ARTICLE = 1;
     private static final int FRAGMENT_EXPERT = 2;
-    private static final int FRAGMENT_PRODUCT = 3;
+    private static final int FRAGMENT_PRODUCT = 0;
     private final int EMAIL_FEEDBACK = 1500;
     DrawerLayout mDrawer;
     int width, height;
@@ -204,7 +204,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         //   mTabs.setTabTextColors(R.color.heading_text_color,R.color.pager_tab_selected_color);
 
         mTabs.setupWithViewPager(pager);
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mTabs.setVisibility(View.GONE);
+     /*   pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -213,7 +214,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
-                    case FRAGMENT_PHOTO:
+                    *//*case FRAGMENT_PHOTO:
                         showFAB(false);
                         ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.fab_filter);
                         searchItem.setVisible(false);
@@ -223,6 +224,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.fab_filter);
                         searchItem.setVisible(true);
                         break;
+                    *//*
                     case FRAGMENT_PRODUCT:
                         showFAB(false);
                         ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.ic_barcodescanner);
@@ -262,7 +264,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
             }
         });
-
+*/
         onNewIntent(getIntent());
         checkForUpdate();
         loadBanner();
@@ -423,7 +425,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             }
         });
         mFABOverlay.setClickable(false);
-
+        ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.ic_barcodescanner);
         showFAB(true);
     }
 
@@ -505,15 +507,16 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     public void fabSelected(View view) {
-        switch (view.getId()) {
+
+        Intent intent = new Intent(HomeActivity.this,BarcodeScannerActivity.class);
+        startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
+        /*switch (view.getId()) {
             case R.id.fab_post_request:
                 if(pager.getCurrentItem() == 0 || pager.getCurrentItem() == 2) {
-                    Intent intent = new Intent(this, FilterActivity.class);
-                    intent.putExtra("pro_slug", "");
-                    intent.putExtra("type", AppConstants.ITEM_TYPE_PHOTO);
-                    startActivity(intent);
+                    Intent intent = new Intent(HomeActivity.this,BarcodeScannerActivity.class);
+                    startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
                 }else if(pager.getCurrentItem() == 3){
-                    /*Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                    *//*Intent intent = new Intent("com.google.zxing.client.android.SCAN");
                     intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
                     PackageManager packageMgr = getPackageManager();
                     List<ResolveInfo> activities = packageMgr.queryIntentActivities(intent, 0);
@@ -521,12 +524,11 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         startActivityForResult(intent, 0);
                     } else {
                         showToast("Barcode scanner is not available in your device");
-                    }*/
-                    Intent intent = new Intent(HomeActivity.this,BarcodeScannerActivity.class);
-                    startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
+                    }*//*
+
                 }
                 break;
-        }
+        }*/
     }
 
     // Controls visibility/scale of FAB on drawer open/close
@@ -577,9 +579,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         mDrawer.closeDrawers();
                         startActivity(intent);
                         break;
-                    case 1:
+                    case 2:
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
-                            intent = new Intent(HomeActivity.this, UserFavouritesActivity.class);
+                            intent = new Intent(HomeActivity.this, BookedForReviewActivity.class);
                             mDrawer.closeDrawers();
                             startActivity(intent);
                         } else {
@@ -591,7 +593,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                             startActivity(intent);
                         }
                         break;
-                    case 2:
+                    case 1:
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
                             intent = new Intent(HomeActivity.this, MyWishlist.class);
                             intent.putExtra("url", AppConstants.USER_WISHLIST);
@@ -781,7 +783,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 JSONObject obj = JSONUtils.getJSONObject(contents);
                 // Intent workintent = new Intent(this, ProductDetailsActivity.class);
                 productId=(long) JSONUtils.getIntegerfromJSON(obj, "id");
-
+                slug = JSONUtils.getStringfromJSON(obj, "slug");
                 addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
                 // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
                 // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
@@ -797,14 +799,16 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         if (AppPreferences.isUserLogIn(this)) {
             if (AllProducts.getInstance().cartContains((int) id)) {
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
-                moveToCartActivity();
+                moveToProductDetail(id, slug);
             } else {
 
                 String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
                 List<NameValuePair> nameValuePair = new ArrayList<>();
+                nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_OFFLINE+""));
                 nameValuePair.add(new BasicNameValuePair("product_id", id + ""));
                 nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
+
                 UploadManager.getInstance().addCallback(this);
                 UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART, slug, ObjectTypes.OBJECT_ADD_TO_CART, null, nameValuePair, null);
             }
@@ -813,7 +817,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             if (oldObj == null) {
                 oldObj = new ArrayList<NonLoggedInCartObj>();
             }
-            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1);
+            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1,BUYING_CHANNEL_OFFLINE);
             if (oldObj.contains(item)) {
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
             } else {
@@ -823,9 +827,17 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
             }
-            moveToCartActivity();
+            moveToProductDetail(id, slug);
 
         }
+    }
+
+    public void moveToProductDetail(long productId , String slug){
+        Intent intent = new Intent(this, ProductDetailsActivity.class);
+        intent.putExtra("slug", slug);
+        intent.putExtra("id", productId);
+        intent.putExtra("is_scanned",true);
+        startActivity(intent);
     }
 
     public void moveToCartActivity(){
@@ -1105,6 +1117,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             case R.id.cart:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
                 intent.putExtra("OrderSummaryFragment", false);
+                intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
                 startActivity(intent);
                 break;
         }
@@ -1205,6 +1218,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     long productId;
+    String slug;
 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
@@ -1224,7 +1238,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 if (message != null) {
                     AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int)productId, 1));
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
-                    moveToCartActivity();
+                    moveToProductDetail(productId,slug);
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
 
                     message = jsonObject.getString("error");
@@ -1330,9 +1344,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
             pageTitles = new ArrayList<String>();
-            pageTitles.add("Photos");
+            /*pageTitles.add("Photos");
             pageTitles.add("Stories");
-            pageTitles.add("Experts");
+            pageTitles.add("Experts");*/
             pageTitles.add("Shop");
             fragments = new HashMap<>();
         }
@@ -1341,7 +1355,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         public Fragment getItem(int position) {
             Fragment fragment = null;
             switch (position) {
-                case FRAGMENT_PHOTO:
+                /*case FRAGMENT_PHOTO:
                     if (CommonLib.showPhotosWebView)
                         fragment = PhotosListingFragmentWebView.newInstance(null);
                     else
@@ -1355,7 +1369,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 case FRAGMENT_EXPERT:
                     fragment = ExpertCategoryFragment.newInstance(null);
 
-                    break;
+                    break;*/
                 case FRAGMENT_PRODUCT:
                     Bundle arguments = new Bundle();
                     arguments.putString("title", getString(R.string.deals_of_day_text));

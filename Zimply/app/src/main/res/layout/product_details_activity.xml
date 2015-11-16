@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/product_root"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/white">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/product_root"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/product_overlay"
@@ -50,49 +50,31 @@
         android:layout_gravity="bottom"
         android:orientation="horizontal">
 
-        <FrameLayout
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/buy_offline"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="fill_parent"
+            android:background="@drawable/blue_button_background"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:text="@string/buy_offline"
+            android:textSize="@dimen/font_medium"
+            android:textColor="@color/white" />
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/add_to_cart"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1">
-
-            <com.application.zimply.widgets.CustomTextView
-                android:id="@+id/buy_offline"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/blue_button_background"
-                android:gravity="center"
-                android:textAllCaps="true"
-                android:text="@string/buy_offline"
-                android:textSize="@dimen/font_medium"
-                android:textColor="@color/white" />
-
-            <ProgressBar
-                android:id="@+id/progress_add_to_cart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone" />
-        </FrameLayout>
+            android:layout_weight="1"
+            android:background="@drawable/green_btn_rectangle_bg"
+            android:gravity="center"
+            android:text="@string/buy_online"
+            android:textSize="@dimen/font_medium"
+            android:textAllCaps="true"
+            android:textColor="@color/white" />
 
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1">
-
-            <com.application.zimply.widgets.CustomTextView
-                android:id="@+id/add_to_cart"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:background="@drawable/green_btn_rectangle_bg"
-                android:gravity="center"
-                android:text="@string/buy_online"
-                android:textSize="@dimen/font_medium"
-                android:textAllCaps="true"
-                android:textColor="@color/white" />
-
-        </FrameLayout>
     </LinearLayout>
     <android.support.v7.widget.Toolbar
         android:id="@+id/prod_toolbar"

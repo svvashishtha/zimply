@@ -5,6 +5,7 @@ import com.application.zimply.application.AppApplication;
 import com.application.zimply.baseobjects.AddressObject;
 import com.application.zimply.baseobjects.AppConfig;
 import com.application.zimply.baseobjects.BannerObject;
+import com.application.zimply.baseobjects.BookedProductHistoryObject;
 import com.application.zimply.baseobjects.CategoryObject;
 import com.application.zimply.baseobjects.CategoryTree;
 import com.application.zimply.baseobjects.FavListItemObject;
@@ -15,6 +16,7 @@ import com.application.zimply.baseobjects.HomePhotoObj;
 import com.application.zimply.baseobjects.HomeProductObj;
 import com.application.zimply.baseobjects.ParentCategory;
 import com.application.zimply.baseobjects.ProductAttribute;
+import com.application.zimply.baseobjects.ProductVendorTimeObj;
 import com.application.zimply.objects.AllArticles;
 import com.application.zimply.objects.AllCategories;
 import com.application.zimply.objects.AllCities;
@@ -246,6 +248,8 @@ public class ParserClass implements ObjectTypes {
                             product.setName(String.valueOf(productObjectJson.get("name")));
                         }
 
+                        if (productObjectJson.has("is_o2o") && productObjectJson.get("is_o2o") instanceof Boolean)
+                            product.setIs_o2o(productObjectJson.getBoolean("is_o2o"));
                         if (productObjectJson.has("is_cod") && productObjectJson.get("is_cod") instanceof Boolean)
                             product.setIsCod(productObjectJson.getBoolean("is_cod"));
                         if (productObjectJson.has("price") && productObjectJson.get("price") instanceof Double)
@@ -320,6 +324,23 @@ public class ParserClass implements ObjectTypes {
                 }
                 return product;
             }
+            case OBJECT_TYPE_ALL_BOOKED_PRODUCTS:
+                JSONArray array=JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString),"books");
+                ArrayList<BookedProductHistoryObject> bookedObj = new ArrayList<>();
+                if(array!=null) {
+
+                    for(int i=0;i<array.length();i++) {
+                        BookedProductHistoryObject newObj = new BookedProductHistoryObject();
+                        newObj.setName(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "name"));
+                        newObj.setPrice(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(array, i), "price"));
+                        newObj.setProductImg(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "image"));
+                        newObj.setVendorTimeObj(new Gson().fromJson(JSONUtils.getJSONObject(array, i).toString(), ProductVendorTimeObj.class));
+                        bookedObj.add(newObj);
+                    }
+                    return bookedObj;
+                }
+                return null;
+
             case OBJECT_TYPE_ORDER_LIST:
                 return AllProducts.getInstance().parseOrders(responseString);
             case OBJECT_TYPE_ITEM_REMOVED:
@@ -814,6 +835,10 @@ public class ParserClass implements ObjectTypes {
                 return AllProducts.getInstance().parseWishlistData(responseString);
             case OBJECT_TYPE_BANNER_OBJECT:
                 return new Gson().fromJson(responseString, BannerObject.class);
+            case OBJECT_TYPE_MARK_PRODUCT_REVIEW:
+                return new Gson().fromJson(JSONUtils.getJSONObject(JSONUtils.getJSONObject(responseString),"context").toString(), ProductVendorTimeObj.class);
+            case OBJECT_TYPE_REMOVE_PRODUCT_REVIEW:
+                return responseString;
             default:
                 return null;
         }

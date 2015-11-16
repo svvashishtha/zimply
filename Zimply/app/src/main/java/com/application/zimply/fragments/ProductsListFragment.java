@@ -3,7 +3,7 @@ package com.application.zimply.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +21,7 @@ import com.application.zimply.managers.GetRequestListener;
 import com.application.zimply.managers.GetRequestManager;
 import com.application.zimply.objects.AllProducts;
 import com.application.zimply.serverapis.RequestTags;
-import com.application.zimply.widgets.SpaceGridItemDecorator;
+import com.application.zimply.widgets.SpaceItemDecoration;
 
 import java.util.ArrayList;
 
@@ -56,11 +56,11 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
         GetRequestManager.getInstance().addCallbacks(this);
 
         height = (getDisplayMetrics().widthPixels - 3 * getResources().getDimensionPixelSize(R.dimen.margin_medium)) / 2;
+       // height = getDisplayMetrics().widthPixels ;
         cateoryList = (RecyclerView) view.findViewById(R.id.category_list);
-        cateoryList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        cateoryList.addItemDecoration(new SpaceGridItemDecorator(
-                (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini)));
+        //cateoryList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        cateoryList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        cateoryList.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small)));
         //load products
         setLoadingVariables();
         loadData();
@@ -82,8 +82,8 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     }
 
     private void loadData() {
-        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_PRODUCT_CATEGORY_LIST + "?src=mob";
-        GetRequestManager.getInstance().requestHTTPThenCache(url, RequestTags.PRODUCT_CATEGORY_REQUEST_TAG,
+        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_PRODUCT_CATEGORY_LIST ;
+        GetRequestManager.getInstance().requestCacheThenHTTP(url, RequestTags.PRODUCT_CATEGORY_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_CATEGORY, GetRequestManager.TEMP);
     }
 
@@ -108,7 +108,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                     } else {
                         AllProducts.getInstance().setProduct_category((ArrayList<CategoryObject>) obj);
                         productsCategoryGridAdapter = new ProductsCategoryGridAdapter(getActivity(), (ArrayList<CategoryObject>) obj, height);
-                        ((GridLayoutManager) cateoryList.getLayoutManager())
+                       /* ((GridLayoutManager) cateoryList.getLayoutManager())
                                 .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                                     @Override
                                     public int getSpanSize(int position) {
@@ -124,7 +124,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                                                 return -1;
                                         }
                                     }
-                                });
+                                });*/
 
                         cateoryList.setAdapter(productsCategoryGridAdapter);
                         showView();

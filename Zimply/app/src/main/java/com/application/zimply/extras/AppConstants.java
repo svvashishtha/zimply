@@ -22,6 +22,7 @@ public interface AppConstants {
     String ORDER_LIST_URL = "ecommerce/all-orders/";
     String CHECK_PINCODE = "ecommerce/pincode/";
     String GET_USER_DATA = "zimply-auth/user-detail/";
+    String BOOKED_PRODUCTS_URL = "ecommerce/all-book/";
 
     String EXPERT_PHOTO_REQUETS_URL = "explore/expert-photo-list/";
     String FORGOT_PASSWORD = "zimply-auth/new-forget-password/";
@@ -29,6 +30,9 @@ public interface AppConstants {
 
     String MARK_FAVOURITE_URL = "zimply-auth/add-item-in-favourite/";
     String MARK_UNFAVOURITE_URL = "zimply-auth/delete-item-from-favourite/";
+
+    String MARK_PRODUCT_REVIEW_URL = "ecommerce/add-book-product/";
+    String REMOVE_PRODUCT_REVIEW_URL = "ecommerce/remove-book/";
 
     String GET_FAV_LIST_URL = "zimply-auth/new-favourite/";
 
@@ -147,4 +151,12 @@ public interface AppConstants {
 
     int REQUEST_TYPE_FROM_SEARCH = 10000;
     int REQUEST_TYPE_FROM_PRODUCT = 10001;
+
+
+    int BUYING_CHANNEL_OFFLINE = 0;
+    int BUYING_CHANNEL_ONLINE = 1;
+
+
+
 }
+
