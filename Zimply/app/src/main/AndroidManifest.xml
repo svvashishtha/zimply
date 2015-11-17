@@ -19,6 +19,10 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- SMS Parsing -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
     <permission
         android:name="com.application.zimply.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -341,6 +345,13 @@
             android:label="@string/title_activity_post_payment_thank_you"
             android:theme="@style/AppTheme">
         </activity>
+
+        <receiver android:name="com.application.zimply.receiver.IncomingSmsReceiver">
+            <intent-filter android:priority="999">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
