@@ -589,7 +589,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         mDrawer.closeDrawers();
                         startActivity(intent);
                         break;
-                    case 2:
+                    case 1:
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
                             intent = new Intent(HomeActivity.this, BookedForReviewActivity.class);
                             mDrawer.closeDrawers();
@@ -603,7 +603,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                             startActivity(intent);
                         }
                         break;
-                    case 1:
+                    case 3:
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
                             intent = new Intent(HomeActivity.this, MyWishlist.class);
                             intent.putExtra("url", AppConstants.USER_WISHLIST);
@@ -618,7 +618,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                             startActivity(intent);
                         }
                         break;
-                    case 3:
+                    case 2:
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
                             intent = new Intent(HomeActivity.this, PurchaseListActivity.class);
                             intent.putExtra("fromHome", true);
@@ -671,7 +671,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         }
                         break;
 
-                    case 5:
+                    case 6:
                         try {
                             intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
                             startActivity(intent);
@@ -681,7 +681,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                             Crashlytics.logException(e);
                         }
                         break;
-                    case 6:/*
+                    case 5:/*
                         AlertDialog alertDialog = new AlertDialog.Builder(HomeActivity.this).
                                 setTitle("Support").
                                 setMessage("Talk to us..").setPositiveButton("Call", new DialogInterface.OnClickListener() {
@@ -1504,6 +1504,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 if (zProgressDialog != null) {
                     zProgressDialog.dismiss();
                 }
+
                 if (verificationMessage != null && !"".equals(verificationMessage)) {
 
                     StringTokenizer tokens = new StringTokenizer(verificationMessage, " ");
@@ -1511,16 +1512,14 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     boolean otpFound = false;
                     if(tokens.countTokens() > 0) {
 
-                        while(!otpFound) {
-                            if(tokens.hasMoreTokens()) {
-                                otp = tokens.nextToken();
-                                if (otp != null && otp.length() == 6) {
-                                    otpFound = true;
-                                }
-                            } else {
-                                break;
+//                        while(!otpFound) {
+                        if(tokens.hasMoreTokens()) {
+                            otp = tokens.nextToken();
+                            if (otp != null && otp.length() == 6) {
+                                otpFound = true;
                             }
                         }
+//                        }
                     }
 
                     if(!otpFound)

@@ -107,7 +107,8 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                         changeViewVisiblity(cateoryList, View.GONE);
                     } else {
                         AllProducts.getInstance().setProduct_category((ArrayList<CategoryObject>) obj);
-                        productsCategoryGridAdapter = new ProductsCategoryGridAdapter(getActivity(), (ArrayList<CategoryObject>) obj, height);
+                        int width = getDisplayMetrics().widthPixels - (2*(getResources().getDimensionPixelSize(R.dimen.margin_medium)));
+                        productsCategoryGridAdapter = new ProductsCategoryGridAdapter(getActivity(), (ArrayList<CategoryObject>) obj, height,width);
                        /* ((GridLayoutManager) cateoryList.getLayoutManager())
                                 .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                                     @Override

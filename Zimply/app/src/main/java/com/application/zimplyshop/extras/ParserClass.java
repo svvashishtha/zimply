@@ -1,4 +1,3 @@
-
 package com.application.zimplyshop.extras;
 
 import com.application.zimplyshop.application.AppApplication;
@@ -14,6 +13,7 @@ import com.application.zimplyshop.baseobjects.HomeArticleObj;
 import com.application.zimplyshop.baseobjects.HomeExpertObj;
 import com.application.zimplyshop.baseobjects.HomePhotoObj;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.baseobjects.ImageObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
@@ -145,7 +145,7 @@ public class ParserClass implements ObjectTypes {
                         for (int i = 0; i < productsArr.length(); i++) {
                             CategoryObject productCategory = new CategoryObject();
                             JSONObject productCatJson = productsArr.getJSONObject(i);
-
+                            productCategory.setImg(new Gson().fromJson(productCatJson.getJSONObject("img").toString(), ImageObject.class));
                             if (productCatJson.has("image")) {
                                 productCategory.setImage(String.valueOf(productCatJson.get("image")));
                             }
@@ -334,6 +334,7 @@ public class ParserClass implements ObjectTypes {
                         newObj.setName(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "name"));
                         newObj.setPrice(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(array, i), "price"));
                         newObj.setProductImg(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "image"));
+                        newObj.setStatus(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "status"));
                         newObj.setVendorTimeObj(new Gson().fromJson(JSONUtils.getJSONObject(array, i).toString(), ProductVendorTimeObj.class));
                         bookedObj.add(newObj);
                     }

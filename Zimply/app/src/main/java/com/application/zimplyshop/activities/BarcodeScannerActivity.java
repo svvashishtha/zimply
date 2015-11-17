@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,8 +44,9 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
         scannerView.setFormats(formats);
         scannerView.setAutoFocus(true);
         scannerView.setSoundEffectsEnabled(true);
-
-
+        DisplayMetrics metrics = getDisplayMetrics();
+        scannerView.getFramingRectInPreview(metrics.widthPixels/3,metrics.widthPixels/3);
+        new Handler().postDelayed(r,5000);
     }
 
     private void addToolbarView(Toolbar toolbar) {
@@ -58,8 +61,8 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
     protected void onResume() {
         super.onResume();
         scannerView.setResultHandler(this);
-        scannerView.startCamera();
-        //  new Handler().postDelayed(r,1000);
+       // scannerView.startCamera();
+
 
     }
     Runnable r = new Runnable() {

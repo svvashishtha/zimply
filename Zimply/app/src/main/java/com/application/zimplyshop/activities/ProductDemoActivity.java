@@ -16,6 +16,7 @@ import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.TimeUtils;
 import com.application.zimplyshop.utils.UploadManager;
@@ -61,6 +62,7 @@ public class ProductDemoActivity extends BaseActivity implements AppConstants,Up
             }
         });
 
+        AppPreferences.setIsStartRating(this, true);
         UploadManager.getInstance().addCallback(this);
     }
 

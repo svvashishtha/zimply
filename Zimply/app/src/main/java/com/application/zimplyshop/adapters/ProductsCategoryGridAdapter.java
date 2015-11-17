@@ -20,6 +20,7 @@ import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.preferences.AppPreferences;
+import com.application.zimplyshop.widgets.CustomTextViewBold;
 
 import java.util.ArrayList;
 
@@ -32,10 +33,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     int TYPE_TITLE = 2;
     private ArrayList<CategoryObject> objs;
 
-    public ProductsCategoryGridAdapter(Context context, ArrayList<CategoryObject> objs, int height) {
+    int displayWidth;
+
+    public ProductsCategoryGridAdapter(Context context, ArrayList<CategoryObject> objs, int height,int displayWidth) {
         this.objs = objs;
         this.height = height;
         this.mContext = context;
+        this.displayWidth = displayWidth;
     }
 
 
@@ -60,11 +64,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_CATEGORY) {
+            int height = (objs.get(position).getImg().getHeight()*displayWidth)/objs.get(position).getImg().getWidth();
+
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             ((ProductsCategoryViewHolder) holder).parentFrame.setLayoutParams(lp);
             ((ProductsCategoryViewHolder) holder).categoryName.setText(objs.get(position).getName());
             if (objs.get(position ).getImage() != null) {
-                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(objs.get(position).getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(objs.get(position).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
             }
         } else {
 
@@ -104,13 +110,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class ProductsCategoryViewHolder extends RecyclerView.ViewHolder {
         ImageView categoryImg;
-        TextView categoryName;
+        CustomTextViewBold categoryName;
         FrameLayout parentFrame;
 
         public ProductsCategoryViewHolder(View itemView) {
             super(itemView);
             categoryImg = (ImageView) itemView.findViewById(R.id.category_img);
-            categoryName = (TextView) itemView.findViewById(R.id.category_name);
+            categoryName = (CustomTextViewBold) itemView.findViewById(R.id.category_name);
             parentFrame = (FrameLayout) itemView.findViewById(R.id.parent_layout);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

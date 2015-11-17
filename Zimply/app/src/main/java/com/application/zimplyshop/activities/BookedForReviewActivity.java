@@ -56,6 +56,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
         UploadManager.getInstance().addCallback(this);
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
+
         loadData();
     }
 
@@ -116,7 +117,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
     public void onRequestCompleted(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)){
             if(((ArrayList<BookedProductHistoryObject>)obj).size() == 0){
-                showNullCaseView("Looks like you haven't ordered anything yet.");
+                showNullCaseView("Looks like you haven't booked anything yet.");
                 changeViewVisiblity(orderList, View.GONE);
             }else{
                 setAdapterData(((ArrayList<BookedProductHistoryObject>) obj));

@@ -45,6 +45,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
     int PAYMENT_TYPE_CASH=4;
     int PAYMENT_TYPE_CARD = 2;
 
+
+
     int buyingChannel;
 
     @Override
@@ -64,7 +66,12 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
+        if(buyingChannel == AppConstants.BUYING_CHANNEL_ONLINE) {
+            ((CustomTextView)findViewById(R.id.pay_cash_counter)).setVisibility(View.GONE);
+        }else{
+            ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
+        }
+
         ((CustomTextView)findViewById(R.id.pay_online)).setOnClickListener(this);
 
         UploadManager.getInstance().addCallback(this);
