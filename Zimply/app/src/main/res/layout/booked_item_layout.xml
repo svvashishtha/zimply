@@ -19,11 +19,12 @@
             android:scaleType="centerCrop"/>
         <com.application.zimply.widgets.CustomTextView
             android:id="@+id/product_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sleepwell Sleepwell Sleepwell Sleepwell Sleepwell Sleepwell Sleepwell Sleepwell Sleepwell "
             android:layout_toRightOf="@id/product_img"
             android:layout_alignTop="@id/product_img"
+            android:layout_marginRight="@dimen/margin_small"
             android:textSize="@dimen/font_medium"
             android:textColor="@color/text_color1"/>
 
@@ -35,8 +36,19 @@
             android:text="Rs. 300"
             android:layout_toRightOf="@+id/product_img"
             android:layout_marginRight="@dimen/margin_small"
-
             android:textColor="@color/text_color1"/>
+
+        <com.application.zimply.widgets.CustomTextView
+            android:id="@+id/booking_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_name"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/margin_mini"
+            android:text="Rs. 300"
+            android:layout_marginRight="@dimen/margin_small"
+            android:background="@drawable/green_btn_bg"
+            android:textColor="@color/white"/>
 
         <com.application.zimply.widgets.CustomTextView
             android:id="@+id/store_name"
@@ -67,6 +79,7 @@
             android:layout_marginLeft="@dimen/margin_small"
             android:layout_below="@id/store_address"
             android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
             android:text="Estimated Delivery"
             android:textColor="@color/text_color1"/>
 
@@ -74,7 +87,7 @@
             android:id="@+id/separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/margin_small"
+
             android:layout_below="@id/product_delivery_date"
             android:background="@color/separator_color"/>
         <com.application.zimply.widgets.CustomTextView

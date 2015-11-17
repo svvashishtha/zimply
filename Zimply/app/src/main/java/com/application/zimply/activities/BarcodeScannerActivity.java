@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -60,8 +61,8 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
     protected void onResume() {
         super.onResume();
         scannerView.setResultHandler(this);
-        scannerView.startCamera();
-        //  new Handler().postDelayed(r,1000);
+       // scannerView.startCamera();
+          new Handler().postDelayed(r,5000);
 
     }
     Runnable r = new Runnable() {

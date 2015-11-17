@@ -1504,6 +1504,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 if (zProgressDialog != null) {
                     zProgressDialog.dismiss();
                 }
+
                 if (verificationMessage != null && !"".equals(verificationMessage)) {
 
                     StringTokenizer tokens = new StringTokenizer(verificationMessage, " ");
@@ -1511,16 +1512,14 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     boolean otpFound = false;
                     if(tokens.countTokens() > 0) {
 
-                        while(!otpFound) {
-                            if(tokens.hasMoreTokens()) {
-                                otp = tokens.nextToken();
-                                if (otp != null && otp.length() == 6) {
-                                    otpFound = true;
-                                }
-                            } else {
-                                break;
+//                        while(!otpFound) {
+                        if(tokens.hasMoreTokens()) {
+                            otp = tokens.nextToken();
+                            if (otp != null && otp.length() == 6) {
+                                otpFound = true;
                             }
                         }
+//                        }
                     }
 
                     if(!otpFound)
