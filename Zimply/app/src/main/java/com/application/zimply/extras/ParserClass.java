@@ -14,6 +14,7 @@ import com.application.zimply.baseobjects.HomeArticleObj;
 import com.application.zimply.baseobjects.HomeExpertObj;
 import com.application.zimply.baseobjects.HomePhotoObj;
 import com.application.zimply.baseobjects.HomeProductObj;
+import com.application.zimply.baseobjects.ImageObject;
 import com.application.zimply.baseobjects.ParentCategory;
 import com.application.zimply.baseobjects.ProductAttribute;
 import com.application.zimply.baseobjects.ProductVendorTimeObj;
@@ -145,7 +146,7 @@ public class ParserClass implements ObjectTypes {
                         for (int i = 0; i < productsArr.length(); i++) {
                             CategoryObject productCategory = new CategoryObject();
                             JSONObject productCatJson = productsArr.getJSONObject(i);
-
+                            productCategory.setImg(new Gson().fromJson(productCatJson.getJSONObject("img").toString(), ImageObject.class));
                             if (productCatJson.has("image")) {
                                 productCategory.setImage(String.valueOf(productCatJson.get("image")));
                             }

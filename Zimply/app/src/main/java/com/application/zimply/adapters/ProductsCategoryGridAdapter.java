@@ -33,10 +33,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     int TYPE_TITLE = 2;
     private ArrayList<CategoryObject> objs;
 
-    public ProductsCategoryGridAdapter(Context context, ArrayList<CategoryObject> objs, int height) {
+    int displayWidth;
+
+    public ProductsCategoryGridAdapter(Context context, ArrayList<CategoryObject> objs, int height,int displayWidth) {
         this.objs = objs;
         this.height = height;
         this.mContext = context;
+        this.displayWidth = displayWidth;
     }
 
 
@@ -61,11 +64,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_CATEGORY) {
+            int height = (objs.get(position).getImg().getHeight()*displayWidth)/objs.get(position).getImg().getWidth();
+
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             ((ProductsCategoryViewHolder) holder).parentFrame.setLayoutParams(lp);
             ((ProductsCategoryViewHolder) holder).categoryName.setText(objs.get(position).getName());
             if (objs.get(position ).getImage() != null) {
-                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(objs.get(position).getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(objs.get(position).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
             }
         } else {
 

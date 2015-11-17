@@ -46,7 +46,7 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
         scannerView.setSoundEffectsEnabled(true);
         DisplayMetrics metrics = getDisplayMetrics();
         scannerView.getFramingRectInPreview(metrics.widthPixels/3,metrics.widthPixels/3);
-
+        new Handler().postDelayed(r,5000);
     }
 
     private void addToolbarView(Toolbar toolbar) {
@@ -62,7 +62,7 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
         super.onResume();
         scannerView.setResultHandler(this);
        // scannerView.startCamera();
-          new Handler().postDelayed(r,5000);
+
 
     }
     Runnable r = new Runnable() {

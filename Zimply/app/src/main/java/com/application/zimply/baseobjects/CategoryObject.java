@@ -11,6 +11,8 @@ public class CategoryObject implements Serializable {
     private int dupType;
     private boolean serve;
 
+    private ImageObject img;
+
     public CategoryObject() {
 
     }
@@ -21,6 +23,16 @@ public class CategoryObject implements Serializable {
         this.image = object.getImage();
         this.type = object.getType();
         this.dupType = object.getType();
+        this.img = object.getImg();
+    }
+
+
+    public ImageObject getImg() {
+        return img;
+    }
+
+    public void setImg(ImageObject img) {
+        this.img = img;
     }
 
     public String getName() {
