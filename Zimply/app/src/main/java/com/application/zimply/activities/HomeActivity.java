@@ -35,7 +35,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
@@ -43,7 +42,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,9 +62,6 @@ import com.application.zimply.baseobjects.ShopCategoryObject;
 import com.application.zimply.baseobjects.SignupObject;
 import com.application.zimply.extras.AppConstants;
 import com.application.zimply.extras.ObjectTypes;
-import com.application.zimply.firstRunOverlay.OnShowcaseEventListener;
-import com.application.zimply.firstRunOverlay.ShowcaseView;
-import com.application.zimply.firstRunOverlay.ViewTarget;
 import com.application.zimply.fragments.ArticleListingFragment;
 import com.application.zimply.fragments.BannerDialogFragment;
 import com.application.zimply.fragments.PhotosListingFragmentWebView;
@@ -282,94 +277,94 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         checkForUpdate();
         loadBanner();
         //Show case view lib - FAB
-        prefs = getSharedPreferences("preference_name", 0);
-        if (prefs.getBoolean("first_run_photos", true)) {
-            ViewTarget target = new ViewTarget(R.id.photos_view_pager, this);
-            ShowcaseView collectionFirstRun =
-                    new ShowcaseView.Builder(this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE_LARGE)
-                            .setTarget(target)
-                            .setContentTitle("See home design ideas")
-                            .setStyle(R.style.ShowcaseView)
-                            .setShowcaseEventListener(new OnShowcaseEventListener() {
-                                @Override
-                                public void onShowcaseViewHide(ShowcaseView showcaseView) {
-                                    if (prefs.getBoolean("first_run_fab", true)) {
-                                        ViewTarget target = new ViewTarget(R.id.fab_post_request, HomeActivity.this);
-                                        ShowcaseView collectionFirstRun =
-                                                new ShowcaseView.Builder(HomeActivity.this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE)
-                                                        .setTarget(target)
-                                                        .setContentTitle("Hire home design experts.")
-                                                        .setStyle(R.style.ShowcaseView)
-                                                        .setShowcaseEventListener(new OnShowcaseEventListener() {
-                                                            @Override
-                                                            public void onShowcaseViewHide(ShowcaseView showcaseView) {
-                                                                if (prefs.getBoolean("first_run_product", true)) {
-                                                                    ViewTarget target = new ViewTarget(R.id.shop_view_pager, HomeActivity.this);
-                                                                    ShowcaseView collectionFirstRun =
-                                                                            new ShowcaseView.Builder(HomeActivity.this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE_SMALL)
-                                                                                    .setTarget(target)
-                                                                                    .setContentTitle("Shop exclusive products for your home")
-                                                                                    .setStyle(R.style.ShowcaseView)
-                                                                                    .build();
-
-                                                                    // 'OK' button
-                                                                    RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                                                    lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                                                                    lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                                                                    lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
-                                                                    collectionFirstRun.setButtonPosition(lps);
-
-                                                                    collectionFirstRun.show();
-                                                                    prefs.edit().putBoolean("first_run_product", false).commit();
-                                                                }
-                                                            }
-
-                                                            @Override
-                                                            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-
-                                                            }
-
-                                                            @Override
-                                                            public void onShowcaseViewShow(ShowcaseView showcaseView) {
-
-                                                            }
-                                                        })
-                                                        .build();
-
-                                        // 'OK' button
-                                        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                                        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                                        lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
-                                        collectionFirstRun.setButtonPosition(lps);
-
-                                        collectionFirstRun.show();
-                                        prefs.edit().putBoolean("first_run_fab", false).commit();
-                                    }
-                                }
-
-                                @Override
-                                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-
-                                }
-
-                                @Override
-                                public void onShowcaseViewShow(ShowcaseView showcaseView) {
-
-                                }
-                            })
-                            .build();
-
-            // 'OK' button
-            RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
-            collectionFirstRun.setButtonPosition(lps);
-
-            collectionFirstRun.show();
-            prefs.edit().putBoolean("first_run_photos", false).commit();
-        }
+//        prefs = getSharedPreferences("preference_name", 0);
+//        if (prefs.getBoolean("first_run_photos", true)) {
+//            ViewTarget target = new ViewTarget(R.id.photos_view_pager, this);
+//            ShowcaseView collectionFirstRun =
+//                    new ShowcaseView.Builder(this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE_LARGE)
+//                            .setTarget(target)
+//                            .setContentTitle("See home design ideas")
+//                            .setStyle(R.style.ShowcaseView)
+//                            .setShowcaseEventListener(new OnShowcaseEventListener() {
+//                                @Override
+//                                public void onShowcaseViewHide(ShowcaseView showcaseView) {
+//                                    if (prefs.getBoolean("first_run_fab", true)) {
+//                                        ViewTarget target = new ViewTarget(R.id.fab_post_request, HomeActivity.this);
+//                                        ShowcaseView collectionFirstRun =
+//                                                new ShowcaseView.Builder(HomeActivity.this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE)
+//                                                        .setTarget(target)
+//                                                        .setContentTitle("Hire home design experts.")
+//                                                        .setStyle(R.style.ShowcaseView)
+//                                                        .setShowcaseEventListener(new OnShowcaseEventListener() {
+//                                                            @Override
+//                                                            public void onShowcaseViewHide(ShowcaseView showcaseView) {
+//                                                                if (prefs.getBoolean("first_run_product", true)) {
+//                                                                    ViewTarget target = new ViewTarget(R.id.shop_view_pager, HomeActivity.this);
+//                                                                    ShowcaseView collectionFirstRun =
+//                                                                            new ShowcaseView.Builder(HomeActivity.this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE_SMALL)
+//                                                                                    .setTarget(target)
+//                                                                                    .setContentTitle("Shop exclusive products for your home")
+//                                                                                    .setStyle(R.style.ShowcaseView)
+//                                                                                    .build();
+//
+//                                                                    // 'OK' button
+//                                                                    RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                                                                    lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//                                                                    lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//                                                                    lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
+//                                                                    collectionFirstRun.setButtonPosition(lps);
+//
+//                                                                    collectionFirstRun.show();
+//                                                                    prefs.edit().putBoolean("first_run_product", false).commit();
+//                                                                }
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+//
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onShowcaseViewShow(ShowcaseView showcaseView) {
+//
+//                                                            }
+//                                                        })
+//                                                        .build();
+//
+//                                        // 'OK' button
+//                                        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                                        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//                                        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//                                        lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
+//                                        collectionFirstRun.setButtonPosition(lps);
+//
+//                                        collectionFirstRun.show();
+//                                        prefs.edit().putBoolean("first_run_fab", false).commit();
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onShowcaseViewShow(ShowcaseView showcaseView) {
+//
+//                                }
+//                            })
+//                            .build();
+//
+//            // 'OK' button
+//            RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//            lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//            lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
+//            collectionFirstRun.setButtonPosition(lps);
+//
+//            collectionFirstRun.show();
+//            prefs.edit().putBoolean("first_run_photos", false).commit();
+//        }
 
         phoneVerification();
 
