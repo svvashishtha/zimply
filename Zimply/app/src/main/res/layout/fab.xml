@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
 
-    <com.application.zimply.utils.fab.FABUnit
+    <com.application.zimplyshop.utils.fab.FABUnit
         android:id="@+id/fab_post_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         fab:fab_size="normal" />
 
 <!--
-    <com.application.zimply.utils.fab.FABControl
+    <FABControl
         android:id="@+id/multiple_actions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_labelStyle="@style/fab_labels_style" >
 
-        <com.application.zimply.utils.fab.FABUnit
+        <FABUnit
             android:id="@+id/fab_post_request"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,6 +50,6 @@
             fab:fab_icon="@drawable/fab_filter"
             fab:fab_size="normal" />
 
-    </com.application.zimply.utils.fab.FABControl>-->
+    </FABControl>-->
 
 </RelativeLayout>

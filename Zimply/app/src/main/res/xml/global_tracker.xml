@@ -11,48 +11,48 @@
 
     <bool name="ga_reportUncaughtExceptions">true</bool>
 
-    <screenName name="com.application.zimply.activities.AboutUsPage">AboutUs</screenName>
-    <screenName name="com.application.zimply.activities.ArticleDescriptionActivity">Article Description</screenName>
-    <screenName name="com.application.zimply.activities.ArticleListingActivity">Article Listing</screenName>
-    <screenName name="com.application.zimply.activities.BaseLoginSignupActivity">Base Login Signup</screenName>
-    <screenName name="com.application.zimply.activities.ExpertProfileActivity">Expert Profile</screenName>
+    <screenName name="com.application.zimplyshop.activities.AboutUsPage">AboutUs</screenName>
+    <screenName name="com.application.zimplyshop.activities.ArticleDescriptionActivity">Article Description</screenName>
+    <screenName name="com.application.zimplyshop.activities.ArticleListingActivity">Article Listing</screenName>
+    <screenName name="com.application.zimplyshop.activities.BaseLoginSignupActivity">Base Login Signup</screenName>
+    <screenName name="com.application.zimplyshop.activities.ExpertProfileActivity">Expert Profile</screenName>
     <screenName name="com.application.zimply.activities.ExpertListActivity">Expert List</screenName>
-    <screenName name="com.application.zimply.activities.FilterActivity">Filters</screenName>
-    <screenName name="com.application.zimply.activities.ForgotPassword">Forgot Password</screenName>
-    <screenName name="com.application.zimply.activities.HomeActivity">Home</screenName>
-    <screenName name="com.application.zimply.activities.LoginActivity">Login</screenName>
-    <screenName name="com.application.zimply.activities.PhotoDetailsActivity">Photo Details</screenName>
-    <screenName name="com.application.zimply.activities.SignupActivity">Sign up</screenName>
-    <screenName name="com.application.zimply.activities.AllFilterClassActivity">Filter
+    <screenName name="com.application.zimplyshop.activities.FilterActivity">Filters</screenName>
+    <screenName name="com.application.zimplyshop.activities.ForgotPassword">Forgot Password</screenName>
+    <screenName name="com.application.zimplyshop.activities.HomeActivity">Home</screenName>
+    <screenName name="com.application.zimplyshop.activities.LoginActivity">Login</screenName>
+    <screenName name="com.application.zimplyshop.activities.PhotoDetailsActivity">Photo Details</screenName>
+    <screenName name="com.application.zimplyshop.activities.SignupActivity">Sign up</screenName>
+    <screenName name="com.application.zimplyshop.activities.AllFilterClassActivity">Filter
         Activity(AllFilterClassActivity)
     </screenName>
-    <screenName name="com.application.zimply.activities.FeedbackActivity">Feed Back</screenName>
-    <screenName name="com.application.zimply.activities.PostPaymentThankYouActivity">Payment
+    <screenName name="com.application.zimplyshop.activities.FeedbackActivity">Feed Back</screenName>
+    <screenName name="com.application.zimplyshop.activities.PostPaymentThankYouActivity">Payment
         successful
     </screenName>
-    <screenName name="com.application.zimply.activities.ProductCheckoutActivity">Product
+    <screenName name="com.application.zimplyshop.activities.ProductCheckoutActivity">Product
         checkout(order Summary,Select Address)
     </screenName>
-    <screenName name="com.application.zimply.activities.ProductDetailsActivity">Product Description
+    <screenName name="com.application.zimplyshop.activities.ProductDetailsActivity">Product Description
         page
     </screenName>
-    <screenName name="com.application.zimply.activities.PurchaseListActivity">Order history
+    <screenName name="com.application.zimplyshop.activities.PurchaseListActivity">Order history
     </screenName>
-    <screenName name="com.application.zimply.activities.SearchActivity">Search Experts</screenName>
-    <screenName name="com.application.zimply.activities.SearchProductsActivity">Search Products
+    <screenName name="com.application.zimplyshop.activities.SearchActivity">Search Experts</screenName>
+    <screenName name="com.application.zimplyshop.activities.SearchProductsActivity">Search Products
     </screenName>
-    <screenName name="com.application.zimply.activities.SearchResultsActivity">Search Results
+    <screenName name="com.application.zimplyshop.activities.SearchResultsActivity">Search Results
     </screenName>
-    <screenName name="com.application.zimply.activities.SelectCity">Select city</screenName>
-    <screenName name="com.application.zimply.activities.SharingOptionsActivity">Sharing options
+    <screenName name="com.application.zimplyshop.activities.SelectCity">Select city</screenName>
+    <screenName name="com.application.zimplyshop.activities.SharingOptionsActivity">Sharing options
     </screenName>
-    <screenName name="com.application.zimply.activities.SplashActivity">Splash Screen</screenName>
-    <screenName name="com.application.zimply.activities.UrlRouter">Shared Intent received
+    <screenName name="com.application.zimplyshop.activities.SplashActivity">Splash Screen</screenName>
+    <screenName name="com.application.zimplyshop.activities.UrlRouter">Shared Intent received
     </screenName>
-    <screenName name="com.application.zimply.activities.UserFavouritesActivity">User Favourites
+    <screenName name="com.application.zimplyshop.activities.UserFavouritesActivity">User Favourites
         view
     </screenName>
-    <screenName name="com.application.zimply.activities.UserProfileActivity">User profile
+    <screenName name="com.application.zimplyshop.activities.UserProfileActivity">User profile
     </screenName>
 
 

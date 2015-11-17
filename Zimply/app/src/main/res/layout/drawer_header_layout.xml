@@ -32,7 +32,7 @@
         android:orientation="vertical"
         android:paddingBottom="@dimen/margin_medium" >
 
-        <com.application.zimply.widgets.CircularImageView
+        <com.application.zimplyshop.widgets.CircularImageView
             android:id="@+id/user_img"
             android:layout_width="@dimen/abc_action_bar_default_height_material"
             android:layout_height="@dimen/abc_action_bar_default_height_material"
@@ -42,7 +42,7 @@
             app1:border_width="2dp"
             app1:border_color="@color/white"/>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/drawer_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

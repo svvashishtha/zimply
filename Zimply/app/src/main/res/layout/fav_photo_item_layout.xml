@@ -11,7 +11,7 @@
     android:foreground="@drawable/photo_feedback">
 
 
-    <com.application.zimply.widgets.RoundedImageView
+    <com.application.zimplyshop.widgets.RoundedImageView
         android:id="@+id/photo_img"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -20,7 +20,7 @@
         app1:riv_corner_radius_top_left="3dp"
         app1:riv_corner_radius_top_right="3dp"/>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/style_cat_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

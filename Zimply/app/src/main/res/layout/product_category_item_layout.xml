@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent_black_color"/>
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/category_name"
         android:layout_width="wrap_content"
         android:layout_gravity="center"

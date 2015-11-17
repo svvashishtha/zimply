@@ -6,7 +6,7 @@
     android:background="@drawable/ic_card_bg"
     android:orientation="horizontal" >
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/sub_cat_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:textColor="@color/text_color1"
         android:textSize="@dimen/font_medium" />
 
-    <com.application.zimply.widgets.RoundedImageView
+    <com.application.zimplyshop.widgets.RoundedImageView
         android:id="@+id/sub_cat_img"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/padding_top_66"

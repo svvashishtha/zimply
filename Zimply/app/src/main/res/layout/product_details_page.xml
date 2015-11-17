@@ -18,7 +18,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1">
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/add_to_cart"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
@@ -43,7 +43,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1">
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/buy_now"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"

@@ -24,7 +24,7 @@
                 android:duplicateParentState="true"
                 android:clickable="false"
                 android:layout_height="wrap_content"/>
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:textColor="@color/text_color1"
                 android:textSize="@dimen/font_medium"
                 android:id="@+id/city_name"

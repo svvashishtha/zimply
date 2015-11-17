@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.application.zimply.widgets.SlidingUpPanelLayout
+    <com.application.zimplyshop.widgets.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +36,7 @@
             android:focusable="false"
             android:orientation="vertical" >
 
-            <com.application.zimply.widgets.ZHeaderGridView
+            <com.application.zimplyshop.widgets.ZHeaderGridView
                 android:id="@+id/collection_images_grid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,8 +47,8 @@
                 android:paddingRight="@dimen/z_margin_small"
                 android:paddingTop="@dimen/z_margin_small"
                 android:verticalSpacing="@dimen/z_margin_small" >
-            </com.application.zimply.widgets.ZHeaderGridView>
+            </com.application.zimplyshop.widgets.ZHeaderGridView>
         </LinearLayout>
-    </com.application.zimply.widgets.SlidingUpPanelLayout>
+    </com.application.zimplyshop.widgets.SlidingUpPanelLayout>
 
 </RelativeLayout>

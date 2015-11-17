@@ -7,7 +7,7 @@
     android:layout_margin="10dp"
     android:padding="10dp" >
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:textSize="@dimen/size18"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <com.application.zimply.widgets.CustomEdittext
+    <com.application.zimplyshop.widgets.CustomEdittext
         android:id="@+id/editTextDialogUserInput"
         android:layout_width="match_parent"
         android:textSize="@dimen/size18"
@@ -27,6 +27,6 @@
 
         <requestFocus />
 
-    </com.application.zimply.widgets.CustomEdittext>
+    </com.application.zimplyshop.widgets.CustomEdittext>
 
 </LinearLayout>

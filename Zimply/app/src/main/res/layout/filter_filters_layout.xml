@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -28,7 +28,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/offers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         android:orientation="horizontal"
         android:padding="@dimen/margin_small" >
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -57,7 +57,7 @@
             android:textColor="@color/text_color1"
             android:textSize="@dimen/font_small" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=">"

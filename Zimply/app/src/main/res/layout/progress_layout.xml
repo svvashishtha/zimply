@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:progressDrawable="@drawable/progressbar_layerlist" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/quote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         android:background="@android:color/transparent"
         android:gravity="center">
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/nullcase_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -7,7 +7,7 @@
               android:padding="@dimen/margin_small"
               android:layout_height="match_parent">
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:layout_width="match_parent"
         android:text="Sort By"
         android:textSize="@dimen/font_medium"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/margin_small"
         android:layout_height="@dimen/z_item_height_48">
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/low_to_high"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -31,7 +31,7 @@
             android:layout_width="@dimen/margin_small"
             android:layout_height="match_parent"></View>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/high_to_low"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -43,7 +43,7 @@
 
     </LinearLayout>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:layout_width="match_parent"
         android:text="Select Range"
         android:textSize="@dimen/font_medium"
@@ -52,7 +52,7 @@
         android:textColor="@color/heading_text_color"
         android:layout_height="wrap_content"/>
 
-    <com.application.zimply.widgets.RangeSeekBar
+    <com.application.zimplyshop.widgets.RangeSeekBar
         android:id="@+id/range_seekbar"
         android:layout_width="match_parent"
         app:absoluteMaxValue="50000"
@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/margin_small"
         android:layout_height="wrap_content">
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:text="@string/rs_text"
             android:textSize="@dimen/font_small"
@@ -74,7 +74,7 @@
             android:paddingRight="@dimen/margin_small"
             android:textColor="@color/heading_text_color"
             android:layout_height="match_parent"/>
-        <com.application.zimply.widgets.CustomEdittext
+        <com.application.zimplyshop.widgets.CustomEdittext
             android:id="@+id/from_price"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -86,7 +86,7 @@
             android:background="@drawable/ic_card_bg"
             android:layout_height="wrap_content"/>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:text="to"
             android:textSize="@dimen/font_small"
@@ -98,7 +98,7 @@
             android:textColor="@color/heading_text_color"
             android:layout_height="match_parent"/>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:text="@string/rs_text"
             android:textSize="@dimen/font_small"
@@ -110,7 +110,7 @@
             android:textColor="@color/heading_text_color"
             android:layout_height="match_parent"/>
 
-        <com.application.zimply.widgets.CustomEdittext
+        <com.application.zimplyshop.widgets.CustomEdittext
             android:id="@+id/to_price"
             android:layout_width="0dp"
             android:layout_weight="1"

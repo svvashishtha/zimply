@@ -5,7 +5,7 @@
 
     android:background="@color/white"
     android:clickable="true" >
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         android:textColor="@color/text_color1"
         android:textSize="@dimen/font_medium"/>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/next_bt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height48"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/label"
         android:layout_marginTop="@dimen/margin_large">
-    <com.application.zimply.widgets.CustomEdittext
+    <com.application.zimplyshop.widgets.CustomEdittext
         android:id="@+id/name_et"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/separator1">
-    <com.application.zimply.widgets.CustomEdittext
+    <com.application.zimplyshop.widgets.CustomEdittext
         android:id="@+id/phone_et"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/separator2">
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/location_et"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

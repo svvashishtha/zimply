@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/search_category"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/abc_action_bar_default_height_material"

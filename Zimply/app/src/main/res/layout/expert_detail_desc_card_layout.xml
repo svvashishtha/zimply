@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="@dimen/margin_small" >
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_mini"
@@ -20,7 +20,7 @@
             android:textSize="@dimen/font_medium"
             android:textStyle="bold" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/pro_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:textSize="@dimen/font_small" />
     </LinearLayout>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_mini"

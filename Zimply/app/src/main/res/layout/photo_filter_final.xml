@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:background="@color/blue_button" >
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/hurrey"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_alignParentTop="true"
             android:textColor="@color/white" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/thank_you_message"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_below="@id/message_container"
         android:layout_marginTop="@dimen/margin_large"
         android:layout_height="wrap_content">
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/additional_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
         android:text="@string/additional_requests"
         android:textColor="@color/font_color" />
 
-    <com.application.zimply.widgets.CustomEdittext
+    <com.application.zimplyshop.widgets.CustomEdittext
         android:id="@+id/additional_details_et"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
         android:textColor="@color/font_color" />
 </LinearLayout>
 </RelativeLayout>
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/finish_bt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height48"

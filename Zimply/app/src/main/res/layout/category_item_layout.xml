@@ -8,7 +8,7 @@
     android:background="@drawable/ic_card_bg"
     android:orientation="vertical" >
 
-    <com.application.zimply.widgets.RoundedImageView
+    <com.application.zimplyshop.widgets.RoundedImageView
         android:id="@+id/cat_img"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_top_66"
@@ -16,7 +16,7 @@
         app1:riv_corner_radius_top_left="3dp"
         app1:riv_corner_radius_top_right="3dp" />
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/cat_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

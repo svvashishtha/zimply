@@ -32,7 +32,7 @@
                         android:background="@color/white"
                         app:theme="@style/Toolbar_Theme" />
 
-                    <com.application.zimply.widgets.CustomTextView
+                    <com.application.zimplyshop.widgets.CustomTextView
                         android:id="@+id/cart_item_true"
                         android:layout_width="@dimen/cart_count_size_bg"
                         android:layout_height="@dimen/cart_count_size_bg"

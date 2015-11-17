@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.application.zimply.utils.fadingActionBar.ParallaxRootLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.application.zimplyshop.utils.fadingActionBar.ParallaxRootLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include layout="@layout/parallax_header_container" />
 
-    <com.application.zimply.utils.fadingActionBar.ObservableScrollView
+    <com.application.zimplyshop.utils.fadingActionBar.ObservableScrollView
         android:id="@+id/parallax_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -57,6 +57,6 @@
                 </RelativeLayout>
             </FrameLayout>
         </LinearLayout>
-    </com.application.zimply.utils.fadingActionBar.ObservableScrollView>
+    </com.application.zimplyshop.utils.fadingActionBar.ObservableScrollView>
 
-</com.application.zimply.utils.fadingActionBar.ParallaxRootLayout>
+</com.application.zimplyshop.utils.fadingActionBar.ParallaxRootLayout>

@@ -24,7 +24,7 @@
             android:textColor="@color/white" />
 
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/cart_item_true"
             android:layout_width="@dimen/cart_count_size_bg"
             android:layout_height="@dimen/cart_count_size_bg"
@@ -60,7 +60,7 @@
         android:layout_toLeftOf="@id/cart_view"
         android:src="@drawable/share_blank" />
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

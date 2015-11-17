@@ -35,7 +35,7 @@
                 android:background="@color/transparent_black_color"
                 android:src="@drawable/ic_fb" />
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -61,7 +61,7 @@
                 android:background="@color/transparent_black_color"
                 android:src="@drawable/ic_google" />
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -86,7 +86,7 @@
                 android:layout_weight="1"
                 android:background="@color/white" />
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -150,7 +150,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/font_medium" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/forgot_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -169,7 +169,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/margin_small" >
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -178,7 +178,7 @@
                 android:textColor="@color/drawericon_color"
                 android:textSize="@dimen/font_medium" />
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
@@ -188,7 +188,7 @@
                 android:textSize="@dimen/font_medium" />
         </LinearLayout>
     </LinearLayout>
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/terms_string"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

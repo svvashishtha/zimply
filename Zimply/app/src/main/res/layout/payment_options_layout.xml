@@ -12,7 +12,7 @@
         android:background="@drawable/actionbar_bg"
         app:theme="@style/Toolbar_Theme" />
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/pay_cash_counter"
         android:layout_width="match_parent"
         android:layout_height="@dimen/z_item_height_48"
@@ -22,7 +22,7 @@
         android:textSize="@dimen/font_medium"
         android:text="@string/cash_on_counter_text"/>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/pay_online"
         android:layout_width="match_parent"
         android:layout_height="@dimen/z_item_height_48"

@@ -17,7 +17,7 @@
 
         android:padding="@dimen/margin_medium"
         android:orientation="vertical">
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/store_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:text="@string/request_for_demo_regisered"/>
 
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -33,7 +33,7 @@
             android:textColor="@color/heading_text_color"
             android:text="Store Address"/>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/store_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         android:layout_gravity="bottom"
         android:gravity="center"
         android:layout_height="wrap_content">
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/cancel_booking"
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"

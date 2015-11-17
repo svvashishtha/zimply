@@ -38,7 +38,7 @@
                 android:visibility="gone" />
         </FrameLayout>
 
-        <com.application.zimply.widgets.CustomTextViewBold
+        <com.application.zimplyshop.widgets.CustomTextViewBold
             android:id="@+id/article_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
             android:paddingRight="@dimen/margin_small"
             android:paddingTop="@dimen/margin_mini">
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/article_desc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                 android:textColor="@color/transparent_grey_color"
                 android:textSize="@dimen/font_small" />
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/article_date"
 
                 android:layout_width="wrap_content"

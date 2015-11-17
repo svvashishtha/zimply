@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@color/white" >
 
-<com.application.zimply.widgets.CustomTextView
+<com.application.zimplyshop.widgets.CustomTextView
     android:id="@+id/label"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
 
 
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/next_bt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height48"

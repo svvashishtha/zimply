@@ -39,14 +39,14 @@
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/size5">
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/categories_text"
                     android:textColor="@color/heading_text_color"
                     android:textSize="@dimen/font_small" />
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/category_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,14 +90,14 @@
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/size5">
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/filters_text"
                     android:textColor="@color/heading_text_color"
                     android:textSize="@dimen/font_small" />
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/filter_filter_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,14 +141,14 @@
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/size5">
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sort_by_text"
                     android:textColor="@color/heading_text_color"
                     android:textSize="@dimen/font_small" />
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/sortby_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

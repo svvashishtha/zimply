@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/pro_cover_img_height" >
 
-        <com.application.zimply.widgets.RoundedImageView
+        <com.application.zimplyshop.widgets.RoundedImageView
             android:id="@+id/cover_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -44,7 +44,7 @@
         android:scaleType="fitCenter"
        />
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -56,7 +56,7 @@
         android:textSize="@dimen/font_small"
         android:visibility="gone" />
 
-    <com.application.zimply.widgets.CustomTextViewBold
+    <com.application.zimplyshop.widgets.CustomTextViewBold
         android:id="@+id/expert_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
         android:textColor="@color/heading_text_color"
         android:textSize="@dimen/font_medium" />
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/expert_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="9.25"
@@ -109,7 +109,7 @@
             android:rating="4.5"
             android:stepSize="0.5" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(20 Ratings)"

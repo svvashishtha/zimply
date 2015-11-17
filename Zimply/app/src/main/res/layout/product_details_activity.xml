@@ -50,7 +50,7 @@
         android:layout_gravity="bottom"
         android:orientation="horizontal">
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/buy_offline"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -62,7 +62,7 @@
             android:textSize="@dimen/font_medium"
             android:textColor="@color/white" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/add_to_cart"
             android:layout_width="0dp"
             android:layout_height="fill_parent"

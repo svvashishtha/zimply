@@ -11,7 +11,7 @@
     android:foreground="@drawable/photo_feedback">
 
 
-    <com.application.zimply.widgets.RoundedImageView
+    <com.application.zimplyshop.widgets.RoundedImageView
         android:id="@+id/photo_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

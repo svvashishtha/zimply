@@ -31,7 +31,7 @@
     <uses-permission android:name="com.application.zimply.permission.C2D_MESSAGE" />
 
     <application
-        android:name=".application.AppApplication"
+        android:name="com.application.zimplyshop.application.AppApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_app_launcher_icon"
         android:label="@string/app_name"
@@ -53,7 +53,7 @@
             android:value="vE0dpVXQ" />
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.application.zimplyshop.activities.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" >
@@ -64,148 +64,148 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.HomeActivity"
+            android:name="com.application.zimplyshop.activities.HomeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.ExpertsListActivity"
+            android:name="com.application.zimplyshop.activities.ExpertsListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.PhotosListingActivity"
+            android:name="com.application.zimplyshop.activities.PhotosListingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.ArticleListingActivity"
+            android:name="com.application.zimplyshop.activities.ArticleListingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.ShopCategoriesActivity"
+            android:name="com.application.zimplyshop.activities.ShopCategoriesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.ProductListingActivity"
+            android:name="com.application.zimplyshop.activities.ProductListingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.ShopSubCategoriesActivity"
+            android:name="com.application.zimplyshop.activities.ShopSubCategoriesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.FilterLayoutActivity"
+            android:name="com.application.zimplyshop.activities.FilterLayoutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ZDialogTheme" />
         <activity
-            android:name=".activities.AboutUsPage"
+            android:name="com.application.zimplyshop.activities.AboutUsPage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".activities.PurchaseListActivity"
+            android:name="com.application.zimplyshop.activities.PurchaseListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".utils.ZWebView"
+            android:name="com.application.zimplyshop.utils.ZWebView"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".activities.PhotoDetailsActivity"
+            android:name="com.application.zimplyshop.activities.PhotoDetailsActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".activities.ProductDetailsActivity"
+            android:name="com.application.zimplyshop.activities.ProductDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ProductPageTheme" />
         <activity
-            android:name=".activities.FilterFiltersLayout"
+            android:name="com.application.zimplyshop.activities.FilterFiltersLayout"
             android:screenOrientation="portrait"
             android:theme="@style/ZDialogTheme" />
 
-        <activity android:name=".activities.ProductPhotoZoomActivity"
+        <activity android:name="com.application.zimplyshop.activities.ProductPhotoZoomActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppBaseTheme"/>
         <activity
-            android:name=".activities.ArticleDescriptionActivity"
+            android:name="com.application.zimplyshop.activities.ArticleDescriptionActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.ExpertProfileActivity"
+            android:name="com.application.zimplyshop.activities.ExpertProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.UserProfileActivity"
+            android:name="com.application.zimplyshop.activities.UserProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.BaseLoginSignupActivity"
+            android:name="com.application.zimplyshop.activities.BaseLoginSignupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.FilterActivity"
+            android:name="com.application.zimplyshop.activities.FilterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".activities.SignupActivity"
+            android:name="com.application.zimplyshop.activities.SignupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.application.zimplyshop.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.FeedbackActivity"
+            android:name="com.application.zimplyshop.activities.FeedbackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ZimplyActionBarTheme" />
         <activity
-            android:name=".activities.UserFavouritesActivity"
+            android:name="com.application.zimplyshop.activities.UserFavouritesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.MyWishlist"
+            android:name="com.application.zimplyshop.activities.MyWishlist"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.BarcodeScannerActivity"
+            android:name="com.application.zimplyshop.activities.BarcodeScannerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name=".activities.BookedForReviewActivity"
+            android:name="com.application.zimplyshop.activities.BookedForReviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
 
         <activity
-            android:name=".activities.SearchActivity"
+            android:name="com.application.zimplyshop.activities.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
-            android:name=".activities.SearchProductsActivity"
+            android:name="com.application.zimplyshop.activities.SearchProductsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
-            android:name=".activities.ProductCheckoutActivity"
+            android:name="com.application.zimplyshop.activities.ProductCheckoutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".activities.SearchResultsActivity"
+            android:name="com.application.zimplyshop.activities.SearchResultsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".activities.AppPaymentOptionsActivity"
+            android:name="com.application.zimplyshop.activities.AppPaymentOptionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity
-            android:name=".activities.NewSearchActivity"
+            android:name="com.application.zimplyshop.activities.NewSearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateVisible" />
@@ -225,12 +225,12 @@
             android:configChanges="orientation|screenSize" >
         </activity>
         <activity
-            android:name=".activities.ProductDemoActivity"
+            android:name="com.application.zimplyshop.activities.ProductDemoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".activities.UrlRouter"
+            android:name="com.application.zimplyshop.activities.UrlRouter"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="@string/app_name"
@@ -275,18 +275,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ForgotPassword"
+            android:name="com.application.zimplyshop.activities.ForgotPassword"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".activities.SharingOptionsActivity"
+            android:name="com.application.zimplyshop.activities.SharingOptionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
         <!-- Receivers -->
         <receiver
-            android:name=".receivers.GcmBroadcastReceiver"
+            android:name="com.application.zimplyshop.receivers.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -300,8 +300,8 @@
 
 
         <!-- Cache cleaner service triggered from Application object -->
-        <service android:name=".utils.CacheCleanerService" />
-        <service android:name=".services.GCMIntentService" />
+        <service android:name="com.application.zimplyshop.utils.CacheCleanerService" />
+        <service android:name="com.application.zimplyshop.services.GCMIntentService" />
         <service android:name="com.notikum.notifypassive.services.GCMInformService" />
         <service android:name="com.notikum.notifypassive.services.NotiphiGCMIntentService" />
         <service android:name="com.notikum.notifypassive.services.NotificationInformService" />
@@ -333,20 +333,20 @@
             android:value="0c1bb8ada05e9b169fe0a504e9d5d0c415b3ed7a" />
 
         <service
-            android:name=".services.ZFetchAddressIntentService"
+            android:name="com.application.zimplyshop.services.ZFetchAddressIntentService"
             android:exported="false" >
         </service>
 
         <activity
-            android:name=".activities.SelectCity"
+            android:name="com.application.zimplyshop.activities.SelectCity"
             android:label="@string/title_activity_select_city" ></activity>
         <activity
-            android:name=".activities.PostPaymentThankYouActivity"
+            android:name="com.application.zimplyshop.activities.PostPaymentThankYouActivity"
             android:label="@string/title_activity_post_payment_thank_you"
             android:theme="@style/AppTheme">
         </activity>
 
-        <receiver android:name="com.application.zimply.receiver.IncomingSmsReceiver">
+        <receiver android:name="com.application.zimplyshop.receiver.IncomingSmsReceiver">
             <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>

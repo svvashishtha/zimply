@@ -23,7 +23,7 @@
                 android:layout_height="match_parent" >
             </android.support.v4.view.ViewPager>
 
-            <com.application.zimply.widgets.CirclePageIndicator
+            <com.application.zimplyshop.widgets.CirclePageIndicator
                 android:id="@+id/pager_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                     android:src="@drawable/ic_google" />
             </LinearLayout>
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small"
@@ -94,7 +94,7 @@
                 android:layout_height="@dimen/height48"
                 android:orientation="horizontal" >
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/signup"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -111,7 +111,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/separator_color" />
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/login"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -126,7 +126,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/skip_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

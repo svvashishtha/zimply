@@ -11,7 +11,7 @@
         android:clickable="true"
         android:orientation="vertical">
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
 
         <include layout="@layout/slider_option_layout" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/budget_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium">
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/button1"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/z_item_height_48"
@@ -69,7 +69,7 @@
                     android:layout_width="@dimen/margin_small"
                     android:layout_height="match_parent" />
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/button2"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/z_item_height_48"
@@ -92,7 +92,7 @@
                 android:orientation="horizontal">
 
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/button3"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/z_item_height_48"
@@ -107,7 +107,7 @@
                 <View
                     android:layout_width="@dimen/margin_small"
                     android:layout_height="match_parent" />
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/button4"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/z_item_height_48"
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/margin_small"
                 android:layout_height="wrap_content">
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/button5"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/z_item_height_48"
@@ -155,7 +155,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/next_bt"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height48"

@@ -6,7 +6,7 @@
               android:background="@drawable/white_card_bg"
               android:orientation="vertical">
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_small"
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_small">
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -32,7 +32,7 @@
             android:textColor="@color/text_color1"
             android:textSize="@dimen/font_medium" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/total_sum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         android:paddingLeft="@dimen/margin_small"
         android:paddingRight="@dimen/margin_small"
         android:paddingBottom="@dimen/margin_small">
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -59,7 +59,7 @@
             android:textColor="@color/text_color1"
             android:textSize="@dimen/font_medium" />
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/shipping_charges"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <com.application.zimply.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Payment"
@@ -95,7 +95,7 @@
                 android:textColor="@color/heading_text_color"
                 android:textSize="@dimen/font_medium" />
 
-            <com.application.zimply.widgets.CustomTextViewBold
+            <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/total_payment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
 
         </LinearLayout>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/check_out"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/z_item_height_48"

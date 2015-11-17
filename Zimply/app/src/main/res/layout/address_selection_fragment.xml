@@ -29,7 +29,7 @@
                 android:layout_marginRight="@dimen/margin_large"
                 android:layout_marginTop="@dimen/margin_large">
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -38,7 +38,7 @@
 
                     android:textSize="@dimen/font_medium" />
 
-                <com.application.zimply.widgets.CustomTextView
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/add_new_address"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/height48"
@@ -56,14 +56,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-                <com.application.zimply.utils.NonScrollListView
+                <com.application.zimplyshop.utils.NonScrollListView
                     android:id="@+id/address_listview"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"></com.application.zimply.utils.NonScrollListView>
+                    android:layout_height="wrap_content"></com.application.zimplyshop.utils.NonScrollListView>
 
             </RelativeLayout>
 
-            <!--  <com.application.zimply.widgets.CustomTextView
+            <!--  <CustomTextView
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:hint="@string/add_new_address"
@@ -74,7 +74,7 @@
                   android:layout_margin="@dimen/size10"
                   android:textColor="@color/zhl_darkest"/>
 
-              <com.application.zimply.widgets.CustomEdittext
+              <CustomEdittext
                   android:id="@+id/phone"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                   android:layout_margin="@dimen/size10"
                   android:textColor="@color/zhl_darkest"/>
 
-              <com.application.zimply.widgets.CustomEdittext
+              <CustomEdittext
                   android:id="@+id/email"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                   android:layout_margin="@dimen/size10"
                   android:textColor="@color/zhl_darkest"/>
 
-              <com.application.zimply.widgets.CustomEdittext
+              <CustomEdittext
                   android:id="@+id/name"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                   android:inputType="textPersonName|textAutoCorrect"
                   android:layout_margin="@dimen/size10"
                   android:textColor="@color/zhl_darkest"/>
-              <com.application.zimply.widgets.CustomEdittext
+              <CustomEdittext
                   android:id="@+id/address_line1"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
                   android:inputType="textPostalAddress|textAutoCorrect"
                   android:layout_margin="@dimen/size10"
                   android:textColor="@color/zhl_darkest"/>
-              <com.application.zimply.widgets.CustomEdittext
+              <CustomEdittext
                   android:id="@+id/address_line2"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:orientation="vertical">
-                  <com.application.zimply.widgets.CustomEdittext
+                  <CustomEdittext
                       android:id="@+id/city"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
                       android:visibility="gone">
                   </ListView>
               </LinearLayout>
-              <com.application.zimply.widgets.CustomEdittext
+              <CustomEdittext
                   android:id="@+id/state"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                   android:padding="@dimen/size12"
                   android:layout_margin="@dimen/size10"
                   android:textColor="@color/zhl_darkest"/>
-              <com.application.zimply.widgets.CustomEdittext
+              <CustomEdittext
                   android:id="@+id/pincode"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
                   android:layout_margin="@dimen/size10"
                   android:textColor="@color/zhl_darkest"/>
 
-              <com.application.zimply.widgets.CustomTextView
+              <CustomTextView
                   android:id="@+id/save"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"

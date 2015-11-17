@@ -17,7 +17,7 @@
             android:src="@drawable/ic_launcher_icon_full"
             android:layout_margin="@dimen/margin_small"
             android:scaleType="centerCrop"/>
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/product_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:textSize="@dimen/font_medium"
             android:textColor="@color/text_color1"/>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/product_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
 
             android:textColor="@color/text_color1"/>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/store_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             android:textSize="@dimen/font_medium"
             android:textColor="@color/heading_text_color"/>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/store_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
             android:textSize="@dimen/font_small"
             android:textColor="@color/text_color1"/>
 
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/product_delivery_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             android:layout_marginTop="@dimen/margin_small"
             android:layout_below="@id/product_delivery_date"
             android:background="@color/separator_color"/>
-        <com.application.zimply.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/cancel_booking"
             android:layout_width="match_parent"
             android:layout_height="@dimen/z_item_height_48"

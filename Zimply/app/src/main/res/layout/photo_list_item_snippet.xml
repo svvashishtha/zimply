@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.application.zimply.widgets.TouchImageView
+    <com.application.zimplyshop.widgets.TouchImageView
         android:id="@+id/photo_imageview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/title_textview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,7 +41,7 @@
             android:background="@drawable/cross_circle_border"
             android:visibility="gone"/>
 
-        <com.application.zimply.widgets.CustomEdittext
+        <com.application.zimplyshop.widgets.CustomEdittext
             android:id="@+id/search_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

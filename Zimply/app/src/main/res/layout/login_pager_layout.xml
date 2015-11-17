@@ -12,7 +12,7 @@
         android:src="@drawable/ic_tut1">
     </ImageView>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

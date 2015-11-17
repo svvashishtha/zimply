@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:background="@drawable/ic_card_bg"
               android:layout_height="match_parent">
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/order_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:paddingRight="@dimen/margin_small"
         android:textColor="@color/heading_text_color"/>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/order_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:paddingRight="@dimen/margin_small"
         android:textSize="@dimen/font_small"
         android:textColor="@color/text_color1"/>
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/order_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         android:textSize="@dimen/font_small"
         android:textColor="@color/text_color1"/>
 
-    <com.application.zimply.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/order_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
