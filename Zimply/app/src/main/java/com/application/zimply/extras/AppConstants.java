@@ -140,6 +140,8 @@ public interface AppConstants {
     String SAVE_ADDRESS = "ecommerce/save-address/";
     String APP_CONFIG = "notification/app-config/";
     String GET_ADDRESSES = "ecommerce/get-address/";
+    String PHONE_VERIFICATION = "zimply-auth/mobile/";
+    String PHONE_VERIFICATION_INPUT_DIALOG = "zimply-auth/mobile/";
 
     int CANCEL_ORDER = 2;
     int RETURN_ORDER = 6;

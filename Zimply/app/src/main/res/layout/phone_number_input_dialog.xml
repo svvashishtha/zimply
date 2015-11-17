@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:padding="10dp" >
+
+    <com.application.zimply.widgets.CustomTextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your phonenumber: "
+        android:textSize="@dimen/size18"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <com.application.zimply.widgets.CustomEdittext
+        android:id="@+id/editTextDialogUserInput"
+        android:layout_width="match_parent"
+        android:textSize="@dimen/size18"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Phone number"
+        android:inputType="number"
+        android:layout_height="wrap_content" >
+
+        <requestFocus />
+
+    </com.application.zimply.widgets.CustomEdittext>
+
+</LinearLayout>

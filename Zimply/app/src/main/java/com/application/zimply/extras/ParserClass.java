@@ -188,7 +188,7 @@ public class ParserClass implements ObjectTypes {
                                     subCategory.setName(String.valueOf(subcategoryJson.get("name")));
                                 }
 
-                                if (subcategoryJson.has("banner") ) {
+                                if (subcategoryJson.has("banner")) {
                                     subCategory.setImage(String.valueOf(subcategoryJson.get("banner")));
                                 }
 
@@ -212,7 +212,7 @@ public class ParserClass implements ObjectTypes {
                                     category.setName(String.valueOf(subcategoryJson.get("name")));
                                 }
 
-                                if (subcategoryJson.has("banner") ) {
+                                if (subcategoryJson.has("banner")) {
                                     category.setImage(String.valueOf(subcategoryJson.get("banner")));
                                 }
                                 category.setType(CommonLib.CATEGORY);
@@ -325,11 +325,11 @@ public class ParserClass implements ObjectTypes {
                 return product;
             }
             case OBJECT_TYPE_ALL_BOOKED_PRODUCTS:
-                JSONArray array=JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString),"books");
+                JSONArray array = JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString), "books");
                 ArrayList<BookedProductHistoryObject> bookedObj = new ArrayList<>();
-                if(array!=null) {
+                if (array != null) {
 
-                    for(int i=0;i<array.length();i++) {
+                    for (int i = 0; i < array.length(); i++) {
                         BookedProductHistoryObject newObj = new BookedProductHistoryObject();
                         newObj.setName(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "name"));
                         newObj.setPrice(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(array, i), "price"));
@@ -391,7 +391,7 @@ public class ParserClass implements ObjectTypes {
                 return JSONUtils.getBoolfromJSON(JSONUtils.getJSONObject(responseString), "status");
             case OBJECT_USER_DETAILS:
 
-               // AllProducts.getInstance().setCartCount(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(responseString),"cart_count"));
+                // AllProducts.getInstance().setCartCount(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(responseString),"cart_count"));
                 AllProducts.getInstance().parseCartData(responseString);
                 return true;
             case OBJECT_TYPE_SAVE_LIST: {
@@ -400,47 +400,47 @@ public class ParserClass implements ObjectTypes {
                 try {
                     addressObjectJson = new JSONObject(responseString);
 
-                    if(addressObjectJson.has("Address") && addressObjectJson.get("Address") instanceof JSONObject) {
+                    if (addressObjectJson.has("Address") && addressObjectJson.get("Address") instanceof JSONObject) {
                         addressObjectJson = addressObjectJson.getJSONObject("Address");
 
-                        if(addressObjectJson.has("city")) {
+                        if (addressObjectJson.has("city")) {
                             addresses.setCity(String.valueOf(addressObjectJson.get("city")));
                         }
 
-                        if(addressObjectJson.has("name")) {
+                        if (addressObjectJson.has("name")) {
                             addresses.setName(String.valueOf(addressObjectJson.get("name")));
                         }
 
-                        if(addressObjectJson.has("line2")) {
+                        if (addressObjectJson.has("line2")) {
                             addresses.setLine2(String.valueOf(addressObjectJson.get("line2")));
                         }
 
-                        if(addressObjectJson.has("line1")) {
+                        if (addressObjectJson.has("line1")) {
                             addresses.setLine1(String.valueOf(addressObjectJson.get("line1")));
                         }
 
-                        if(addressObjectJson.has("id") && addressObjectJson.get("id") instanceof Integer) {
+                        if (addressObjectJson.has("id") && addressObjectJson.get("id") instanceof Integer) {
                             addresses.setId(addressObjectJson.getInt("id"));
                         }
 
-                        if(addressObjectJson.has("phone")) {
+                        if (addressObjectJson.has("phone")) {
                             addresses.setPhone(String.valueOf(addressObjectJson.get("phone")));
                         }
 
-                        if(addressObjectJson.has("state")) {
+                        if (addressObjectJson.has("state")) {
                             addresses.setState(String.valueOf(addressObjectJson.get("state")));
                         }
 
-                        if(addressObjectJson.has("pincode")) {
+                        if (addressObjectJson.has("pincode")) {
                             addresses.setPincode(String.valueOf(addressObjectJson.get("pincode")));
                         }
 
-                        if(addressObjectJson.has("email")) {
+                        if (addressObjectJson.has("email")) {
                             addresses.setEmail(String.valueOf(addressObjectJson.get("email")));
                         }
                         return addresses;
                     }
-                } catch(JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -452,65 +452,65 @@ public class ParserClass implements ObjectTypes {
                     ArrayList<HomeExpertObj> experts = new ArrayList<HomeExpertObj>();
                     ArrayList<CategoryObject> categories = new ArrayList<CategoryObject>();
                     //parse experts
-                    if(searchExpertsJson.has("experts") && searchExpertsJson.get("experts") instanceof JSONArray) {
+                    if (searchExpertsJson.has("experts") && searchExpertsJson.get("experts") instanceof JSONArray) {
 
                         JSONArray expertsArr = searchExpertsJson.getJSONArray("experts");
-                        for(int i=0; i<expertsArr.length(); i++) {
+                        for (int i = 0; i < expertsArr.length(); i++) {
 
                             HomeExpertObj expert = new HomeExpertObj();
 
                             JSONObject expertJson = expertsArr.getJSONObject(i);
 
-                            if(expertJson.has("category") && expertJson.get("category") instanceof JSONArray) {
+                            if (expertJson.has("category") && expertJson.get("category") instanceof JSONArray) {
                                 ArrayList<String> expCategories = new ArrayList<String>();
                                 JSONArray categoriesArr = expertJson.getJSONArray("category");
-                                for(int j=0 ;j<categoriesArr.length() ; j++) {
+                                for (int j = 0; j < categoriesArr.length(); j++) {
                                     String category = String.valueOf(categoriesArr.get(j));
                                     expCategories.add(category);
                                 }
                                 expert.setCategory(expCategories);
                             }
 
-                            if(expertJson.has("rating") && expertJson.get("rating") instanceof Double) {
+                            if (expertJson.has("rating") && expertJson.get("rating") instanceof Double) {
                                 expert.setRating(expertJson.getDouble("rating"));
                             }
 
-                            if(expertJson.has("title")) {
+                            if (expertJson.has("title")) {
                                 expert.setTitle(String.valueOf(expertJson.get("title")));
                             }
 
-                            if(expertJson.has("cover")) {
+                            if (expertJson.has("cover")) {
                                 expert.setCover(String.valueOf(expertJson.get("cover")));
                             }
 
-                            if(expertJson.has("id") && expertJson.get("id") instanceof Integer) {
+                            if (expertJson.has("id") && expertJson.get("id") instanceof Integer) {
                                 expert.setId(expertJson.getInt("id"));
                             }
 
-                            if(expertJson.has("logo")) {
+                            if (expertJson.has("logo")) {
                                 expert.setLogo(String.valueOf(expertJson.get("logo")));
                             }
 
-                            if(expertJson.has("slug")) {
+                            if (expertJson.has("slug")) {
                                 expert.setSlug(String.valueOf(expertJson.get("slug")));
                             }
 
-                            if(expertJson.has("desc")) {
+                            if (expertJson.has("desc")) {
                                 expert.setDesc(String.valueOf(expertJson.get("desc")));
                             }
                             experts.add(expert);
                         }
                     }
                     //parse categories
-                    if(searchExpertsJson.has("categories") && searchExpertsJson.get("categories") instanceof JSONArray) {
-                        JSONArray categoriesArr = searchExpertsJson.getJSONArray("categories") ;
-                        for(int i=0; i<categoriesArr.length(); i++) {
+                    if (searchExpertsJson.has("categories") && searchExpertsJson.get("categories") instanceof JSONArray) {
+                        JSONArray categoriesArr = searchExpertsJson.getJSONArray("categories");
+                        for (int i = 0; i < categoriesArr.length(); i++) {
                             CategoryObject category = new CategoryObject();
                             JSONObject categoryJson = categoriesArr.getJSONObject(i);
-                            if(categoryJson.has("name")) {
+                            if (categoryJson.has("name")) {
                                 category.setName(String.valueOf(categoryJson.get("name")));
                             }
-                            if(categoryJson.has("id")) {
+                            if (categoryJson.has("id")) {
                                 category.setId(String.valueOf(categoryJson.get("id")));
                             }
                             categories.add(category);
@@ -518,7 +518,7 @@ public class ParserClass implements ObjectTypes {
                     }
                     objects[0] = categories;
                     objects[1] = experts;
-                } catch(JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return objects;
@@ -529,25 +529,26 @@ public class ParserClass implements ObjectTypes {
                 try {
                     appConfigJson = new JSONObject(responseString);
 
-                    if(appConfigJson.has("update") && appConfigJson.get("update") instanceof JSONObject) {
+                    if (appConfigJson.has("update") && appConfigJson.get("update") instanceof JSONObject) {
                         appConfigJson = appConfigJson.getJSONObject("update");
 
-                        if(appConfigJson.has("version") && appConfigJson.get("version") instanceof Double) {
+                        if (appConfigJson.has("version") && appConfigJson.get("version") instanceof Double) {
                             objects[0] = appConfigJson.getDouble("version") > CommonLib.VERSION;
                         }
-                        if(appConfigJson.has("text")) {
+                        if (appConfigJson.has("text")) {
                             objects[1] = String.valueOf(appConfigJson.get("text"));
                         }
-                        if(appConfigJson.has("force") && appConfigJson.get("force") instanceof Boolean) {
+                        if (appConfigJson.has("force") && appConfigJson.get("force") instanceof Boolean) {
                             objects[2] = appConfigJson.getBoolean("force");
                         }
                     }
 
-                } catch(JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return objects;
-            } case OBJECT_TYPE_FILTER_PRODUCTS: {
+            }
+            case OBJECT_TYPE_FILTER_PRODUCTS: {
                 ArrayList<CategoryTree> parentCategory = new ArrayList<CategoryTree>();
                 JSONObject parentCategoryJson = null;
                 try {
@@ -616,23 +617,23 @@ public class ParserClass implements ObjectTypes {
                         String number = appConfigJson.getString("no");
                         AppApplication.getInstance().setContactNumber(number);
                         //Parse all categories
-                        if(appConfigJson.has("category") && appConfigJson.get("category") instanceof JSONObject) {
+                        if (appConfigJson.has("category") && appConfigJson.get("category") instanceof JSONObject) {
 
                             JSONObject categoryJson = appConfigJson.getJSONObject("category");
 
                             //Parse the article category and store them in All Categories Object.
-                            if(categoryJson.has("article_category") && categoryJson.get("article_category") instanceof JSONArray) {
+                            if (categoryJson.has("article_category") && categoryJson.get("article_category") instanceof JSONArray) {
                                 JSONArray articleCategoryArr = categoryJson.getJSONArray("article_category");
                                 ArrayList<CategoryObject> articleCategories = new ArrayList<CategoryObject>();
-                                for(int i=0; i<articleCategoryArr.length(); i++) {
+                                for (int i = 0; i < articleCategoryArr.length(); i++) {
                                     JSONObject articleCategoryJson = articleCategoryArr.getJSONObject(i);
                                     CategoryObject articleCategory = new CategoryObject();
 
-                                    if(articleCategoryJson.has("id")) {
+                                    if (articleCategoryJson.has("id")) {
                                         articleCategory.setId(String.valueOf(articleCategoryJson.get("id")));
                                     }
 
-                                    if(articleCategoryJson.has("name")) {
+                                    if (articleCategoryJson.has("name")) {
                                         articleCategory.setName(String.valueOf(articleCategoryJson.get("name")));
                                     }
 
@@ -643,18 +644,18 @@ public class ParserClass implements ObjectTypes {
                             }
 
                             //Parse the photo category and store them in All Categories Object.
-                            if(categoryJson.has("photo_category") && categoryJson.get("photo_category") instanceof JSONArray) {
+                            if (categoryJson.has("photo_category") && categoryJson.get("photo_category") instanceof JSONArray) {
                                 JSONArray photoCategoryArr = categoryJson.getJSONArray("photo_category");
                                 ArrayList<CategoryObject> photoCategories = new ArrayList<CategoryObject>();
-                                for(int i=0; i<photoCategoryArr.length(); i++) {
+                                for (int i = 0; i < photoCategoryArr.length(); i++) {
                                     JSONObject photoCategoryJson = photoCategoryArr.getJSONObject(i);
                                     CategoryObject photoCategory = new CategoryObject();
 
-                                    if(photoCategoryJson.has("id")) {
+                                    if (photoCategoryJson.has("id")) {
                                         photoCategory.setId(String.valueOf(photoCategoryJson.get("id")));
                                     }
 
-                                    if(photoCategoryJson.has("name")) {
+                                    if (photoCategoryJson.has("name")) {
                                         photoCategory.setName(String.valueOf(photoCategoryJson.get("name")));
                                     }
 
@@ -665,18 +666,18 @@ public class ParserClass implements ObjectTypes {
                             }
 
                             //Parse the expert category and store them in All Categories Object.
-                            if(categoryJson.has("expert_category") && categoryJson.get("expert_category") instanceof JSONArray) {
+                            if (categoryJson.has("expert_category") && categoryJson.get("expert_category") instanceof JSONArray) {
                                 JSONArray expertCategoryArr = categoryJson.getJSONArray("expert_category");
                                 ArrayList<CategoryObject> expertCategories = new ArrayList<CategoryObject>();
-                                for(int i=0; i<expertCategoryArr.length(); i++) {
+                                for (int i = 0; i < expertCategoryArr.length(); i++) {
                                     JSONObject expertCategoryJson = expertCategoryArr.getJSONObject(i);
                                     CategoryObject expertCategory = new CategoryObject();
 
-                                    if(expertCategoryJson.has("id")) {
+                                    if (expertCategoryJson.has("id")) {
                                         expertCategory.setId(String.valueOf(expertCategoryJson.get("id")));
                                     }
 
-                                    if(expertCategoryJson.has("name")) {
+                                    if (expertCategoryJson.has("name")) {
                                         expertCategory.setName(String.valueOf(expertCategoryJson.get("name")));
                                     }
 
@@ -687,22 +688,22 @@ public class ParserClass implements ObjectTypes {
                             }
 
                             //Parse the expert category and store them in All Categories Object.
-                            if(categoryJson.has("expert_base_category") && categoryJson.get("expert_base_category") instanceof JSONArray) {
+                            if (categoryJson.has("expert_base_category") && categoryJson.get("expert_base_category") instanceof JSONArray) {
                                 JSONArray expertBaseCategoryArr = categoryJson.getJSONArray("expert_base_category");
                                 ArrayList<CategoryObject> expertBaseCategories = new ArrayList<CategoryObject>();
-                                for(int i=0; i<expertBaseCategoryArr.length(); i++) {
+                                for (int i = 0; i < expertBaseCategoryArr.length(); i++) {
                                     JSONObject expertBaseCategoryJson = expertBaseCategoryArr.getJSONObject(i);
                                     CategoryObject expertBaseCategory = new CategoryObject();
 
-                                    if(expertBaseCategoryJson.has("id")) {
+                                    if (expertBaseCategoryJson.has("id")) {
                                         expertBaseCategory.setId(String.valueOf(expertBaseCategoryJson.get("id")));
                                     }
 
-                                    if(expertBaseCategoryJson.has("name")) {
+                                    if (expertBaseCategoryJson.has("name")) {
                                         expertBaseCategory.setName(String.valueOf(expertBaseCategoryJson.get("name")));
                                     }
 
-                                    if(expertBaseCategoryJson.has("image")) {
+                                    if (expertBaseCategoryJson.has("image")) {
                                         expertBaseCategory.setImage(String.valueOf(expertBaseCategoryJson.get("image")));
                                     }
 
@@ -723,14 +724,14 @@ public class ParserClass implements ObjectTypes {
 //                            }
 //                        }
 
-                        if(appConfigJson.has("pro_category_tree") && appConfigJson.get("pro_category_tree") instanceof JSONObject) {
+                        if (appConfigJson.has("pro_category_tree") && appConfigJson.get("pro_category_tree") instanceof JSONObject) {
                             JSONObject proCategoryTreeJson = appConfigJson.getJSONObject("pro_category_tree");
 
-                            if(proCategoryTreeJson.has("tree") && proCategoryTreeJson.get("tree") instanceof  JSONArray) {
+                            if (proCategoryTreeJson.has("tree") && proCategoryTreeJson.get("tree") instanceof JSONArray) {
                                 JSONArray treeArr = proCategoryTreeJson.getJSONArray("tree");
 
                                 ArrayList<CategoryTree> categoryTree = new ArrayList<CategoryTree>();
-                                for (int i= 0; i < treeArr.length(); i++) {
+                                for (int i = 0; i < treeArr.length(); i++) {
                                     CategoryTree treeObj = new CategoryTree();
                                     JSONObject treeObjJson = treeArr.getJSONObject(i);
 
@@ -775,7 +776,7 @@ public class ParserClass implements ObjectTypes {
                             }
                         }
                         //Parse all cities
-                        if(appConfigJson.has("city_list") && appConfigJson.get("city_list") instanceof JSONArray) {
+                        if (appConfigJson.has("city_list") && appConfigJson.get("city_list") instanceof JSONArray) {
                             JSONArray citiesArr = appConfigJson.getJSONArray("city_list");
                             ArrayList<CategoryObject> cities = new ArrayList<CategoryObject>();
                             for (int i = 0; i < citiesArr.length(); i++) {
@@ -794,30 +795,30 @@ public class ParserClass implements ObjectTypes {
                             appConfig.setCities(cities);
                         }
 
-                        if(appConfigJson.has("update") && appConfigJson.get("update") instanceof JSONObject) {
+                        if (appConfigJson.has("update") && appConfigJson.get("update") instanceof JSONObject) {
                             JSONObject updateConfigJson = appConfigJson.getJSONObject("update");
 
                             Object[] updateObj = new Object[3];
-                            if(updateConfigJson.has("version") && updateConfigJson.get("version") instanceof Double) {
+                            if (updateConfigJson.has("version") && updateConfigJson.get("version") instanceof Double) {
                                 updateObj[0] = updateConfigJson.getDouble("version") > CommonLib.VERSION;
-                                appConfig.setUpdateRequired( (Boolean) updateObj[0]);
+                                appConfig.setUpdateRequired((Boolean) updateObj[0]);
                             }
-                            if(updateConfigJson.has("text")) {
+                            if (updateConfigJson.has("text")) {
                                 updateObj[1] = String.valueOf(updateConfigJson.get("text"));
                                 appConfig.setUpdateText((String) updateObj[1]);
                             }
-                            if(updateConfigJson.has("force") && updateConfigJson.get("force") instanceof Boolean) {
+                            if (updateConfigJson.has("force") && updateConfigJson.get("force") instanceof Boolean) {
                                 updateObj[2] = updateConfigJson.getBoolean("force");
-                                appConfig.setForceUpdate( (Boolean) updateObj[2]);
+                                appConfig.setForceUpdate((Boolean) updateObj[2]);
                             }
 //                            objects[0] = updateObj;
                         }
 
-                        if(appConfigJson.has("reg") && appConfigJson.get("reg") instanceof JSONObject) {
+                        if (appConfigJson.has("reg") && appConfigJson.get("reg") instanceof JSONObject) {
 
                             JSONObject regJson = appConfigJson.getJSONObject("reg");
 
-                            if(regJson.has("message")) {
+                            if (regJson.has("message")) {
                                 appConfig.setMessage(String.valueOf(regJson.get("message")));
 //                                objects[1] = String.valueOf(regJson.get("message"));
                             }
@@ -825,7 +826,7 @@ public class ParserClass implements ObjectTypes {
 
                         return appConfig;
                     }
-                } catch(JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -836,9 +837,67 @@ public class ParserClass implements ObjectTypes {
             case OBJECT_TYPE_BANNER_OBJECT:
                 return new Gson().fromJson(responseString, BannerObject.class);
             case OBJECT_TYPE_MARK_PRODUCT_REVIEW:
-                return new Gson().fromJson(JSONUtils.getJSONObject(JSONUtils.getJSONObject(responseString),"context").toString(), ProductVendorTimeObj.class);
+                return new Gson().fromJson(JSONUtils.getJSONObject(JSONUtils.getJSONObject(responseString), "context").toString(), ProductVendorTimeObj.class);
             case OBJECT_TYPE_REMOVE_PRODUCT_REVIEW:
                 return responseString;
+            case OBJECT_TYPE_PHONE_VERIFICATION:
+            {
+                Object[] responseObj = new Object[2];
+                try {
+                    JSONObject phoneVerificationJson = new JSONObject(responseString);
+                    if (phoneVerificationJson != null) {
+
+                        //parse the contact number
+                        if (phoneVerificationJson.has("mobile"))
+                            responseObj[0] = phoneVerificationJson.get("mobile");
+
+                        if (phoneVerificationJson.has("is_verified") && phoneVerificationJson.get("is_verified") instanceof Boolean)
+                            responseObj[1] = phoneVerificationJson.get("is_verified");
+
+                        return responseObj;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                responseObj[0] = "";
+                responseObj[1] = false;
+                return responseObj;
+            }
+            case OBJECT_TYPE_PHONE_VERIFICATION_INPUT: {
+                String response = "";
+                try {
+                    JSONObject phoneVerificationJson = new JSONObject(responseString);
+                    if (phoneVerificationJson != null) {
+
+                        //parse the contact number
+                        if (phoneVerificationJson.has("message"))
+                            response = String.valueOf(phoneVerificationJson.get("message"));
+
+                        return response;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return response;
+            }
+            case OBJECT_TYPE_PHONE_VERIFICATION_OTP:
+            {
+                String response = "";
+                try {
+                    JSONObject phoneVerificationJson = new JSONObject(responseString);
+                    if (phoneVerificationJson != null) {
+
+                        //parse the contact number
+                        if (phoneVerificationJson.has("message"))
+                            response = String.valueOf(phoneVerificationJson.get("message"));
+
+                        return response;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return response;
+            }
             default:
                 return null;
         }

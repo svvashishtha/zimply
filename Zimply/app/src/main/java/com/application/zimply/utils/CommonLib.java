@@ -87,6 +87,9 @@ public class CommonLib {
 	public static final int DUP_TYPE_FALSE = 16;
 	public static final int CANCEL_ORDER = 17;
 
+	// Broadcasts generated after gcm messages are recieved.
+	public static final String LOCAL_SMS_BROADCAST = "sms-phone-verification-message";
+
 
 	/** Constant to track location identification progress */
 	public static final int LOCATION_NOT_ENABLED = 0;

@@ -22,6 +22,8 @@ public interface RequestTags {
     String GCM_REGISTRATION = "gcmRegistration";
     String REGIONLIST_REQUESTTAG = "regionlistrequesttag";
     String APP_CONFIG = "appConfig";
+    String PHONE_VERIFICATION = "phoneVerification";
+    String PHONE_VERIFICATION_INPUT_NUMBER_STRING = "phoneVerification_INPUT_NUMBER";
     String ORDERLISTREQUESTTAG = "orderlistrequesttag";
     String CHECKPINCODEREQUESTTAG = "checkpincoderequesttag";
     String PRO_REQUEST_TAGS = "pro_request_tags";
@@ -46,12 +48,15 @@ public interface RequestTags {
 
     int PLACE_ORDER_SUCCESS_REQUEST_TAG = 0x07;
     int ADD_TO_CART = 0x008;
+
     int ADD_TO_CART_SEARCH = 0x0111;
     int ADD_TO_CART_PRODUCT_DETAIL = 0x0112;
     int MARK_PRODUCT_REVIEW_TAG = 0x0113;
     int CANCEL_PRODUCT_REVIEW_TAG = 0x0114;
     int QUANTITY_UPDATE = 0x009;
     int BUY_NOW = 0x0010;
+    int PHONE_VERIFICATION_INPUT_NUMBER = 0x0011;
+    int PHONE_VERIFICATION_OTP = 0x0012;
 
     String GET_PHOTO_SINGLE = "getSinglePhotoObject";
     String GET_CITY_FROM_LL = "getCityformLL";
