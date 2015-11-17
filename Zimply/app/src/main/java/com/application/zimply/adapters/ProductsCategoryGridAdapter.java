@@ -20,6 +20,7 @@ import com.application.zimply.baseobjects.CategoryObject;
 import com.application.zimply.extras.AppConstants;
 import com.application.zimply.managers.ImageLoaderManager;
 import com.application.zimply.preferences.AppPreferences;
+import com.application.zimply.widgets.CustomTextViewBold;
 
 import java.util.ArrayList;
 
@@ -104,13 +105,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class ProductsCategoryViewHolder extends RecyclerView.ViewHolder {
         ImageView categoryImg;
-        TextView categoryName;
+        CustomTextViewBold categoryName;
         FrameLayout parentFrame;
 
         public ProductsCategoryViewHolder(View itemView) {
             super(itemView);
             categoryImg = (ImageView) itemView.findViewById(R.id.category_img);
-            categoryName = (TextView) itemView.findViewById(R.id.category_name);
+            categoryName = (CustomTextViewBold) itemView.findViewById(R.id.category_name);
             parentFrame = (FrameLayout) itemView.findViewById(R.id.parent_layout);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

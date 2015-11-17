@@ -56,6 +56,9 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
         UploadManager.getInstance().addCallback(this);
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
+
+        AppPreferences.setIsStartRating(this,true);
+
         loadData();
     }
 
