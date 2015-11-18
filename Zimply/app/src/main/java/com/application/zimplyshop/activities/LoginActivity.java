@@ -267,6 +267,9 @@ public class LoginActivity extends BaseActivity
 	}
 
 	private void addServerReuqest(String name, String email, String photoUrl, String token) {
+		if(z_ProgressDialog!=null) {
+			z_ProgressDialog.dismiss();
+		}
 		String url = AppApplication.getInstance().getBaseUrl() + SIGNUP_REQUEST_URL;
 		List<NameValuePair> list = new ArrayList<NameValuePair>();
 		list.add(new BasicNameValuePair("name", name));

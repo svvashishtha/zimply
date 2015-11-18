@@ -213,7 +213,13 @@ public class ProductListingActivity extends BaseActivity implements
             case R.id.cart:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
                 intent.putExtra("OrderSummaryFragment", false);
+                intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
                 startActivity(intent);
+                break;
+            case R.id.search:
+                Intent searchIntent = new Intent(this, NewSearchActivity.class);
+                searchIntent.putExtra("position",0);
+                startActivity(searchIntent);
                 break;
             case R.id.filter:
                 if (!isLoading) {

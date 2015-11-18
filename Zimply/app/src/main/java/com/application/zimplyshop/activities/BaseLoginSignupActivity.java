@@ -28,7 +28,6 @@ import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CirclePageIndicator;
 import com.application.zimplyshop.widgets.ParallaxPageTransformer;
-import com.facebook.Session;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -184,8 +183,8 @@ public class BaseLoginSignupActivity extends BaseActivity
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
-		try {
+		super.onActivityResult(requestCode, resultCode, intent);
+		/*try {
 			super.onActivityResult(requestCode, resultCode, intent);
 			Session.getActiveSession().onActivityResult(this, requestCode, resultCode, intent);
 
@@ -202,17 +201,19 @@ public class BaseLoginSignupActivity extends BaseActivity
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 	}
 
 	private void addServerReuqest(String name, String email, String photoUrl, String token) {
+		if(z_ProgressDialog!=null) {
+            z_ProgressDialog.dismiss();
+		}
 		String url = AppApplication.getInstance().getBaseUrl() + SIGNUP_REQUEST_URL;
 		List<NameValuePair> list = new ArrayList<NameValuePair>();
 		list.add(new BasicNameValuePair("name", name));
 		list.add(new BasicNameValuePair("email", email));
 		list.add(new BasicNameValuePair("photo", photoUrl));
 		list.add(new BasicNameValuePair("token", token));
-
 		UploadManager.getInstance().makeAyncRequest(url, SIGNUP_REQUEST_TAG_BASE, "", ObjectTypes.OBJECT_TYPE_SIGNUP,
 				null, list, null);
 
@@ -272,7 +273,7 @@ public class BaseLoginSignupActivity extends BaseActivity
 			if (z_ProgressDialog != null) {
 				z_ProgressDialog.dismiss();
 			}
-			z_ProgressDialog = ProgressDialog.show(this, null, "Loading. Please wait..");
+			z_ProgressDialog = ProgressDialog.show(this, null, "Signing in. Please wait..");
 		}
 	}
 
