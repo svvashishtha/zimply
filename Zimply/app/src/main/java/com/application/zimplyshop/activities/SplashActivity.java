@@ -90,6 +90,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
         GetRequestManager.getInstance().addCallbacks(this);
 //        loadProCatData();
         appConfig();
+        //    moveToHomePage();
         imageView.setVisibility(View.VISIBLE);
     }
 
@@ -324,8 +325,6 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
                     if (objs != null) {
                         int count = 0;
                         for (NonLoggedInCartObj cObj : objs) {
-
-
                             AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()),cObj.getQuantity()));
                         }
                         AllProducts.getInstance().setCartCount(objs.size());

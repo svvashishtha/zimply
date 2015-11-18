@@ -94,7 +94,7 @@ public class ProductDetailsActivity extends ActionBarActivity
     View restPageContent;
     ProgressDialog progressDialog;
     GoogleApiClient mClient;
-    String baseAppUri = "android-app://com.application.zimply/http/www.zimply.in/shop-product/";
+    String baseAppUri = "android-app://com.application.zimplyshop/http/www.zimply.in/shop-product/";
     String baseWebUri = "http://www.zimply.in/home/shop-product/";
     Uri WEB_URL;
     Uri APP_URI;
@@ -515,7 +515,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 restPageContent.findViewById(R.id.product_page_content).setVisibility(View.VISIBLE);
 
                 showView();
-                setUpIndexingApi();
+                 setUpIndexingApi();
             } else {
                 showNullCaseView("No Info Available");
             }

@@ -128,7 +128,7 @@ public class CommonLib {
 	/**
 	 * Log control
 	 */
-	public final static boolean ZimplyLog = false;
+	public final static boolean ZimplyLog = true;
 	/**
 	 * GCM Sender ID
 	 */

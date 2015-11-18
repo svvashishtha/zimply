@@ -21,6 +21,7 @@ import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -82,9 +83,10 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     }
 
     private void loadData() {
+        CommonLib.ZLog("Product_category" , "Requesting Product category "+System.currentTimeMillis());
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_PRODUCT_CATEGORY_LIST ;
         GetRequestManager.getInstance().requestCacheThenHTTP(url, RequestTags.PRODUCT_CATEGORY_REQUEST_TAG,
-                ObjectTypes.OBJECT_TYPE_PRODUCT_CATEGORY, GetRequestManager.TEMP);
+                ObjectTypes.OBJECT_TYPE_PRODUCT_CATEGORY, GetRequestManager.ONE_HOUR);
     }
 
     @Override

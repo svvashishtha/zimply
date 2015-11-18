@@ -48,7 +48,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		Cursor cursor = null;
 		try {
 			this.getReadableDatabase();
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
 					null);
 			cursor = db.query(CACHE_TABLE_NAME, new String[] { URL }, TYPE + "=?",
 					new String[] { GetRequestManager.QUERYRESTAURANTLIST }, null, null, TIMESTAMP + " DESC ", "25");
@@ -96,7 +96,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = null;
 		Cursor cursor = null;
 		try {
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
 					null);
 			cursor = db.query(CACHE_TABLE_NAME, new String[] { URL, TYPE, TTL, TIMESTAMP, ZOMID, OBJECT },
 					TYPE + "!=? AND " + TYPE + "!=? AND " + TTL + "!=?",
@@ -153,7 +153,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = null;
 		Cursor cursor = null;
 		try {
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
 					null);
 			cursor = db.query(CACHE_TABLE_NAME, new String[] { URL }, TYPE + "=?",
 					new String[] { GetRequestManager.QUERYRESTAURANTLIST }, null, null, TIMESTAMP + " DESC ", "25");
@@ -203,7 +203,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = null;
 		Cursor cursor = null;
 		try {
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
 					null);
 
 			cursor = db.query(CACHE_TABLE_NAME, new String[] { URL, TYPE, TTL, TIMESTAMP, ZOMID, OBJECT }, TYPE + "=?",
@@ -257,7 +257,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = null;
 
 		try {
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READWRITE,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READWRITE,
 					null);
 
 			ContentValues values = new ContentValues();
@@ -297,7 +297,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		try {
 			this.getReadableDatabase();
 
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
 					null);
 			cursor = db.query(CACHE_TABLE_NAME, new String[] { URL, TYPE, TTL, TIMESTAMP, ZOMID, OBJECT }, URL + "=?",
 					new String[] { query }, null, null, null, null);
@@ -340,7 +340,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 
 		try {
 			this.getReadableDatabase();
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
 					null);
 			cursor = db.query(CACHE_TABLE_NAME, new String[] { URL, TYPE, TTL, TIMESTAMP, ZOMID, OBJECT }, URL + "=?",
 					new String[] { query }, null, null, null, null);
@@ -395,7 +395,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		try {
 			String sql = "SELECT COUNT(*) FROM " + CACHE_TABLE_NAME;
 			this.getReadableDatabase();
-			SQLiteDatabase db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE",
+			SQLiteDatabase db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE",
 					SQLiteDatabase.OPEN_READONLY, null);
 			SQLiteStatement statement = db.compileStatement(sql);
 			count = statement.simpleQueryForLong();
@@ -420,7 +420,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		try {
 			this.getReadableDatabase();
 
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READWRITE,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READWRITE,
 					null);
 
 			ContentValues values = new ContentValues();
@@ -455,7 +455,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = null;
 		try {
 			this.getReadableDatabase();
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READWRITE,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READWRITE,
 					null);
 			db.delete(CACHE_TABLE_NAME, URL + " = ?", new String[] { query });
 			db.close();
@@ -498,7 +498,7 @@ public class ResponseCacheManager extends SQLiteOpenHelper {
 		Cursor cursor = null;
 		try {
 			this.getReadableDatabase();
-			db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
+			db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/CACHE", SQLiteDatabase.OPEN_READONLY,
 					null);
 			cursor = db.query(CACHE_TABLE_NAME, new String[] { ZOMID }, TYPE + "=?",
 					new String[] { GetRequestManager.RESTAURANT }, null, null, null, null);

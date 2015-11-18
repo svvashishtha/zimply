@@ -1,19 +1,18 @@
 package com.application.zimplyshop.db;
 
-import android.database.sqlite.SQLiteOpenHelper;
-
-import java.util.ArrayList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.utils.CommonLib;
+
+import java.util.ArrayList;
 
 public class RecentProductsDBManager extends SQLiteOpenHelper {
 
@@ -63,7 +62,7 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
 
             this.getReadableDatabase();
 
-            SQLiteDatabase db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/" + DATABASE_NAME,
+            SQLiteDatabase db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME,
                     SQLiteDatabase.OPEN_READWRITE, null);
             ContentValues values = new ContentValues();
             values.put(TIMESTAMP, timestamp);
@@ -111,7 +110,7 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         ArrayList<HomeProductObj> queries = new ArrayList<HomeProductObj>();
 
         try {
-            db = ctx.openOrCreateDatabase("/data/data/com.application.zimply/databases/" + DATABASE_NAME,
+            db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME,
                     SQLiteDatabase.OPEN_READONLY, null);
 
             cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, MESSAGEID, WISHID, TIMESTAMP, TYPE, BUNDLE },

@@ -1,3 +1,4 @@
+
 package com.application.zimplyshop.activities;
 
 import android.animation.Animator;
@@ -274,8 +275,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         });
 */
         onNewIntent(getIntent());
-        checkForUpdate();
-        loadBanner();
+        //checkForUpdate();
+       // loadBanner();
         //Show case view lib - FAB
 //        prefs = getSharedPreferences("preference_name", 0);
 //        if (prefs.getBoolean("first_run_photos", true)) {
@@ -366,7 +367,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 //            prefs.edit().putBoolean("first_run_photos", false).commit();
 //        }
 
-        phoneVerification();
+        // phoneVerification();
 
     }
 

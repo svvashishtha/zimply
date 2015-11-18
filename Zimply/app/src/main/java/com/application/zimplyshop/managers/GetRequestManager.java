@@ -249,7 +249,7 @@ public class GetRequestManager {
 
     public static Object[] fetchhttp(String urlstring) throws Exception {
         HttpGet get = new HttpGet(urlstring);
-
+        get.addHeader("accept", "application/json");
         HttpResponse response = HttpManager.execute(get);
         BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
@@ -282,7 +282,7 @@ public class GetRequestManager {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (httpresult != null) {
+                if (httpresult != null  && result!=null) {
                     long timestamp = System.currentTimeMillis();
                     if (httpresult[0] != null && httpresult[0] instanceof Boolean && ((Boolean) httpresult[0]))
                         o = ParserClass.parseData(String.valueOf(result[1]), status);
