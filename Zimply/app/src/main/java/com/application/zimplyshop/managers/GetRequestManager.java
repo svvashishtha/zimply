@@ -118,6 +118,13 @@ public class GetRequestManager {
         return asyncTask;
     }
 
+
+    public UpdateCache updateAsync(String url, Object returnObj, String requestTag, int status) {
+        UpdateCache asyncTask = new UpdateCache(url, returnObj, requestTag, status);
+        asyncTask.execute();
+        return asyncTask;
+    }
+
     public class GetAsyncTask extends AsyncTask<Void, Void, Object> {
 
         String url;
@@ -165,7 +172,7 @@ public class GetRequestManager {
                     }
                     if (returnObj != null) {
                         // update the cache
-                        Update(url, returnObj, requestTag, this.status);
+                        updateAsync(url, returnObj, requestTag, this.status);
                         return returnObj;
                     }
                 } else {
@@ -199,7 +206,7 @@ public class GetRequestManager {
                         }
                         if (returnObj != null) {
                             // update the cache
-                            Update(url, returnObj, requestTag, this.status);
+                            updateAsync(url, returnObj, requestTag, this.status);
                             return returnObj;
                         }
                     }
@@ -426,5 +433,26 @@ public class GetRequestManager {
         }
         return queries;
     }
+
+    public class UpdateCache extends AsyncTask<Void, Void, Object> {
+
+        String url;
+        String requestTag;
+        int status;
+        Object returnObj = null;
+
+        public UpdateCache(String url, Object returnObj, String requestTag, int status) {
+            this.url = url;
+            this.requestTag = requestTag;
+            this.status = status;
+        }
+
+        @Override
+        protected Object doInBackground(Void... params) {
+            Update(url, returnObj, requestTag, this.status);
+            return null;
+        }
+    }
+
 
 }
