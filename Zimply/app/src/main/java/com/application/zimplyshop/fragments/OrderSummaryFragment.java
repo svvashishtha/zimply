@@ -267,7 +267,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 changeViewVisiblity(mListView,View.VISIBLE);
                 cartObject = (CartObject) obj;
                 if(!AppPreferences.isUserLogIn(getActivity()))
-                    GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), null, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                    GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(getActivity()), null, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 setAdapterData();
                 AllProducts.getInstance().setCartCount(getCartQuantity());
             }else{
