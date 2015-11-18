@@ -488,8 +488,10 @@ public class BaseActivity extends AppCompatActivity
             if (mGoogleApiClient == null)
                 registerGoogleApiClient();
             mGoogleApiClient.connect();
-            if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
+            if (z_ProgressDialog != null && z_ProgressDialog.isShowing()) {
+                z_ProgressDialog.dismiss();
                 z_ProgressDialog = ProgressDialog.show(this, null, "Getting google login details.Please wait..");
+            }
 
         } else {
             // Facebook Login
