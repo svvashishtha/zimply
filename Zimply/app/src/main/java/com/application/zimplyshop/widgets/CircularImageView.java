@@ -1,6 +1,6 @@
 package com.application.zimplyshop.widgets;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;

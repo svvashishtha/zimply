@@ -2,7 +2,7 @@ package com.application.zimplyshop.activities;
 
 import java.util.ArrayList;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.CategoriesGridRecyclerAdapter;
 import com.application.zimplyshop.adapters.CategoriesGridRecyclerAdapter.OnItemClickListener;
 import com.application.zimplyshop.application.AppApplication;

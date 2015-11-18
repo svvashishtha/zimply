@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BaseActivity;
 import com.application.zimplyshop.activities.FilterActivity;
 import com.application.zimplyshop.adapters.ExpandableListAdapter;

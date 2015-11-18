@@ -17,7 +17,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.ProductDetailsActivity;
 import com.application.zimplyshop.utils.CommonLib;
 

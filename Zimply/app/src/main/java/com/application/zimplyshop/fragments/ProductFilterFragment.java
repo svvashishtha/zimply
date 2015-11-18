@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BaseActivity;
 import com.application.zimplyshop.adapters.ExpandableProductFilterFragment;
 import com.application.zimplyshop.application.AppApplication;

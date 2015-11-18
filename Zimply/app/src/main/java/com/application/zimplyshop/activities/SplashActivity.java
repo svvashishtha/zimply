@@ -18,7 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AppConfig;
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;

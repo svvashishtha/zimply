@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.PhotoFilterCategoryAdapter;
 import com.application.zimplyshop.adapters.PhotoFilterCategoryAdapter.OnItemClickListener;
 import com.application.zimplyshop.extras.AppConstants;

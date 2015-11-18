@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.PhotosListRecyclerAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.ErrorObject;

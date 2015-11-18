@@ -38,7 +38,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 /**
  * A view which allows you to showcase areas of your app with an explanation.

@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.baseobjects.CartObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.utils.CommonLib;

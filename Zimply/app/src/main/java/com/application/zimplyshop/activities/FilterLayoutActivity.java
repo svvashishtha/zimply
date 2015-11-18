@@ -1,6 +1,6 @@
 package com.application.zimplyshop.activities;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.fragments.FilterCategoryDialogFragment;
 

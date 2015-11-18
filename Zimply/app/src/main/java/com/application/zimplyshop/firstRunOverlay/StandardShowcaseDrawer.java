@@ -24,7 +24,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 class StandardShowcaseDrawer implements ShowcaseDrawer {
 

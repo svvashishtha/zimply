@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.ProductDetailsActivity;
 import com.application.zimplyshop.activities.PurchaseListActivity;
 import com.application.zimplyshop.baseobjects.IndividualOrderItemObj;

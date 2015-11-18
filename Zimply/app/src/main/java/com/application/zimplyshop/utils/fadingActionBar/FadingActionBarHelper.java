@@ -6,7 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 public class FadingActionBarHelper extends FadingActionBarHelperBase {
 

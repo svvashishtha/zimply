@@ -16,7 +16,7 @@ import com.facebook.Session;
 import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 import android.app.Activity;
 import android.content.Context;

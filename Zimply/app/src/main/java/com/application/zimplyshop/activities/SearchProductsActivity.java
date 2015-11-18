@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;

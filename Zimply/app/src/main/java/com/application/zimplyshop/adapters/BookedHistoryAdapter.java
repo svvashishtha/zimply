@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BookedForReviewActivity;
 import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;

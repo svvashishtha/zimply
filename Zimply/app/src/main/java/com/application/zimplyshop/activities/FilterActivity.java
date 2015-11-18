@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.fragments.BaseFragment;
 import com.application.zimplyshop.fragments.FilterFragmentFirst;

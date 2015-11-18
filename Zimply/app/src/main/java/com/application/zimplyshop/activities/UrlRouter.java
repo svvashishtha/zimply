@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.HomePhotoObj;
 import com.application.zimplyshop.extras.ObjectTypes;

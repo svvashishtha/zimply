@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.FilterActivity;
 import com.application.zimplyshop.objects.ZFilter;
 

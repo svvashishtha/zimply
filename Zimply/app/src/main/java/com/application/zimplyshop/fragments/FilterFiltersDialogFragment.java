@@ -1,6 +1,6 @@
 package com.application.zimplyshop.fragments;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.FilterFiltersLayout;
 
 import android.os.Bundle;

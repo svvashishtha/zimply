@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.AllFilterClassActivity;
 import com.application.zimplyshop.activities.ArticleDescriptionActivity;
 import com.application.zimplyshop.adapters.ArticlesListRecyclerAdapter;

@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.CityListAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.CategoryObject;

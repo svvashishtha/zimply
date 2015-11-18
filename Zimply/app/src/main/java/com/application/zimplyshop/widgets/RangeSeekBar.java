@@ -33,7 +33,7 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 import java.math.BigDecimal;
 

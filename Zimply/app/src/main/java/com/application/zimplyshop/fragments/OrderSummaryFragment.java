@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.AppPaymentOptionsActivity;
 import com.application.zimplyshop.activities.ProductCheckoutActivity;
 import com.application.zimplyshop.adapters.CartItemListAdapter;

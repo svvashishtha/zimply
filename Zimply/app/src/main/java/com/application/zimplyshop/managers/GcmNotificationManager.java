@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.ArticleDescriptionActivity;
 import com.application.zimplyshop.activities.ExpertProfileActivity;
 import com.application.zimplyshop.activities.HomeActivity;

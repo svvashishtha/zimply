@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
 import com.application.zimplyshop.baseobjects.HomeArticleObj;
 import com.application.zimplyshop.fragments.ArticleListingFragment;

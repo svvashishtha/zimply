@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
 import com.application.zimplyshop.baseobjects.HomePhotoObj;
 import com.application.zimplyshop.managers.ImageLoaderManager;

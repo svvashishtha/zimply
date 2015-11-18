@@ -26,7 +26,7 @@ import android.util.AttributeSet;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 public class FABUnit extends ImageButton {
 

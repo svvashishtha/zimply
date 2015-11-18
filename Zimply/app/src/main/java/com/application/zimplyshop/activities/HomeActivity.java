@@ -47,7 +47,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.MenuAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BannerObject;

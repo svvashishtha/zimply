@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.fragments.PhotoFilterBasicFragment.OnBasicItemClickListener;
 

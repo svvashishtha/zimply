@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.ArticleDetailObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;

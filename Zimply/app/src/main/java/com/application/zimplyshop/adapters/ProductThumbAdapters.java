@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.ProductDetailsActivity;
 import com.application.zimplyshop.activities.ProductPhotoZoomActivity;
 import com.application.zimplyshop.managers.ImageLoaderManager;
