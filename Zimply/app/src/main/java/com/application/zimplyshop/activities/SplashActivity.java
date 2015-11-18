@@ -76,21 +76,25 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.splash_activity_layout);
+
+        GetRequestManager.getInstance().addCallbacks(this);
+
+        //initialize params
         mContext = this;
         prefs = getSharedPreferences(CommonLib.preferenceName, 0);
         imageView = (ImageView) findViewById(R.id.logo_image);
         int width = getDisplayMetrics().widthPixels;
         int height = getDisplayMetrics().heightPixels;
+
+        //
+        appConfig();
+
         try {
             imageView.setImageResource(R.drawable.ic_splash);
         } catch (OutOfMemoryError e) {
             imageView.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_splash, width, height));
         }
 
-        GetRequestManager.getInstance().addCallbacks(this);
-//        loadProCatData();
-        appConfig();
-        //    moveToHomePage();
         imageView.setVisibility(View.VISIBLE);
     }
 
@@ -371,16 +375,5 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
                 RequestTags.APP_CONFIG,
                 ObjectTypes.OBJECT_TYPE_APPCONFIG_2, GetRequestManager.THREE_DAYS);
     }
-
-//    public void loadProCatData(){
-//        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PRO_CATEGORY_TREE;
-//        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.PRO_REQUEST_TAGS, ObjectTypes.OBJECT_TYPE_FILTER_PRODUCTS);
-//    }
-
-    /*public void loadUserData(){
-        String url = AppApplication.getInstance().getBaseUrl()+AppConstants.GET_USER_DATA+"?userid="+AppPreferences.getUserID(this);
-        GetRequestManager.getInstance().requestHTTPThenCache(url, RequestTags.GET_USER_DATA, ObjectTypes.OBJECT_USER_DETAILS, GetRequestManager.THREE_DAYS);
-    }
-*/
 
 }
