@@ -14,7 +14,6 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductsCategoryGridAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.CategoryObject;
-import com.application.zimplyshop.baseobjects.ShopCategoryObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -99,7 +98,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag != null && requestTag.equals(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
+        if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
             if (!destroyed) {
                 showLoadingView();
                 changeViewVisiblity(cateoryList, View.GONE);
@@ -109,10 +108,10 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
-        if (requestTag != null && requestTag.equals(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
+        if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
             if (!destroyed) {
                 if (obj instanceof ArrayList<?>) {
-                    if (((ArrayList<ShopCategoryObject>) obj).size() == 0) {
+                    if (((ArrayList<CategoryObject>) obj).size() == 0) {
                         showNullCaseView("No Product categories");
                         changeViewVisiblity(cateoryList, View.GONE);
                     } else {
@@ -150,7 +149,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if (requestTag != null && requestTag.equals(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
+        if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
             if (!destroyed) {
                 showNetworkErrorView();
                 changeViewVisiblity(cateoryList, View.GONE);
