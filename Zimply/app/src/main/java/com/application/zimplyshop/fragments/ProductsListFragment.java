@@ -64,6 +64,14 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
         cateoryList.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small)));
         //load products
         setLoadingVariables();
+        retryLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isRequestFailed){
+                    loadData();
+                }
+            }
+        });
         loadData();
     }
 

@@ -35,11 +35,12 @@ public class AllCities implements Serializable{
     }
 
     public Object parseCityList(String response) {
-       cities= new ArrayList<>();
+        cities= new ArrayList<>();
         JSONArray array = JSONUtils.getJSONArray(response);
         if (array != null) {
             for (int i = 0; i < array.length(); i++) {
-                cities.add(new Gson().fromJson(JSONUtils.getJSONObject(array, i).toString(), CategoryObject.class));
+                if(JSONUtils.getBoolfromJSON(JSONUtils.getJSONObject(array, i),"serve"))
+                    cities.add(new Gson().fromJson(JSONUtils.getJSONObject(array, i).toString(), CategoryObject.class));
             }
         }
         return cities;

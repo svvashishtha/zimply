@@ -782,14 +782,16 @@ public class ParserClass implements ObjectTypes {
                             ArrayList<CategoryObject> cities = new ArrayList<CategoryObject>();
                             for (int i = 0; i < citiesArr.length(); i++) {
                                 JSONObject cityObject = citiesArr.getJSONObject(i);
-                                CategoryObject city = new CategoryObject();
-                                if (cityObject.has("id"))
-                                    city.setId(String.valueOf(cityObject.get("id")));
-                                if (cityObject.has("name"))
-                                    city.setName(String.valueOf(cityObject.get("name")));
-                                if (cityObject.has("serve") && cityObject.get("serve") instanceof Boolean)
-                                    city.setServe(cityObject.getBoolean("serve"));
-                                cities.add(city);
+                                if(cityObject.getBoolean("serve")) {
+                                    CategoryObject city = new CategoryObject();
+                                    if (cityObject.has("id"))
+                                        city.setId(String.valueOf(cityObject.get("id")));
+                                    if (cityObject.has("name"))
+                                        city.setName(String.valueOf(cityObject.get("name")));
+                                    if (cityObject.has("serve") && cityObject.get("serve") instanceof Boolean)
+                                        city.setServe(cityObject.getBoolean("serve"));
+                                    cities.add(city);
+                                }
                             }
                             AllCategories.getInstance().setCities(cities);
                             AllCities.getInsance().setCities(cities);

@@ -327,7 +327,26 @@ public class ProductDetailsActivity extends ActionBarActivity
                             /*Intent intent = new Intent(ProductDetailsActivity.this, ProductDemoActivity.class);
                             startActivity(intent);*/
                             if(AppPreferences.isUserLogIn(ProductDetailsActivity.this)){
-                                makeProductPreviewRequest();
+
+                                final AlertDialog logoutDialog;
+                                logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this)
+                                        .setTitle("Confirm Booking")
+                                        .setMessage("By clicking confirm, you agree to reserve the demo of the product valid till 9pm tomorrow.")
+                                        .setPositiveButton("Confirm",
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        makeProductPreviewRequest();
+                                                    }
+                                                }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                }).create();
+                                logoutDialog.show();
+
                             }else{
                                 Intent intent = new Intent(ProductDetailsActivity.this, BaseLoginSignupActivity.class);
                                 intent.putExtra("inside", true);

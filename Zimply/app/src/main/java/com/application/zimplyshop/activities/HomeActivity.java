@@ -367,7 +367,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 //            prefs.edit().putBoolean("first_run_photos", false).commit();
 //        }
 
-        // phoneVerification();
+         phoneVerification();
 
     }
 
@@ -751,6 +751,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                                                 AllProducts.getInstance().setCartObjs(null);
                                                 Intent loginIntent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
                                                 loginIntent.putExtra("is_logout", true);
+
                                                 loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 //loginIntent.putExtra("inside", true);
                                                 startActivity(loginIntent);
@@ -1109,6 +1110,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 Intent loginIntent = new Intent(this, BaseLoginSignupActivity.class);
                 loginIntent.putExtra("inside", true);
                 isToLoginPage = true;
+                mDrawer.closeDrawers();
                 startActivity(loginIntent);
                 break;
         }
