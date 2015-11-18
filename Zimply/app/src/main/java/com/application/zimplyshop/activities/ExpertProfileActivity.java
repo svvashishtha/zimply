@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ExpertDetailListAdapter;
 import com.application.zimplyshop.adapters.ExpertDetailListAdapter.OnItemClickListener;
 import com.application.zimplyshop.application.AppApplication;

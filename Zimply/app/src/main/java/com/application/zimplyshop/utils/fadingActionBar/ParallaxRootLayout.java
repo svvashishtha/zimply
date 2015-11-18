@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 public class ParallaxRootLayout extends FrameLayout {
 

@@ -10,7 +10,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
 import android.util.AttributeSet;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 public class AddFAB extends FABUnit {
     int mPlusColor;

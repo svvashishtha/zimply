@@ -2,7 +2,7 @@ package com.application.zimplyshop.adapters;
 
 import java.util.ArrayList;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.ShopCategoriesActivity;
 import com.application.zimplyshop.baseobjects.ShopCategoryObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;

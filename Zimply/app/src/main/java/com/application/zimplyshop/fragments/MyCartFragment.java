@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BaseLoginSignupActivity;
 import com.application.zimplyshop.activities.ProductCheckoutActivity;
 import com.application.zimplyshop.adapters.MyCartAdapter;

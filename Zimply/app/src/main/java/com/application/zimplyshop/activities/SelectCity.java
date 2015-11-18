@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.fragments.CitiesListFragment;
 import com.application.zimplyshop.preferences.AppPreferences;

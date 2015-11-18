@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewSearchActivity;
 import com.application.zimplyshop.activities.ProductDetailsActivity;
 import com.application.zimplyshop.activities.SearchResultsActivity;

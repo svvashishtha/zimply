@@ -5,7 +5,7 @@ import static com.application.zimplyshop.widgets.RoundedDrawable.CORNER_BOTTOM_R
 import static com.application.zimplyshop.widgets.RoundedDrawable.CORNER_TOP_LEFT;
 import static com.application.zimplyshop.widgets.RoundedDrawable.CORNER_TOP_RIGHT;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 import android.content.Context;
 import android.content.res.ColorStateList;

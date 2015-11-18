@@ -2,7 +2,7 @@ package com.application.zimplyshop.adapters;
 
 import java.util.List;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

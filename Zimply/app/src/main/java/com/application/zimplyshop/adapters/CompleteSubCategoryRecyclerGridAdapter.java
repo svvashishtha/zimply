@@ -2,7 +2,7 @@ package com.application.zimplyshop.adapters;
 
 import java.util.ArrayList;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.baseobjects.CompleteSubCategoryObject;
 
 import android.content.Context;

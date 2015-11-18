@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="ga_trackingId">UA-64477399-5</string>
+    <string name="ga_trackingId">UA-64477399-7</string>
 
     <integer name="ga_sessionTimeout">30</integer>
 
@@ -16,7 +16,7 @@
     <screenName name="com.application.zimplyshop.activities.ArticleListingActivity">Article Listing</screenName>
     <screenName name="com.application.zimplyshop.activities.BaseLoginSignupActivity">Base Login Signup</screenName>
     <screenName name="com.application.zimplyshop.activities.ExpertProfileActivity">Expert Profile</screenName>
-    <screenName name="com.application.zimply.activities.ExpertListActivity">Expert List</screenName>
+    <screenName name="com.application.zimplyshop.activities.ExpertListActivity">Expert List</screenName>
     <screenName name="com.application.zimplyshop.activities.FilterActivity">Filters</screenName>
     <screenName name="com.application.zimplyshop.activities.ForgotPassword">Forgot Password</screenName>
     <screenName name="com.application.zimplyshop.activities.HomeActivity">Home</screenName>

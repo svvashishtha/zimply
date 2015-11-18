@@ -12,7 +12,7 @@ import android.graphics.Bitmap;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.utils.CacheCleanerService;

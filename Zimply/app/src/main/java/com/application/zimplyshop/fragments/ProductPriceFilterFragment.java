@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.extras.InputFilterMinMax;
 import com.application.zimplyshop.widgets.RangeSeekBar;
 

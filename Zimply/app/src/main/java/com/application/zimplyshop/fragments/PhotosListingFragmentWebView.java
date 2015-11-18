@@ -14,7 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.AllFilterClassActivity;
 import com.application.zimplyshop.activities.BaseLoginSignupActivity;
 import com.application.zimplyshop.application.AppApplication;

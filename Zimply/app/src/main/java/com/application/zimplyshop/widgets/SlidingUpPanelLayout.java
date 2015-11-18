@@ -1,7 +1,7 @@
 package com.application.zimplyshop.widgets;
 
 import com.nineoldandroids.view.animation.AnimatorProxy;
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

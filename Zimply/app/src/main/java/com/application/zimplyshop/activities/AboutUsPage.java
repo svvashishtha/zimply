@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.ZWebView;
 import com.google.android.gms.plus.PlusOneButton;

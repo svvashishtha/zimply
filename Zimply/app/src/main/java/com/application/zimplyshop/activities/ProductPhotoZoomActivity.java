@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductThumbAdapters;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.managers.ImageLoaderManager;

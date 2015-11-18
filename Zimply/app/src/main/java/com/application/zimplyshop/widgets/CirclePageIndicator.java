@@ -20,7 +20,7 @@ import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 import android.content.Context;
 import android.content.res.Resources;

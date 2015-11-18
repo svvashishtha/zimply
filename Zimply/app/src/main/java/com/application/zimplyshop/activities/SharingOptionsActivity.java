@@ -20,7 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ShareAppGridAdapter;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.utils.CommonLib;

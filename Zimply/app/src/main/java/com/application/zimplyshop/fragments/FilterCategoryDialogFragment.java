@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.FilterLayoutActivity;
 import com.application.zimplyshop.adapters.CompleteCategoryRecyclerAdapter;
 import com.application.zimplyshop.adapters.CompleteSubCategoryRecyclerGridAdapter;

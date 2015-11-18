@@ -23,7 +23,7 @@ import android.graphics.Color;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 
 /**
  * Created by curraa01 on 13/10/2013.

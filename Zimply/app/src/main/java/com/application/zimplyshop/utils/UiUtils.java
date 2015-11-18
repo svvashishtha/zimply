@@ -2,7 +2,7 @@ package com.application.zimplyshop.utils;
 
 import java.util.Random;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.extras.AppConstants;
 
 import android.content.Context;

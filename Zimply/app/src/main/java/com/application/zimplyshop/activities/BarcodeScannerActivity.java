@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.zxing.BarcodeFormat;

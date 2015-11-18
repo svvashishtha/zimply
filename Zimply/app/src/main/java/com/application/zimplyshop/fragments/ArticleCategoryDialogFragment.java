@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.PhotoArticleFilterAdapter;
 import com.application.zimplyshop.objects.AllCategories;
 import com.application.zimplyshop.objects.AllCities;

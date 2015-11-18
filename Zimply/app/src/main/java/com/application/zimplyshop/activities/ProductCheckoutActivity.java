@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.application.zimply.R;
+import com.application.zimplyshop.R;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.fragments.AddressSelectionFragment;
 import com.application.zimplyshop.fragments.BaseFragment;
