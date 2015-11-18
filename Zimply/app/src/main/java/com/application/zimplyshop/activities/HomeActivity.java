@@ -210,180 +210,17 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
         mTabs = (TabLayout) findViewById(R.id.indicator);
 
-        //   mTabs.setTabTextColors(R.color.heading_text_color,R.color.pager_tab_selected_color);
-
         mTabs.setupWithViewPager(pager);
         mTabs.setVisibility(View.GONE);
-     /*   pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                switch (position) {
-                    *//*case FRAGMENT_PHOTO:
-                        showFAB(false);
-                        ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.fab_filter);
-                        searchItem.setVisible(false);
-                        break;
-                    case FRAGMENT_EXPERT:
-                        showFAB(false);
-                        ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.fab_filter);
-                        searchItem.setVisible(true);
-                        break;
-                    *//*
-                    case FRAGMENT_PRODUCT:
-                        showFAB(false);
-                        ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.ic_barcodescanner);
-                        searchItem.setVisible(true);
-                        if (isDestroyed)
-                            return;
-                        break;
-                    default:
-                        hideFAB();
-                        searchItem.setVisible(false);
-                        break;
-                }
-                if (position == 2 || position == 3) {
-                    filterItem.setVisible(false);
-                    findViewById(R.id.filter_applied).setVisibility(View.GONE);
-                } else {
-                    filterItem.setVisible(true);
-                }
-                if (position == 0) {
-                    if (((PhotosListingFragmentWebView) fragments.get(0)).isFilterApplied()) {
-                        findViewById(R.id.filter_applied).setVisibility(View.VISIBLE);
-                    } else {
-                        findViewById(R.id.filter_applied).setVisibility(View.GONE);
-                    }
-                }
-                if (position == 1) {
-                    if (((ArticleListingFragment) fragments.get(1)).isFilterApplied()) {
-                        findViewById(R.id.filter_applied).setVisibility(View.VISIBLE);
-                    } else {
-                        findViewById(R.id.filter_applied).setVisibility(View.GONE);
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-*/
         onNewIntent(getIntent());
-        //checkForUpdate();
-       // loadBanner();
-        //Show case view lib - FAB
-//        prefs = getSharedPreferences("preference_name", 0);
-//        if (prefs.getBoolean("first_run_photos", true)) {
-//            ViewTarget target = new ViewTarget(R.id.photos_view_pager, this);
-//            ShowcaseView collectionFirstRun =
-//                    new ShowcaseView.Builder(this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE_LARGE)
-//                            .setTarget(target)
-//                            .setContentTitle("See home design ideas")
-//                            .setStyle(R.style.ShowcaseView)
-//                            .setShowcaseEventListener(new OnShowcaseEventListener() {
-//                                @Override
-//                                public void onShowcaseViewHide(ShowcaseView showcaseView) {
-//                                    if (prefs.getBoolean("first_run_fab", true)) {
-//                                        ViewTarget target = new ViewTarget(R.id.fab_post_request, HomeActivity.this);
-//                                        ShowcaseView collectionFirstRun =
-//                                                new ShowcaseView.Builder(HomeActivity.this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE)
-//                                                        .setTarget(target)
-//                                                        .setContentTitle("Hire home design experts.")
-//                                                        .setStyle(R.style.ShowcaseView)
-//                                                        .setShowcaseEventListener(new OnShowcaseEventListener() {
-//                                                            @Override
-//                                                            public void onShowcaseViewHide(ShowcaseView showcaseView) {
-//                                                                if (prefs.getBoolean("first_run_product", true)) {
-//                                                                    ViewTarget target = new ViewTarget(R.id.shop_view_pager, HomeActivity.this);
-//                                                                    ShowcaseView collectionFirstRun =
-//                                                                            new ShowcaseView.Builder(HomeActivity.this, true, ShowcaseView.TYPE_CIRCLE, target, ShowcaseView.CUSTOMMEASURE_CIRCLE_SMALL)
-//                                                                                    .setTarget(target)
-//                                                                                    .setContentTitle("Shop exclusive products for your home")
-//                                                                                    .setStyle(R.style.ShowcaseView)
-//                                                                                    .build();
-//
-//                                                                    // 'OK' button
-//                                                                    RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                                                                    lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//                                                                    lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//                                                                    lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
-//                                                                    collectionFirstRun.setButtonPosition(lps);
-//
-//                                                                    collectionFirstRun.show();
-//                                                                    prefs.edit().putBoolean("first_run_product", false).commit();
-//                                                                }
-//                                                            }
-//
-//                                                            @Override
-//                                                            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-//
-//                                                            }
-//
-//                                                            @Override
-//                                                            public void onShowcaseViewShow(ShowcaseView showcaseView) {
-//
-//                                                            }
-//                                                        })
-//                                                        .build();
-//
-//                                        // 'OK' button
-//                                        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                                        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//                                        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//                                        lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
-//                                        collectionFirstRun.setButtonPosition(lps);
-//
-//                                        collectionFirstRun.show();
-//                                        prefs.edit().putBoolean("first_run_fab", false).commit();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onShowcaseViewShow(ShowcaseView showcaseView) {
-//
-//                                }
-//                            })
-//                            .build();
-//
-//            // 'OK' button
-//            RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//            lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//            lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//            lps.setMargins(0, 0, width / 3 - width / 10, height / 3);
-//            collectionFirstRun.setButtonPosition(lps);
-//
-//            collectionFirstRun.show();
-//            prefs.edit().putBoolean("first_run_photos", false).commit();
-//        }
 
-         phoneVerification();
+        if(AppPreferences.isUserLogIn(this))
+            phoneVerification();
 
-    }
-
-
-    public void loadBanner(){
-        String url = AppApplication.getInstance().getBaseUrl()+AppConstants.BANNER_URL;
-        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.BANNER_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_BANNER_OBJECT);
     }
 
     public void toggleFilterVisibility(boolean visibility) {
         filterItem.setVisible(visibility);
-
-    }
-
-    public void checkForUpdate() {
-
     }
 
     // makes FAB gone.
@@ -836,7 +673,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                 // checkCartCount();
                 oldObj.add(item);
-                GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
             }
             moveToProductDetail(id, slug);
@@ -1442,9 +1279,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
             pageTitles = new ArrayList<String>();
-            /*pageTitles.add("Photos");
-            pageTitles.add("Stories");
-            pageTitles.add("Experts");*/
             pageTitles.add("Shop");
             fragments = new HashMap<>();
         }
@@ -1453,21 +1287,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         public Fragment getItem(int position) {
             Fragment fragment = null;
             switch (position) {
-                /*case FRAGMENT_PHOTO:
-                    if (CommonLib.showPhotosWebView)
-                        fragment = PhotosListingFragmentWebView.newInstance(null);
-                    else
-                        fragment = PhotosListingFragment.newInstance(null);
-                    break;
 
-                case FRAGMENT_ARTICLE:
-                    fragment = ArticleListingFragment.newInstance(null);
-                    break;
-
-                case FRAGMENT_EXPERT:
-                    fragment = ExpertCategoryFragment.newInstance(null);
-
-                    break;*/
                 case FRAGMENT_PRODUCT:
                     Bundle arguments = new Bundle();
                     arguments.putString("title", getString(R.string.deals_of_day_text));
@@ -1515,14 +1335,12 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     boolean otpFound = false;
                     if(tokens.countTokens() > 0) {
 
-//                        while(!otpFound) {
                         if(tokens.hasMoreTokens()) {
                             otp = tokens.nextToken();
                             if (otp != null && otp.length() == 6) {
                                 otpFound = true;
                             }
                         }
-//                        }
                     }
 
                     if(!otpFound)

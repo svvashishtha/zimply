@@ -280,7 +280,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                                         checkCartCount();
                                         addToCart.setText("Go To Cart");
                                         oldObj.add(item);
-                                        GetRequestManager.Update(AppPreferences.getDeviceID(mContext), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                                        GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(mContext), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                                         Toast.makeText(mContext, "Successfully added to cart", Toast.LENGTH_SHORT).show();
                                     }
 
@@ -1285,7 +1285,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                 // checkCartCount();
                 oldObj.add(item);
-                GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
             }
             moveToCartActivity();
