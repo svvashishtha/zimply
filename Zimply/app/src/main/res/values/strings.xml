@@ -170,8 +170,20 @@
     <string name="continue_shop_text">Continue Shopping</string>
     <string name="request_for_demo_regisered">Your request for the demo of the product has been registered. Kindly visit the store to get the feel.</string>
 
+
     <string name="out_of_delivery_area">Out of delivery area</string>
     <string name="use_different_address">Use a different address</string>
     <string name="confirm_booking_message">\'Book a Visit\' feature allows you to book a product valid till 9 PM tomorrow so that you can visit the Zimply Store and have a look at the product before you buy.\nBy clicking confirm, you agree to reserve the demo of the product valid till 9 PM tomorrow.</string>
     <string name="not_in_area_text">Sorry! We are currently not present in this area. We are constantly increasing our delivery reach, please try again soon.</string>
+
+    <string name="verify">Verify</string>
+    <string name="please_verify_phone">Please verify your phone number.</string>
+    <string name="verify_phone_sms">We will send you a code via SMS to verify this number.</string>
+    <string name="verfication">Verify Number</string>
+    <string name="verification_code_message">We have sent a 6-digit verification code on %1$s via SMS. Please enter it below, and you\'re done!</string>
+    <string name="edit_number">Edit Number</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="incorrect_verification_code">The verification code you entered is incorrect. Please try again</string>
+    <string name="retry_in">Resend in %1$s sec</string>
+
 </resources>

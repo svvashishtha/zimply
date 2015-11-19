@@ -38,8 +38,13 @@
     <color name="zimply_darker">#1d1d1d</color>
     <color name="zdhl5">#7D7D7D</color>
     <color name="blue_trans_twenty">#6600a6e4</color>
-   <!-- <color name="blue_button">#1ca4c9</color>
-    <color name="blue_button_pressed">#1286a3</color>-->
+    <color name="zdhl3">#5D5D5D</color>
+    <color name="zhl_light">#f8f8f8</color>
+    <color name="submit_green">#4fc31c</color> <!-- #51a351 -->  <!--#77cb00-->
+    <color name="submit_green_pressed">#3aa718</color>  <!--57ab00-->
+
+    <!-- <color name="blue_button">#1ca4c9</color>
+     <color name="blue_button_pressed">#1286a3</color>-->
     <color name="blue_button">@color/z_blue_color</color>
     <color name="blue_button_pressed">#0084a5</color>
     <color name="orange_button">#f29129</color>

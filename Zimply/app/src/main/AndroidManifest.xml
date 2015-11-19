@@ -97,6 +97,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/ZDialogTheme" />
         <activity
+            android:name="com.application.zimplyshop.activities.CheckPhoneVerificationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZDialogTheme" />
+        <activity
             android:name="com.application.zimplyshop.activities.AboutUsPage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
