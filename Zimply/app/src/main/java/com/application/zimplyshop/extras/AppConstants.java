@@ -53,6 +53,7 @@ public interface AppConstants {
     String GET_CART_COMPUTATION = "ecommerce/cart-computation/";
     String USER_WISHLIST = "zimply-auth/wishlist/";
     String BANNER_URL = "explore/get-banner/";
+    String NOTIFICATIONS_LIST = "notification/gcmnotification";
 
 
 

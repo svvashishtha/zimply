@@ -1,14 +1,18 @@
 package com.application.zimplyshop.activities;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,6 +47,27 @@ public class BaseLoginSignupActivity extends BaseActivity
 	private boolean fromInside = false;
 
 	private boolean isLoggedOut=false;
+
+	boolean isDestroyed;
+
+	Runnable r2 = new Runnable() {
+
+		@Override
+		public void run() {
+			if (!isDestroyed) {
+				r2Running = true;
+				animateArrowForward();
+			}
+			// fadeOutView((LinearLayout) findViewById(R.id.username_layout));
+		}
+
+	};
+
+	boolean isArrowHidden;
+
+	ImageView arrowRight;
+
+	private boolean r2Running = false   ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +104,68 @@ public class BaseLoginSignupActivity extends BaseActivity
 		width = getDisplayMetrics().widthPixels;
 		height = getDisplayMetrics().heightPixels;
 		UploadManager.getInstance().addCallback(this);
+		arrowRight = (ImageView) findViewById(R.id.arrow_right);
+		arrowRight.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_arrow_right,
+				getResources().getDimensionPixelSize(R.dimen.height48),
+				getResources().getDimensionPixelSize(R.dimen.height48)));
+
+
+		final Handler arrowHandler = new Handler();
+		if (!r2Running)
+			arrowHandler.postDelayed(r2, 1000);
+
+		pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int arg0) {
+
+			}
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				if (positionOffsetPixels > 20 && arrowRight.isShown() && !isArrowHidden) {
+					isArrowHidden = true;
+					arrowHandler.removeCallbacks(r2);
+					fadeOutView(arrowRight);
+				}
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+
+			}
+		});
+	}
+
+	private void fadeOutView(final View view) {
+		if (view != null) {
+			ObjectAnimator anim = ObjectAnimator.ofFloat(view, View.ALPHA, 1, 0);
+			anim.setDuration(500);
+
+			anim.start();
+			anim.addListener(new Animator.AnimatorListener() {
+
+				@Override
+				public void onAnimationStart(Animator animation) {
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animator animation) {
+
+				}
+
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					view.setVisibility(View.GONE);
+				}
+
+				@Override
+				public void onAnimationCancel(Animator animation) {
+
+				}
+			});
+		}
 
 	}
 
@@ -279,6 +366,7 @@ public class BaseLoginSignupActivity extends BaseActivity
 
 	@Override
 	protected void onDestroy() {
+		isDestroyed=true;
 		UploadManager.getInstance().removeCallback(this);
 		super.onDestroy();
 	}
@@ -330,4 +418,63 @@ public class BaseLoginSignupActivity extends BaseActivity
 		}
 
 	}
+
+	private void animateArrowForward() {
+		ObjectAnimator anim = ObjectAnimator.ofFloat(arrowRight, View.TRANSLATION_X, 0, 30f);
+		anim.setDuration(500);
+		anim.setInterpolator(new AccelerateDecelerateInterpolator());
+		anim.addListener(new Animator.AnimatorListener() {
+
+			@Override
+			public void onAnimationStart(Animator animation) {
+
+			}
+
+			@Override
+			public void onAnimationRepeat(Animator animation) {
+
+			}
+
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				animateArrowBackward();
+			}
+
+			@Override
+			public void onAnimationCancel(Animator animation) {
+
+			}
+		});
+		anim.start();
+	}
+
+	private void animateArrowBackward() {
+		ObjectAnimator anim = ObjectAnimator.ofFloat(arrowRight, View.TRANSLATION_X, 30, 0);
+		anim.setDuration(500);
+		anim.setInterpolator(new AccelerateDecelerateInterpolator());
+		anim.addListener(new Animator.AnimatorListener() {
+
+			@Override
+			public void onAnimationStart(Animator animation) {
+
+			}
+
+			@Override
+			public void onAnimationRepeat(Animator animation) {
+
+			}
+
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				animateArrowForward();
+			}
+
+			@Override
+			public void onAnimationCancel(Animator animation) {
+
+			}
+		});
+		anim.start();
+	}
+
 }

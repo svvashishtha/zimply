@@ -53,8 +53,10 @@ public class AllFilterClassActivity extends BaseDialogFragment implements View.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.filter_tab_layout, container, false);
-        if (getDialog() != null)
+        if (getDialog() != null) {
             getDialog().getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.white));
+
+        }
 
         bundle = getArguments();
         pager = (ViewPager) view.findViewById(R.id.viewpager);
@@ -65,37 +67,48 @@ public class AllFilterClassActivity extends BaseDialogFragment implements View.O
 
         adapter = new MainFragmentsAdapter(getChildFragmentManager());
         pager.setOffscreenPageLimit(2);
+
         mTabs = (TabLayout) view.findViewById(R.id.indicator);
         mTabs.setBackgroundColor(getResources().getColor(R.color.white));
+
+
         return view;
     }
 
-    /*@NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity(), R.style.HJCustomDialogTheme);
-        bundle = getArguments();
-
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        DisplayMetrics metrics = new DisplayMetrics();
-
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setContentView(view);
-
-        dialog.getWindow().setLayout(
-                metrics.widthPixels - 2 * getResources().getDimensionPixelSize(R.dimen.margin_large),
-                ((4 * metrics.heightPixels) / 5));
-
-        return dialog;
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        pager.setAdapter(adapter);
+        mTabs.setupWithViewPager(pager);
+        pager.setCurrentItem(1);
     }
-*/
+
+    /*@NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Dialog dialog = new Dialog(getActivity(), R.style.HJCustomDialogTheme);
+            bundle = getArguments();
+
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            DisplayMetrics metrics = new DisplayMetrics();
+
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setContentView(view);
+
+            dialog.getWindow().setLayout(
+                    metrics.widthPixels - 2 * getResources().getDimensionPixelSize(R.dimen.margin_large),
+                    ((4 * metrics.heightPixels) / 5));
+
+            return dialog;
+        }
+    */
     @Override
     public void onResume() {
         super.onResume();
-        pager.setAdapter(adapter);
-        mTabs.setupWithViewPager(pager);
+
+
 
     }
 

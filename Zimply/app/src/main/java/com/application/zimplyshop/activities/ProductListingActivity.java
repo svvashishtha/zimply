@@ -201,6 +201,8 @@ public class ProductListingActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        MenuItem item = menu.findItem(R.id.filter);
+        item.setVisible(true);
         return true;
     }
 
@@ -248,7 +250,7 @@ public class ProductListingActivity extends BaseActivity implements
             bundle.putInt("price_high", priceHigh);
             bundle.putInt("price_low", priceLte);
             AllFilterClassActivity dialogFragment = AllFilterClassActivity.newInstance(bundle);
-            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.HJCustomDialogTheme);
+            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.HJFullScreenDialogTheme);
             dialogFragment.setOnApplyClickListener(new AllFilterClassActivity.OnApplyClickListener() {
                 @Override
                 public void onApplyClick(Bundle bundle) {
@@ -297,7 +299,9 @@ public class ProductListingActivity extends BaseActivity implements
 
                 break;
             case R.id.retry_layout:
-                loadData();
+                if(isRequestFailed) {
+                    loadData();
+                }
                 break;
         }
     }

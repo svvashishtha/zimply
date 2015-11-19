@@ -135,6 +135,12 @@
             android:name="com.application.zimplyshop.activities.ExpertProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
+
+        <activity
+            android:name="com.application.zimplyshop.activities.NotificationsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseTheme" />
+
         <activity
             android:name="com.application.zimplyshop.activities.UserProfileActivity"
             android:screenOrientation="portrait"
