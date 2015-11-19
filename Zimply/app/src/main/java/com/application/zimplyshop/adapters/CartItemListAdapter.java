@@ -202,6 +202,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs) + price);
             summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) + totalPrice);
             summaryHolder.shipping.setText((Float.parseFloat(cartObject.getCart().getTotal_shipping()) == 0)?"Free":(context.getResources().getString(R.string.Rs) + cartObject.getCart().getTotal_shipping()));
+            summaryHolder.checkOut.setText("Proceed to Payment");
             summaryHolder.checkOut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

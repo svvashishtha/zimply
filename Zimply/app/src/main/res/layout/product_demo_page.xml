@@ -17,6 +17,15 @@
 
         android:padding="@dimen/margin_medium"
         android:orientation="vertical">
+
+        <com.application.zimplyshop.widgets.CustomTextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_xxlarge"
+            android:textColor="@color/green_text_color"
+            android:text="@string/congrats_txt"/>
+
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/store_time"
             android:layout_width="match_parent"
@@ -57,6 +66,20 @@
             android:paddingRight="@dimen/margin_large"
             android:textColor="@color/white"
             android:background="@drawable/blue_button_background"
+            android:layout_height="@dimen/z_item_height_48"/>
+        <View
+            android:layout_width="@dimen/margin_medium"
+            android:layout_height="match_parent"/>
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/continue_shop"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/continue_shop_text"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingRight="@dimen/margin_large"
+            android:textColor="@color/white"
+            android:background="@drawable/green_btn_bg"
             android:layout_height="@dimen/z_item_height_48"/>
     </LinearLayout>
 

@@ -331,7 +331,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                                 final AlertDialog logoutDialog;
                                 logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this)
                                         .setTitle("Confirm Booking")
-                                        .setMessage("By clicking confirm, you agree to reserve the demo of the product valid till 9pm tomorrow.")
+                                        .setMessage(getString(R.string.confirm_booking_message))
                                         .setPositiveButton("Confirm",
                                                 new DialogInterface.OnClickListener() {
                                                     @Override

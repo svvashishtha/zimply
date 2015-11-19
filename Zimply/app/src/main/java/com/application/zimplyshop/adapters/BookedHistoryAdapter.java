@@ -1,6 +1,8 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -47,8 +49,17 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
         ((OrderItemHolder)holder).storeName.setText(objs.get(position).getVendorTimeObj().getVendor());
         ((OrderItemHolder)holder).itemPrice.setText(mContext.getResources().getString(R.string.rs_text) + objs.get(position).getPrice() + "");
 
+       /* ColorFilter filter = new LightingColorFilter(
+                objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green),
+                objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green));
+        ((OrderItemHolder) holder).bookingStatus.getBackground().setColorFilter(filter);*/
+
         if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL") || objs.get(position).getStatus().equalsIgnoreCase("EXPIRED")){
-            ((OrderItemHolder)holder).bookingStatus.setText("CANCELLED");
+            if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL")) {
+                ((OrderItemHolder) holder).bookingStatus.setText("CANCELLED");
+            }else{
+                ((OrderItemHolder) holder).bookingStatus.setText(objs.get(position).getStatus());
+            }
             ((OrderItemHolder)holder).cancelBooking.setVisibility(View.GONE);
             ((OrderItemHolder)holder).separatorView.setVisibility(View.GONE);
         }else{
@@ -64,7 +75,10 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
         }
-
+        ColorFilter filter = new LightingColorFilter(
+                objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green),
+                objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green));
+        ((OrderItemHolder) holder).bookingStatus.getBackground().setColorFilter(filter);
     }
 
     public void removePos(int pos){

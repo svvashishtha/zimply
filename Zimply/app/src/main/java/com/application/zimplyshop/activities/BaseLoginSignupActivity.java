@@ -298,8 +298,8 @@ public class BaseLoginSignupActivity extends BaseActivity
 
 	public class MyPagerAdapter extends PagerAdapter {
 
-		int[] resId = {R.drawable.ic_tut3, R.drawable.ic_tut2, R.drawable.ic_tut1, R.drawable.ic_tut4};
-		String[] texts = {"", "Book a visit to the nearest Zimply Store", "Experience the delight of shopping at our store", "Shop Exclusive Home Products"};
+		int[] resId = {R.drawable.ic_tut3,R.drawable.ic_tut1, R.drawable.ic_tut2,  R.drawable.ic_tut4};
+		String[] texts = {"","Shop Exclusive Home Products Online", "Book a product to have a look at your nearest Zimply Store", "Experience the delight of shopping at our store" };
 
 		@Override
 		public int getCount() {
