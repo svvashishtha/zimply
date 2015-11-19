@@ -218,7 +218,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                         (cartObject.getCart().getDetail().get(quantityUpdatePosition).getShipping_charges())
                                 * Integer.parseInt(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQuantity());
 
-                cartObject.getCart().setTotal_shipping(((int) shippingPrice != 0) ? shippingPrice + "" : "Free");
+                cartObject.getCart().setTotal_shipping(shippingPrice +"");
 
                 cartObject.getCart().setTotal_price(Float.parseFloat(cartObject.getCart().getTotal_price()) -
                         (cartObject.getCart().getDetail().get(quantityUpdatePosition).getIndividualTotal_price())

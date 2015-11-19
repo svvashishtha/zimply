@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/notif_img"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/margin_small"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/notif_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/font_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:textColor="@color/text_color1"
+            android:paddingRight="@dimen/margin_small"
+            android:text="Checkout some items from our latest designed shop for you.Checkout some items from our latest designed shop for you."/>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/notif_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_mini"
+            android:text="Friday, 22 feb"/>
+    </LinearLayout>
+</LinearLayout>

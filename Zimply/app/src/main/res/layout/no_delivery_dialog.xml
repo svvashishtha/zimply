@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@color/white"
+              android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/sad_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/margin_medium"
+        android:background="@color/white"
+        android:src="@drawable/ic_sad_face"
+        android:scaleType="center"
+        />
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/heading_text_color"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:textSize="@dimen/font_medium"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:text="@string/out_of_delivery_area"/>
+
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/font_small"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:text="@string/not_in_area_text"
+       />
+
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/use_address_text"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/z_item_height_48"
+        android:gravity="center"
+        android:background="@drawable/green_btn_bg"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:textColor="@color/white"
+        android:textAllCaps="true"
+        android:textSize="@dimen/font_medium"
+        android:text="@string/use_different_address"/>
+
+</LinearLayout>

@@ -1,6 +1,8 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -41,14 +43,23 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         new ImageLoaderManager((BookedForReviewActivity)mContext).setImageFromUrl(objs.get(position).getProductImg(), ((OrderItemHolder) holder).itemPic, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
-        ((OrderItemHolder)holder).orderDate.setText(Html.fromHtml("Visit store by <b>" + TimeUtils.getTimeStampDate(objs.get(position).getVendorTimeObj().getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY)+"</b>"));
+        ((OrderItemHolder)holder).orderDate.setText(Html.fromHtml("Visit store on or before <b>" + TimeUtils.getTimeStampDate(objs.get(position).getVendorTimeObj().getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY)+"</b>" + " by 9 PM"));
         ((OrderItemHolder)holder).storeAddress.setText(objs.get(position).getVendorTimeObj().getLine1()+"\n"+objs.get(position).getVendorTimeObj().getCity()+"\nPincode-"+objs.get(position).getVendorTimeObj().getPincode());
         ((OrderItemHolder)holder).itemName.setText(objs.get(position).getName());
         ((OrderItemHolder)holder).storeName.setText(objs.get(position).getVendorTimeObj().getVendor());
         ((OrderItemHolder)holder).itemPrice.setText(mContext.getResources().getString(R.string.rs_text) + objs.get(position).getPrice() + "");
 
+       /* ColorFilter filter = new LightingColorFilter(
+                objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green),
+                objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green));
+        ((OrderItemHolder) holder).bookingStatus.getBackground().setColorFilter(filter);*/
+
         if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL") || objs.get(position).getStatus().equalsIgnoreCase("EXPIRED")){
-            ((OrderItemHolder)holder).bookingStatus.setText("CANCELLED");
+            if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL")) {
+                ((OrderItemHolder) holder).bookingStatus.setText("CANCELLED");
+            }else{
+                ((OrderItemHolder) holder).bookingStatus.setText(objs.get(position).getStatus());
+            }
             ((OrderItemHolder)holder).cancelBooking.setVisibility(View.GONE);
             ((OrderItemHolder)holder).separatorView.setVisibility(View.GONE);
         }else{
@@ -64,7 +75,10 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
         }
-
+        ColorFilter filter = new LightingColorFilter(
+                objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green),
+                objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green));
+        ((OrderItemHolder) holder).bookingStatus.getBackground().setColorFilter(filter);
     }
 
     public void removePos(int pos){

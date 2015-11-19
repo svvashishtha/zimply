@@ -3,6 +3,7 @@ package com.application.zimplyshop.activities;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -54,13 +55,25 @@ public class ProductDemoActivity extends BaseActivity implements AppConstants,Up
         storeAddress.setText(obj.getVendor()+"\n"+obj.getLine1()+"\n"+obj.getLine2()+"\n"+obj.getCity()+"\nPincode"+obj.getPincode());
 
         CustomTextView storeTime = (CustomTextView)findViewById(R.id.store_time);
-        storeTime.setText(Html.fromHtml("Your request for the demo of the product has been registered. Kindly visit the store before "+"<b>"+ TimeUtils.getTimeStampDate(obj.getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY)+"</b>"));
+        storeTime.setText(Html.fromHtml("Your request for the demo of the product has been registered. Kindly visit the store on or before 9 PM, " + "<b>" + TimeUtils.getTimeStampDate(obj.getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY) + "</b>"));
         ((CustomTextView) findViewById(R.id.cancel_booking)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 removeBooking();
             }
         });
+
+        ((CustomTextView) findViewById(R.id.continue_shop)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductDemoActivity.this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                finish();
+                startActivity(intent);
+            }
+        });
+
 
         AppPreferences.setIsStartRating(this, true);
         UploadManager.getInstance().addCallback(this);

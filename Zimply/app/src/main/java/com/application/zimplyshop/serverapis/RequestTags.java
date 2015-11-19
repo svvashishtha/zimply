@@ -37,7 +37,7 @@ public interface RequestTags {
     String GET_USER_DATA = "userdatatag";
     String NON_LOGGED_IN_CART_CACHE="nonloggedincartcache";
     String USER_WISHLIST = "userwishlist";
-
+    String NOTIFICATION_LIST_REQUEST_TAG = "notificationlistrequesttag";
 
     int SIGNUP_REQUEST_TAG_BASE = 0x01;
     int SIGNUP_REQUEST_TAG_SIGNUP = 0x02;

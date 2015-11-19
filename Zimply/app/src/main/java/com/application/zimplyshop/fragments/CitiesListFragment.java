@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -142,18 +143,33 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                 JSONObject jsonObject = (JSONObject) obj;
                 if (jsonObject != null) {
                     try {
+                        if(z_ProgressDialog!=null){
+                            z_ProgressDialog.dismiss();
+                        }
                         JSONObject city= JSONUtils.getJSONObject(jsonObject, "city");
                         JSONObject locality = JSONUtils.getJSONObject(jsonObject, "locality");
-                        AppPreferences.setIsLocationSaved(getActivity(), true);
-                        AppPreferences.setSavedCityServe(getActivity(), city.getBoolean("serve"));
-                        AppPreferences.setSavedCity(getActivity(), JSONUtils.getStringfromJSON(city, "name"));
-                        AppPreferences.setSavedCityId(getActivity(), JSONUtils.getStringfromJSON(city, "id"));
-                        AppPreferences.setSavedLocality(getActivity(), JSONUtils.getStringfromJSON(locality,"name"));
+                        if( city.getBoolean("serve")){
+                            AppPreferences.setIsLocationSaved(getActivity(), true);
+                            AppPreferences.setSavedCityServe(getActivity(), city.getBoolean("serve"));
+                            AppPreferences.setSavedCity(getActivity(), JSONUtils.getStringfromJSON(city, "name"));
+                            AppPreferences.setSavedCityId(getActivity(), JSONUtils.getStringfromJSON(city, "id"));
+                            AppPreferences.setSavedLocality(getActivity(), JSONUtils.getStringfromJSON(locality, "name"));
+                            mListener.onCityReceivedFromServer();
+                        }else{
+                            final NoDeliveryDialog dialog = NoDeliveryDialog
+                                    .newInstance(null);
+                            dialog.setStyle(DialogFragment.STYLE_NORMAL,
+                                    R.style.HJCustomDialogTheme);
+
+                            dialog.show(getActivity().getSupportFragmentManager(), "BannerTag");
+                        }
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    mListener.onCityReceivedFromServer();
+
                 }
             }
         }
@@ -186,8 +202,8 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
             case R.id.my_location:
                 if (mLastLocation != null) {
                     makeCityRequest();
-                    if (z_ProgressDialog != null)
-                        z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");
+                    /*if (z_ProgressDialog != null)
+                        z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");*/
                     locationRequested = true;
                 } else {
                     forced = true;
