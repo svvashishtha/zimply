@@ -7,11 +7,8 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -22,7 +19,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -40,7 +36,6 @@ import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -92,7 +87,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Home Activity for a user who opens the app
@@ -162,9 +156,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
         setContentView(R.layout.home_activity_layout);
 
-        //register receviers
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mNotificationReceived, new IntentFilter(CommonLib.LOCAL_SMS_BROADCAST));
-
         //add callbacks
         GetRequestManager.getInstance().addCallbacks(this);
         UploadManager.getInstance().addCallback(this);
@@ -216,7 +207,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
         if(AppPreferences.isUserLogIn(this))
             phoneVerification();
-
     }
 
     public void toggleFilterVisibility(boolean visibility) {
@@ -1033,56 +1023,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 boolean isVerified = (Boolean) response[1];
 
                 if(!isVerified) {
-                    // get prompts.xml view
-                    LayoutInflater li = LayoutInflater.from(this);
-                    View promptsView = li.inflate(R.layout.phone_number_input_dialog, null);
-
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                            this);
-
-                    // set prompts.xml to alertdialog builder
-                    alertDialogBuilder.setView(promptsView);
-
-                    final EditText userInput = (EditText) promptsView
-                            .findViewById(R.id.editTextDialogUserInput);
-
-                    // set dialog message
-                    alertDialogBuilder
-                            .setCancelable(false)
-                            .setPositiveButton("Verify",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog,int id) {
-                                            // get user input and set it to result
-                                            // edit text
-                                            mobile = userInput.getText().toString();
-
-                                            if(mobile == null || mobile.length() < 10 || mobile.length() > 10) {
-                                                showToast("Invalid phone number");
-                                                return;
-                                            }
-
-                                            String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION;
-                                            List<NameValuePair> nameValuePair = new ArrayList<>();
-                                            nameValuePair.add(new BasicNameValuePair("mobile", mobile));
-                                            nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(HomeActivity.this)));
-                                            UploadManager.getInstance().makeAyncRequest(url, PHONE_VERIFICATION_INPUT_NUMBER, slug, ObjectTypes.OBJECT_TYPE_PHONE_VERIFICATION_INPUT, null, nameValuePair, null);
-
-                                            //show loader till the response is completed
-                                            if (z_ProgressDialog != null) {
-                                                z_ProgressDialog.dismiss();
-                                            }
-                                            zProgressDialog = ProgressDialog.show(HomeActivity.this, null, "Verifying phone number. Please wait...");
-                                        }
-                                    });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    alertDialog.setCancelable(false);
-
-                    // show it
-                    alertDialog.show();
-
+                    Intent intent = new Intent(this, CheckPhoneVerificationActivity.class);
+                    startActivity(intent);
                 }
             }
         }
@@ -1113,8 +1055,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
     @Override
     protected void onDestroy() {
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mNotificationReceived);
-
         GetRequestManager.getInstance().removeCallbacks(this);
         UploadManager.getInstance().removeCallback(this);
         isDestroyed = true;
@@ -1213,29 +1153,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
                 }
             }
-        } else if(requestType == PHONE_VERIFICATION_INPUT_NUMBER) {
-            if(zProgressDialog != null && zProgressDialog.isShowing())
-                zProgressDialog.dismiss();
-
-            if(!isDestroyed) {
-                if(status) {
-                    zProgressDialog = ProgressDialog.show(HomeActivity.this, null, "Waiting to receive OTP. Please wait...");
-                } else {
-                    showToast("Something went wrong in the phone verification. Please try after some time.");
-                }
-            }
-        } else if(requestType == PHONE_VERIFICATION_OTP) {
-            if(zProgressDialog != null && zProgressDialog.isShowing())
-                zProgressDialog.dismiss();
-
-            if(!isDestroyed) {
-                if(status) {
-                    showToast("Verified");
-                } else {
-                    showToast("Something went wrong in the phone verification. Please try after some time.");
-                }
-            }
         }
+
     }
 
     protected void onNewIntent(Intent intent) {
@@ -1318,50 +1237,4 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 ObjectTypes.OBJECT_TYPE_PHONE_VERIFICATION);
     }
 
-    private BroadcastReceiver mNotificationReceived = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String verificationMessage = intent.getExtras().getString("verification_message");
-                if (zProgressDialog != null) {
-                    zProgressDialog.dismiss();
-                }
-
-                if (verificationMessage != null && !"".equals(verificationMessage)) {
-
-                    StringTokenizer tokens = new StringTokenizer(verificationMessage, " ");
-                    String otp = "";
-                    boolean otpFound = false;
-                    if(tokens.countTokens() > 0) {
-
-                        if(tokens.hasMoreTokens()) {
-                            otp = tokens.nextToken();
-                            if (otp != null && otp.length() == 6) {
-                                otpFound = true;
-                            }
-                        }
-                    }
-
-                    if(!otpFound)
-                        return;
-
-                    String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION;
-                    List<NameValuePair> nameValuePair = new ArrayList<>();
-                    nameValuePair.add(new BasicNameValuePair("otp", otp));
-                    nameValuePair.add(new BasicNameValuePair("mobile", mobile));
-                    nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(HomeActivity.this)));
-                    UploadManager.getInstance().makeAyncRequest(url, PHONE_VERIFICATION_OTP, slug, ObjectTypes.OBJECT_TYPE_PHONE_VERIFICATION_OTP, null, nameValuePair, null);
-
-                    //show loader till the response is completed
-                    zProgressDialog = ProgressDialog.show(HomeActivity.this, null, "OTP received. Performing final steps...");
-
-                    CommonLib.hideKeyBoard(HomeActivity.this, null);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
 }

@@ -179,6 +179,17 @@
     <item name="toolbar_height_product" type="dimen">50dp</item>
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="corner_radius_rating">10dp</dimen>
+    <dimen name="corner_radius_button">4dp</dimen>
+    <dimen name="corner_radius_medium">1dp</dimen>
+    <dimen name="corner_radius_tour">2dp</dimen>
+    <dimen name="corner_radius_verified">4dp</dimen>
+    <dimen name="corner_radius_notification">10dp</dimen>
+    <dimen name="corner_radius_big">100dp</dimen>
+    <dimen name="drawer_icon_size">@dimen/size18</dimen>
+    <dimen name="corner_radius_dialog">@dimen/height10</dimen>
+
+
 
 
 

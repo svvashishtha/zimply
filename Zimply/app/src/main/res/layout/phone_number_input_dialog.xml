@@ -7,26 +7,67 @@
     android:layout_margin="10dp"
     android:padding="10dp" >
 
-    <com.application.zimplyshop.widgets.CustomTextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please enter your phone number for verification: "
-        android:textSize="@dimen/size18"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <LinearLayout
+        android:id="@+id/phone_input_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:padding="10dp" >
 
-    <com.application.zimplyshop.widgets.CustomEdittext
-        android:id="@+id/editTextDialogUserInput"
-        android:layout_width="match_parent"
-        android:textSize="@dimen/size18"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:hint="Phone number"
-        android:inputType="number"
-        android:layout_height="wrap_content" >
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please enter your phone number for verification: "
+            android:textSize="@dimen/size18"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <requestFocus />
+        <com.application.zimplyshop.widgets.CustomEdittext
+            android:id="@+id/editTextDialogUserInput"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/size18"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Phone number"
+            android:inputType="number"
+            android:layout_height="wrap_content" >
 
-    </com.application.zimplyshop.widgets.CustomEdittext>
+            <requestFocus />
+
+        </com.application.zimplyshop.widgets.CustomEdittext>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/otp_input_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:padding="10dp" >
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/otp_verification_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please wait while we auto-verify using otp.: "
+            android:textSize="@dimen/size18"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <com.application.zimplyshop.widgets.CustomEdittext
+            android:id="@+id/editTextDialogUserInput"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/size18"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Phone number"
+            android:inputType="number"
+            android:layout_height="wrap_content" >
+
+            <requestFocus />
+
+        </com.application.zimplyshop.widgets.CustomEdittext>
+
+    </LinearLayout>
 
 </LinearLayout>

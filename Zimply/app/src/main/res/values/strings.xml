@@ -167,4 +167,13 @@
     <string name="cash_on_counter_text">Cash on Counter</string>
     <string name="pay_online_text">Pay Online</string>
     <string name="request_for_demo_regisered">Your request for the demo of the product has been registered. Kindly visit the store to get the feel.</string>
+    <string name="verify">Verify</string>
+    <string name="please_verify_phone">Please verify your phone number.</string>
+    <string name="verify_phone_sms">We will send you a code via SMS to verify this number.</string>
+    <string name="verfication">Verify Number</string>
+    <string name="verification_code_message">We have sent a 6-digit verification code on %1$s via SMS. Please enter it below, and you\'re done!</string>
+    <string name="edit_number">Edit Number</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="incorrect_verification_code">The verification code you entered is incorrect. Please try again</string>
+    <string name="retry_in">Resend in %1$s sec</string>
 </resources>
