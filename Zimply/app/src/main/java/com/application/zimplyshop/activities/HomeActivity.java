@@ -844,6 +844,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         inflater.inflate(R.menu.main, menu);
         filterItem = menu.findItem(R.id.filter);
         searchItem = menu.findItem(R.id.search);
+        menu.findItem(R.id.notifications).setVisible(true);
         return true;
     }
 
@@ -959,6 +960,10 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 intent.putExtra("OrderSummaryFragment", false);
                 intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
                 startActivity(intent);
+                break;
+            case R.id.notifications:
+                Intent notifIntent = new Intent(this , NotificationsActivity.class);
+                startActivity(notifIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);

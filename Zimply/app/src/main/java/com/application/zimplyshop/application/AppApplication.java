@@ -163,6 +163,7 @@ public class AppApplication extends Application {
     public String getBaseUrl() {
         //		return "http://10.0.0.112/";
         return "http://api.zimply.in/";
+        // return "http://192.168.43.36:8000/";
         //	return "http://52.64.127.88/";
         //return "http://52.64.12.26/";//test IP
         //return "http://54.79.118.6/";

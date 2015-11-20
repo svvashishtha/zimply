@@ -17,6 +17,14 @@
         android:title="@string/filters_text"
         android:visible="false"
         zimply:showAsAction="always"/>
+
+    <item
+        android:id="@+id/notifications"
+        android:icon="@drawable/ic_action_social_notifications_none"
+        android:orderInCategory="100"
+        android:title="@string/cart_text"
+        android:visible="false"
+        zimply:showAsAction="always"/>
     <item
         android:id="@+id/cart"
         android:icon="@drawable/ic_action_action_shopping_cart"
@@ -24,5 +32,6 @@
         android:title="@string/cart_text"
         android:visible="true"
         zimply:showAsAction="always"/>
+
 
 </menu>

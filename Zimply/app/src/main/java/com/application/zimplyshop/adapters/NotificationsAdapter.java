@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.activities.NotificationsActivity;
+import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.objects.NotificationListObj;
 import com.application.zimplyshop.utils.TimeUtils;
 
@@ -25,13 +28,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     boolean isFooterRemoved;
 
-    int height;
+    int height,width;
 
     OnItemClickListener mListener;
 
-    public NotificationsAdapter(Context context , int height){
+    int TYPE_DATA = 0;
+
+    int TYPE_LOADER = 1;
+
+    public NotificationsAdapter(Context context , int height , int width){
         this.mContext = context;
         this.height = height;
+        this.width = width;
+        objs = new ArrayList<NotificationListObj>();
     }
 
     public void addData(ArrayList<NotificationListObj> objs) {
@@ -41,23 +50,59 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int itemType) {
         RecyclerView.ViewHolder holder ;
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_item_layout,parent,false);
-        holder = new NotificationsViewHolder(view);
+        if (itemType == TYPE_DATA) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_item_layout, parent, false);
+            holder = new NotificationsViewHolder(view);
+        }else{
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_footer_layout, parent,
+                    false);
+            holder = new LoadingViewHolder(view);
+        }
         return holder;
     }
 
+
+    public NotificationListObj getItem(int pos){
+        return objs.get(pos);
+    }
+
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((NotificationsViewHolder)holder).notifDate.setText(TimeUtils.getTimeStampDate(objs.get(position).getCreated_on(),TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
-        ((NotificationsViewHolder)holder).notifText.setText(objs.get(position).getTitle());
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            if(getItemViewType(position) == TYPE_DATA) {
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
+
+                ((NotificationsViewHolder) holder).notifImage.setLayoutParams(lp);
+
+                ((NotificationsViewHolder) holder).notifDate.setText(TimeUtils.getTimeStampDate(objs.get(position).getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
+                ((NotificationsViewHolder) holder).notifText.setText(objs.get(position).getTitle());
+                new ImageLoaderManager((NotificationsActivity) mContext).setImageFromUrl(objs.get(position).getImage(), ((NotificationsViewHolder) holder).notifImage, "users", width, height, false, false);
+                ((NotificationsViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mListener != null) {
+                            mListener.onItemClick(position);
+                        }
+                    }
+                });
+
+            }else{
+
+            }
 
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        if (objs != null) {
+            if (isFooterRemoved) {
+                return objs.size();
+            } else {
+                return objs.size() + 1;
+            }
+        }
+        return 0;
     }
 
     public class NotificationsViewHolder extends RecyclerView.ViewHolder{
@@ -66,18 +111,32 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         ImageView notifImage;
 
+        LinearLayout parent ;
         public NotificationsViewHolder(View view) {
             super(view);
             notifText = (TextView )view.findViewById(R.id.notif_text);
             notifDate = (TextView)view.findViewById(R.id.notif_date);
             notifImage = (ImageView)view.findViewById(R.id.notif_img);
+            parent = (LinearLayout)view.findViewById(R.id.parent);
+
         }
     }
 
     public void removePreviousData() {
-        objs.clear();
+        if(objs!=null)
+            objs.clear();
         isFooterRemoved = false;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == objs.size()) {
+            return TYPE_LOADER;
+        } else {
+            return TYPE_DATA;
+        }
+
     }
 
     public void removeItem() {
@@ -91,5 +150,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public interface OnItemClickListener{
         void onItemClick(int pos);
+    }
+
+    public class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        public LoadingViewHolder(View view) {
+            super(view);
+
+        }
+
     }
 }

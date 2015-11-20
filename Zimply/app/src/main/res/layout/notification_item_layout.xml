@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
+              android:id="@+id/parent"
+              android:background="@drawable/ic_card_bg"
               android:layout_height="match_parent">
     <ImageView
         android:id="@+id/notif_img"
@@ -21,7 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="@dimen/font_small"
+            android:textSize="@dimen/font_medium"
             android:paddingLeft="@dimen/margin_small"
             android:textColor="@color/text_color1"
             android:paddingRight="@dimen/margin_small"
@@ -31,7 +33,8 @@
             android:id="@+id/notif_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_mini"
+            android:textSize="@dimen/font_small"
+            android:textColor="@color/transparent_grey_color"
             android:text="Friday, 22 feb"/>
     </LinearLayout>
 </LinearLayout>

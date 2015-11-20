@@ -114,6 +114,8 @@ public class ProductDetailsActivity extends ActionBarActivity
 
     private boolean isScannedProduct;
 
+    Toast toast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +156,8 @@ public class ProductDetailsActivity extends ActionBarActivity
                     if (((EditText) mainContent.findViewById(R.id.pincode)).getText().toString().length() == 6) {
                         checkPincodeAvailabilty(((EditText) findViewById(R.id.pincode)).getText().toString());
                     } else {
-                        Toast.makeText(ProductDetailsActivity.this, "Please enter a valid pincode", Toast.LENGTH_SHORT).show();
+                        showToast("Please enter a valid pincode");
+                      //  Toast.makeText(ProductDetailsActivity.this, "Please enter a valid pincode", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -233,7 +236,8 @@ public class ProductDetailsActivity extends ActionBarActivity
             @Override
             public void onClick(View v) {
                 if (isLoading) {
-                    Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
+                    showToast("Please wait while loading..");
+                   // Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
                 } else {
                     if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
 
@@ -273,7 +277,8 @@ public class ProductDetailsActivity extends ActionBarActivity
                                     }
                                     NonLoggedInCartObj item = new NonLoggedInCartObj(productId + "", 1,BUYING_CHANNEL_ONLINE);
                                     if (oldObj.contains(item)) {
-                                        Toast.makeText(mContext, "Already added to cart", Toast.LENGTH_SHORT).show();
+                                        showToast("Already added to cart");
+                                        //Toast.makeText(mContext, "Already added to cart", Toast.LENGTH_SHORT).show();
                                         addToCart.setText("Go To Cart");
                                     } else {
                                         AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
@@ -281,7 +286,8 @@ public class ProductDetailsActivity extends ActionBarActivity
                                         addToCart.setText("Go To Cart");
                                         oldObj.add(item);
                                         GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(mContext), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
-                                        Toast.makeText(mContext, "Successfully added to cart", Toast.LENGTH_SHORT).show();
+                                        showToast("Successfully added to cart");
+                                        //  Toast.makeText(mContext, "Successfully added to cart", Toast.LENGTH_SHORT).show();
                                     }
 
                                 } else {
@@ -293,7 +299,8 @@ public class ProductDetailsActivity extends ActionBarActivity
                             }
                         }
                     } else {
-                        Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
+                        showToast("No network available");
+                       // Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -306,7 +313,8 @@ public class ProductDetailsActivity extends ActionBarActivity
             @Override
             public void onClick(View v) {
                 if (isLoading) {
-                    Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
+                    showToast("Please wait while loading..");
+                   // Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
                 } else {
                     if (isScannedProduct) {
                         ProductDetailsActivity.this.finish();
@@ -355,7 +363,8 @@ public class ProductDetailsActivity extends ActionBarActivity
 
 
                         } else {
-                            Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
+                            showToast("No network available");
+                            //Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -415,7 +424,8 @@ public class ProductDetailsActivity extends ActionBarActivity
             String url = AppApplication.getInstance().getBaseUrl() + AppConstants.CHECK_PINCODE + "?pincode=" + text;
             GetRequestManager.getInstance().makeAyncRequest(url, CHECKPINCODEREQUESTTAG, ObjectTypes.OBJECT_TYPE_CHECK_PINCODE);
         } else {
-            Toast.makeText(this, "No network available", Toast.LENGTH_SHORT).show();
+            showToast( "No network available");
+          //  Toast.makeText(this, "No network available", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -563,26 +573,37 @@ public class ProductDetailsActivity extends ActionBarActivity
 
         if (requestTag != null && requestTag.equals(RequestTags.GET_USER_DATA) && !destroyed) {
             showNetworkErrorView();
-            if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this))
-                Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(ProductDetailsActivity.this, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
-            isLoading = false;
+            if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
+              // Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                showToast("Something went wrong. Please try again");
+            }else {
+                // Toast.makeText(ProductDetailsActivity.this, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
+                showToast("Something went wrong. Please try again");
+            }
+                isLoading = false;
         }
         if (requestTag != null && requestTag.equals(PRODUCT_DETAIL_REQUEST_TAG) && !destroyed) {
             // findViewById(R.id.progress_container).setVisibility(View.GONE);
             showNetworkErrorView();
-            if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this))
-                Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(ProductDetailsActivity.this, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
-            isLoading = false;
+            if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
+                showToast("Something went wrong. Please try again");
+                //Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                showToast("Internet not available. Please try again");
+                //  Toast.makeText(ProductDetailsActivity.this, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
+            }
+                isLoading = false;
         }
         if (requestTag != null && requestTag.equals(CHECKPINCODEREQUESTTAG) && !destroyed) {
-            if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this))
-                Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(ProductDetailsActivity.this, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
+            if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
+                showToast("Something went wrong. Please try again");
+             //   Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                showToast("Internet not available. Please try again");
+                //   Toast.makeText(ProductDetailsActivity.this, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
+            }
             isLoading = false;
             if (progressDialog != null) {
                 progressDialog.dismiss();
@@ -1299,5 +1320,14 @@ public class ProductDetailsActivity extends ActionBarActivity
         Intent intent = new Intent(this, ProductCheckoutActivity.class);
         intent.putExtra("OrderSummaryFragment", false);
         startActivity(intent);
+    }
+
+    public void showToast(String message) {
+        if (toast == null) {
+            toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        }
+        toast.setText(message);
+        //toast.setDuration(Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

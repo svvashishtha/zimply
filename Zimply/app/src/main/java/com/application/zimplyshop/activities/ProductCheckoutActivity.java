@@ -189,7 +189,7 @@ public class ProductCheckoutActivity extends BaseActivity {
 
 
                 } else {
-                    if (count == 0) {
+                    if (count == 0 || count==1) {
                         Bundle bundle = savedInstanceState;
                         bundle.putSerializable("addressShipping", (AddressObject) savedInstanceState.getSerializable("address"));
 

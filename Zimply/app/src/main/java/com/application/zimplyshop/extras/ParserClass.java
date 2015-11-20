@@ -22,6 +22,7 @@ import com.application.zimplyshop.objects.AllCategories;
 import com.application.zimplyshop.objects.AllCities;
 import com.application.zimplyshop.objects.AllExperts;
 import com.application.zimplyshop.objects.AllHomeObjects;
+import com.application.zimplyshop.objects.AllNotifications;
 import com.application.zimplyshop.objects.AllPhotos;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.objects.AllUsers;
@@ -901,6 +902,8 @@ public class ParserClass implements ObjectTypes {
                 }
                 return response;
             }
+            case OBJECT_TYPE_NOTIFICATION_LIST_OBJ:
+                return AllNotifications.getsInstance().parseNotifListData(responseString);
             default:
                 return null;
         }
