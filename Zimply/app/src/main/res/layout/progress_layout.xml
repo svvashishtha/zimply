@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:components="http://schemas.android.com/apk/res-auto"
     android:id="@+id/progress_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,6 +18,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:progressDrawable="@drawable/progressbar_layerlist" />
+
+        <com.application.zimplyshop.utils.gif.GifMovieView
+            android:id="@+id/gifView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            components:gif="@drawable/sq2" />
+
 
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/quote"
