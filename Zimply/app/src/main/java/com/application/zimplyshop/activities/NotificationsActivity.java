@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.adapters.ArticlesListRecyclerAdapter;
 import com.application.zimplyshop.adapters.NotificationsAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.ArticleListObject;
@@ -84,12 +83,11 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
-        ((ArticlesListRecyclerAdapter) categoriesList.getAdapter()).setOnItemClickListener(new ArticlesListRecyclerAdapter.OnItemClickListener() {
+        ((NotificationsAdapter) categoriesList.getAdapter()).setOnItemClickListener(new NotificationsAdapter.OnItemClickListener() {
 
             @Override
-            public void onItemClickListener(int pos) {
+            public void onItemClick(int pos) {
 
-                //startArticleDescriptionActivity(pos);
             }
 
         });
@@ -115,7 +113,6 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
             }
             isLoading = true;
         }
-
     }
 
     @Override

@@ -27,6 +27,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     int height;
 
+    OnItemClickListener mListener;
+
     public NotificationsAdapter(Context context , int height){
         this.mContext = context;
         this.height = height;
@@ -81,5 +83,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void removeItem() {
         isFooterRemoved = true;
         notifyItemRemoved(objs.size());
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(int pos);
     }
 }
