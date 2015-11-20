@@ -18,7 +18,7 @@ public class GIFView extends View {
 		super(context);
 		mMovie = Movie.decodeStream(stream);
 	}
-	
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.TRANSPARENT);
