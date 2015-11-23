@@ -164,7 +164,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag.equalsIgnoreCase(GET_CART_DETAILS) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION)) {
+        if (requestTag.equalsIgnoreCase(GET_CART_DETAILS + buyingChannel) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION + buyingChannel)) {
             showLoadingView();
             changeViewVisiblity(cartList, View.GONE);
         }
@@ -389,7 +389,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                                     objs.get(i).setQuantity(updatedQuantity);
                                 }
                             }
-                            GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), objs,OBJECT_TYPE_NONLOGGED_IN_CART, GetRequestManager.CONSTANT);
+                            GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), objs, OBJECT_TYPE_NONLOGGED_IN_CART, GetRequestManager.CONSTANT);
                         }
                         //  AllProducts.getInstance().setCartCount(getCartQuantity());
                         // quantityUpdatePosition = -1;
