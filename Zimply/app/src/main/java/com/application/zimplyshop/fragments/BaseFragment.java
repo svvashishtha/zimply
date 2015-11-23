@@ -13,12 +13,14 @@ import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.utils.UiUtils;
+import com.application.zimplyshop.utils.gif.GifMovieView;
 
 public class BaseFragment extends Fragment {
 
     public View view;
     Toast toast;
     ProgressBar progress;
+    GifMovieView gifLoadingView;
     TextView nullcaseText;
     TextView quoteText;
     boolean isRequestFailed;
@@ -46,6 +48,8 @@ public class BaseFragment extends Fragment {
      */
     public void setLoadingVariables() {
         progress = (ProgressBar) view.findViewById(R.id.progress);
+        progress.setVisibility(View.GONE);
+        gifLoadingView = (GifMovieView)view.findViewById(R.id.gifView);
         nullcaseText = (TextView) view.findViewById(R.id.nullcase_text);
         retryLayout = (LinearLayout) view.findViewById(R.id.retry_layout);
         quoteText = (TextView) view.findViewById(R.id.quote);
@@ -76,6 +80,7 @@ public class BaseFragment extends Fragment {
      */
     public void showView() {
         progress.setVisibility(View.GONE);
+        gifLoadingView.setVisibility(View.GONE);
         nullcaseText.setVisibility(View.GONE);
         retryLayout.findViewById(R.id.retry_image).setVisibility(View.GONE);
 
@@ -88,7 +93,8 @@ public class BaseFragment extends Fragment {
      * Method shows loading view when a server request is generated
      */
     public void showLoadingView() {
-        progress.setVisibility(View.VISIBLE);
+      //  progress.setVisibility(View.VISIBLE);
+        gifLoadingView.setVisibility(View.VISIBLE);
         nullcaseText.setVisibility(View.GONE);
         retryLayout.findViewById(R.id.retry_image).setVisibility(View.GONE);
         retryLayout.setVisibility(View.GONE);
@@ -111,6 +117,7 @@ public class BaseFragment extends Fragment {
         // changeLeftDrawable(R.drawable.ic_navigation_refresh);
         quoteText.setVisibility(View.GONE);
         progress.setVisibility(View.GONE);
+        gifLoadingView.setVisibility(View.GONE);
         retryLayout.setVisibility(View.VISIBLE);
         int width = getDisplayMetrics().widthPixels;
         int height = getDisplayMetrics().heightPixels;
@@ -134,6 +141,7 @@ public class BaseFragment extends Fragment {
         quoteText.setVisibility(View.GONE);
         //   nullcaseText.setTextColor(Color.WHITE);
         progress.setVisibility(View.GONE);
+        gifLoadingView.setVisibility(View.GONE);
         retryLayout.setVisibility(View.VISIBLE);
         retryLayout.findViewById(R.id.retry_image).setVisibility(View.GONE);
         retryLayout.findViewById(R.id.nullcase_text).setVisibility(View.VISIBLE);

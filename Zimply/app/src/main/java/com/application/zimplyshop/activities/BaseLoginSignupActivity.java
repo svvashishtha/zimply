@@ -92,7 +92,7 @@ public class BaseLoginSignupActivity extends BaseActivity
 		findViewById(R.id.login).setOnClickListener(this);
 
 		findViewById(R.id.skip_btn).setOnClickListener(this);
-		ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
+		final ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
 //		pager.setPageTransformer(true, new ZoomOutPageTransformer());
 		pager.setPageTransformer(true, new ParallaxPageTransformer((float) .5, (float) .5, R.id.img));
 		MyPagerAdapter adapter = new MyPagerAdapter();
@@ -105,6 +105,12 @@ public class BaseLoginSignupActivity extends BaseActivity
 		height = getDisplayMetrics().heightPixels;
 		UploadManager.getInstance().addCallback(this);
 		arrowRight = (ImageView) findViewById(R.id.arrow_right);
+		arrowRight.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				pager.setCurrentItem(pager.getCurrentItem()+1);
+			}
+		});
 		arrowRight.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_arrow_right,
 				getResources().getDimensionPixelSize(R.dimen.height48),
 				getResources().getDimensionPixelSize(R.dimen.height48)));

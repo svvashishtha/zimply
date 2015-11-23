@@ -78,8 +78,9 @@ public class ProductListingActivity extends BaseActivity implements
                 (int) getResources().getDimension(R.dimen.margin_mini)));
 
         // setProductsGrid();
-        url = getIntent().getStringExtra("url");
 
+        url = getIntent().getStringExtra("url");
+        isHideFilter = getIntent().getBooleanExtra("hide_filter",false);
         setStatusBarColor();
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
@@ -90,6 +91,8 @@ public class ProductListingActivity extends BaseActivity implements
         loadData();
     }
 
+
+    boolean isHideFilter;
     public int getSelectedCatgeoryId(int categoryId) {
         if (AllProducts.getInstance().getProduct_category() != null) {
             for (int i = 0; i < AllProducts.getInstance().getProduct_category().size(); i++) {
@@ -114,10 +117,12 @@ public class ProductListingActivity extends BaseActivity implements
         if (nextUrl == null) {
 
             int width = (getDisplayMetrics().widthPixels-(3*getResources().getDimensionPixelSize(R.dimen.margin_small)))/3;
-
-            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0"+(AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
-                    + "&width=" + width +  ((categoryId != 0) ? "&category__id__in=" + AllProducts.getInstance().getProduct_category().get(categoryId - 1).getId() : "");
-
+            if(!isHideFilter) {
+                finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
+                        + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + AllProducts.getInstance().getProduct_category().get(categoryId - 1).getId() : "");
+            }else{
+                finalUrl = AppApplication.getInstance().getBaseUrl() + url ;
+            }
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
@@ -202,7 +207,11 @@ public class ProductListingActivity extends BaseActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         MenuItem item = menu.findItem(R.id.filter);
-        item.setVisible(true);
+        if(isHideFilter){
+            item.setVisible(false);
+        }else {
+            item.setVisible(true);
+        }
         return true;
     }
 

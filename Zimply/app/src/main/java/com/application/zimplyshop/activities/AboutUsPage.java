@@ -37,8 +37,8 @@ public class AboutUsPage extends BaseActivity {
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 		setStatusBarColor();
-		setLoadingVariables();
-		setFilterVariables();
+		//setLoadingVariables();
+		//setFilterVariables();
 //		setUpActionBar();
 		fixsizes();
 		setListeners();

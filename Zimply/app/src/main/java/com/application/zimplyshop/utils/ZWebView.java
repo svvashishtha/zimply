@@ -47,14 +47,14 @@ public class ZWebView extends BaseActivity {
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 		setStatusBarColor();
-		setLoadingVariables();
-		setFilterVariables();
+	//	setLoadingVariables();
+	//	setFilterVariables();
 		
         if(mUrl != null)
             mUrl = mUrl + "?src=mob";
 
         
-        findViewById(R.id.loader).setVisibility(View.VISIBLE);
+        findViewById(R.id.gifView).setVisibility(View.VISIBLE);
         findViewById(R.id.webView).setVisibility(View.GONE);
 
         WebView webView = (WebView) findViewById(R.id.webView);
@@ -92,7 +92,7 @@ public class ZWebView extends BaseActivity {
                 }
 
                 if (loadingFinished) {
-                    findViewById(R.id.loader).setVisibility(View.GONE);
+                    findViewById(R.id.gifView).setVisibility(View.GONE);
                     findViewById(R.id.webView).setVisibility(View.VISIBLE);
 
                 } else {

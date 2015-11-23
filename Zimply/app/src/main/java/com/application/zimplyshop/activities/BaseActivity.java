@@ -43,6 +43,7 @@ import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.FacebookConnect;
 import com.application.zimplyshop.utils.FacebookConnectCallback;
 import com.application.zimplyshop.utils.UiUtils;
+import com.application.zimplyshop.utils.gif.GifMovieView;
 import com.facebook.Session;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -81,6 +82,7 @@ public class BaseActivity extends AppCompatActivity
     int PROFILE_PIC_SIZE = 400;
     boolean isActivityRunning;
     String personName, personPhotoUrl, email, personId;
+    GifMovieView gifLoadingView ;
     AsyncTask task = new AsyncTask() {
         @Override
         protected String doInBackground(Object... params) {
@@ -163,6 +165,8 @@ public class BaseActivity extends AppCompatActivity
      */
     public void setLoadingVariables() {
         progress = (ProgressBar) findViewById(R.id.progress);
+        progress.setVisibility(View.GONE);
+        gifLoadingView = (GifMovieView)findViewById(R.id.gifView);
         nullcaseText = (TextView) findViewById(R.id.nullcase_text);
         retryLayout = (LinearLayout) findViewById(R.id.retry_layout);
         quoteText = (TextView) findViewById(R.id.quote);
@@ -198,7 +202,8 @@ public class BaseActivity extends AppCompatActivity
      * from the server and loaded into the adapter
      */
     public void showView() {
-        progress.setVisibility(View.GONE);
+      //  progress.setVisibility(View.GONE);
+        gifLoadingView.setVisibility(View.GONE);
         nullcaseText.setVisibility(View.GONE);
         retryLayout.setVisibility(View.GONE);
         quoteText.setVisibility(View.GONE);
@@ -209,7 +214,8 @@ public class BaseActivity extends AppCompatActivity
      * Method shows loading view when a server request is generated
      */
     public void showLoadingView() {
-        progress.setVisibility(View.VISIBLE);
+      //  progress.setVisibility(View.VISIBLE);
+        gifLoadingView.setVisibility(View.VISIBLE);
         nullcaseText.setVisibility(View.GONE);
         retryLayout.setVisibility(View.GONE);
         quoteText.setVisibility(View.VISIBLE);
@@ -230,7 +236,8 @@ public class BaseActivity extends AppCompatActivity
         nullcaseText.setTextColor(getResources().getColor(R.color.heading_text_color));
         //changeLeftDrawable(R.drawable.ic_navigation_refresh);
         quoteText.setVisibility(View.GONE);
-        progress.setVisibility(View.GONE);
+      //  progress.setVisibility(View.GONE);
+        gifLoadingView.setVisibility(View.GONE);
         retryLayout.setVisibility(View.VISIBLE);
         retryLayout.setBackgroundResource(R.drawable.ic_navigation_refresh);
     }
@@ -243,7 +250,8 @@ public class BaseActivity extends AppCompatActivity
         nullcaseText.setTextColor(getResources().getColor(R.color.heading_text_color));
         changeLeftDrawable(0);
         quoteText.setVisibility(View.GONE);
-        progress.setVisibility(View.GONE);
+        //progress.setVisibility(View.GONE);
+        gifLoadingView.setVisibility(View.GONE);
         retryLayout.setVisibility(View.VISIBLE);
         retryLayout.setBackgroundResource(R.drawable.ic_null_case);
     }

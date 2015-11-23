@@ -142,6 +142,14 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
                 intent.putExtra("id", Long.parseLong(JSONUtils.getStringfromJSON(jsonObj, "id")));
                 startActivity(intent);
                 break;
+            case NOTIFICATION_TYPE_PRODUCT_LIST:
+                Intent listIntent = new Intent(this, ProductListingActivity.class);
+                listIntent .putExtra("category_id", "-1");
+                listIntent.putExtra("hide_filter",true);
+                listIntent .putExtra("category_name", obj.getTitle());
+                listIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST+"/?shop__id__in=");
+                startActivity(listIntent );
+                break;
         }
     }
 

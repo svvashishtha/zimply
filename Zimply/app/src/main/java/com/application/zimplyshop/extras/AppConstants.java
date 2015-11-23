@@ -160,6 +160,7 @@ public interface AppConstants {
     int BUYING_CHANNEL_ONLINE = 1;
 
 
+    int NOTIFICATION_TYPE_PRODUCT_LIST = 1;
     int NOTIFICATION_TYPE_PRODUCT_DETAIL = 3;
 
 }

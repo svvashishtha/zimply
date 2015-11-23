@@ -55,7 +55,7 @@ public class ProductDemoActivity extends BaseActivity implements AppConstants,Up
         storeAddress.setText(obj.getVendor()+"\n"+obj.getLine1()+"\n"+obj.getLine2()+"\n"+obj.getCity()+"\nPincode"+obj.getPincode());
 
         CustomTextView storeTime = (CustomTextView)findViewById(R.id.store_time);
-        storeTime.setText(Html.fromHtml("Your request for the demo of the product has been registered. Kindly visit the store on or before 9 PM, " + "<b>" + TimeUtils.getTimeStampDate(obj.getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY) + "</b>"));
+        storeTime.setText(Html.fromHtml("Your request for the demo of the product has been registered. Kindly visit the store on or before " + "<b>" + TimeUtils.getTimeStampDate(obj.getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY) + "</b>  by 9 PM."));
         ((CustomTextView) findViewById(R.id.cancel_booking)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

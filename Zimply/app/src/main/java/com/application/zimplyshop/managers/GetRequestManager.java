@@ -138,6 +138,7 @@ public class GetRequestManager {
 
         public GetAsyncTask(String url, String requestTag, int objType, int status, boolean cacheFirst) {
             this.url = url;
+            CommonLib.ZLog("Requesting Url ",url);
             this.requestTag = requestTag;
             this.objType = objType;
             this.status = status;
