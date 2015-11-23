@@ -31,7 +31,7 @@
     <string name="eligible_for_discount">Congrats! You are eligible for a discount of Rs. %1$f</string>
     <string name="enter_credit_card_details">Please enter credit card details</string>
     <string name="enter_debit_card_details">Please enter debit card details</string>
-    <string name="store_card_check">Store this card</string>
+    <string name="store_card_check">Save this card</string>
     <string name="process_your_request">Processing Your Request</string>
     <string name="slow_connection">Slow Network.\nStill Connecting...</string>
 </resources>

@@ -147,7 +147,7 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
                 listIntent .putExtra("category_id", "-1");
                 listIntent.putExtra("hide_filter",true);
                 listIntent .putExtra("category_name", obj.getTitle());
-                listIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST+"/?shop__id__in=");
+                listIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST+"/?shop__id__in="+obj.getSlug());
                 startActivity(listIntent );
                 break;
         }

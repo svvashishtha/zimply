@@ -118,13 +118,6 @@ public class GetRequestManager {
         return asyncTask;
     }
 
-
-    public UpdateCache updateAsync(String url, Object returnObj, String requestTag, int status) {
-        UpdateCache asyncTask = new UpdateCache(url, returnObj, requestTag, status);
-        asyncTask.execute();
-        return asyncTask;
-    }
-
     public class GetAsyncTask extends AsyncTask<Void, Void, Object> {
 
         String url;
@@ -138,7 +131,6 @@ public class GetRequestManager {
 
         public GetAsyncTask(String url, String requestTag, int objType, int status, boolean cacheFirst) {
             this.url = url;
-            CommonLib.ZLog("Requesting Url ",url);
             this.requestTag = requestTag;
             this.objType = objType;
             this.status = status;
@@ -173,7 +165,7 @@ public class GetRequestManager {
                     }
                     if (returnObj != null) {
                         // update the cache
-                        updateAsync(url, returnObj, requestTag, this.status);
+                        Update(url, returnObj, requestTag, this.status);
                         return returnObj;
                     }
                 } else {
@@ -207,7 +199,7 @@ public class GetRequestManager {
                         }
                         if (returnObj != null) {
                             // update the cache
-                            updateAsync(url, returnObj, requestTag, this.status);
+                            Update(url, returnObj, requestTag, this.status);
                             return returnObj;
                         }
                     }
@@ -257,7 +249,7 @@ public class GetRequestManager {
 
     public static Object[] fetchhttp(String urlstring) throws Exception {
         HttpGet get = new HttpGet(urlstring);
-        get.addHeader("accept", "application/json");
+
         HttpResponse response = HttpManager.execute(get);
         BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
@@ -290,7 +282,7 @@ public class GetRequestManager {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (httpresult != null  && result!=null) {
+                if (httpresult != null) {
                     long timestamp = System.currentTimeMillis();
                     if (httpresult[0] != null && httpresult[0] instanceof Boolean && ((Boolean) httpresult[0]))
                         o = ParserClass.parseData(String.valueOf(result[1]), status);
@@ -383,6 +375,12 @@ public class GetRequestManager {
         }
     }
 
+    public UpdateCache updateAsync(String url, Object returnObj, String requestTag, int status) {
+        UpdateCache asyncTask = new UpdateCache(url, returnObj, requestTag, status);
+        asyncTask.execute();
+        return asyncTask;
+    }
+
     public static void Update(String url, Object obj, String Object_Type, int status) {
 
         byte[] result;
@@ -454,6 +452,5 @@ public class GetRequestManager {
             return null;
         }
     }
-
 
 }

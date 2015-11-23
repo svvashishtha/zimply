@@ -1,8 +1,6 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -75,10 +73,17 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
         }
-        ColorFilter filter = new LightingColorFilter(
+        /*ColorFilter filter = new LightingColorFilter(
                 objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green),
                 objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green));
-        ((OrderItemHolder) holder).bookingStatus.getBackground().setColorFilter(filter);
+*/
+
+       // ((OrderItemHolder) holder).bookingStatus.getBackground().setColorFilter(filter);
+        if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL")){
+            ((OrderItemHolder) holder).bookingStatus.setBackgroundResource(R.drawable.red_bg);
+        }else {
+            ((OrderItemHolder) holder).bookingStatus.setBackgroundResource(R.drawable.green_btn_rectangle_bg);
+        }
     }
 
     public void removePos(int pos){

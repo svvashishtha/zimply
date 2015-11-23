@@ -183,25 +183,30 @@ public class CardsFragment extends ProcessPaymentFragment implements PaymentList
             @Override
             public void onClick(View view) {
                 if(cardDetails.findViewById(R.id.makePayment).isSelected()) {
-                    Params requiredParams = new Params();
 
-                    String nameOnCard = ((TextView) cardDetails.findViewById(R.id.nameOnCardEditText)).getText().toString();
-                    if (nameOnCard.length() < 3) {
-                        nameOnCard = "PayU " + nameOnCard;
+                    if(((EditText) cardDetails.findViewById(R.id.expiryDatePickerEditTextYear)).getText().toString().trim().length()==4) {
+                        Params requiredParams = new Params();
+
+                        String nameOnCard = ((TextView) cardDetails.findViewById(R.id.nameOnCardEditText)).getText().toString();
+                        if (nameOnCard.length() < 3) {
+                            nameOnCard = "PayU " + nameOnCard;
+                        }
+
+                        requiredParams.put(PayU.CARD_NUMBER, cardNumber);
+                        requiredParams.put(PayU.EXPIRY_MONTH, String.valueOf(expiryMonth));
+                        requiredParams.put(PayU.EXPIRY_YEAR, String.valueOf(expiryYear));
+                        requiredParams.put(PayU.CARDHOLDER_NAME, nameOnCard);
+                        requiredParams.put(PayU.CVV, cvv);
+
+                        if (getArguments().getString(PayU.STORE_CARD) != null) { // this comes from the stored card fragment.
+                            requiredParams.put("card_name", cardName);
+                            requiredParams.put(PayU.STORE_CARD, "1");
+                        }
+
+                        startPaymentProcessActivity(PayU.PaymentMode.CC, requiredParams);
+                    }else{
+                        Toast.makeText(getActivity(),"Please add year in YYYY format",Toast.LENGTH_SHORT).show();
                     }
-
-                    requiredParams.put(PayU.CARD_NUMBER, cardNumber);
-                    requiredParams.put(PayU.EXPIRY_MONTH, String.valueOf(expiryMonth));
-                    requiredParams.put(PayU.EXPIRY_YEAR, String.valueOf(expiryYear));
-                    requiredParams.put(PayU.CARDHOLDER_NAME, nameOnCard);
-                    requiredParams.put(PayU.CVV, cvv);
-
-                    if (getArguments().getString(PayU.STORE_CARD) != null) { // this comes from the stored card fragment.
-                        requiredParams.put("card_name", cardName);
-                        requiredParams.put(PayU.STORE_CARD, "1");
-                    }
-
-                    startPaymentProcessActivity(PayU.PaymentMode.CC, requiredParams);
                 }else{
                     Toast.makeText(getActivity(),"Please fill the complete details",Toast.LENGTH_SHORT).show();
                 }
@@ -216,7 +221,9 @@ public class CardsFragment extends ProcessPaymentFragment implements PaymentList
     // For checking if the date is filled or not
     public void checkIsExpiryDateSet() {
         if (((EditText) cardDetails.findViewById(R.id.expiryDatePickerEditText)).getText().toString().trim().length() > 0 && ((EditText) cardDetails.findViewById(R.id.expiryDatePickerEditTextYear)).getText().toString().trim().length() > 0) {
-
+        if(((EditText) cardDetails.findViewById(R.id.expiryDatePickerEditTextYear)).getText().toString().trim().length()==2) {
+            ((EditText) cardDetails.findViewById(R.id.expiryDatePickerEditTextYear)).setText("20" + ((EditText) cardDetails.findViewById(R.id.expiryDatePickerEditTextYear)).getText().toString().trim().length());
+        }
             int i = Integer.parseInt(((EditText) cardDetails.findViewById(R.id.expiryDatePickerEditTextYear)).getText().toString().trim());
             int i2 = Integer.parseInt(((EditText) cardDetails.findViewById(R.id.expiryDatePickerEditText)).getText().toString().trim());
             expiryMonth = i2 ;

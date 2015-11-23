@@ -230,7 +230,8 @@ public class ProductDetailsActivity extends ActionBarActivity
         addToCart = (TextView) findViewById(R.id.add_to_cart);
 
         if(isScannedProduct){
-            addToCart.setText("Checkout");
+         addToCart.setText("Checkout");
+
         }
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,7 +286,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                                         checkCartCount();
                                         addToCart.setText("Go To Cart");
                                         oldObj.add(item);
-                                        GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(mContext), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                                        GetRequestManager.Update(AppPreferences.getDeviceID(mContext), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                                         showToast("Successfully added to cart");
                                         //  Toast.makeText(mContext, "Successfully added to cart", Toast.LENGTH_SHORT).show();
                                     }
@@ -335,26 +336,28 @@ public class ProductDetailsActivity extends ActionBarActivity
                             /*Intent intent = new Intent(ProductDetailsActivity.this, ProductDemoActivity.class);
                             startActivity(intent);*/
                             if(AppPreferences.isUserLogIn(ProductDetailsActivity.this)){
+                        if(((TextView) findViewById(R.id.buy_offline)).getText().toString().equalsIgnoreCase("Visit Booked")){
 
-                                final AlertDialog logoutDialog;
-                                logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this)
-                                        .setTitle("Confirm Booking")
-                                        .setMessage(getString(R.string.confirm_booking_message))
-                                        .setPositiveButton("Confirm",
-                                                new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        makeProductPreviewRequest();
-                                                    }
-                                                }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
-                                                new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        dialog.dismiss();
-                                                    }
-                                                }).create();
-                                logoutDialog.show();
-
+                        }else {
+                            final AlertDialog logoutDialog;
+                            logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this)
+                                    .setTitle("Confirm Booking")
+                                    .setMessage(getString(R.string.confirm_booking_message))
+                                    .setPositiveButton("Confirm",
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    makeProductPreviewRequest();
+                                                }
+                                            }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            }).create();
+                            logoutDialog.show();
+                        }
                             }else{
                                 Intent intent = new Intent(ProductDetailsActivity.this, BaseLoginSignupActivity.class);
                                 intent.putExtra("inside", true);
@@ -815,6 +818,12 @@ public class ProductDetailsActivity extends ActionBarActivity
 
         if(!product.is_o2o()){
             ((TextView) findViewById(R.id.buy_offline)).setVisibility(View.GONE);
+        }else{
+            if(AllProducts.getInstance().bookedProductsContains((int)product.getId())){
+                ((TextView) findViewById(R.id.buy_offline)).setText("Visit Booked");
+            }else{
+                ((TextView) findViewById(R.id.buy_offline)).setText("Book A Visit");
+            }
         }
         restPageContent.findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
 
@@ -890,6 +899,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             }
         }else if(requestType == MARK_PRODUCT_REVIEW_TAG){
             if(status) {
+                AllProducts.getInstance().getBookedObjs().add(new BaseCartProdutQtyObj((int)product.getId(),1));
                 Intent intent = new Intent(this, ProductDemoActivity.class);
                 intent.putExtra("product_vendor_time", ((ProductVendorTimeObj) response));
                 startActivity(intent);
@@ -1308,7 +1318,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                 // checkCartCount();
                 oldObj.add(item);
-                GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
             }
             moveToCartActivity();

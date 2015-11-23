@@ -547,7 +547,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                 AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                 // checkCartCount();
                 oldObj.add(item);
-                GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
             }
            // moveToCartActivity();

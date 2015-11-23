@@ -43,6 +43,9 @@ public class AllProducts {
     }
 
     ArrayList<BaseCartProdutQtyObj> cartObjs;
+
+    ArrayList<BaseCartProdutQtyObj> bookedObjs;
+
     private ArrayList<CategoryObject> product_category;
     private ArrayList<CategoryTree> category_tree;
 
@@ -51,6 +54,18 @@ public class AllProducts {
             sInstance = new AllProducts();
         }
         return sInstance;
+    }
+
+    public ArrayList<BaseCartProdutQtyObj> getBookedObjs() {
+        if(bookedObjs == null){
+            bookedObjs = new ArrayList<>();
+        }
+        return bookedObjs;
+    }
+
+    public void setBookedObjs(ArrayList<BaseCartProdutQtyObj> bookedObjs) {
+
+        this.bookedObjs = bookedObjs;
     }
 
     public ArrayList<BaseCartProdutQtyObj> getCartObjs() {
@@ -72,6 +87,14 @@ public class AllProducts {
                 cartObjs.add(new Gson().fromJson(JSONUtils.getJSONObject(jsonArray,i).toString(),BaseCartProdutQtyObj.class));
             }
             cartCount = jsonArray.length();
+        }
+        JSONArray bookedJsonArray = JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString), "booked_products");
+        bookedObjs = new ArrayList<>();
+        if(bookedJsonArray!=null){
+            for(int i=0;i<bookedJsonArray.length();i++){
+                bookedObjs.add(new Gson().fromJson(JSONUtils.getJSONObject(bookedJsonArray,i).toString(),BaseCartProdutQtyObj.class));
+            }
+
         }
 
     }
@@ -157,4 +180,16 @@ public class AllProducts {
     public Object parseWishlistData(String responseString){
         return new Gson().fromJson(responseString , MyWishListObject.class);
     }
+
+    public boolean bookedProductsContains(int productId){
+        if(bookedObjs!=null && bookedObjs.size()>0){
+            for(BaseCartProdutQtyObj obj: bookedObjs){
+                if(obj.getId() == productId){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
+

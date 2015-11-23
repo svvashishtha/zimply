@@ -201,7 +201,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
             }
 
             if(requestTag.equalsIgnoreCase(GET_CART_DETAILS+buyingChannel)){
-                GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(getActivity()), null, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), null, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
             }
 
         } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART+buyingChannel)) {
@@ -313,7 +313,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                             objs = null;
 
                         }
-                        GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(getActivity()), objs, OBJECT_TYPE_NONLOGGED_IN_CART, GetRequestManager.CONSTANT);
+                        GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), objs, OBJECT_TYPE_NONLOGGED_IN_CART, GetRequestManager.CONSTANT);
                         AllProducts.getInstance().setCartCount(loadLocalCount());
 
                     }
@@ -389,7 +389,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                                     objs.get(i).setQuantity(updatedQuantity);
                                 }
                             }
-                            GetRequestManager.getInstance().updateAsync(AppPreferences.getDeviceID(getActivity()), objs,OBJECT_TYPE_NONLOGGED_IN_CART, GetRequestManager.CONSTANT);
+                            GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), objs,OBJECT_TYPE_NONLOGGED_IN_CART, GetRequestManager.CONSTANT);
                         }
                         //  AllProducts.getInstance().setCartCount(getCartQuantity());
                         // quantityUpdatePosition = -1;

@@ -243,8 +243,9 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
     }
 
     private void sendRegistrationIdToBackend() {
+        String deviceId = getIMEI() ;
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GCM_REGISTRATIONS
-                + "?reg_id=" + regId + "&device_id=" + getIMEI();
+                + "?reg_id=" + regId + "&device_id=" + deviceId;
         CommonLib.ZLog("url", url);
         GetRequestManager.getInstance().requestHTTPThenCache(url, GCM_REGISTRATION,
                 ObjectTypes.OBJECT_TYPE_GCM_PUSH, GetRequestManager.THREE_HOURS);
@@ -257,6 +258,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
         CommonLib.ZLog("Device Id", imeisv);
         if(imeisv==null)
             imeisv="Unknown";
+        AppPreferences.setDeviceID(this, imeisv);
         return imeisv;
     }
 
