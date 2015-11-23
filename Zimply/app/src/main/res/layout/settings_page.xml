@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_marginTop="@dimen/size10"
     android:background="@color/zhl"
     android:layout_height="match_parent">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -15,21 +15,24 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height=".5dp"
-        android:background="@color/white"
+        android:layout_marginTop="@dimen/size10"
+        android:background="@color/zhl_dark"
         />
 
-    <com.application.zimplyshop.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextViewBold
         android:id="@+id/change_number"
         android:clickable="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/size15"
-        android:textColor="@color/zhl_darkest"
+        android:textColor="@color/zdhl3"
         android:padding="@dimen/size20"
+        android:background="@drawable/zhllightbuttonfeedback"
         android:text="@string/change_phone_number"/>
     <View
         android:layout_width="fill_parent"
         android:layout_height=".5dp"
-        android:background="@color/white"
+        android:background="@color/zhl_dark"
         />
+
 </LinearLayout>
