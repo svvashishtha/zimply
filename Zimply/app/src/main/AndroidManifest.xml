@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.application.zimplyshop" >
+    package="com.application.zimplyshop" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -111,6 +111,11 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name="com.application.zimplyshop.activities.SettingsPage"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name="com.application.zimplyshop.utils.ZWebView"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
@@ -128,8 +133,8 @@
             android:theme="@style/ZDialogTheme" />
 
         <activity android:name="com.application.zimplyshop.activities.ProductPhotoZoomActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppBaseTheme"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseTheme"/>
         <activity
             android:name="com.application.zimplyshop.activities.ArticleDescriptionActivity"
             android:hardwareAccelerated="true"

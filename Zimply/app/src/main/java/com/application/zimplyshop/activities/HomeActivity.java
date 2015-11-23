@@ -498,30 +498,14 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
                         }
                         break;
+                    case 5:
+                    {
+                        Intent settingsIntent = new Intent(HomeActivity.this, SettingsPage.class);
+                        startActivity(settingsIntent);
+                        break;
+                    }
 
                     case 6:
-                        try {
-                            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
-                            startActivity(intent);
-                        } catch (ActivityNotFoundException e) {
-                            Crashlytics.logException(e);
-                        } catch (Exception e) {
-                            Crashlytics.logException(e);
-                        }
-                        break;
-                    case 5:/*
-                        AlertDialog alertDialog = new AlertDialog.Builder(HomeActivity.this).
-                                setTitle("Support").
-                                setMessage("Talk to us..").setPositiveButton("Call", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + AppApplication.getContactNumber()));
-                                startActivity(intent);
-                            }
-                        }).setNegativeButton("Cancel", null).create();
-                        alertDialog.show();
-                        break;*/
-
                         intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("application/octet-stream");
                         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"care@zimply.in"});
@@ -556,13 +540,24 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
                         }
                         break;
+
                     case 7:
+                        try {
+                            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            Crashlytics.logException(e);
+                        } catch (Exception e) {
+                            Crashlytics.logException(e);
+                        }
+                        break;
+                    case 8:
                         intent = new Intent(HomeActivity.this, AboutUsPage.class);
                         mDrawer.closeDrawers();
                         startActivity(intent);
 
                         break;
-                    case 8:
+                    case 9:
                         ZTracker.logGAEvent(HomeActivity.this, "Home", "Logout", "");
                         final AlertDialog logoutDialog;
                         logoutDialog = new AlertDialog.Builder(HomeActivity.this)
