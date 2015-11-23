@@ -46,6 +46,7 @@
             android:gravity="center"
             android:inputType="phone"
             android:padding="@dimen/size20"
+            android:maxLength="10"
             android:textColor="@color/zdark"
             android:textSize="@dimen/size18" />
     </LinearLayout>
