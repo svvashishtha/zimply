@@ -7,7 +7,6 @@
     <RelativeLayout
         android:id="@+id/item_info_parent"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <ImageView
@@ -90,16 +89,35 @@
 
             android:layout_below="@id/product_delivery_date"
             android:background="@color/separator_color"/>
-        <com.application.zimplyshop.widgets.CustomTextView
-            android:id="@+id/cancel_booking"
+        <LinearLayout
+            android:id="@+id/btn_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/z_item_height_48"
-            android:text="Cancel"
-            android:gravity="center"
-            android:textSize="@dimen/font_large"
-            android:textAllCaps="true"
-            android:layout_below="@id/separator"
-            />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/separator">
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/add_to_cart"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/z_item_height_48"
+                android:layout_weight="1"
+                android:background="@drawable/green_btn_rectangle_bg"
+                android:gravity="center"
+                android:text="@string/buy_online"
+                android:textSize="@dimen/font_medium"
+                android:textAllCaps="true"
+                android:textColor="@color/white" />
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/cancel_booking"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/z_item_height_48"
+                android:text="Cancel"
+                android:gravity="center"
+                android:textSize="@dimen/font_large"
+                android:textAllCaps="true"
+
+                />
+        </LinearLayout>
+
 
     </RelativeLayout>
 </LinearLayout>

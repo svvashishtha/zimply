@@ -20,13 +20,14 @@ import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.ArticleDescriptionActivity;
-import com.application.zimplyshop.activities.ExpertProfileActivity;
 import com.application.zimplyshop.activities.HomeActivity;
-import com.application.zimplyshop.activities.PhotoDetailsActivity;
+import com.application.zimplyshop.activities.ProductDetailsActivity;
+import com.application.zimplyshop.activities.ProductListingActivity;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.TimeUtils;
+import com.application.zimplyshop.utils.ZWebView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,51 +66,31 @@ public class GcmNotificationManager implements AppConstants {
         mBuilder.setStyle(mBigPictureStyle);
         Intent notificationIntent = new Intent();
         // TaskBuilder
-        if (type == NOTIFICATION_TYPE_EXPERT_LISTING) {
-            notificationIntent = new Intent(mContext, HomeActivity.class);
-            notificationIntent.putExtra("slug", slug);
-            notificationIntent.putExtra("message", message);
-            notificationIntent.putExtra("nType",NOTIFICATION_TYPE_EXPERT_LISTING);
+        if (type == NOTIFICATION_TYPE_SHOP_LISTING) {
+            notificationIntent = new Intent(mContext, ProductListingActivity.class);
+            notificationIntent .putExtra("category_id", "-1");
+            notificationIntent.putExtra("hide_filter",true);
+            notificationIntent .putExtra("category_name", message);
+            notificationIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST + "?shop__id__in=" +slug);
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_SHOP_LISTING);
             notificationIntent.putExtra("is_notification", true);
             notificationIntent.setAction("Big Offer Notification");
-        } else if (type == NOTIFICATION_TYPE_ARTICLE_LISTING) {
-            notificationIntent = new Intent(mContext, HomeActivity.class);
+        } else if (type == NOTIFICATION_TYPE_WEBVIEW) {
+            notificationIntent = new Intent(mContext, ZWebView.class);
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_WEBVIEW);
+            notificationIntent.putExtra("is_notification", true);
+            notificationIntent.putExtra("title",message );
+            notificationIntent.putExtra("url", slug);
+            notificationIntent.setAction("Big Offer Notification");
+        } else if (type == NOTIFICATION_TYPE_PRODUCT_DETAIL) {
+            notificationIntent = new Intent(mContext, ProductDetailsActivity.class);
             notificationIntent.putExtra("slug", slug);
-            notificationIntent.putExtra("nType",NOTIFICATION_TYPE_ARTICLE_LISTING);
+            notificationIntent.putExtra("nType",NOTIFICATION_TYPE_PRODUCT_DETAIL);
             notificationIntent.putExtra("message", message);
             notificationIntent.putExtra("is_notification", true);
+            notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
+            notificationIntent.putExtra("id", Long.parseLong(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
             notificationIntent.setAction("Big Offer Notification");
-        } else if (type == NOTIFICATION_TYPE_PHOTO_LISTING) {
-            notificationIntent = new Intent(mContext, HomeActivity.class);
-            notificationIntent.putExtra("slug", slug);
-            notificationIntent.putExtra("nType",NOTIFICATION_TYPE_PHOTO_LISTING);
-            notificationIntent.putExtra("message", message);
-            notificationIntent.putExtra("is_notification", true);
-            notificationIntent.setAction("Big Offer Notification");
-        } else if (type == NOTIFICATION_TYPE_EXPERT_DETAILS) {
-            notificationIntent = new Intent(mContext, ExpertProfileActivity.class);
-            notificationIntent.putExtra("slug", slug);
-            notificationIntent.putExtra("message", message);
-            notificationIntent.putExtra("is_notification", true);
-            notificationIntent.setAction("Big Offer Notification");
-        } else if (type == NOTIFICATION_TYPE_ARTICLE_DETAILS) {
-            notificationIntent = new Intent(mContext, ArticleDescriptionActivity.class);
-            notificationIntent.putExtra("slug", slug);
-            notificationIntent.putExtra("message", message);
-            notificationIntent.putExtra("is_notification", true);
-            notificationIntent.setAction("Big Offer Notification");
-        } else if (type == NOTIFICATION_TYPE_PHOTO_DETAILS) {
-            notificationIntent = new Intent(mContext, PhotoDetailsActivity.class);
-            notificationIntent.putExtra("slug", slug);
-            notificationIntent.putExtra("message", message);
-            notificationIntent.putExtra("is_notification", true);
-            notificationIntent.setAction("Big Offer Notification");
-        } else if (type == NOTIFICATION_TYPE_APP_UPDATE) {
-            // notificationIntent = new Intent(mContext, Updateac.class);
-            // notificationIntent.putExtra("slug", slug);
-            // notificationIntent.putExtra("message", message);
-            // notificationIntent.putExtra("is_notification", true);
-            // notificationIntent.setAction("Big Offer Notification");
         } else {
             notificationIntent = new Intent(mContext, HomeActivity.class);
             notificationIntent.putExtra("slug", slug);

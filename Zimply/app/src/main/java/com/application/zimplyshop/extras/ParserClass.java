@@ -336,6 +336,7 @@ public class ParserClass implements ObjectTypes {
                         newObj.setPrice(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(array, i), "price"));
                         newObj.setProductImg(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "image"));
                         newObj.setStatus(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "status"));
+                        newObj.setId(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(array, i), "id"));
                         newObj.setVendorTimeObj(new Gson().fromJson(JSONUtils.getJSONObject(array, i).toString(), ProductVendorTimeObj.class));
                         bookedObj.add(newObj);
                     }
@@ -904,6 +905,9 @@ public class ParserClass implements ObjectTypes {
             }
             case OBJECT_TYPE_NOTIFICATION_LIST_OBJ:
                 return AllNotifications.getsInstance().parseNotifListData(responseString);
+            case OBJECT_TYPE_NOTIFICATION_COUNT:
+                AllNotifications.getsInstance().setNewNotificationCount(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(responseString),"notifications"));
+                return true;
             default:
                 return null;
         }

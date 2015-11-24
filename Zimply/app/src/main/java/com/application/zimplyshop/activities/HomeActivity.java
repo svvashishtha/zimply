@@ -64,11 +64,13 @@ import com.application.zimplyshop.fragments.PhotosListingFragmentWebView;
 import com.application.zimplyshop.fragments.ProductsListFragment;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
+import com.application.zimplyshop.objects.AllNotifications;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.JSONUtils;
+import com.application.zimplyshop.utils.TimeUtils;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.utils.ZTracker;
@@ -122,7 +124,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     MainFragmentsAdapter adapter;
     ViewPager pager;
     TextView toolbarTitle;
-    MenuItem filterItem, searchItem;
+    MenuItem filterItem, searchItem,notificationsItem;
     HashMap<Integer, Fragment> fragments;
     Runnable r2 = new Runnable() {
 
@@ -204,9 +206,17 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         mTabs.setupWithViewPager(pager);
         mTabs.setVisibility(View.GONE);
         onNewIntent(getIntent());
-
+        if(AppPreferences.getNotifModDateTime(this)!=0)
+            getUserNotificationCount();
         if(AppPreferences.isUserLogIn(this))
             phoneVerification();
+    }
+
+    public void getUserNotificationCount(){
+
+        CommonLib.ZLog("Notification Date Time", TimeUtils.getFormatedDate(AppPreferences.getNotifModDateTime(this)));
+        String url = AppApplication.getInstance().getBaseUrl()+AppConstants.NOTIFICATION_COUNT+"?created_on="+ TimeUtils.getFormatedDate(AppPreferences.getNotifModDateTime(this));
+        GetRequestManager.getInstance().makeAyncRequest(url,LATEST_NOTIFICATION_COUNT_TAG,ObjectTypes.OBJECT_TYPE_NOTIFICATION_COUNT);
     }
 
     public void toggleFilterVisibility(boolean visibility) {
@@ -839,7 +849,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         inflater.inflate(R.menu.main, menu);
         filterItem = menu.findItem(R.id.filter);
         searchItem = menu.findItem(R.id.search);
-        menu.findItem(R.id.notifications).setVisible(true);
+        notificationsItem = menu.findItem(R.id.notifications);
+        notificationsItem.setVisible(true);
         return true;
     }
 
@@ -957,6 +968,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 startActivity(intent);
                 break;
             case R.id.notifications:
+                findViewById(R.id.notification_count).setVisibility(View.GONE);
                 Intent notifIntent = new Intent(this , NotificationsActivity.class);
                 startActivity(notifIntent);
                 break;
@@ -1026,6 +1038,13 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     Intent intent = new Intent(this, CheckPhoneVerificationActivity.class);
                     startActivity(intent);
                 }
+            }
+        }else if(!isDestroyed && requestTag.equalsIgnoreCase(LATEST_NOTIFICATION_COUNT_TAG)){
+            if(AllNotifications.getsInstance().getNewNotificationCount() == 0){
+                findViewById(R.id.notification_count).setVisibility(View.GONE);
+            }else{
+                ((TextView)findViewById(R.id.notification_count)).setText(AllNotifications.getsInstance().getNewNotificationCount()+"");
+                findViewById(R.id.notification_count).setVisibility(View.VISIBLE);
             }
         }
 
@@ -1165,13 +1184,13 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
                 int type = intent.getExtras().getInt("nType");
                 switch (type) {
-                    case NOTIFICATION_TYPE_ARTICLE_LISTING:
+                    case NOTIFICATION_TYPE_WEBVIEW:
                         pager.setCurrentItem(0);
                         break;
                     case NOTIFICATION_TYPE_PHOTO_LISTING:
                         pager.setCurrentItem(1);
                         break;
-                    case NOTIFICATION_TYPE_EXPERT_LISTING:
+                    case NOTIFICATION_TYPE_SHOP_LISTING:
                         pager.setCurrentItem(2);
                         break;
                 }

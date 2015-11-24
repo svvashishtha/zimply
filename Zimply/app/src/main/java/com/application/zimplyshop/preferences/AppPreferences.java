@@ -34,6 +34,7 @@ public class AppPreferences {
 	private static final String USER_CITY_ID = "user_city_id";
 	private static final String USER_PINCODE = "user_pincode";
     private static final String IS_PINCODE_SAVED = "is_pincode_saved";
+	private static final String NOTIF_MOD_DATE_TIME = "notif_mod_date_tim";
 
 
 
@@ -277,7 +278,7 @@ public class AppPreferences {
 	public static String getSavedCity(Context context) {
 
         SharedPreferences savedSession = context.getSharedPreferences(KEY,
-                Context.MODE_PRIVATE);
+				Context.MODE_PRIVATE);
         return savedSession.getString(USER_CITY, "");
     }
 
@@ -332,4 +333,15 @@ public class AppPreferences {
         SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
         return savedSession.getBoolean(IS_PINCODE_SAVED, false);
     }
+
+	public static void setNotifModDateTime(Context context, long notifModDateTime) {
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+		editor.putLong(NOTIF_MOD_DATE_TIME, notifModDateTime);
+		editor.commit();
+	}
+
+	public static long getNotifModDateTime(Context context) {
+		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
+		return savedSession.getLong(NOTIF_MOD_DATE_TIME, 0);
+	}
 }

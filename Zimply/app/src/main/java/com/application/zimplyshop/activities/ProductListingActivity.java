@@ -57,6 +57,8 @@ public class ProductListingActivity extends BaseActivity implements
     Context context;
     TextView titleText;
 
+    boolean isNotification;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,8 @@ public class ProductListingActivity extends BaseActivity implements
         context = getApplicationContext();
         if(getIntent().getStringExtra("category_id")!=null)
             categoryId = getSelectedCatgeoryId(Integer.parseInt(getIntent().getStringExtra("category_id"))) + 1;
+
+        isNotification = getIntent().getBooleanExtra("is_notification",false);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
@@ -420,5 +424,15 @@ public class ProductListingActivity extends BaseActivity implements
         isDestroyed = true;
         GetRequestManager.getInstance().removeCallbacks(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isNotification){
+            Intent intent = new Intent(this,HomeActivity.class);
+            this.finish();
+            startActivity(intent);
+        }
+        super.onBackPressed();
     }
 }

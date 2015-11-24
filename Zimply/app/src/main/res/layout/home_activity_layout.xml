@@ -43,7 +43,18 @@
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:textSize="@dimen/cart_item_count_text" />
-
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:id="@+id/notification_count"
+                        android:layout_width="@dimen/cart_count_size_bg"
+                        android:layout_height="@dimen/cart_count_size_bg"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="@dimen/padding_top_56"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:background="@drawable/red_circle_bg"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:visibility="gone"
+                        android:textSize="@dimen/cart_item_count_text" />
                     <ImageView
                         android:id="@+id/filter_applied"
                         android:layout_width="@dimen/cart_count_size_bg"

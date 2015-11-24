@@ -486,7 +486,7 @@ public class ProductDetailsActivity extends ActionBarActivity
 
     @Override
     public void onBackPressed() {
-        if (getIntent().getBooleanExtra("is_shared", false)) {
+        if (getIntent().getBooleanExtra("is_shared", false)||getIntent().getBooleanExtra("is_notification", false)) {
             Intent intent = new Intent(this, HomeActivity.class);
             this.finish();
             startActivity(intent);

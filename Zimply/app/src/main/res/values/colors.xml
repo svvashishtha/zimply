@@ -6,8 +6,8 @@
     <color name="home_page_bg_color">#F3F3F3</color>
     <color name="heading_text_color">#535353</color>
     <color name="text_color1">#585858</color>
-    <color name="btn_green_color_normal">#81C48F</color>
-    <color name="btn_green_color_pressed">#76b082</color>
+    <color name="btn_green_color_normal">#29AD23</color>
+    <color name="btn_green_color_pressed">#189c12</color>
     <color name="drawericon_color">#666666</color>
     <color name="black_trans_seventy">#B3000000</color>
     <color name="transparent_black_color">#44000000</color>

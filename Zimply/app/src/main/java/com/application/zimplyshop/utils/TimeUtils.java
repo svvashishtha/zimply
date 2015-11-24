@@ -1,21 +1,29 @@
 package com.application.zimplyshop.utils;
 
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-
 public class TimeUtils {
 
 	public static int DATE_TYPE_DD_MM_YY = 1;
 	public static int DATE_TYPE_DAY_MON_DD_YYYY = 2;
 	public static int DATE_TYPE_DD_MON = 3;
+
+	public static String getFormatedDate(long timestamp) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
+                Locale.US);
+		// sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		return sdf.format(new Date(timestamp));
+
+	}
 
 	public static String getTimeStampDate(String timestamp, int type) {
 		try {

@@ -29,7 +29,7 @@ public interface RequestTags {
     String PRO_REQUEST_TAGS = "pro_request_tags";
     String BOOKED_HISTORY_REQUEST_TAG=  "bookedhistoryrequesttag";
     String BANNER_REQUEST_TAG="bannerrequesttag";
-
+    String LATEST_NOTIFICATION_COUNT_TAG  = "latestnotifcounttext";
 
 
     String FAV_LIST_REQUEST_TAG = "favlistrequesttag";

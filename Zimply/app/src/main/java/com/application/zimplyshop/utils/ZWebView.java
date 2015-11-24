@@ -1,5 +1,6 @@
 package com.application.zimplyshop.utils;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BaseActivity;
+import com.application.zimplyshop.activities.HomeActivity;
 
 public class ZWebView extends BaseActivity {
 
@@ -26,6 +28,8 @@ public class ZWebView extends BaseActivity {
 
     boolean loadingFinished = true;
     boolean redirect = false;
+
+    boolean isNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +43,9 @@ public class ZWebView extends BaseActivity {
                 mTitle = bundle.getString("title");
             if (bundle.get("url") != null)
                 mUrl = bundle.getString("url");
+
         }
-        
+        isNotification = getIntent().getBooleanExtra("is_notification",false);
 		addToolbarView(toolbar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -118,6 +123,19 @@ public class ZWebView extends BaseActivity {
 
     public void goBack(View view) {
         onBackPressed();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        if(isNotification){
+            Intent intent = new Intent(this , HomeActivity.class);
+            this.finish();
+            startActivity(intent);
+        }
+        super.onBackPressed();
+
     }
 
     @Override

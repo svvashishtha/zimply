@@ -21,8 +21,10 @@ import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.objects.NotificationListObj;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.JSONUtils;
+import com.application.zimplyshop.utils.ZWebView;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
 
@@ -64,6 +66,7 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
         retryLayout.setOnClickListener(this);
         GetRequestManager.getInstance().addCallbacks(this);
         ((CustomTextView)findViewById(R.id.cart_item_true)).setVisibility(View.GONE);
+        AppPreferences.setNotifModDateTime(this,System.currentTimeMillis());
         loadData();
     }
 
@@ -147,9 +150,20 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
                 listIntent .putExtra("category_id", "-1");
                 listIntent.putExtra("hide_filter",true);
                 listIntent .putExtra("category_name", obj.getTitle());
-                listIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST+"/?shop__id__in="+obj.getSlug());
+                listIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST+"?shop__id__in="+obj.getSlug());
                 startActivity(listIntent );
                 break;
+            case NOTIFICATION_TYPE_WEBVIEW:
+                Intent  notificationIntent = new Intent(this, ZWebView.class);
+                notificationIntent.putExtra("title",obj.getTitle() );
+                notificationIntent.putExtra("url", obj.getSlug());
+                startActivity(notificationIntent);
+                break;
+            case NOTIFICATION_TYPE_HOME_PAGE:
+                Intent  homeIntent = new Intent(this, HomeActivity.class);
+                startActivity(homeIntent);
+                break;
+
         }
     }
 

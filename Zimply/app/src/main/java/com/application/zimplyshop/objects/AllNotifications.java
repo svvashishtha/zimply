@@ -10,6 +10,16 @@ public class AllNotifications {
 
     static AllNotifications  sInstance;
 
+    private int newNotificationCount;
+
+
+    public void setNewNotificationCount(int newNotificationCount) {
+        this.newNotificationCount = newNotificationCount;
+    }
+
+    public int getNewNotificationCount() {
+        return newNotificationCount;
+    }
 
     public static AllNotifications getsInstance(){
         if(sInstance ==null ){

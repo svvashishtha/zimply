@@ -3,6 +3,7 @@ package com.application.zimplyshop.activities;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,11 +15,13 @@ import android.widget.TextView;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.BookedHistoryAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
+import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.UploadManager;
@@ -34,13 +37,14 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 11/14/2015.
  */
-public class BookedForReviewActivity extends BaseActivity implements GetRequestListener,UploadManagerCallback,View.OnClickListener,AppConstants {
+public class BookedForReviewActivity extends BaseActivity implements GetRequestListener,UploadManagerCallback,View.OnClickListener,AppConstants,RequestTags {
 
     RecyclerView orderList;
 
 
     boolean isDestroyed;
 
+    int addToCartId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +97,18 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                                 }).create();
                 logoutDialog.show();
             }
+        }else if(!isDestroyed && requestType == ADD_TO_CART_PRODUCT_DETAIL){
+            if(progressDialog!=null){
+                progressDialog.dismiss();
+            }
+                if(status){
+
+                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(addToCartId, 1));
+                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                    adapter.changeAddBtnText(addToCartId);
+                }else{
+                    showToast("Could not add into cart. Try again");
+                }
         }
     }
 
@@ -101,6 +117,8 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
         if(!isDestroyed && requestType == RequestTags.CANCEL_PRODUCT_REVIEW_TAG){
             progressDialog = ProgressDialog.show(this, null, "Loading.Please Wait..");
+        }else if(!isDestroyed && requestType == RequestTags.ADD_TO_CART_PRODUCT_DETAIL){
+            progressDialog = ProgressDialog.show(this, null, "Adding to cart.Please Wait..");
         }
     }
 
@@ -141,7 +159,33 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                 clickedPos = pos;
                 removeBookedItem(bookProductId);
             }
+
+            @Override
+            public void addToCartClick(int pos , int id) {
+                addToCartId = id;
+                addToCart(id);
+            }
+
+            @Override
+            public void moveToCartActivity() {
+                Intent intent = new Intent(BookedForReviewActivity.this , ProductCheckoutActivity.class);
+                intent.putExtra("buying_channel",BUYING_CHANNEL_OFFLINE);
+                intent.putExtra("OrderSummaryFragment", false);
+                startActivity(intent);
+            }
         });
+
+    }
+
+    public void addToCart(int id){
+        String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+        List<NameValuePair> nameValuePair = new ArrayList<>();
+        nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_OFFLINE+""));
+        nameValuePair.add(new BasicNameValuePair("product_id", id + ""));
+        nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+        nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
+
+        UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, id+"", ObjectTypes.OBJECT_ADD_TO_CART, null, nameValuePair, null);
 
     }
 

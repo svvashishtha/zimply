@@ -15,6 +15,16 @@ public class BookedProductHistoryObject implements Serializable{
 
     String status;
 
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getStatus() {
         return status;
     }

@@ -54,6 +54,7 @@ public interface AppConstants {
     String USER_WISHLIST = "zimply-auth/wishlist/";
     String BANNER_URL = "explore/get-banner/";
     String NOTIFICATIONS_LIST = "notification/gcmnotification";
+    String NOTIFICATION_COUNT = "notification/gcmnotification-count/";
 
 
 
@@ -116,10 +117,10 @@ public interface AppConstants {
     int REQUEST_PHOTO_DETAILS_REQUEST_CODE = 0x01;
     int REQUEST_ARTICLE_DETAILS_REQUEST_CODE = 0x02;
 
-    int NOTIFICATION_TYPE_EXPERT_LISTING = 1;
-    int NOTIFICATION_TYPE_ARTICLE_LISTING = 2;
+    int NOTIFICATION_TYPE_SHOP_LISTING = 1;
+    int NOTIFICATION_TYPE_WEBVIEW = 2;
     int NOTIFICATION_TYPE_PHOTO_LISTING = 3;
-    int NOTIFICATION_TYPE_EXPERT_DETAILS = 4;
+    int NOTIFICATION_TYPE_HOME_PAGE = 4;
     int NOTIFICATION_TYPE_ARTICLE_DETAILS = 5;
     int NOTIFICATION_TYPE_PHOTO_DETAILS = 6;
     int NOTIFICATION_TYPE_APP_UPDATE = 7;

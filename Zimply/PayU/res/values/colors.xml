@@ -2,7 +2,7 @@
 <resources>
     <item name="white" type="color">#FFFFFFFF</item>
     <color name="input_gray">#FFDEE6E6</color>
-    <color name="button_green">#5fc73b</color>
+    <color name="button_green">#29AD23</color>
     <color name="button_gray">#cbcbcb</color>
     <color name="blue">#FF1784C7</color>
     <color name="fab_background_color">#de3b38</color>
