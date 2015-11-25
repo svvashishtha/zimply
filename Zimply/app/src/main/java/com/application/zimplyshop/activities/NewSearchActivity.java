@@ -179,7 +179,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    //call fragment search
+                    performSearch(v.getText().toString());
                     return true;
                 }
                 return false;
@@ -187,6 +187,23 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         });
 
         toolbar.addView(actionBarView);
+    }
+
+    private void performSearch(String query) {
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+
+        if(query == null || query.length() < 1)
+            return;
+        String[] params = query.split(" ");
+        String builder = "";
+        for ( String pam:params ) {
+            builder += (pam + "+");
+        }
+        builder = builder.substring(0, builder.length() - 1);
+
+        intent.putExtra("query", builder);
+        intent.putExtra("url", AppConstants.GET_SEARCH_RESULTS);
+        startActivity(intent);
     }
 
     @Override
