@@ -30,6 +30,12 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.application.zimplyshop.permission.C2D_MESSAGE" />
 
+    <!-- Google Maps -->
+    <permission
+        android:name="com.application.zimplyshop.android.locationapi.maps.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.application.zimplyshop.android.locationapi.maps.permission.MAPS_RECEIVE" />
+
     <application
         android:name="com.application.zimplyshop.application.AppApplication"
         android:allowBackup="true"
@@ -51,6 +57,9 @@
         <meta-data
             android:name="payu_merchant_salt"
             android:value="vE0dpVXQ" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDlW-EnI0TZxHNOkAEslTPulkFjBbS8qfg" />
 
         <activity
             android:name="com.application.zimplyshop.activities.SplashActivity"
@@ -82,6 +91,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name="com.application.zimplyshop.activities.ShopCategoriesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.application.zimplyshop.activities.MapPage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity

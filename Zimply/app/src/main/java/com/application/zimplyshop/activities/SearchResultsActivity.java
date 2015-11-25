@@ -196,6 +196,7 @@ public class SearchResultsActivity extends BaseActivity implements
         } else {
             titleText.setText("Products");
         }
+        view.findViewById(R.id.search_frame).setVisibility(View.GONE);
         toolbar.addView(view);
     }
 
@@ -204,6 +205,7 @@ public class SearchResultsActivity extends BaseActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         menu.findItem(R.id.cart).setVisible(false);
+        menu.findItem(R.id.search).setVisible(false);
         return true;
     }
 

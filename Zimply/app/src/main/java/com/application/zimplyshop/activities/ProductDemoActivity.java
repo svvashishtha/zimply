@@ -59,7 +59,12 @@ public class ProductDemoActivity extends BaseActivity implements AppConstants,Up
         ((CustomTextView) findViewById(R.id.cancel_booking)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeBooking();
+//                removeBooking();
+                Intent intent = new Intent(ProductDemoActivity.this, MapPage.class);
+                intent.putExtra("lat", 51.5034070);
+                intent.putExtra("lon", -0.1275920);
+                intent.putExtra("name", "test");
+                startActivity(intent);
             }
         });
 
