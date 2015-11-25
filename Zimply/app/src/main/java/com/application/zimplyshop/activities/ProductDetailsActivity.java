@@ -749,7 +749,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         ((TextView) findViewById(R.id.delivery)).setText(product.getMinShippingDays() + "-" + product.getMaxShippingDays() + " Days");
         ((TextView) findViewById(R.id.shipping_charges)).setText(getString(R.string.rs_text) + " " + product.getShippingCharges());
         ((TextView) findViewById(R.id.sold_by)).setText(product.getVendor());
-        ((TextView) findViewById(R.id.description_value)).setText(product.getDescription());
+        ((TextView) findViewById(R.id.description_value)).setText(product.getDescription().trim());
         ((TextView) findViewById(R.id.return_value)).setText(product.getReturnPolicy());
         if(isScannedProduct){
             ((TextView) findViewById(R.id.add_to_cart)).setText("Checkout");

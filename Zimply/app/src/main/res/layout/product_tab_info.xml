@@ -25,13 +25,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         android:textColor="@color/heading_text_color"
-        android:textSize="@dimen/font_large"
+        android:textSize="@dimen/font_xlarge"
+        android:text="Vertical Chairs"
         android:textStyle="bold"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:paddingBottom="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
         android:orientation="horizontal">
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/product_price"
@@ -42,7 +43,7 @@
             android:layout_marginLeft="@dimen/margin_small"
             android:layout_marginRight="@dimen/margin_small"
             android:textColor="@color/blue_button"
-            android:textSize="@dimen/font_medium" />
+            android:textSize="@dimen/font_large" />
         <ImageView
             android:id="@+id/product_fav"
             android:layout_width="wrap_content"
@@ -69,7 +70,7 @@
             android:padding="@dimen/margin_small"
             android:text="@string/deliver_seller_info"
             android:textColor="@color/heading_text_color"
-            android:textSize="@dimen/font_medium"
+            android:textSize="@dimen/font_large"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -206,7 +207,7 @@
         android:padding="@dimen/margin_small"
         android:text="@string/description"
         android:textColor="@color/heading_text_color"
-        android:textSize="@dimen/font_medium"
+        android:textSize="@dimen/font_large"
         android:textStyle="bold" />
 
     <com.application.zimplyshop.widgets.CustomTextView
@@ -216,20 +217,20 @@
         android:paddingLeft="@dimen/margin_small"
         android:paddingRight="@dimen/margin_small"
         android:textColor="@color/text_color1"
-        android:textSize="@dimen/font_small" />
+        android:textSize="@dimen/font_medium" />
 
     <com.application.zimplyshop.widgets.CustomTextViewBold
         android:id="@+id/specification_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
-        android:background="@color/zhl_dark"
+        android:background="@drawable/ic_card_bg"
         android:drawableRight="@drawable/ic_forward_black"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/margin_small"
         android:text="@string/specifications"
         android:textColor="@color/heading_text_color"
-        android:textSize="@dimen/font_medium"
+        android:textSize="@dimen/font_large"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -264,13 +265,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/abc_action_bar_default_height_material"
-        android:background="@color/zhl_dark"
+        android:background="@drawable/ic_card_bg"
         android:drawableRight="@drawable/ic_forward_black"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/margin_small"
         android:text="@string/return_policy"
         android:textColor="@color/heading_text_color"
-        android:textSize="@dimen/font_medium"
+        android:textSize="@dimen/font_large"
         android:textStyle="bold" />
 
 
