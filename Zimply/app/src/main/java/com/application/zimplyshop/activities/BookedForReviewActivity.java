@@ -102,7 +102,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                 progressDialog.dismiss();
             }
                 if(status){
-
+                    showToast("Successfully added to cart");
                     AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(addToCartId, 1));
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                     adapter.changeAddBtnText(addToCartId);
@@ -142,7 +142,6 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                 showView();
                 changeViewVisiblity(orderList, View.VISIBLE);
             }
-
         }
     }
 
