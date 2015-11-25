@@ -121,9 +121,10 @@
 
     <string name="agree_terms_click_signup">By creating an account, you agree to Zimply\'s Terms of Use and Privacy Policy</string>
     <string name="agree_terms_click_logging">By logging in, you agree to Zimply\'s Terms of Service and Privacy Policy</string>
-    <string name="pin_code_et_hint">Pin code</string>
-    <string name="check">Check</string>
+    <string name="pin_code_et_hint">Enter Pincode</string>
+    <string name="check">Check Availability</string>
     <string name="description">Description</string>
+    <string name="deliver_seller_info">Delivery and Seller Information</string>
     <string name="specifications">Specifications</string>
     <string name="return_policy">Return Policy</string>
     <string name="delivered_in">Delivered in</string>

@@ -138,5 +138,6 @@
     <color name="z_new_collection_color_pressed">#9E9E9E</color>
     <color name="z_red_btn_color_pressed">#F0585D</color>
     <color name="z_red_btn_color_normal">#FF7E82</color>
-
+    <color name="btn_orange_color_normal">#F88519</color>
+    <color name="btn_orange_color_pressed">#dd7a1c</color>
 </resources>

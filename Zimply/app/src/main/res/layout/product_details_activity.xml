@@ -67,7 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="@drawable/green_btn_rectangle_bg"
+            android:background="@drawable/orange_btn_bg"
             android:gravity="center"
             android:text="@string/buy_online"
             android:textSize="@dimen/font_medium"
