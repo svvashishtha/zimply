@@ -188,4 +188,6 @@
     <string name="retry_in">Resend in %1$s sec</string>
     <string name="change_phone_number">Change Phone Number</string>
 
+    <string name="load_error">Error occured in Google tag manager. Please try again later.</string>
+
 </resources>

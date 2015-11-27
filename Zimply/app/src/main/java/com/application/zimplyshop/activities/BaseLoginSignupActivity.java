@@ -32,6 +32,8 @@ import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CirclePageIndicator;
 import com.application.zimplyshop.widgets.ParallaxPageTransformer;
+import com.google.android.gms.tagmanager.DataLayer;
+import com.google.android.gms.tagmanager.TagManager;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -182,6 +184,8 @@ public class BaseLoginSignupActivity extends BaseActivity
 		case R.id.sign_in_google_button:
             if(CommonLib.isNetworkAvailable(this)) {
 			ZTracker.logGAEvent(this,"Login","Google","BaseLoginSignup");
+			DataLayer dataLayer = TagManager.getInstance(this).getDataLayer();
+			dataLayer.pushEvent("SignUp", DataLayer.mapOf("SignUpDone", "Yes", "NetworkUsed", "G+"));
 			onSignInClicked();
         }else{
                 showToast("Failed to load. Check your internet connection");
@@ -191,6 +195,8 @@ public class BaseLoginSignupActivity extends BaseActivity
 		case R.id.sign_in_facebook_button:
             if(CommonLib.isNetworkAvailable(this)) {
                 ZTracker.logGAEvent(this, "Login", "Facebook", "BaseLoginSignup");
+				DataLayer dataLayer = TagManager.getInstance(this).getDataLayer();
+				dataLayer.pushEvent("SignUp", DataLayer.mapOf("SignUpDone", "Yes", "NetworkUsed", "FB"));
                 signinWithFbClicked();
             }else{
                 showToast("Failed to load. Check your internet connection");

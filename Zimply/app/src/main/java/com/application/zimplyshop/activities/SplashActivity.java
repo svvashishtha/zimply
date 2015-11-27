@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,17 +34,29 @@ import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.ZContainerHolder;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.tagmanager.Container;
+import com.google.android.gms.tagmanager.ContainerHolder;
+import com.google.android.gms.tagmanager.DataLayer;
+import com.google.android.gms.tagmanager.TagManager;
 import com.notikum.notifypassive.UninstallSession;
 import com.notikum.notifypassive.utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SplashActivity extends BaseActivity implements RequestTags,GetRequestListener {
+/**
+ * Displays simple splash screen while GTM container is loading. Once the container is loaded,
+ * launches the {@link HomeActivity}.
+ */
+public class SplashActivity extends BaseActivity implements RequestTags,GetRequestListener, ContainerHolder.ContainerAvailableListener {
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     boolean isDestroyed;
@@ -54,6 +67,10 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
     private boolean windowHasFocus = false;
     private ImageView imageView;
     private Activity mContext;
+
+    private static final String TAG_CONTAINER_ID = "GTM_WRPWPV";
+
+    private boolean containerLoaded = false;
 
     /**
      * @return Application's version code from the {@code PackageManager}.
@@ -77,6 +94,41 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
 
         setContentView(R.layout.splash_activity_layout);
 
+        TagManager tagManager = TagManager.getInstance(this);
+
+        // Modify the log level of the logger to print out not only
+        // warning and error messages, but also verbose, debug, info messages.
+        tagManager.setVerboseLoggingEnabled(true);
+        PendingResult<ContainerHolder> pending =
+                tagManager.loadContainerPreferNonDefault(TAG_CONTAINER_ID,
+                        R.raw.gtm_wrpwpv);
+
+        // The onResult method will be called as soon as one of the following happens:
+        //     1. a saved container is loaded
+        //     2. if there is no saved container, a network container is loaded
+        //     3. the request times out. The example below uses a constant to manage the timeout period.
+        pending.setResultCallback(new ResultCallback<ContainerHolder>() {
+            @Override
+            public void onResult(ContainerHolder containerHolder) {
+                ZContainerHolder.setContainerHolder(containerHolder);
+                Container container = containerHolder.getContainer();
+                if (!containerHolder.getStatus().isSuccess()) {
+                    Log.e("CuteAnimals", "failure loading container");
+                    showToast(getResources().getString(R.string.load_error));
+                    return;
+                }
+                ZContainerHolder.setContainerHolder(containerHolder);
+//                ContainerLoadedCallback.registerCallbacksForContainer(container);
+//                containerHolder.setContainerAvailableListener(new ContainerLoadedCallback());
+                containerLoaded = true;
+                SplashActivity.pushOpenScreenEvent(SplashActivity.this, "splash");
+            }
+        }, 2, TimeUnit.SECONDS);
+        startMainActivity();
+    }
+
+    private void startMainActivity() {
+
         GetRequestManager.getInstance().addCallbacks(this);
 
         //initialize params
@@ -96,6 +148,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
         }
 
         imageView.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -378,4 +431,24 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
                 ObjectTypes.OBJECT_TYPE_APPCONFIG_2, GetRequestManager.THREE_DAYS);
     }
 
+    @Override
+    public void onContainerAvailable(ContainerHolder containerHolder, String s) {
+
+    }
+
+    /**
+     * Returns an integer representing a color.
+     */
+    private int getColor(String key) {
+        return Color.parseColor(ZContainerHolder.getContainerHolder().getContainer().getString(key));
+    }
+
+    public static void pushOpenScreenEvent(Context context, String screenName) {
+        DataLayer dataLayer = TagManager.getInstance(context).getDataLayer();
+        dataLayer.pushEvent("OpenScreen", DataLayer.mapOf("screenName", screenName));
+    }
+
+    public static void refresh() {
+        ZContainerHolder.getContainerHolder().refresh();
+    }
 }
