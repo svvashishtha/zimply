@@ -10,13 +10,14 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/product_thumb_icons"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/showcase_radius_outer_large"
+        android:layout_height="@dimen/padding_top_72"
         android:layout_marginTop="@dimen/margin_small"
         android:clipToPadding="false"
         ></android.support.v7.widget.RecyclerView>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_small"
         android:background="@color/separator_color"
         />
     <com.application.zimplyshop.widgets.CustomTextViewBold
@@ -48,11 +49,10 @@
             android:id="@+id/product_fav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginRight="@dimen/margin_small"
             android:src="@drawable/fav_bigger_bg"/>
     </LinearLayout>
-
-
 
     <View
         android:layout_width="match_parent"

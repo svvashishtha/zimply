@@ -140,4 +140,7 @@
     <color name="z_red_btn_color_normal">#FF7E82</color>
     <color name="btn_orange_color_normal">#F88519</color>
     <color name="btn_orange_color_pressed">#dd7a1c</color>
+    <color name="booking_card_green_color">#B5CA01</color>
+    <color name="book_btn_color_normal">@color/booking_card_green_color</color>
+    <color name="book_btn_color_pressed">#a0b202</color>
 </resources>
