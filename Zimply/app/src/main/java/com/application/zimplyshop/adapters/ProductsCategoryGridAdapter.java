@@ -2,7 +2,7 @@ package com.application.zimplyshop.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +10,13 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
 import com.application.zimplyshop.activities.ProductListingActivity;
-import com.application.zimplyshop.activities.SearchProductsActivity;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.managers.ImageLoaderManager;
-import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 
 import java.util.ArrayList;
@@ -30,7 +27,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     Context mContext;
     int TYPE_HEADER = 0;
     int TYPE_CATEGORY = 1;
-    int TYPE_TITLE = 2;
+
     private ArrayList<CategoryObject> objs;
 
     int displayWidth;
@@ -49,14 +46,10 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         if (viewType == TYPE_CATEGORY) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_item_layout, null);
             holder = new ProductsCategoryViewHolder(view);
-        } else if (viewType == TYPE_TITLE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_title_layout
+        }else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bookings_recyclerview_layout
                     , null);
-            holder = new ProductsTitleViewHolder(view);
-        } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_header_layout
-                    , null);
-            holder = new ProductsCategoryHeaderViewHolder(view);
+            holder = new HeaderViewHolder(view);
         }
         return holder;
     }
@@ -64,29 +57,25 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_CATEGORY) {
-            int height = (objs.get(position).getImg().getHeight()*displayWidth)/objs.get(position).getImg().getWidth();
+            int height = (objs.get(position-1).getImg().getHeight()*displayWidth)/objs.get(position-1).getImg().getWidth();
 
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             ((ProductsCategoryViewHolder) holder).parentFrame.setLayoutParams(lp);
-            ((ProductsCategoryViewHolder) holder).categoryName.setText(objs.get(position).getName());
-            if (objs.get(position ).getImage() != null) {
-                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(objs.get(position).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
+            ((ProductsCategoryViewHolder) holder).categoryName.setText(objs.get(position-1).getName());
+            if (objs.get(position-1 ).getImage() != null) {
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(objs.get(position-1).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
             }
         } else {
-
-            if (position == objs.size()) {
-                ProductsTitleViewHolder productsTitleViewHolder = (ProductsTitleViewHolder) holder;
-                int cityId = Integer.parseInt(AppPreferences.getSavedCityId(mContext));
-
-                if (!AppPreferences.getSavedCityServe(mContext)) {
-                    productsTitleViewHolder.footer.setVisibility(View.VISIBLE);
-                    productsTitleViewHolder.footer.setTypeface(null, Typeface.ITALIC);
-                    productsTitleViewHolder.footer.setText(R.string.delhi_ncr_available);
-                } else {
-                    productsTitleViewHolder.footer.setVisibility(View.GONE);
-                }
-            }
+            ((HeaderViewHolder)holder).recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+           // ((HeaderViewHolder)holder).recyclerView.addItemDecoration(new SpaceItemDecoration(mContext.getResources().getDimensionPixelSize(R.dimen.margin_small)));
+            HomePageBookingsAdapter adapter = new HomePageBookingsAdapter(mContext);
+           /* LinearLayout.LayoutParams lp =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(int)mContext.getResources().getDimension(R.dimen.booking_card_height));
+            ((HeaderViewHolder)holder).recyclerView.setLayoutParams(lp);*/
+            ((HeaderViewHolder) holder).recyclerView.setAdapter(adapter);
+          //  CommonLib.setListViewHeightBasedOnChildren(((HeaderViewHolder) holder).recyclerView.get);
+            //((HeaderViewHolder)holder).recyclerView.setNestedScrollingEnabled(true);
         }
+
     }
 
     @Override
@@ -98,12 +87,9 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-        /*if (position == 0) {
+        if (position == 0) {
             return TYPE_HEADER;
-        } else */
-        if (position == objs.size()) {
-            return TYPE_TITLE;
-        } else {
+        }  else {
             return TYPE_CATEGORY;
         }
     }
@@ -131,27 +117,15 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public class ProductsCategoryHeaderViewHolder extends RecyclerView.ViewHolder {
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+        RecyclerView recyclerView;
 
-        public ProductsCategoryHeaderViewHolder(View itemView) {
-            super(itemView);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, SearchProductsActivity.class);
-                    mContext.startActivity(intent);
-                }
-            });
+        public HeaderViewHolder(View view) {
+            super(view);
+            recyclerView = (RecyclerView)view.findViewById(R.id.booking_list);
         }
+
     }
 
-    public class ProductsTitleViewHolder extends RecyclerView.ViewHolder {
-        TextView footer;
 
-        public ProductsTitleViewHolder(View itemView) {
-            super(itemView);
-            footer = (TextView) itemView.findViewById(R.id.header_footer);
-        }
-    }
 }

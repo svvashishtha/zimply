@@ -1,11 +1,11 @@
 package com.application.zimplyshop.widgets;
 
-import com.application.zimplyshop.extras.AppConstants;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.Button;
+
+import com.application.zimplyshop.utils.CommonLib;
 
 /**
  * Button with a custom typeface
@@ -35,7 +35,7 @@ public class CustomButton extends Button {
 	 */
 	private void init() {
 		Typeface tf = Typeface.createFromAsset(getContext().getAssets(),
-				AppConstants.FONT_PATH);
+				CommonLib.REGULAR_FONT);
 		setTypeface(tf);
 	}
 

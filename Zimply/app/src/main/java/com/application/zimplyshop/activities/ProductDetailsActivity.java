@@ -26,6 +26,8 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +59,7 @@ import com.application.zimplyshop.utils.UiUtils;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.utils.fadingActionBar.FadingActionBarHelper;
+import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.ProductThumbListItemDecorator;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.appindexing.Action;
@@ -72,6 +75,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ProductDetailsActivity extends ActionBarActivity
         implements GetRequestListener, AppConstants, RequestTags, ObjectTypes, UploadManagerCallback, View.OnClickListener {
@@ -115,6 +120,8 @@ public class ProductDetailsActivity extends ActionBarActivity
     private boolean isScannedProduct;
 
     Toast toast;
+
+    CustomTextView bookAVisitBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,7 +219,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             loadData();
         ImageView productImg = (ImageView) findViewById(R.id.product_img);
         productImg.getLayoutParams().width = width;
-        productImg.getLayoutParams().height = height / 2;
+        productImg.getLayoutParams().height = (height )/ 2;
         /*pager = (ViewPager) findViewById(R.id.photos_viewpager);
         pager.getLayoutParams().width = width;
         pager.getLayoutParams().height = height / 2;
@@ -228,11 +235,15 @@ public class ProductDetailsActivity extends ActionBarActivity
             }
         });
         addToCart = (TextView) findViewById(R.id.add_to_cart);
-
-        if(isScannedProduct){
-         addToCart.setText("Checkout");
-
-        }
+        bookAVisitBtn = (CustomTextView)findViewById(R.id.book_store_visit);
+        bookAVisitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bookAVisitBtn.setVisibility(View.GONE);
+                findViewById(R.id.empty_btn).setVisibility(View.VISIBLE);
+                scaleView(findViewById(R.id.empty_btn), 1f, 0.15f);
+            }
+        });
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -280,11 +291,11 @@ public class ProductDetailsActivity extends ActionBarActivity
                                     if (oldObj.contains(item)) {
                                         showToast("Already added to cart");
                                         //Toast.makeText(mContext, "Already added to cart", Toast.LENGTH_SHORT).show();
-                                        addToCart.setText("Go To Cart");
+
                                     } else {
                                         AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                                         checkCartCount();
-                                        addToCart.setText("Go To Cart");
+
                                         oldObj.add(item);
                                         GetRequestManager.Update(AppPreferences.getDeviceID(mContext), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                                         showToast("Successfully added to cart");
@@ -307,9 +318,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             }
         });
 
-        if(isScannedProduct){
-            ((TextView)findViewById(R.id.buy_offline)).setText("Shop More");
-        }
+
         findViewById(R.id.buy_offline).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -411,6 +420,84 @@ public class ProductDetailsActivity extends ActionBarActivity
         findViewById(R.id.relativeParent).setBackgroundColor(getResources().getColor(R.color.white));
     }
 
+    public void scaleView(View v, float startScale, float endScale) {
+        Animation anim = new ScaleAnimation(
+                startScale, endScale, // Start and end values for the X axis scaling
+                1f, 1f, // Start and end values for the Y axis scaling
+                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
+                Animation.RELATIVE_TO_SELF, 0f); // Pivot point of Y scaling
+        anim.setFillAfter(true); // Needed to keep the result of the animation
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                startProgressBarLayout();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        anim.setDuration(300);
+        v.startAnimation(anim);
+    }
+
+    int seconds = 100;
+
+    public void startProgressBarLayout(){
+        if(!isDestroyed) {
+            final ProgressBar bookVisitProgress = (ProgressBar) findViewById(R.id.progress_book_visit);
+
+            final ImageView crossImg = (ImageView) findViewById(R.id.cross_img);
+            bookVisitProgress.setVisibility(View.VISIBLE);
+            bookVisitProgress.setIndeterminate(true);
+            bookVisitProgress.setMax(100);
+            bookVisitProgress.setProgress(0);
+            bookVisitProgress.setRotation(-90);
+            crossImg.setVisibility(View.VISIBLE);
+
+            final Timer timer = new Timer();
+
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!destroyed) {
+                                seconds -= 1;
+                                if (seconds <= 0) {
+                                    seconds = 100;
+                                    timer.cancel();
+                                    crossImg.setVisibility(View.GONE);
+                                    makeProductPreviewRequest();
+
+                                } else {
+                                    bookVisitProgress.setProgress(100 - seconds);
+                                }
+
+                            }
+                        }
+                    });
+
+                }
+            }, 0, 1000);
+// bookVisitProgress.
+
+            crossImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    timer.cancel();
+                }
+            });
+        }
+    }
+
     public void makeProductPreviewRequest(){
         String url = AppApplication.getInstance().getBaseUrl() + MARK_PRODUCT_REVIEW_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
@@ -449,10 +536,10 @@ public class ProductDetailsActivity extends ActionBarActivity
         width = display.getWidth();
         height = display.getHeight();
 
-        final int buttonHeight = 3 * width / 20;
+        /*final int buttonHeight = 3 * width / 20;
         findViewById(R.id.bottom_action_container).getLayoutParams().height = buttonHeight;
-
-        ((LinearLayout.LayoutParams) findViewById(R.id.return_value).getLayoutParams()).setMargins(0, 0, 0, buttonHeight);
+*/
+        //  ((LinearLayout.LayoutParams) findViewById(R.id.return_value).getLayoutParams()).setMargins(0, 0, 0, buttonHeight);
         // ((LinearLayout.LayoutParams) findViewById(R.id.return_container).getLayoutParams()).setMargins(0, 0, 0, buttonHeight + width / 20);
 
         findViewById(R.id.return_title).setOnClickListener(new View.OnClickListener() {
@@ -751,14 +838,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         ((TextView) findViewById(R.id.sold_by)).setText(product.getVendor());
         ((TextView) findViewById(R.id.description_value)).setText(product.getDescription().trim());
         ((TextView) findViewById(R.id.return_value)).setText(product.getReturnPolicy());
-        if(isScannedProduct){
-            ((TextView) findViewById(R.id.add_to_cart)).setText("Checkout");
-        }else {
-            if (AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
-                ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
-            else
-                ((TextView) findViewById(R.id.add_to_cart)).setText("Buy Online");
-        }
+
         ((TextView) mActionBarCustomView.findViewById(R.id.title)).setText(product.getName());
 
         ((TextView) findViewById(R.id.specification_title)).setOnClickListener(new View.OnClickListener() {
@@ -816,15 +896,6 @@ public class ProductDetailsActivity extends ActionBarActivity
         }
         toggleButtonsState(true);
 
-        if(!product.is_o2o()){
-            ((TextView) findViewById(R.id.buy_offline)).setVisibility(View.GONE);
-        }else{
-            if(AllProducts.getInstance().bookedProductsContains((int)product.getId())){
-                ((TextView) findViewById(R.id.buy_offline)).setText("Visit Booked");
-            }else{
-                ((TextView) findViewById(R.id.buy_offline)).setText("Book A Visit");
-            }
-        }
         restPageContent.findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
 
     }
@@ -861,7 +932,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                         AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                         cartCount.setVisibility(View.VISIBLE);
                         cartCount.setText(AllProducts.getInstance().getCartCount() + "");
-                        addToCart.setText("Go To Cart");
+
                     }
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
@@ -919,7 +990,8 @@ public class ProductDetailsActivity extends ActionBarActivity
         } else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
             // progressDialog = ProgressDialog.show(this, null, "Loading. Please wait");
         }else if(requestType == MARK_PRODUCT_REVIEW_TAG){
-            progressDialog = ProgressDialog.show(this, null, "Loading. Please wait");
+            //progressDialog = ProgressDialog.show(this, null, "Loading. Please wait");
+            ((ProgressBar)findViewById(R.id.progress_book_visit)).setIndeterminate(true);
         }
     }
 
@@ -1146,14 +1218,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         super.onResume();
 
         if (AppPreferences.isUserLogIn(this)) {
-            if(isScannedProduct){
-                ((TextView) findViewById(R.id.add_to_cart)).setText("Checkout");
-            }else {
-                if (product != null && AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
-                    ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
-                else
-                    ((TextView) findViewById(R.id.add_to_cart)).setText("Buy Online");
-            }
+
         } else {
             ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
             if (objs != null) {
@@ -1163,14 +1228,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 }
                 AllProducts.getInstance().setCartCount(objs.size());
             }
-            if(isScannedProduct){
-                ((TextView) findViewById(R.id.add_to_cart)).setText("Checkout");
-            }else {
-                if (product != null && AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
-                    ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
-                else
-                    ((TextView) findViewById(R.id.add_to_cart)).setText("Buy Online");
-            }
+
         }
         checkCartCount();
     }
