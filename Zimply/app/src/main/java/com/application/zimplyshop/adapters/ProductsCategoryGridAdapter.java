@@ -145,8 +145,8 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
                         pos = getAdapterPosition();
                     }
                     Intent intent = new Intent(mContext, ProductListingActivity.class);
-                    intent.putExtra("category_id", obj.getProduct_category().get(getAdapterPosition()-1).getId());
-                    intent.putExtra("category_name", obj.getProduct_category().get(getAdapterPosition()-1).getName());
+                    intent.putExtra("category_id", obj.getProduct_category().get(pos).getId());
+                    intent.putExtra("category_name", obj.getProduct_category().get(pos).getName());
                     intent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
                     mContext.startActivity(intent);
                 }
