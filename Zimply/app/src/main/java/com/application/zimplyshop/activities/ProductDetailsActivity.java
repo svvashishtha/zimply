@@ -451,15 +451,12 @@ public class ProductDetailsActivity extends ActionBarActivity
 
     public void startProgressBarLayout(){
         if(!isDestroyed) {
-            final ProgressBar bookVisitProgress = (ProgressBar) findViewById(R.id.progress_book_visit);
+            final ProgressBar bookVisitProgress = (ProgressBar) findViewById(R.id.progressBar);
 
             final ImageView crossImg = (ImageView) findViewById(R.id.cross_img);
-            bookVisitProgress.setVisibility(View.VISIBLE);
-            bookVisitProgress.setIndeterminate(true);
-            bookVisitProgress.setMax(100);
-            bookVisitProgress.setProgress(0);
-            bookVisitProgress.setRotation(-90);
+
             crossImg.setVisibility(View.VISIBLE);
+            bookVisitProgress.setVisibility(View.VISIBLE);
 
             final Timer timer = new Timer();
 
@@ -475,6 +472,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                                     seconds = 100;
                                     timer.cancel();
                                     crossImg.setVisibility(View.GONE);
+                                    bookVisitProgress.setVisibility(View.GONE);
                                     makeProductPreviewRequest();
 
                                 } else {
@@ -486,13 +484,13 @@ public class ProductDetailsActivity extends ActionBarActivity
                     });
 
                 }
-            }, 0, 1000);
-// bookVisitProgress.
+            }, 0, 100);
 
             crossImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     timer.cancel();
+                    bookVisitProgress.setVisibility(View.GONE);
                 }
             });
         }
@@ -991,7 +989,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             // progressDialog = ProgressDialog.show(this, null, "Loading. Please wait");
         }else if(requestType == MARK_PRODUCT_REVIEW_TAG){
             //progressDialog = ProgressDialog.show(this, null, "Loading. Please wait");
-            ((ProgressBar)findViewById(R.id.progress_book_visit)).setIndeterminate(true);
+//            ((ProgressBar)findViewById(R.id.progress_book_visit)).setIndeterminate(true);
         }
     }
 

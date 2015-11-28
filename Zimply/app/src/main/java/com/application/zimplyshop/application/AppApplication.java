@@ -87,19 +87,19 @@ public class AppApplication extends Application {
         try {
             lat = Double.parseDouble(prefs.getString("lat1", "0"));
             lon = Double.parseDouble(prefs.getString("lon1", "0"));
-        } catch(ClassCastException e) {
-        } catch(Exception e) {
+        } catch (ClassCastException e) {
+        } catch (Exception e) {
         }
         boolean firstLaunch = false;
 
-        if(prefs.getInt("version", 0) < CommonLib.VERSION) {
+        if (prefs.getInt("version", 0) < CommonLib.VERSION) {
 
             firstLaunch = true;
 
             SharedPreferences.Editor edit = prefs.edit();
 
             //logging out user with app version < 3.2
-            if(prefs.getInt("version", 0) < 40) {
+            if (prefs.getInt("version", 0) < 40) {
                 edit.putInt("uid", 0);
             }
 
@@ -134,8 +134,8 @@ public class AppApplication extends Application {
         UploadManager.getInstance().setContext(getApplicationContext());
         GetRequestManager.getInstance().setContext(getApplicationContext());
         getTracker(CommonLib.TrackerName.GLOBAL_TRACKER);
-    }
 
+    }
     public boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -202,7 +202,7 @@ public class AppApplication extends Application {
 
         if (!mTrackers.containsKey(trackerId)) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            Tracker t = trackerId == CommonLib.TrackerName.APPLICATION_TRACKER ? analytics.newTracker("UA-64477399-5")
+            Tracker t = trackerId == CommonLib.TrackerName.APPLICATION_TRACKER ? analytics.newTracker("UA-64477399-7")
                     : analytics.newTracker(R.xml.global_tracker);
             mTrackers.put(trackerId, t);
         }
