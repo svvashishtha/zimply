@@ -43,7 +43,6 @@ import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
-import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
 import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -122,6 +121,7 @@ public class ProductDetailsActivity extends ActionBarActivity
     Toast toast;
 
     CustomTextView bookAVisitBtn;
+    CustomTextView emptyBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,12 +236,13 @@ public class ProductDetailsActivity extends ActionBarActivity
         });
         addToCart = (TextView) findViewById(R.id.add_to_cart);
         bookAVisitBtn = (CustomTextView)findViewById(R.id.book_store_visit);
+        emptyBtn = (CustomTextView)findViewById(R.id.empty_btn);
         bookAVisitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bookAVisitBtn.setVisibility(View.GONE);
-                findViewById(R.id.empty_btn).setVisibility(View.VISIBLE);
-                scaleView(findViewById(R.id.empty_btn), 1f, 0.15f);
+                emptyBtn.setVisibility(View.VISIBLE);
+                scaleView(emptyBtn, 1f, 0.15f,true);
             }
         });
         addToCart.setOnClickListener(new View.OnClickListener() {
@@ -420,7 +421,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         findViewById(R.id.relativeParent).setBackgroundColor(getResources().getColor(R.color.white));
     }
 
-    public void scaleView(View v, float startScale, float endScale) {
+    public void scaleView(final View v, float startScale, float endScale,final  boolean isAnimateIn) {
         Animation anim = new ScaleAnimation(
                 startScale, endScale, // Start and end values for the X axis scaling
                 1f, 1f, // Start and end values for the Y axis scaling
@@ -435,7 +436,12 @@ public class ProductDetailsActivity extends ActionBarActivity
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                startProgressBarLayout();
+                if(isAnimateIn) {
+                    startProgressBarLayout();
+                }else{
+                   // v.setVisibility(View.GONE);
+                    showBookBtnNormal();
+                }
             }
 
             @Override
@@ -446,11 +452,16 @@ public class ProductDetailsActivity extends ActionBarActivity
         anim.setDuration(300);
         v.startAnimation(anim);
     }
+    public void showBookBtnNormal(){
 
-    int seconds = 100;
+        bookAVisitBtn.setVisibility(View.VISIBLE);
+        emptyBtn.setVisibility(View.INVISIBLE);
+    }
+    int seconds = 60;
 
     public void startProgressBarLayout(){
         if(!isDestroyed) {
+            emptyBtn.setVisibility(View.INVISIBLE);
             final ProgressBar bookVisitProgress = (ProgressBar) findViewById(R.id.progressBar);
 
             final ImageView crossImg = (ImageView) findViewById(R.id.cross_img);
@@ -469,14 +480,16 @@ public class ProductDetailsActivity extends ActionBarActivity
                             if (!destroyed) {
                                 seconds -= 1;
                                 if (seconds <= 0) {
-                                    seconds = 100;
+                                    seconds = 60;
                                     timer.cancel();
                                     crossImg.setVisibility(View.GONE);
                                     bookVisitProgress.setVisibility(View.GONE);
+                                   // emptyBtn.setVisibility(View.GONE);
+                                    findViewById(R.id.book_progress).setVisibility(View.VISIBLE);
                                     makeProductPreviewRequest();
 
                                 } else {
-                                    bookVisitProgress.setProgress(100 - seconds);
+                                    bookVisitProgress.setProgress(100 - ((seconds*100)/60));
                                 }
 
                             }
@@ -484,13 +497,17 @@ public class ProductDetailsActivity extends ActionBarActivity
                     });
 
                 }
-            }, 0, 100);
+            }, 0, 50);
 
             crossImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     timer.cancel();
+                    seconds=60;
                     bookVisitProgress.setVisibility(View.GONE);
+                    crossImg.setVisibility(View.GONE);
+                    emptyBtn.setVisibility(View.VISIBLE);
+                    scaleView(emptyBtn,  0.15f,1f,false);
                 }
             });
         }
@@ -967,16 +984,23 @@ public class ProductDetailsActivity extends ActionBarActivity
                 }
             }
         }else if(requestType == MARK_PRODUCT_REVIEW_TAG){
+            findViewById(R.id.book_progress).setVisibility(View.GONE);
+            bookAVisitBtn.setVisibility(View.VISIBLE);
             if(status) {
-                AllProducts.getInstance().getBookedObjs().add(new BaseCartProdutQtyObj((int)product.getId(),1));
+               /* AllProducts.getInstance().getBookedObjs().add(new BaseCartProdutQtyObj((int)product.getId(),1));
                 Intent intent = new Intent(this, ProductDemoActivity.class);
                 intent.putExtra("product_vendor_time", ((ProductVendorTimeObj) response));
-                startActivity(intent);
+                startActivity(intent);*/
+                showVisitBookedCard();
             }else{
                 Toast.makeText(this,((ErrorObject)response).getErrorMessage(),Toast.LENGTH_SHORT).show();
             }
         }
         isRequestFailed = !status;
+    }
+
+    public void showVisitBookedCard(){
+
     }
 
     @Override

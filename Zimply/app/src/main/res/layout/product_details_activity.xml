@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/product_root"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/white">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/product_root"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/product_overlay"
@@ -51,7 +51,7 @@
         android:orientation="vertical">
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/z_item_height_48"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             >
             <com.application.zimplyshop.widgets.CustomTextView
@@ -63,12 +63,12 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_medium"
                 android:background="@drawable/book_btn_bg"/>
-            <View
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/empty_btn"
                 android:layout_width="match_parent"
                 android:visibility="gone"
                 android:layout_height="@dimen/z_item_height_48"
-                android:background="@drawable/book_btn_bg"/>
+                android:background="@drawable/round_book_btn_bg"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -90,7 +90,17 @@
                 android:visibility="gone"
                 android:scaleType="centerInside"
                 android:layout_gravity="center"/>
-
+            <ProgressBar
+                android:id="@+id/book_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:progressDrawable="@drawable/progressbar_layerlist" />
+            <include layout="@layout/product_detail_booking_confirm_card"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:visibility="gone"/>
         </FrameLayout>
         <LinearLayout
             android:layout_width="fill_parent"
