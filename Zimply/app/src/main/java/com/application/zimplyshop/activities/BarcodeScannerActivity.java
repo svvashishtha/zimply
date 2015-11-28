@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -13,14 +12,13 @@ import android.view.View;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.utils.JSONUtils;
+import com.application.zimplyshop.utils.zxing.ZXingScannerView;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
  * Created by Umesh Lohani on 11/9/2015.
@@ -45,8 +43,7 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
         scannerView.setAutoFocus(true);
         scannerView.setSoundEffectsEnabled(true);
         DisplayMetrics metrics = getDisplayMetrics();
-        scannerView.getFramingRectInPreview(metrics.widthPixels/3,metrics.widthPixels/3);
-        new Handler().postDelayed(r,5000);
+        scannerView.getFramingRectInPreview(metrics.widthPixels / 3, metrics.widthPixels / 3);
     }
 
     private void addToolbarView(Toolbar toolbar) {
@@ -63,15 +60,7 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
         scannerView.setResultHandler(BarcodeScannerActivity.this);
         scannerView.startCamera();
        // scannerView.startCamera();
-
-
     }
-    Runnable r = new Runnable() {
-        @Override
-        public void run() {
-
-        }
-    };
 
     @Override
     public void onPause() {

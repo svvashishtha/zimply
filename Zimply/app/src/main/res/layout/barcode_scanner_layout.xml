@@ -12,13 +12,13 @@
         android:background="@drawable/actionbar_bg"
         app:theme="@style/Toolbar_Theme" />
 
-    <me.dm7.barcodescanner.zxing.ZXingScannerView
+    <com.application.zimplyshop.utils.zxing.ZXingScannerView
         android:id="@+id/barcode_scanner_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-    </me.dm7.barcodescanner.zxing.ZXingScannerView>
+    </com.application.zimplyshop.utils.zxing.ZXingScannerView>
 
 
 

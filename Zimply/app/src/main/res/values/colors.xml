@@ -143,4 +143,10 @@
     <color name="booking_card_green_color">#B5CA01</color>
     <color name="book_btn_color_normal">@color/booking_card_green_color</color>
     <color name="book_btn_color_pressed">#a0b202</color>
+
+    <!-- zxing -->
+    <color name="viewfinder_border">#ffafed44</color>
+    <color name="viewfinder_laser">#ffcc0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+
 </resources>
