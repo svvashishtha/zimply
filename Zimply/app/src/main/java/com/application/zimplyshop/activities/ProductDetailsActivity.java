@@ -453,7 +453,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         v.startAnimation(anim);
     }
     public void showBookBtnNormal(){
-
+        emptyBtn.clearAnimation();
         bookAVisitBtn.setVisibility(View.VISIBLE);
         emptyBtn.setVisibility(View.INVISIBLE);
     }
@@ -461,7 +461,9 @@ public class ProductDetailsActivity extends ActionBarActivity
 
     public void startProgressBarLayout(){
         if(!isDestroyed) {
-            emptyBtn.setVisibility(View.INVISIBLE);
+
+            mContext.findViewById(R.id.empty_btn).clearAnimation();
+            mContext.findViewById(R.id.empty_btn).setVisibility(View.GONE);
             final ProgressBar bookVisitProgress = (ProgressBar) findViewById(R.id.progressBar);
 
             final ImageView crossImg = (ImageView) findViewById(R.id.cross_img);
@@ -507,7 +509,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                     bookVisitProgress.setVisibility(View.GONE);
                     crossImg.setVisibility(View.GONE);
                     emptyBtn.setVisibility(View.VISIBLE);
-                    scaleView(emptyBtn,  0.15f,1f,false);
+                    scaleView(emptyBtn, 0.15f, 1f, false);
                 }
             });
         }
