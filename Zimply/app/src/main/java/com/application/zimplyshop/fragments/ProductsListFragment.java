@@ -19,6 +19,7 @@ import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.objects.AllProducts;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
@@ -56,7 +57,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
         GetRequestManager.getInstance().addCallbacks(this);
 
         height = (getDisplayMetrics().widthPixels - 3 * getResources().getDimensionPixelSize(R.dimen.margin_medium)) / 2;
-       // height = getDisplayMetrics().widthPixels ;
+        // height = getDisplayMetrics().widthPixels ;
         cateoryList = (RecyclerView) view.findViewById(R.id.category_list);
         //cateoryList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         cateoryList.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -66,12 +67,13 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
         retryLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isRequestFailed){
+                if (isRequestFailed) {
                     loadData();
                 }
             }
         });
         loadData();
+
     }
 
     @Override
@@ -90,7 +92,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     }
 
     private void loadData() {
-        CommonLib.ZLog("Product_category" , "Requesting Product category "+System.currentTimeMillis());
+        CommonLib.ZLog("Product_category", "Requesting Product category " + System.currentTimeMillis());
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_PRODUCT_CATEGORY_LIST ;
         GetRequestManager.getInstance().requestCacheThenHTTP(url, RequestTags.PRODUCT_CATEGORY_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_CATEGORY, GetRequestManager.ONE_HOUR);
@@ -108,45 +110,47 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
-        if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
+        if (!destroyed && requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
             if (!destroyed) {
                 if (obj instanceof ArrayList<?>) {
                     if (((ArrayList<CategoryObject>) obj).size() == 0) {
                         showNullCaseView("No Product categories");
                         changeViewVisiblity(cateoryList, View.GONE);
                     } else {
-                        AllProducts.getInstance().setProduct_category((ArrayList<CategoryObject>) obj);
-                        int width = getDisplayMetrics().widthPixels - (2*(getResources().getDimensionPixelSize(R.dimen.margin_medium)));
-                        productsCategoryGridAdapter = new ProductsCategoryGridAdapter(getActivity(), (ArrayList<CategoryObject>) obj, height,width);
-                       /* ((GridLayoutManager) cateoryList.getLayoutManager())
-                                .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                                    @Override
-                                    public int getSpanSize(int position) {
-                                        switch (cateoryList
-                                                .getAdapter().getItemViewType(position)) {
-                                            case 0:
-                                                return 2;
-                                            case 1:
-                                                return 1;
-                                            case 2:
-                                                return 2;
-                                            default:
-                                                return -1;
-                                        }
-                                    }
-                                });*/
+                        AllProducts.getInstance().getHomeProCatNBookingObj().setProduct_category((ArrayList<CategoryObject>) obj);
+                        if(productsCategoryGridAdapter == null) {
+                            int width = getDisplayMetrics().widthPixels - (2 * (getResources().getDimensionPixelSize(R.dimen.margin_medium)));
+                            productsCategoryGridAdapter = new ProductsCategoryGridAdapter(getActivity(), height, width);
+                            cateoryList.setAdapter(productsCategoryGridAdapter);
+                        }
+                        productsCategoryGridAdapter.addCategoryData((ArrayList<CategoryObject>) obj);
 
-                        cateoryList.setAdapter(productsCategoryGridAdapter);
                         showView();
                         changeViewVisiblity(cateoryList, View.VISIBLE);
+                        loadBookingData();
                     }
                 } else {
                     Toast.makeText(mActivity, "Something went wrong. Please try again..", Toast.LENGTH_SHORT).show();
                 }
             }
+        }else if(!destroyed&& requestTag != null && requestTag.equalsIgnoreCase(RequestTags.LATEST_BOOKINGS_TAG)){
+            if(AllProducts.getInstance().getHomeProCatNBookingObj().getLatest_bookings().size()>0) {
+                if(productsCategoryGridAdapter == null) {
+                    int width = getDisplayMetrics().widthPixels - (2 * (getResources().getDimensionPixelSize(R.dimen.margin_medium)));
+                    productsCategoryGridAdapter = new ProductsCategoryGridAdapter(getActivity(), height, width);
+                    cateoryList.setAdapter(productsCategoryGridAdapter);
+                }
+                productsCategoryGridAdapter.addLatestBookingsData(AllProducts.getInstance().getHomeProCatNBookingObj().getLatest_bookings());
+                cateoryList.smoothScrollToPosition(0);
+            }
         }
     }
-
+    public void loadBookingData(){
+        if(AppPreferences.isUserLogIn(getActivity())) {
+            String url = AppApplication.getInstance().getBaseUrl() + AppConstants.LATEST_BOOKINGS +"?userid="+AppPreferences.getUserID(getActivity());
+            GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.LATEST_BOOKINGS_TAG,ObjectTypes.OBJECT_TYPE_LATEST_BOOKKING_OBJ);
+        }
+    }
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
         if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {

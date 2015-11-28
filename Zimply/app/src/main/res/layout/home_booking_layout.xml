@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
+              android:id="@+id/product_card"
               android:background="@drawable/ic_card_bg"
               android:layout_height="wrap_content">
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_small">
         <ImageView
             android:id="@+id/product_img_src"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="@dimen/sub_cat_img_size"
+            android:layout_height="@dimen/sub_cat_img_size"
             android:scaleType="centerCrop"/>
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/product_name"
@@ -53,9 +55,10 @@
                 android:text="Booking Done"
                 android:textColor="@color/white"/>
             <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/visit_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/font_medium"
+                android:textSize="@dimen/font_small"
                 android:layout_gravity="bottom"
                 android:text="Visit store befor 9 PM tomorrow"
                 android:textColor="@color/white"/>

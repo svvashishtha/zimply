@@ -61,7 +61,7 @@ public class ArticleCategoryDialogFragment extends BaseFragment implements OnCli
             selectedPos = bundle.getInt("selected_loc");
         } else if(bundle.getBoolean("is_products")){
             adapter = new PhotoArticleFilterAdapter(getActivity(),
-					AllProducts.getInstance().getProduct_category(),
+					AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category(),
                     bundle.getInt("selected_pos"));
             selectedPos = bundle.getInt("selected_pos");
 		}else{

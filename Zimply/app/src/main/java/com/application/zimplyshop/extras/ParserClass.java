@@ -14,6 +14,7 @@ import com.application.zimplyshop.baseobjects.HomeExpertObj;
 import com.application.zimplyshop.baseobjects.HomePhotoObj;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ImageObject;
+import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
@@ -159,7 +160,7 @@ public class ParserClass implements ObjectTypes {
                             }
                             productCategories.add(productCategory);
                         }
-                        AllProducts.getInstance().setProduct_category(productCategories);
+                        AllProducts.getInstance().getHomeProCatNBookingObj().setProduct_category(productCategories);
 
                     }
                 } catch (JSONException e) {
@@ -907,6 +908,17 @@ public class ParserClass implements ObjectTypes {
                 return AllNotifications.getsInstance().parseNotifListData(responseString);
             case OBJECT_TYPE_NOTIFICATION_COUNT:
                 AllNotifications.getsInstance().setNewNotificationCount(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(responseString),"notifications"));
+                return true;
+            case OBJECT_TYPE_LATEST_BOOKKING_OBJ:
+                ArrayList<LatestBookingObject> objs = new ArrayList<>();
+                JSONObject bookingObj = JSONUtils.getJSONObject(responseString);
+                JSONArray jsonArray1 = JSONUtils.getJSONArray(bookingObj,"bookings");
+                if(jsonArray1 != null && jsonArray1.length()>0){
+                    for(int i=0;i<jsonArray1.length();i++){
+                        objs.add(new Gson().fromJson(JSONUtils.getJSONObject(jsonArray1,i).toString(),LatestBookingObject.class));
+                    }
+                    AllProducts.getInstance().getHomeProCatNBookingObj().setLatest_bookings(objs);
+                }
                 return true;
             default:
                 return null;

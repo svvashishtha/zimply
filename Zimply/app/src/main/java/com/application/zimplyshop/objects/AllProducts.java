@@ -2,8 +2,8 @@ package com.application.zimplyshop.objects;
 
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimplyshop.baseobjects.CartObject;
-import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.CategoryTree;
+import com.application.zimplyshop.baseobjects.HomeProductCategoryNBookingObj;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.MyWishListObject;
 import com.application.zimplyshop.baseobjects.OrderList;
@@ -46,7 +46,9 @@ public class AllProducts {
 
     ArrayList<BaseCartProdutQtyObj> bookedObjs;
 
-    private ArrayList<CategoryObject> product_category;
+    HomeProductCategoryNBookingObj homeProCatNBookingObj;
+
+
     private ArrayList<CategoryTree> category_tree;
 
     public static AllProducts getInstance() {
@@ -135,13 +137,6 @@ public class AllProducts {
     }
 
 
-    public ArrayList<CategoryObject> getProduct_category() {
-        return product_category;
-    }
-
-    public void setProduct_category(ArrayList<CategoryObject> product_category) {
-        this.product_category = product_category;
-    }
 
     public Object parseCart(String responseString) {
         return new Gson().fromJson(responseString, CartObject.class);
@@ -190,6 +185,17 @@ public class AllProducts {
             }
         }
         return false;
+    }
+
+
+    public HomeProductCategoryNBookingObj getHomeProCatNBookingObj() {
+        if(homeProCatNBookingObj == null)
+            homeProCatNBookingObj = new HomeProductCategoryNBookingObj();
+        return homeProCatNBookingObj;
+    }
+
+    public void setHomeProCatNBookingObj(HomeProductCategoryNBookingObj homeProCatNBookingObj) {
+        this.homeProCatNBookingObj = homeProCatNBookingObj;
     }
 }
 

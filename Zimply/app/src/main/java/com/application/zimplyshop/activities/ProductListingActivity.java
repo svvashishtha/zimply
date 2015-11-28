@@ -98,9 +98,9 @@ public class ProductListingActivity extends BaseActivity implements
 
     boolean isHideFilter;
     public int getSelectedCatgeoryId(int categoryId) {
-        if (AllProducts.getInstance().getProduct_category() != null) {
-            for (int i = 0; i < AllProducts.getInstance().getProduct_category().size(); i++) {
-                CategoryObject obj = AllProducts.getInstance().getProduct_category().get(i);
+        if (AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category() != null) {
+            for (int i = 0; i < AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().size(); i++) {
+                CategoryObject obj = AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(i);
                 if (obj.getId().equalsIgnoreCase(categoryId + "")) {
                     return i;
                 }
@@ -123,7 +123,7 @@ public class ProductListingActivity extends BaseActivity implements
             int width = (getDisplayMetrics().widthPixels-(3*getResources().getDimensionPixelSize(R.dimen.margin_small)))/3;
             if(!isHideFilter) {
                 finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
-                        + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + AllProducts.getInstance().getProduct_category().get(categoryId - 1).getId() : "");
+                        + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(categoryId - 1).getId() : "");
             }else{
                 finalUrl = AppApplication.getInstance().getBaseUrl() + url ;
             }
@@ -272,7 +272,7 @@ public class ProductListingActivity extends BaseActivity implements
                     sortId = bundle.getInt("sort_id");
                     priceLte = bundle.getInt("from_price");
                     priceHigh = bundle.getInt("to_price");
-                    nextUrl = url + "?filter=0" + ((categoryId != 0) ? ("&category__id__in=" + Integer.parseInt(AllProducts.getInstance().getProduct_category()
+                    nextUrl = url + "?filter=0" + ((categoryId != 0) ? ("&category__id__in=" + Integer.parseInt(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category()
                             .get(categoryId - 1).getId())) : "")
                             + ("&low_to_high=" + sortId) + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                             + (AppPreferences.isUserLogIn(ProductListingActivity.this)
@@ -283,7 +283,7 @@ public class ProductListingActivity extends BaseActivity implements
                         isFilterApplied = true;
                     else isFilterApplied = false;
                     if (categoryId != 0)
-                        titleText.setText(AllProducts.getInstance().getProduct_category().get(categoryId - 1).getName());
+                        titleText.setText(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(categoryId - 1).getName());
                     else
                         titleText.setText("All");
                     titleText.requestLayout();

@@ -55,6 +55,7 @@ public interface AppConstants {
     String BANNER_URL = "explore/get-banner/";
     String NOTIFICATIONS_LIST = "notification/gcmnotification";
     String NOTIFICATION_COUNT = "notification/gcmnotification-count/";
+    String LATEST_BOOKINGS = "ecommerce/latest-bookings/";
 
 
 

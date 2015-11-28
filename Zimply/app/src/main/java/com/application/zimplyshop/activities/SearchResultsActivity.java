@@ -95,8 +95,8 @@ public class SearchResultsActivity extends BaseActivity implements
     }
 
     public int getSelectedCatgeoryId(int categoryId) {
-        for (int i = 0; i < AllProducts.getInstance().getProduct_category().size(); i++) {
-            CategoryObject obj = AllProducts.getInstance().getProduct_category().get(i);
+        for (int i = 0; i < AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().size(); i++) {
+            CategoryObject obj = AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(i);
             if (obj.getId().equalsIgnoreCase(categoryId + "")) {
                 return i;
             }
