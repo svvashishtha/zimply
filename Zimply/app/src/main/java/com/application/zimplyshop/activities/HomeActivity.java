@@ -14,12 +14,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -58,9 +54,7 @@ import com.application.zimplyshop.baseobjects.ShopCategoryObject;
 import com.application.zimplyshop.baseobjects.SignupObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
-import com.application.zimplyshop.fragments.ArticleListingFragment;
 import com.application.zimplyshop.fragments.BannerDialogFragment;
-import com.application.zimplyshop.fragments.PhotosListingFragmentWebView;
 import com.application.zimplyshop.fragments.ProductsListFragment;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
@@ -100,9 +94,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
 
     //OnPageChangeListener commented
-    private static final int FRAGMENT_PHOTO = 0;
-    private static final int FRAGMENT_ARTICLE = 1;
-    private static final int FRAGMENT_EXPERT = 2;
     private static final int FRAGMENT_PRODUCT = 0;
     private final int EMAIL_FEEDBACK = 1500;
     DrawerLayout mDrawer;
@@ -121,8 +112,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     TextView noInterNetConnection;
     boolean noNetworkViewAdded = false;
     boolean isFreshDataLoaded;
-    MainFragmentsAdapter adapter;
-    ViewPager pager;
     TextView toolbarTitle;
     MenuItem filterItem, searchItem,notificationsItem;
     HashMap<Integer, Fragment> fragments;
@@ -137,7 +126,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         }
 
     };
-    TabLayout mTabs;
     ListView menuListView;
     View toolbarView;
     NavigationView navView;
@@ -151,6 +139,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     private ProgressDialog zProgressDialog;
 
     private String mobile;
+
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,21 +186,23 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         setUpDrawer();
         setUpFAB();
         setNavigationList();
-        pager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new MainFragmentsAdapter(getSupportFragmentManager());
-        pager.setAdapter(adapter);
-        pager.setOffscreenPageLimit(3);
 
-        mTabs = (TabLayout) findViewById(R.id.indicator);
-
-        mTabs.setupWithViewPager(pager);
-        mTabs.setVisibility(View.GONE);
         onNewIntent(getIntent());
         if(AppPreferences.getNotifModDateTime(this)!=0)
             getUserNotificationCount();
         if(AppPreferences.isUserLogIn(this))
             phoneVerification();
+
+        //init fragements
+        Bundle arguments = new Bundle();
+        arguments.putString("title", getString(R.string.deals_of_day_text));
+        fragment = ProductsListFragment.newInstance(arguments);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.container, fragment)
+                .commit();
     }
+
 
     public void getUserNotificationCount(){
 
@@ -611,14 +603,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EMAIL_FEEDBACK) {
             deleteFile("log.txt");
-        } else if (requestCode == AppConstants.REQUEST_PHOTO_FILTER_ACTIVITY) {
-            if (adapter != null && adapter.getCount() > 0) {
-                Fragment fragment = adapter.getItem(0);
-                if (fragment != null && fragment instanceof PhotosListingFragmentWebView) {
-                    fragment.onActivityResult(requestCode, resultCode, data);
-                }
-            }
-        }else if (requestCode == REQUEST_TYPE_FROM_SEARCH) {
+        } else if (requestCode == REQUEST_TYPE_FROM_SEARCH) {
             if (resultCode == RESULT_OK) {
                 String contents = data.getStringExtra("SCAN_RESULT");
                 //Toast.makeText(this , "CONTENT"+contents,Toast.LENGTH_SHORT).show();
@@ -726,37 +711,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     private void setUpDrawer() {
         navView = (NavigationView) findViewById(R.id.navigation_view);
 
-        mDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
-
-            @Override
-            public void onDrawerStateChanged(int arg0) {
-            }
-
-            @Override
-            public void onDrawerSlide(View arg0, float arg1) {
-
-                switch (pager.getCurrentItem()) {
-                    case FRAGMENT_PHOTO:
-                        //showFAB(false);
-                        scaleFAB(arg1);
-                        break;
-                    default:
-                        //do nothing
-                        break;
-                }
-
-
-            }
-
-            @Override
-            public void onDrawerOpened(View arg0) {
-            }
-
-            @Override
-            public void onDrawerClosed(View arg0) {
-            }
-        });
-
         CircularImageView userImage = (CircularImageView) navView.findViewById(R.id.user_img);
         TextView userName = (TextView) navView.findViewById(R.id.drawer_user_name);
 
@@ -790,9 +744,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 //        toolbarView.requestLayout();
         if (toolbar != null) {
             toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-        }
-        if (mTabs != null) {
-            mTabs.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
         }
         if (mDrawer != null) {
             mDrawer.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
@@ -954,11 +905,10 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.filter:
-                showFilterLayout();
                 break;
             case R.id.search:
                 Intent searchIntent = new Intent(this, NewSearchActivity.class);
-                searchIntent.putExtra("position",pager.getCurrentItem());
+                searchIntent.putExtra("position", FRAGMENT_PRODUCT);
                 startActivity(searchIntent);
                 break;
             case R.id.cart:
@@ -974,14 +924,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void showFilterLayout() {
-        if (pager.getCurrentItem() == 0) {
-            ((PhotosListingFragmentWebView) fragments.get(0)).showFilterLayout();
-        } else if (pager.getCurrentItem() == 1) {
-            ((ArticleListingFragment) fragments.get(1)).showFilterLayout();
-        }
     }
 
     @Override
@@ -1185,66 +1127,15 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 int type = intent.getExtras().getInt("nType");
                 switch (type) {
                     case NOTIFICATION_TYPE_WEBVIEW:
-                        pager.setCurrentItem(0);
                         break;
                     case NOTIFICATION_TYPE_PHOTO_LISTING:
-                        pager.setCurrentItem(1);
                         break;
                     case NOTIFICATION_TYPE_SHOP_LISTING:
-                        pager.setCurrentItem(2);
                         break;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (pager != null && pager.getCurrentItem() != 0) {
-            pager.setCurrentItem(0);
-        } else {
-            super.onBackPressed();
-        }
-
-    }
-
-    public class MainFragmentsAdapter extends FragmentPagerAdapter {
-
-        ArrayList<String> pageTitles;
-
-        public MainFragmentsAdapter(FragmentManager fm) {
-            super(fm);
-            pageTitles = new ArrayList<String>();
-            pageTitles.add("Shop");
-            fragments = new HashMap<>();
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = null;
-            switch (position) {
-
-                case FRAGMENT_PRODUCT:
-                    Bundle arguments = new Bundle();
-                    arguments.putString("title", getString(R.string.deals_of_day_text));
-                    fragment = ProductsListFragment.newInstance(arguments);
-                    break;
-
-            }
-            fragments.put(position, fragment);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return pageTitles.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return pageTitles.get(position);
         }
     }
 
