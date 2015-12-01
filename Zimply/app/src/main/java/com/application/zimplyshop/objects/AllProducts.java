@@ -46,6 +46,8 @@ public class AllProducts {
 
     ArrayList<BaseCartProdutQtyObj> bookedObjs;
 
+    ArrayList<Integer> vendorIds;
+
     HomeProductCategoryNBookingObj homeProCatNBookingObj;
 
 
@@ -92,9 +94,10 @@ public class AllProducts {
         }
         JSONArray bookedJsonArray = JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString), "booked_products");
         bookedObjs = new ArrayList<>();
+        vendorIds = new ArrayList<>();
         if(bookedJsonArray!=null){
             for(int i=0;i<bookedJsonArray.length();i++){
-                bookedObjs.add(new Gson().fromJson(JSONUtils.getJSONObject(bookedJsonArray,i).toString(),BaseCartProdutQtyObj.class));
+                vendorIds.add(Integer.parseInt(JSONUtils.getStringObject(bookedJsonArray,i)));
             }
 
         }
