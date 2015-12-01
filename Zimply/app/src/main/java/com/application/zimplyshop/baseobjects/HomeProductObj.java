@@ -21,7 +21,7 @@ public class HomeProductObj implements Serializable{
 	private int score;
 	private String vpc;
 	private boolean isActive;
-	private String vendor;
+
 	private String category;
 	private long id;
 	private String description;
@@ -34,6 +34,16 @@ public class HomeProductObj implements Serializable{
 	private String image;
 
 	private boolean is_o2o;
+
+	private VendorObj vendor;
+
+	public VendorObj getVendor() {
+		return vendor;
+	}
+
+	public void setVendor(VendorObj vendor) {
+		this.vendor = vendor;
+	}
 
 	public boolean is_o2o() {
 		return is_o2o;
@@ -203,13 +213,6 @@ public class HomeProductObj implements Serializable{
 		this.isActive = isActive;
 	}
 
-	public String getVendor() {
-		return vendor;
-	}
-
-	public void setVendor(String vendor) {
-		this.vendor = vendor;
-	}
 
 	public String getCategory() {
 		return category;

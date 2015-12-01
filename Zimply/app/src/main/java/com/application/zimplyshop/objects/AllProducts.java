@@ -200,5 +200,15 @@ public class AllProducts {
     public void setHomeProCatNBookingObj(HomeProductCategoryNBookingObj homeProCatNBookingObj) {
         this.homeProCatNBookingObj = homeProCatNBookingObj;
     }
+
+
+    public boolean vendorIdsContains(int vendorId){
+        for(Integer vendor : vendorIds){
+            if(vendor == vendorId){
+                return  true;
+            }
+        }
+        return false;
+    }
 }
 

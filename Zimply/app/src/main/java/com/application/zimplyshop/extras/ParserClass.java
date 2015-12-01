@@ -15,6 +15,7 @@ import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
+import com.application.zimplyshop.baseobjects.VendorObj;
 import com.application.zimplyshop.objects.AllCategories;
 import com.application.zimplyshop.objects.AllCities;
 import com.application.zimplyshop.objects.AllHomeObjects;
@@ -244,7 +245,7 @@ public class ParserClass implements ObjectTypes {
                         if (productObjectJson.has("active") && productObjectJson.get("active") instanceof Boolean)
                             product.setIsActive(productObjectJson.getBoolean("active"));
                         if (productObjectJson.has("vendor"))
-                            product.setVendor(String.valueOf(productObjectJson.get("vendor")));
+                            product.setVendor(new Gson().fromJson(productObjectJson.getJSONObject("vendor").toString(), VendorObj.class));
                         if (productObjectJson.has("category"))
                             product.setCategory(String.valueOf(productObjectJson.get("category")));
                         if (productObjectJson.has("id") && productObjectJson.get("id") instanceof Integer)

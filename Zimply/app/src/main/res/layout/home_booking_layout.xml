@@ -7,7 +7,6 @@
               android:layout_height="wrap_content">
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_small">
@@ -60,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_small"
                 android:layout_gravity="bottom"
-                android:text="Visit store befor 9 PM tomorrow"
+                android:visibility="gone"
                 android:textColor="@color/white"/>
         </LinearLayout>
         <LinearLayout
@@ -81,6 +80,7 @@
                 android:layout_marginTop="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_small"
                 android:background="@color/white"></View>
+
             <ImageView
                 android:id="@+id/get_direction_customer"
                 android:layout_width="48dp"
