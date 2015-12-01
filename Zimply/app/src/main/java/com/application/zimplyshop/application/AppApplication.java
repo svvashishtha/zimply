@@ -26,7 +26,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.notikum.notifypassive.UninstallSession;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -289,7 +288,6 @@ public class AppApplication extends Application {
             try {
                 // Crashlytics Initialize
                 Fabric.with(getApplicationContext(), new Crashlytics());
-                UninstallSession.init(getApplicationContext(), 1);
                 Crashlytics.getInstance().core.setString("Version", CommonLib.CRASHLYTICS_VERSION_STRING);
 
             } catch (Exception e) {

@@ -1,4 +1,4 @@
-package com.application.zimplyshop.receiver;
+package com.application.zimplyshop.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

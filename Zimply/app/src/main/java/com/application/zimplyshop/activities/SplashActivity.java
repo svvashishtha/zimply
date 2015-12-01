@@ -44,8 +44,6 @@ import com.google.android.gms.tagmanager.Container;
 import com.google.android.gms.tagmanager.ContainerHolder;
 import com.google.android.gms.tagmanager.DataLayer;
 import com.google.android.gms.tagmanager.TagManager;
-import com.notikum.notifypassive.UninstallSession;
-import com.notikum.notifypassive.utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -265,7 +263,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
                         gcm = GoogleCloudMessaging.getInstance(SplashActivity.this);
                     }
 
-                    regId = gcm.register(CommonLib.GCM_SENDER_ID+","+ Constants.GCM_SENDER_ID);
+                    regId = gcm.register(CommonLib.GCM_SENDER_ID);
                     msg = "Device registered, registration ID=" + regId;
                     Log.i("SplashActivity",msg);
                     storeRegistrationId(SplashActivity.this, regId);
@@ -313,12 +311,6 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
             imeisv="Unknown";
         AppPreferences.setDeviceID(this, imeisv);
         return imeisv;
-    }
-
-    @Override
-    protected void onPause() {
-        UninstallSession.appFocusChange();
-        super.onPause();
     }
 
     @Override

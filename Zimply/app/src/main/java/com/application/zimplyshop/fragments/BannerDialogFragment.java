@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 11/4/2015.
  */
-public class BannerDialogFragment extends BaseDialogFragment{
+public class BannerDialogFragment extends DialogFragment{
     BannerObject obj;
 
     public static BannerDialogFragment newInstance(Bundle bundle) {

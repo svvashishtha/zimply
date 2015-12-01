@@ -3,6 +3,7 @@ package com.application.zimplyshop.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.fragments.ArticleCategoryDialogFragment;
-import com.application.zimplyshop.fragments.BaseDialogFragment;
 import com.application.zimplyshop.fragments.BaseFragment;
 import com.application.zimplyshop.fragments.ProductFilterFragment;
 import com.application.zimplyshop.fragments.ProductPriceFilterFragment;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 /**
  * Created by Umesh Lohani on 10/5/2015.
  */
-public class AllFilterClassActivity extends BaseDialogFragment implements View.OnClickListener {
+public class AllFilterClassActivity extends DialogFragment implements View.OnClickListener {
 
     MainFragmentsAdapter adapter;
 

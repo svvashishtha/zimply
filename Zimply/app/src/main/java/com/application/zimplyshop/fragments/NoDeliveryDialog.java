@@ -2,6 +2,7 @@ package com.application.zimplyshop.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import com.application.zimplyshop.utils.CommonLib;
 /**
  * Created by Umesh Lohani on 11/18/2015.
  */
-public class NoDeliveryDialog extends BaseDialogFragment{
+public class NoDeliveryDialog extends DialogFragment {
 
     public static NoDeliveryDialog newInstance(Bundle bundle) {
         NoDeliveryDialog fragment = new NoDeliveryDialog();
