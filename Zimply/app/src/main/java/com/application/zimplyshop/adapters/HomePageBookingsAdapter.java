@@ -16,7 +16,6 @@ import com.application.zimplyshop.activities.HomeActivity;
 import com.application.zimplyshop.activities.MapPage;
 import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
-import com.application.zimplyshop.utils.TimeUtils;
 
 import java.util.ArrayList;
 
@@ -51,7 +50,7 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
         ((BookingHolder)holder).productName.setText("Zi Store");
         ((BookingHolder)holder).productPrice.setText(objs.get(position).getVendor().getCompany_name());
         new ImageLoaderManager((HomeActivity)mContext).setImageFromUrl(objs.get(position).getProduct().getImage(), ((BookingHolder) holder).productImg, "users", mContext.getResources().getDimensionPixelSize(R.dimen.sub_cat_img_size), mContext.getResources().getDimensionPixelSize(R.dimen.sub_cat_img_size), false, false);
-        ((BookingHolder)holder).visitTime.setText("* Visit before" + TimeUtils.getTimeStampDate(objs.get(position).getVisit_date(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY) + ", 9 PM");
+//        ((BookingHolder)holder).visitTime.setText("* Visit before" + TimeUtils.getTimeStampDate(objs.get(position).getVisit_date(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY) + ", 9 PM");
         ((BookingHolder)holder).callCustomer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
