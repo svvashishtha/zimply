@@ -295,7 +295,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                 if (getActivity() != null && AppPreferences.isUserLogIn(getActivity())) {
 
                     bundle.putString("productids", getProductIdStringsFromCart());
-                    bundle.putString("quantity",getProductQuantityStringsFromCart());
+                    bundle.putString("quantity", getProductQuantityStringsFromCart());
                     ((ProductCheckoutActivity) getActivity()).setOrderSummaryFragmentWithBackstack(bundle);
                 } else {
                     Intent intent = new Intent(getActivity(), BaseLoginSignupActivity.class);
@@ -348,7 +348,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                     String url = AppApplication.getInstance().getBaseUrl() +
                             "ecommerce/remove-cart/" + cartObject.getCart().getDetail().get(position).getCart_item_id() + "/";
                     quantityUpdatePosition = position;
-                    GetRequestManager.getInstance().makeAyncRequest(url, REMOVE_FROM_CART , OBJECT_TYPE_ITEM_REMOVED);
+                    GetRequestManager.getInstance().makeAyncRequest(url, REMOVE_FROM_CART, OBJECT_TYPE_ITEM_REMOVED);
                 }
             }
 
@@ -358,7 +358,8 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
             }
         });
 
-        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total " + getResources().getString(R.string.rs_text)+" "+obj.getCart().getTotal_price());
+        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total " + getResources().getString(R.string.rs_text) + " " + obj.getCart().getTotal_price());
+        ((CustomTextView)view.findViewById(R.id.buy_btn)).setText("Checkout");
         ((CustomTextView)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

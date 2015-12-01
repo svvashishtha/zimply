@@ -44,7 +44,7 @@
         android:visibility="gone"
         android:layout_gravity="bottom"
         android:gravity="center_vertical"
-        android:background="@drawable/ic_card_bg"
+        android:background="@drawable/bottom_dropshadow"
         android:padding="@dimen/margin_small"
         android:orientation="horizontal"
         android:layout_height="wrap_content">

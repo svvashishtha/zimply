@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
@@ -21,6 +22,7 @@ import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.widgets.CustomTextView;
+import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.payu.sdk.PayU;
 
 import org.apache.http.NameValuePair;
@@ -76,8 +78,21 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         }*/
         ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
         ((CustomTextView)findViewById(R.id.pay_online)).setOnClickListener(this);
-
+        LinearLayout buyLayout = (LinearLayout)findViewById(R.id.payment_layout);
+        buyLayout.setVisibility(View.VISIBLE);
+        ((CustomTextViewBold)findViewById(R.id.total_amount)).setText("Total " + getResources().getString(R.string.rs_text) + " " + totalPrice);
+        ((CustomTextView)findViewById(R.id.buy_btn)).setText("Place Order");
+        ((CustomTextView)findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePaymentRequest();
+            }
+        });
         UploadManager.getInstance().addCallback(this);
+
+        paymentType = PAYMENT_TYPE_CARD;
+        findViewById(R.id.pay_online).setSelected(true);
+        findViewById(R.id.pay_cash_counter).setSelected(false);
     }
 
     public void addToolbarView(Toolbar toolbar){
@@ -87,30 +102,33 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         toolbar.addView(view);
     }
 
-    String transactionId;
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.pay_online:
-//((ProductCheckoutActivity) mActivity).setAddressSelectionFragment(null);
-                HashMap<String, String> params = new HashMap<String, String>();
-                params.put("furl",
-                        "https://dl.dropboxusercontent.com/s/z69y7fupciqzr7x/furlWithParams.html");
-                params.put("surl",
-                        "https://dl.dropboxusercontent.com/s/dtnvwz5p4uymjvg/success.html");
-                transactionId = "0nf7" + System.currentTimeMillis();
-                params.put(PayU.TXNID, transactionId);
-                params.put(PayU.USER_CREDENTIALS, "test:test");
-                params.put(PayU.PRODUCT_INFO, "My Product");
-                params.put(PayU.FIRSTNAME,name);
-                params.put(PayU.EMAIL, email);
+
+    public void makePaymentRequest(){
+        if(paymentType == PAYMENT_TYPE_CASH){
+            if(isCoc) {
+                sendPaymentSuccessFullCashRequest();
+            }else{
+                Toast.makeText(this,"Cash-at-Counter is not available for one or more items. Please remove those items from the cart to use Cash-at-Counter or Pay Online.",Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("furl",
+                    "https://dl.dropboxusercontent.com/s/z69y7fupciqzr7x/furlWithParams.html");
+            params.put("surl",
+                    "https://dl.dropboxusercontent.com/s/dtnvwz5p4uymjvg/success.html");
+            transactionId = "0nf7" + System.currentTimeMillis();
+            params.put(PayU.TXNID, transactionId);
+            params.put(PayU.USER_CREDENTIALS, "test:test");
+            params.put(PayU.PRODUCT_INFO, "My Product");
+            params.put(PayU.FIRSTNAME,name);
+            params.put(PayU.EMAIL, email);
 
 //Double.parseDouble(cartObject.getCart().getTotal_price())
-                PayU.getInstance(this).startPaymentProcess(1
-                        , params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
-                        PayU.PaymentMode.NB, PayU.PaymentMode.DC,
-                        PayU.PaymentMode.EMI,
-                        PayU.PaymentMode.STORED_CARDS});
+            PayU.getInstance(this).startPaymentProcess(1
+                    , params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
+                    PayU.PaymentMode.NB, PayU.PaymentMode.DC,
+                    PayU.PaymentMode.EMI,
+                    PayU.PaymentMode.STORED_CARDS});
 //totalPrice
                /* PayU.getInstance(this).startPaymentProcess(
                         1, params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
@@ -118,13 +136,22 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                                 PayU.PaymentMode.EMI,
                                 PayU.PaymentMode.STORED_CARDS});*/
 
+        }
+    }
+
+    String transactionId;
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.pay_online:
+                paymentType = PAYMENT_TYPE_CARD;
+                findViewById(R.id.pay_online).setSelected(true);
+                findViewById(R.id.pay_cash_counter).setSelected(false);
                 break;
             case R.id.pay_cash_counter:
-                if(isCoc) {
-                    sendPaymentSuccessFullCashRequest();
-                }else{
-                    Toast.makeText(this,"Cash on Counter not available for one or more items. Please remove those item from cart first",Toast.LENGTH_SHORT).show();
-                }
+                paymentType = PAYMENT_TYPE_CASH;
+                findViewById(R.id.pay_online).setSelected(false);
+                findViewById(R.id.pay_cash_counter).setSelected(true);
                 break;
         }
     }

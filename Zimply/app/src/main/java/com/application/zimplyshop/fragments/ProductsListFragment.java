@@ -127,7 +127,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
 
                         showView();
                         changeViewVisiblity(cateoryList, View.VISIBLE);
-                        loadBookingData();
+                        // loadBookingData();
                     }
                 } else {
                     Toast.makeText(mActivity, "Something went wrong. Please try again..", Toast.LENGTH_SHORT).show();

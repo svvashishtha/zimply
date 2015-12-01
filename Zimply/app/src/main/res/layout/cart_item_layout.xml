@@ -155,7 +155,6 @@
                  android:layout_alignParentBottom="true"
                  />-->
 
-
         </LinearLayout>
 
         <ImageView
@@ -170,7 +169,20 @@
         android:id="@+id/is_coc_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_small"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:paddingTop="@dimen/margin_small"
+        android:textColor="@color/text_color1"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/font_medium" />
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/is_online_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/margin_mini"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_mini"
         android:textColor="@color/text_color1"
         android:gravity="center_vertical"
         android:textSize="@dimen/font_medium" />

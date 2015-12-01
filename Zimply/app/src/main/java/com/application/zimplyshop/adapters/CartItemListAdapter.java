@@ -124,13 +124,15 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
                     (Integer.parseInt(cartObject.getCart().getDetail().get(position-1).getQuantity())
                             *Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice())):
                     ((Integer.parseInt(cartObject.getCart().getDetail().get(position - 1).getQuantity())*Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice()))+cartObject.getCart().getDetail().get(position - 1).getShipping_charges())));
-
+            holder.isOnlineText.setText(Html.fromHtml("<b>Online Payment"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
+            changeDrawableLeft(holder.isOnlineText, R.drawable.ic_tick);
             if(cartObject.getCart().getDetail().get(position-1).is_o2o()){
+                holder.isCocText.setVisibility(View.VISIBLE);
                 holder.isCocText.setText(Html.fromHtml("<b>Cash-at-Counter"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_tick);
                 holder.buyOfflineTag.setVisibility(View.VISIBLE);
             }else{
-                holder.isCocText.setText(Html.fromHtml("<b>Cash-at-Counter"+"</b>" +"<font color=#F0585D> Not Available"+"</font>"));
+                holder.isCocText.setVisibility(View.GONE);
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
                 holder.buyOfflineTag.setVisibility(View.GONE);
             }
@@ -269,7 +271,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
     public class CartItemHolder extends RecyclerView.ViewHolder {
         TextView price, name, delivery_date, quantity;
         ImageView product_image, cancelCartItem;
-        CustomTextView subTotal,shippingPrice,totalPrice,isCocText,buyOfflineTag;
+        CustomTextView subTotal,shippingPrice,totalPrice,isCocText,buyOfflineTag,isOnlineText;
         //ImageButton positive, negative;
         View quantityView;
 
@@ -290,6 +292,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             totalPrice = (CustomTextView)itemView.findViewById(R.id.total_payment);
             isCocText = (CustomTextView)itemView.findViewById(R.id.is_coc_text);
             buyOfflineTag = (CustomTextView)itemView.findViewById(R.id.buy_offline_tag);
+            isOnlineText = (CustomTextView)itemView.findViewById(R.id.is_online_text);
         }
     }
 
