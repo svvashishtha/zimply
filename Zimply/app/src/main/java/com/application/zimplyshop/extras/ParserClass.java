@@ -246,8 +246,69 @@ public class ParserClass implements ObjectTypes {
                             product.setVpc(String.valueOf(productObjectJson.get("vpc")));
                         if (productObjectJson.has("active") && productObjectJson.get("active") instanceof Boolean)
                             product.setIsActive(productObjectJson.getBoolean("active"));
-                        if (productObjectJson.has("vendor"))
-                            product.setVendor(new Gson().fromJson(productObjectJson.getJSONObject("vendor").toString(), VendorObj.class));
+                        //parse the vendor
+                        if(productObjectJson.has("vendor") && productObjectJson.get("vendor") instanceof  JSONObject) {
+
+                            JSONObject vendorJson = productObjectJson.getJSONObject("vendor");
+
+                            VendorObj vendor = new VendorObj();
+
+                            if (vendorJson.has("company_name"))
+                                vendor.setCompany_name(String.valueOf(vendorJson.get("company_name")));
+
+                            if (vendorJson.has("book_product_id") && vendorJson.get("book_product_id") instanceof Integer)
+                                vendor.setBook_product_id(vendorJson.getInt("book_product_id"));
+
+                            if (vendorJson.has("vendor_id") && vendorJson.get("vendor_id") instanceof Integer)
+                                vendor.setVendor_id(vendorJson.getInt("vendor_id"));
+
+                            if (vendorJson.has("reg_add") && vendorJson.get("reg_add") instanceof JSONObject) {
+                                VendorAddressObj addressObj = new VendorAddressObj();
+                                JSONObject addressJson = vendorJson.getJSONObject("reg_add");
+
+                                if (addressJson.has("id") && addressJson.get("id") instanceof Integer)
+                                    addressObj.setId(addressJson.getInt("id"));
+
+                                if (addressJson.has("line1"))
+                                    addressObj.setLine1(String.valueOf(addressJson.get("line1")));
+
+                                if (addressJson.has("phone"))
+                                    addressObj.setPhone(String.valueOf(addressJson.get("phone")));
+
+                                if (addressJson.has("location") && addressJson.get("location") instanceof JSONObject) {
+                                    JSONObject locationJson = addressJson.getJSONObject("location");
+
+                                    VendorLocationObj locationObj = new VendorLocationObj();
+                                    if (locationJson.has("latitude") && locationJson.get("latitude") instanceof Double) {
+                                        locationObj.setLatitude(locationJson.getDouble("latitude"));
+                                    } else if (locationJson.has("latitude") && locationJson.get("latitude") instanceof Integer) {
+                                        locationObj.setLatitude(locationJson.getInt("latitude") + 0.0);
+                                    }
+
+                                    if (locationJson.has("longitude") && locationJson.get("longitude") instanceof Double) {
+                                        locationObj.setLongitude(locationJson.getDouble("longitude"));
+                                    } else if (locationJson.has("longitude") && locationJson.get("longitude") instanceof Integer) {
+                                        locationObj.setLongitude(locationJson.getInt("longitude") + 0.0);
+                                    }
+
+                                    if (locationJson.has("serve") && locationJson.get("serve") instanceof Boolean) {
+                                        locationObj.setServe(locationJson.getBoolean("serve"));
+                                    }
+
+                                    if (locationJson.has("id") && locationJson.get("id") instanceof Integer) {
+                                        locationObj.setId(locationJson.getInt("id"));
+                                    }
+
+                                    if (locationJson.has("name")) {
+                                        locationObj.setName(String.valueOf(locationJson.get("name")));
+                                    }
+
+                                    addressObj.setLocation(locationObj);
+                                }
+                                vendor.setReg_add(addressObj);
+                            }
+                            product.setVendor(vendor);
+                        }
                         if (productObjectJson.has("category"))
                             product.setCategory(String.valueOf(productObjectJson.get("category")));
                         if (productObjectJson.has("id") && productObjectJson.get("id") instanceof Integer)
