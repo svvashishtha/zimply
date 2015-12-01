@@ -21,8 +21,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by apoorvarora on 25/11/15.
@@ -68,7 +71,7 @@ public class MapPage extends BaseActivity implements ZLocationCallback{
         Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
         int height = bitmap.getHeight();
 
-        findViewById(R.id.markerImg).setPadding(0, 0, 0, height);
+//        findViewById(R.id.markerImg).setPadding(0, 0, 0, height);
 
         if (getIntent() != null && getIntent().hasExtra("lat") && getIntent().hasExtra("lon")) {
             lat =  getIntent().getDoubleExtra("lat", 0.0);
@@ -132,6 +135,20 @@ public class MapPage extends BaseActivity implements ZLocationCallback{
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mMapView != null)
+            mMapView.onPause();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if(mMapView != null)
+            mMapView.onLowMemory();
+    }
+
     private void setUpMapIfNeeded() {
         if (mMap == null && mMapView != null)
             mMap = mMapView.getMap();
@@ -154,6 +171,13 @@ public class MapPage extends BaseActivity implements ZLocationCallback{
 
             CameraPosition cameraPosition;
             if (targetCoords != null) {
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.mapmarker);
+
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(targetCoords.latitude, targetCoords.longitude))
+                        .title(name)
+                        .icon(icon));
+
                 cameraPosition = new CameraPosition.Builder().target(targetCoords) // Sets
                         // the
                         // center

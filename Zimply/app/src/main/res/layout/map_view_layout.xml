@@ -7,27 +7,47 @@
     android:background="@color/white_card_selected_color"
     android:orientation="vertical" >
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/search_map"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent">
 
-    <ImageView
-        android:id="@+id/markerImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:src="@drawable/mapmarker" />
+        <RelativeLayout
+            android:id="@+id/bottom_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showDirections"
+            android:padding="@dimen/size16"
+            android:background="@drawable/whitebuttoncustomback"
+            android:layout_alignParentBottom="true">
 
-    <ImageView
-        android:id="@+id/directions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:onClick="showDirections"
-        android:layout_margin="20dp"
-        android:src="@drawable/mapmarker" />
+            <ImageView
+                android:id="@+id/navigation_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/navigate" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/take_me_there"
+                android:textColor="@color/zimply_blue"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:layout_toLeftOf="@id/navigation_img"
+                android:textSize="@dimen/size14"
+                />
+        </RelativeLayout>
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/search_map"
+            android:layout_width="fill_parent"
+            android:layout_above="@+id/bottom_container"
+            android:layout_height="fill_parent" />
+    </RelativeLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
