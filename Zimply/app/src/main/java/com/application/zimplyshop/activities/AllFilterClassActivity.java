@@ -3,6 +3,7 @@ package com.application.zimplyshop.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,9 +14,7 @@ import android.view.ViewGroup;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.fragments.ArticleCategoryDialogFragment;
-import com.application.zimplyshop.fragments.BaseDialogFragment;
 import com.application.zimplyshop.fragments.BaseFragment;
-import com.application.zimplyshop.fragments.FiltersFragmentPhoto;
 import com.application.zimplyshop.fragments.ProductFilterFragment;
 import com.application.zimplyshop.fragments.ProductPriceFilterFragment;
 import com.application.zimplyshop.fragments.SortDialogFragment;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 /**
  * Created by Umesh Lohani on 10/5/2015.
  */
-public class AllFilterClassActivity extends BaseDialogFragment implements View.OnClickListener {
+public class AllFilterClassActivity extends DialogFragment implements View.OnClickListener {
 
     MainFragmentsAdapter adapter;
 
@@ -83,35 +82,6 @@ public class AllFilterClassActivity extends BaseDialogFragment implements View.O
         pager.setCurrentItem(1);
     }
 
-    /*@NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Dialog dialog = new Dialog(getActivity(), R.style.HJCustomDialogTheme);
-            bundle = getArguments();
-
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            DisplayMetrics metrics = new DisplayMetrics();
-
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-            dialog.setCanceledOnTouchOutside(true);
-            dialog.setContentView(view);
-
-            dialog.getWindow().setLayout(
-                    metrics.widthPixels - 2 * getResources().getDimensionPixelSize(R.dimen.margin_large),
-                    ((4 * metrics.heightPixels) / 5));
-
-            return dialog;
-        }
-    */
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-
-    }
-
     public void setOnApplyClickListener(OnApplyClickListener listener) {
         mListener = listener;
     }
@@ -122,15 +92,7 @@ public class AllFilterClassActivity extends BaseDialogFragment implements View.O
             case R.id.apply_btn:
                 Bundle bundle = new Bundle();
 
-                if (this.bundle.getBoolean("is_photos")) {
-                    bundle.putInt("selected_pos", ((ArticleCategoryDialogFragment) fragments.get(0)).getSelectedPos());
-                    bundle.putInt("size_id", ((FiltersFragmentPhoto) fragments.get(1)).getSizeId());
-                    bundle.putInt("style_id", ((FiltersFragmentPhoto) fragments.get(1)).getStyleId());
-                    bundle.putInt("budget_id", ((FiltersFragmentPhoto) fragments.get(1)).getBudgetId());
-                } else if (this.bundle.getBoolean("is_articles")) {
-                    bundle.putInt("selected_pos", ((ArticleCategoryDialogFragment) fragments.get(0)).getSelectedPos() == -1 ? 0 : ((ArticleCategoryDialogFragment) fragments.get(0)).getSelectedPos());
-                    bundle.putInt("sort_id", ((SortDialogFragment) fragments.get(1)).getSortId());
-                } else if (this.bundle.getBoolean("is_products")) {
+                 if (this.bundle.getBoolean("is_products")) {
                     bundle.putInt("selected_pos", ((ArticleCategoryDialogFragment) fragments.get(0)).getSelectedPos());
                     bundle.putInt("sort_id", ((ProductPriceFilterFragment) fragments.get(1)).getSortById());
                     if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue().length() > 0) {
@@ -150,17 +112,7 @@ public class AllFilterClassActivity extends BaseDialogFragment implements View.O
                 dismiss();
                 break;
             case R.id.reset_btn:
-                if (this.bundle.getBoolean("is_photos")) {
-                    ((ArticleCategoryDialogFragment) fragments.get(0)).setSelectedPos(0);
-                    ((FiltersFragmentPhoto) fragments.get(1)).setSizeId(-1);
-                    ((FiltersFragmentPhoto) fragments.get(1)).setBudgetId(-1);
-                    ((FiltersFragmentPhoto) fragments.get(1)).setStyleId(-1);
-                    ((FiltersFragmentPhoto) fragments.get(1)).resetAllValues();
-                } else if (this.bundle.getBoolean("is_articles")) {
-                    ((ArticleCategoryDialogFragment) fragments.get(0)).setSelectedPos(0);
-                    ((SortDialogFragment) fragments.get(1)).setSortId(1);
-                    ((SortDialogFragment) fragments.get(1)).changeSelectedValues();
-                } else if (this.bundle.getBoolean("is_products")) {
+                if (this.bundle.getBoolean("is_products")) {
                     ((ArticleCategoryDialogFragment) fragments.get(0)).setSelectedPos(0);
                     ((ProductPriceFilterFragment) fragments.get(1)).changeSelectedValues();
                 } else {
@@ -201,9 +153,7 @@ public class AllFilterClassActivity extends BaseDialogFragment implements View.O
                 }
 
             } else {
-                if (bundle.getBoolean("is_photos")) {
-                    fragment = FiltersFragmentPhoto.newInstance(bundle);
-                } else if (bundle.getBoolean("is_location")) {
+                if (bundle.getBoolean("is_location")) {
                     bundle.putBoolean("is_second", true);
                     fragment = ArticleCategoryDialogFragment.newInstance(bundle);
                     ((ArticleCategoryDialogFragment) fragment).setIsLoc(true);

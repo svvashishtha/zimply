@@ -280,29 +280,6 @@ public class BaseLoginSignupActivity extends BaseActivity
 		super.onPause();
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
-		/*try {
-			super.onActivityResult(requestCode, resultCode, intent);
-			Session.getActiveSession().onActivityResult(this, requestCode, resultCode, intent);
-
-		} catch (Exception w) {
-
-			w.printStackTrace();
-
-			try {
-				com.facebook.Session fbSession = com.facebook.Session.getActiveSession();
-				if (fbSession != null) {
-					fbSession.closeAndClearTokenInformation();
-				}
-				com.facebook.Session.setActiveSession(null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}*/
-	}
-
 	private void addServerReuqest(String name, String email, String photoUrl, String token) {
 		if(z_ProgressDialog!=null) {
             z_ProgressDialog.dismiss();

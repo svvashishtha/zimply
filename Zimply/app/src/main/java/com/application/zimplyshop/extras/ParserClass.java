@@ -9,22 +9,16 @@ import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.CategoryTree;
 import com.application.zimplyshop.baseobjects.FavListItemObject;
 import com.application.zimplyshop.baseobjects.FavListObject;
-import com.application.zimplyshop.baseobjects.HomeArticleObj;
-import com.application.zimplyshop.baseobjects.HomeExpertObj;
-import com.application.zimplyshop.baseobjects.HomePhotoObj;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ImageObject;
 import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
-import com.application.zimplyshop.objects.AllArticles;
 import com.application.zimplyshop.objects.AllCategories;
 import com.application.zimplyshop.objects.AllCities;
-import com.application.zimplyshop.objects.AllExperts;
 import com.application.zimplyshop.objects.AllHomeObjects;
 import com.application.zimplyshop.objects.AllNotifications;
-import com.application.zimplyshop.objects.AllPhotos;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.utils.CommonLib;
@@ -45,15 +39,6 @@ public class ParserClass implements ObjectTypes {
             case OBJECT_TYPE_HOME_OBJECT:
                 return AllHomeObjects.getInstance().parseData(responseString);
 
-            case OBJECT_TYPE_ARTICLE_LIST_OBJECT:
-                return AllArticles.getInstance().parseData(responseString);
-            case OBJECT_TYPE_EXPERT_LIST_OBJECT:
-                return AllExperts.getInstance().parseData(responseString);
-
-            case OBJECT_TYPE_PHOTO_LIST_OBJECT:
-                return AllPhotos.getInstance().parseData(responseString);
-            case OBJECT_TYPE_HOME_PHOTO:
-                return AllPhotos.getInstance().parseDataObject(responseString);
             case OBJECT_TYPE_PRODUCT_LIST_OBJECT:
                 return AllProducts.getInstance().parseData(responseString);
             case OBJECT_TYPE_PRODUCT_SEARCH_RESULT:
@@ -66,8 +51,6 @@ public class ParserClass implements ObjectTypes {
                 return AllCategories.getInstance().parseCompleteCategoryData(responseString);
             case OBJECT_TYPE_ARTICLE_PHOTO_CATEGORY_LIST:
                 return AllCategories.getInstance().parseArticlePhotoCategoryData(responseString);
-            case OBJECT_TYPE_ARTICLE_DETAIL:
-                return AllArticles.getInstance().parseArticleData(responseString);
 
             case OBJECT_TYPE_SIGNUP:
                 return AllUsers.getInstance().parseUserSignup(responseString);
@@ -120,14 +103,6 @@ public class ParserClass implements ObjectTypes {
                         FavListItemObject itemObj = new FavListItemObject();
                         int type = JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(jsonArray, i), "type");
                         itemObj.setType(type);
-                        if (type == AppConstants.ITEM_TYPE_PHOTO) {
-
-                            itemObj.setObj(new Gson().fromJson(JSONUtils.getJSONObject(jsonArray, i).toString(),
-                                    HomePhotoObj.class));
-                        } else if (type == AppConstants.ITEM_TYPE_ARTICLE) {
-                            itemObj.setObj(new Gson().fromJson(JSONUtils.getJSONObject(jsonArray, i).toString(),
-                                    HomeArticleObj.class));
-                        }
                         obj.getObjects().add(itemObj);
                     }
                 }
@@ -453,58 +428,8 @@ public class ParserClass implements ObjectTypes {
                 JSONObject searchExpertsJson = null;
                 try {
                     searchExpertsJson = new JSONObject(responseString);
-                    ArrayList<HomeExpertObj> experts = new ArrayList<HomeExpertObj>();
                     ArrayList<CategoryObject> categories = new ArrayList<CategoryObject>();
                     //parse experts
-                    if (searchExpertsJson.has("experts") && searchExpertsJson.get("experts") instanceof JSONArray) {
-
-                        JSONArray expertsArr = searchExpertsJson.getJSONArray("experts");
-                        for (int i = 0; i < expertsArr.length(); i++) {
-
-                            HomeExpertObj expert = new HomeExpertObj();
-
-                            JSONObject expertJson = expertsArr.getJSONObject(i);
-
-                            if (expertJson.has("category") && expertJson.get("category") instanceof JSONArray) {
-                                ArrayList<String> expCategories = new ArrayList<String>();
-                                JSONArray categoriesArr = expertJson.getJSONArray("category");
-                                for (int j = 0; j < categoriesArr.length(); j++) {
-                                    String category = String.valueOf(categoriesArr.get(j));
-                                    expCategories.add(category);
-                                }
-                                expert.setCategory(expCategories);
-                            }
-
-                            if (expertJson.has("rating") && expertJson.get("rating") instanceof Double) {
-                                expert.setRating(expertJson.getDouble("rating"));
-                            }
-
-                            if (expertJson.has("title")) {
-                                expert.setTitle(String.valueOf(expertJson.get("title")));
-                            }
-
-                            if (expertJson.has("cover")) {
-                                expert.setCover(String.valueOf(expertJson.get("cover")));
-                            }
-
-                            if (expertJson.has("id") && expertJson.get("id") instanceof Integer) {
-                                expert.setId(expertJson.getInt("id"));
-                            }
-
-                            if (expertJson.has("logo")) {
-                                expert.setLogo(String.valueOf(expertJson.get("logo")));
-                            }
-
-                            if (expertJson.has("slug")) {
-                                expert.setSlug(String.valueOf(expertJson.get("slug")));
-                            }
-
-                            if (expertJson.has("desc")) {
-                                expert.setDesc(String.valueOf(expertJson.get("desc")));
-                            }
-                            experts.add(expert);
-                        }
-                    }
                     //parse categories
                     if (searchExpertsJson.has("categories") && searchExpertsJson.get("categories") instanceof JSONArray) {
                         JSONArray categoriesArr = searchExpertsJson.getJSONArray("categories");
@@ -521,7 +446,6 @@ public class ParserClass implements ObjectTypes {
                         }
                     }
                     objects[0] = categories;
-                    objects[1] = experts;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import com.notikum.notifypassive.segmentIO.Traits;
-import com.notikum.notifypassive.segmentIO.UninstallAnalytics;
-
 public class AppPreferences {
 
 	private static final String KEY = "hj.prefs";
@@ -66,9 +63,6 @@ public class AppPreferences {
 	public static void setUserID(Context context, String token) {
 		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
 
-		//send user-id
-		UninstallAnalytics.with(context).identify(new Traits().putUsername(token));
-
 		editor.putString(USER_ID, token);
 		editor.commit();
 	}
@@ -117,8 +111,6 @@ public class AppPreferences {
 
 	public static void setUserEmail(Context context, String email) {
 		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
-		//Send email-id
-		UninstallAnalytics.with(context).identify(new Traits().putEmail(email));
 		editor.putString(USER_EMAIL, email);
 		editor.commit();
 	}

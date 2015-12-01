@@ -1761,7 +1761,7 @@ public class Request {
 
     final String getUrlForSingleRequest() {
         if (overriddenURL != null) {
-            return overriddenURL.toString();
+            return overriddenURL;
         }
 
         String graphBaseUrlBase;

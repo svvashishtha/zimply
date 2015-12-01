@@ -117,11 +117,6 @@ public class BaseActivity extends AppCompatActivity
     };
     private boolean mIsResolving = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     /**
      * Returns display metrics
      *

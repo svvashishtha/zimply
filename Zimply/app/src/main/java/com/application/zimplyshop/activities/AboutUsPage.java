@@ -131,15 +131,6 @@ public class AboutUsPage extends BaseActivity {
 
 	}
 
-	public void goBack(View view) {
-		onBackPressed();
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {

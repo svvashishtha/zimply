@@ -1,7 +1,5 @@
 package com.application.zimplyshop.widgets;
 
-import com.application.zimplyshop.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -14,6 +12,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.application.zimplyshop.R;
 
 public class CircularImageView extends ImageView {
 	private int borderWidth;
@@ -74,13 +74,6 @@ public class CircularImageView extends ImageView {
 	public void addShadow() {
 		setLayerType(LAYER_TYPE_SOFTWARE, paintBorder);
 		paintBorder.setShadowLayer(4.0f, 0.0f, 2.0f, Color.BLACK);
-	}
-
-	@Override
-	protected void onDetachedFromWindow() {
-
-		// image.recycle();
-		super.onDetachedFromWindow();
 	}
 
 	@Override

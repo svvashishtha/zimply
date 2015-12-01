@@ -44,10 +44,7 @@ import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BannerObject;
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimplyshop.baseobjects.ErrorObject;
-import com.application.zimplyshop.baseobjects.HomeArticleObj;
-import com.application.zimplyshop.baseobjects.HomeExpertObj;
 import com.application.zimplyshop.baseobjects.HomeObject;
-import com.application.zimplyshop.baseobjects.HomePhotoObj;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ShopCategoryObject;
@@ -103,9 +100,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     boolean isDestroyed = false;
     ImageView arrowRight;
     boolean isArrowHidden;
-    ArrayList<HomePhotoObj> photos = new ArrayList<HomePhotoObj>();
-    ArrayList<HomeArticleObj> articles = new ArrayList<HomeArticleObj>();
-    ArrayList<HomeExpertObj> experts = new ArrayList<HomeExpertObj>();
     ArrayList<HomeProductObj> deals = new ArrayList<HomeProductObj>();
     ArrayList<HomeProductObj> products = new ArrayList<HomeProductObj>();
     ArrayList<ShopCategoryObject> shopCategories = new ArrayList<ShopCategoryObject>();
@@ -963,9 +957,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         if (!isDestroyed && requestTag.equalsIgnoreCase(HOME_PAGE_REQUEST_TAG)) {
             showView();
 
-            this.photos = ((HomeObject) obj).getPhotos();
-            this.articles = ((HomeObject) obj).getArticles();
-            this.experts = ((HomeObject) obj).getExperts();
             this.deals = ((HomeObject) obj).getDeals();
             this.products = ((HomeObject) obj).getProducts();
           /*  setViewPagerContent(((HomeObject) obj).getPhotos(), ((HomeObject) obj).getArticles(),

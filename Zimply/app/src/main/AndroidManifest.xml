@@ -78,18 +78,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.application.zimplyshop.activities.ExpertsListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="com.application.zimplyshop.activities.PhotosListingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="com.application.zimplyshop.activities.ArticleListingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name="com.application.zimplyshop.activities.ShopCategoriesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
@@ -135,9 +123,6 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name="com.application.zimplyshop.activities.PhotoDetailsActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
             android:name="com.application.zimplyshop.activities.ProductDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ProductPageTheme" />
@@ -149,15 +134,6 @@
         <activity android:name="com.application.zimplyshop.activities.ProductPhotoZoomActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"/>
-        <activity
-            android:name="com.application.zimplyshop.activities.ArticleDescriptionActivity"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppBaseTheme" />
-        <activity
-            android:name="com.application.zimplyshop.activities.ExpertProfileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppBaseTheme" />
 
         <activity
             android:name="com.application.zimplyshop.activities.NotificationsActivity"
@@ -173,11 +149,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
-            android:name="com.application.zimplyshop.activities.FilterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppBaseTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
             android:name="com.application.zimplyshop.activities.SignupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
@@ -190,10 +161,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/ZimplyActionBarTheme" />
         <activity
-            android:name="com.application.zimplyshop.activities.UserFavouritesActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppBaseTheme" />
-        <activity
             android:name="com.application.zimplyshop.activities.MyWishlist"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
@@ -205,12 +172,6 @@
             android:name="com.application.zimplyshop.activities.BookedForReviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
-
-        <activity
-            android:name="com.application.zimplyshop.activities.SearchActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppBaseTheme"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
             android:name="com.application.zimplyshop.activities.SearchProductsActivity"
@@ -331,31 +292,6 @@
         <!-- Cache cleaner service triggered from Application object -->
         <service android:name="com.application.zimplyshop.utils.CacheCleanerService" />
         <service android:name="com.application.zimplyshop.services.GCMIntentService" />
-        <service android:name="com.notikum.notifypassive.services.GCMInformService" />
-        <service android:name="com.notikum.notifypassive.services.NotiphiGCMIntentService" />
-        <service android:name="com.notikum.notifypassive.services.NotificationInformService" />
-
-        <receiver
-            android:name="com.notikum.notifypassive.receivers.NotiphiGCMBroadCastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.application.zimplyshop" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.notikum.notifypassive.receivers.NetworkStateChangeReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.notikum.notifypassive.receivers.InstallReferrerReceiver"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -375,7 +311,7 @@
             android:theme="@style/AppTheme">
         </activity>
 
-        <receiver android:name="com.application.zimplyshop.receiver.IncomingSmsReceiver">
+        <receiver android:name=".receivers.IncomingSmsReceiver">
             <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
