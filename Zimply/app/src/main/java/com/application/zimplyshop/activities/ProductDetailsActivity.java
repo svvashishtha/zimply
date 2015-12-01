@@ -44,6 +44,7 @@ import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
+import com.application.zimplyshop.baseobjects.VendorObj;
 import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -239,6 +240,8 @@ public class ProductDetailsActivity extends ActionBarActivity
         });
         addToCart = (TextView) findViewById(R.id.add_to_cart);
         bookAVisitBtn = (CustomTextView)findViewById(R.id.book_store_visit);
+
+
         emptyBtn = (CustomTextView)findViewById(R.id.empty_btn);
         bookAVisitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -474,7 +477,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 @Override
                 public void onClick(View v) {
                     timer.cancel();
-                    seconds=30;
+                    seconds = 30;
                     bookVisitProgress.setVisibility(View.GONE);
                     crossImg.setVisibility(View.GONE);
                     emptyBtn.setVisibility(View.VISIBLE);
@@ -516,7 +519,6 @@ public class ProductDetailsActivity extends ActionBarActivity
         retryLayout = (LinearLayout) findViewById(R.id.retry_layout);
         retryLayout.setOnClickListener(this);
         quoteText = (TextView) findViewById(R.id.quote);
-
     }
 
     private void fixSizes() {
@@ -825,7 +827,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         ((TextView) findViewById(R.id.product_price)).setText(getString(R.string.rs_text) + " " + product.getPrice() + "");
         ((TextView) findViewById(R.id.delivery)).setText(product.getMinShippingDays() + "-" + product.getMaxShippingDays() + " Days");
         ((TextView) findViewById(R.id.shipping_charges)).setText(getString(R.string.rs_text) + " " + product.getShippingCharges());
-        ((TextView) findViewById(R.id.sold_by)).setText(product.getVendor());
+        ((TextView) findViewById(R.id.sold_by)).setText(product.getVendor().getCompany_name());
         ((TextView) findViewById(R.id.description_value)).setText(product.getDescription().trim());
         ((TextView) findViewById(R.id.return_value)).setText(product.getReturnPolicy());
 
@@ -885,7 +887,12 @@ public class ProductDetailsActivity extends ActionBarActivity
             specificationsLayout.addView(layout);
         }
         toggleButtonsState(true);
-
+        if(AllProducts.getInstance().vendorIdsContains(product.getVendor().getVendor_id())){
+            bookAVisitBtn.setVisibility(View.GONE);
+        }else{
+            bookAVisitBtn.setVisibility(View.VISIBLE);
+            showVisitBookedInitialCard(product.getVendor());
+        }
         restPageContent.findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
 
     }
@@ -995,6 +1002,14 @@ public class ProductDetailsActivity extends ActionBarActivity
                 ObjectTypes.OBJECT_TYPE_REMOVE_PRODUCT_REVIEW, obj, list, null);
     }
 
+    public void cancelBookingId(VendorObj obj){
+        String url = AppApplication.getInstance().getBaseUrl() + REMOVE_PRODUCT_REVIEW_URL;
+        List<NameValuePair> list = new ArrayList<NameValuePair>();
+
+        list.add(new BasicNameValuePair("book_product_id", obj.getBook_product_id() + ""));
+        UploadManager.getInstance().makeAyncRequest(url, RequestTags.CANCEL_PRODUCT_REVIEW_TAG, obj.getBook_product_id() + "",
+                ObjectTypes.OBJECT_TYPE_REMOVE_PRODUCT_REVIEW, obj, list, null);
+    }
     public void showVisitBookedCard(final ProductVendorTimeObj obj){
         View view = findViewById(R.id.booking_confirm_card);
         view.setVisibility(View.VISIBLE);
@@ -1004,6 +1019,54 @@ public class ProductDetailsActivity extends ActionBarActivity
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:" + obj.getPincode()));
+                mContext.startActivity(callIntent);
+            }
+        });
+
+        ((ImageView)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "Vendor LAT LONG not available", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ((ImageView)view.findViewById(R.id.close_card)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog logoutDialog;
+                logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this)
+                        .setTitle("Confirm?")
+                        .setCancelable(false)
+                        .setMessage("Are you sure you want to cancel?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        cancelBooking(obj);
+                                    }
+                                }).create();
+                logoutDialog.show();
+
+            }
+        });
+    }
+
+    public void showVisitBookedInitialCard(final VendorObj obj){
+        View view = findViewById(R.id.booking_confirm_card);
+        view.setVisibility(View.VISIBLE);
+        ((CustomTextView)view.findViewById(R.id.address)).setText(obj.getReg_add().getLine1() + "\n" + obj.getReg_add().getLocation().getName());
+        ((ImageView)view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + obj.getReg_add().getPhone()));
                 mContext.startActivity(callIntent);
             }
         });
@@ -1034,7 +1097,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        cancelBooking(obj);
+                                        cancelBookingId(obj);
                                     }
                                 }).create();
                 logoutDialog.show();

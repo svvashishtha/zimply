@@ -11,6 +11,26 @@ public class VendorObj implements Serializable{
 
     VendorAddressObj reg_add;
 
+    int vendor_id;
+
+    private int book_product_id;
+
+    public int getBook_product_id() {
+        return book_product_id;
+    }
+
+    public void setBook_product_id(int book_product_id) {
+        this.book_product_id = book_product_id;
+    }
+
+    public int getVendor_id() {
+        return vendor_id;
+    }
+
+    public void setVendor_id(int vendor_id) {
+        this.vendor_id = vendor_id;
+    }
+
     public String getCompany_name() {
         return company_name;
     }

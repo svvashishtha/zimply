@@ -67,6 +67,7 @@
                 android:textSize="@dimen/font_small"
                 android:layout_gravity="bottom"
                 android:text="Visit store befor 9 PM tomorrow"
+                android:visibility="gone"
                 android:textColor="@color/white"/>
         </LinearLayout>
         <LinearLayout

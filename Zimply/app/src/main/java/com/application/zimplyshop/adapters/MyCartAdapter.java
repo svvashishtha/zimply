@@ -70,20 +70,20 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 110, r.getDisplayMetrics());
             new ImageLoaderManager((Activity) context).setImageFromUrl(cartObject.getCart().getDetail().get(position).getImage()
                     , holder.product_image, "", (int) px, (int) px, false, false);
-            holder.price.setText(context.getResources().getString(R.string.Rs) + cartObject.getCart().getDetail().get(position).getPrice());
+            holder.price.setText(context.getResources().getString(R.string.Rs)+" " + cartObject.getCart().getDetail().get(position).getPrice());
 
             holder.quantity.setText(cartObject.getCart().getDetail().get(position).getQuantity());
-            holder.subTotal.setText(context.getResources().getString(R.string.Rs) + cartObject.getCart().getDetail().get(position).getPrice());
+            holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " + cartObject.getCart().getDetail().get(position).getPrice());
             holder.shippingPrice.setText(cartObject.getCart().getDetail().get(position).getShipping_charges()==0?"Free":
                     context.getString(R.string.rs_text)+" "+cartObject.getCart().getDetail().get(position).getShipping_charges());
-            holder.totalPrice.setText(context.getResources().getString(R.string.Rs)+(cartObject.getCart().getDetail().get(position).getShipping_charges()==0? (Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity())*Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice())):((Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity())*Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice()))+cartObject.getCart().getDetail().get(position).getShipping_charges())));
+            holder.totalPrice.setText(context.getResources().getString(R.string.Rs)+" "+(cartObject.getCart().getDetail().get(position).getShipping_charges()==0? (Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity())*Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice())):((Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity())*Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice()))+cartObject.getCart().getDetail().get(position).getShipping_charges())));
 
             if(cartObject.getCart().getDetail().get(position).is_o2o()){
-                holder.isCocText.setText(Html.fromHtml("<b>Cash on Counter"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
+                holder.isCocText.setText(Html.fromHtml("<b>Cash-at-Counter"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_tick);
                 holder.buyOfflineTag.setVisibility(View.VISIBLE);
             }else{
-                holder.isCocText.setText(Html.fromHtml("<b>Cash on Counter" + "</b>" + "<font color=#F0585D> Not Available" + "</font>"));
+                holder.isCocText.setText(Html.fromHtml("<b>Cash-at-Counter" + "</b>" + "<font color=#F0585D> Not Available" + "</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
                 holder.buyOfflineTag.setVisibility(View.GONE);
             }
