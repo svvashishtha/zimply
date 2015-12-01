@@ -203,8 +203,8 @@ public class ProductsRecyclerViewGridAdapter extends
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
-        ImageView img;
-        TextView productName, productDiscountedPrice, productPrice, productDiscountFactor,buyOfflineTag;
+        ImageView img,buyOfflineTag;
+        TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
 
         public ProductViewHolder(View view) {
             super(view);
@@ -215,7 +215,7 @@ public class ProductsRecyclerViewGridAdapter extends
             productPrice = (TextView) view
                     .findViewById(R.id.product_price);
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
-            buyOfflineTag = (TextView)view.findViewById(R.id.buy_offline_tag);
+            buyOfflineTag = (ImageView)view.findViewById(R.id.buy_offline_tag);
         }
     }
 

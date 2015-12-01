@@ -4,19 +4,12 @@
     android:layout_height="wrap_content"
               android:background="@drawable/dropshadowcard"
     android:orientation="vertical" >
-    <com.application.zimplyshop.widgets.CustomTextView
+    <ImageView
         android:id="@+id/buy_offline_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available Offline"
-        android:layout_gravity="end|right"
-        android:background="@drawable/book_btn_bg"
-        android:textSize="@dimen/z_font_mini"
-        android:paddingLeft="@dimen/margin_medium"
-        android:paddingRight="@dimen/margin_medium"
-        android:paddingTop="@dimen/margin_mini"
-        android:paddingBottom="@dimen/margin_mini"
-        android:textColor="@color/white"/>
+        android:layout_gravity="right|end"
+        android:src="@drawable/ic_zi_experience"/>
     <ImageView
         android:id="@+id/product_img"
         android:layout_width="@dimen/product_img_size"

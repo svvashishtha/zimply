@@ -17,6 +17,56 @@ public class BookedProductHistoryObject implements Serializable{
 
     int id;
 
+    String line1;
+
+    String line2;
+
+    public String getLine1() {
+        return line1;
+    }
+
+    public String getLine2() {
+        return line2;
+    }
+
+    public void setLine1(String line1) {
+        this.line1 = line1;
+    }
+
+    public void setLine2(String line2) {
+        this.line2 = line2;
+    }
+
+    String vendor;
+
+    String pincode;
+
+    String city;
+
+    public String getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public int getId() {
         return id;
     }

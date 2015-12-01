@@ -16,7 +16,6 @@ import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.utils.TimeUtils;
-import com.application.zimplyshop.widgets.CustomTextView;
 
 import java.util.ArrayList;
 
@@ -42,7 +41,7 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        new ImageLoaderManager((BookedForReviewActivity)mContext).setImageFromUrl(objs.get(position).getProductImg(), ((OrderItemHolder) holder).itemPic, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
+        new ImageLoaderManager((BookedForReviewActivity)mContext).setImageFromUrl(objs.get(position).getProductImg(), ((OrderItemHolder) holder).storePic, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
         ((OrderItemHolder)holder).orderDate.setText(Html.fromHtml("Visit store on or before <b>" + TimeUtils.getTimeStampDate(objs.get(position).getVendorTimeObj().getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY)+"</b>" + " by 9 PM"));
         ((OrderItemHolder)holder).storeAddress.setText(objs.get(position).getVendorTimeObj().getLine1()+"\n"+objs.get(position).getVendorTimeObj().getCity()+"\nPincode-"+objs.get(position).getVendorTimeObj().getPincode());
         ((OrderItemHolder)holder).itemName.setText(objs.get(position).getName());
@@ -126,7 +125,7 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class OrderItemHolder extends RecyclerView.ViewHolder{
         TextView  orderDate,itemPrice,storeName,storeAddress,itemName,cancelBooking,bookingStatus,addToCart;
-        ImageView itemPic;
+        ImageView storePic,callCustomer,getDirections;
         View separatorView;
 
         LinearLayout btnLayout;
@@ -138,11 +137,10 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
             storeName = (TextView)itemView.findViewById(R.id.store_name);
             storeAddress = (TextView)itemView.findViewById(R.id.store_address);
             itemPrice = (TextView)itemView.findViewById(R.id.product_price);
-            itemPic = (ImageView)itemView.findViewById(R.id.product_img);
+            storePic = (ImageView)itemView.findViewById(R.id.product_img);
             cancelBooking = (TextView)itemView.findViewById(R.id.cancel_booking);
-            bookingStatus = (CustomTextView)itemView.findViewById(R.id.booking_status);
-            btnLayout = (LinearLayout)itemView.findViewById(R.id.btn_layout);
-            addToCart = (TextView)itemView.findViewById(R.id.add_to_cart);
+            callCustomer = (ImageView)itemView.findViewById(R.id.call_customer);
+            getDirections = (ImageView)itemView.findViewById(R.id.get_direction_customer);
         }
     }
 

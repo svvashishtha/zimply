@@ -889,9 +889,14 @@ public class ProductDetailsActivity extends ActionBarActivity
         toggleButtonsState(true);
         if(AllProducts.getInstance().vendorIdsContains(product.getVendor().getVendor_id())){
             bookAVisitBtn.setVisibility(View.GONE);
-        }else{
-            bookAVisitBtn.setVisibility(View.VISIBLE);
             showVisitBookedInitialCard(product.getVendor());
+        } else {
+            if(product.is_o2o()){
+                bookAVisitBtn.setVisibility(View.VISIBLE);
+            }else {
+                bookAVisitBtn.setVisibility(View.GONE);
+            }
+            ;
         }
         restPageContent.findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
 

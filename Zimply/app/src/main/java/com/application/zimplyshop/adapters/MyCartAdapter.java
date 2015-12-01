@@ -198,9 +198,9 @@ public class MyCartAdapter extends RecyclerView.Adapter {
 
     public class CartItemHolder extends RecyclerView.ViewHolder {
         TextView price, name, delivery_date, quantity;
-        ImageView product_image, cancelCartItem;
+        ImageView product_image, cancelCartItem,buyOfflineTag;
         View quantityView;
-        CustomTextView subTotal,shippingPrice,totalPrice,isCocText,buyOfflineTag,isOnlineText;
+        CustomTextView subTotal,shippingPrice,totalPrice,isCocText,isOnlineText;
 
         public CartItemHolder(View itemView) {
             super(itemView);
@@ -217,7 +217,7 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             shippingPrice = (CustomTextView)itemView.findViewById(R.id.shipping_charges);
             totalPrice = (CustomTextView)itemView.findViewById(R.id.total_payment);
             isCocText = (CustomTextView)itemView.findViewById(R.id.is_coc_text);
-            buyOfflineTag = (CustomTextView)itemView.findViewById(R.id.buy_offline_tag);
+            buyOfflineTag = (ImageView)itemView.findViewById(R.id.buy_offline_tag);
             isOnlineText = (CustomTextView)itemView.findViewById(R.id.is_online_text);
         }
     }
