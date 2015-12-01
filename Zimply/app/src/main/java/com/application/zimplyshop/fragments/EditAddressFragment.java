@@ -135,8 +135,6 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
                 addressObject = null;
             }
         }
-        //setValues();
-        fixSizes();
         setListeners();
         UploadManager.getInstance().addCallback(this);
         GetRequestManager.getInstance().addCallbacks(this);
@@ -163,9 +161,6 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
     @Override
     public boolean onFragmentResult(Bundle bundle) {
         return false;
-    }
-
-    private void fixSizes() {
     }
 
     public boolean checkValues() {

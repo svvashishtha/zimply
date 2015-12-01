@@ -35,11 +35,6 @@ public class ProductFilterFragment extends BaseFragment implements GetRequestLis
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.photo_filter_form_first, null);
         rootView.findViewById(R.id.label).setVisibility(View.GONE);

@@ -2,13 +2,10 @@ package com.application.zimplyshop.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -230,29 +227,12 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         tabs.setForegroundGravity(Gravity.LEFT);
         tabs.setShouldExpand(true);
         tabs.setViewPager(homePager);
-        /*tabs.setDividerColor(getResources().getColor(R.color.transparent1));
-        tabs.setBackgroundColor(getResources().getColor(R.color.zimply_darker));
-        tabs.setUnderlineColor(getResources().getColor(R.color.zhl_dark));
-        tabs.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.BOLD_FONT), 0);
-        tabs.setIndicatorColor(getResources().getColor(R.color.zhl_dark));
-        tabs.setIndicatorHeight((int) getResources().getDimension(R.dimen.height3));
-        tabs.setTextSize((int) getResources().getDimension(R.dimen.size15));
-        tabs.setUnderlineHeight(0);
-        tabs.setTabPaddingLeftRight(12);
-        tabs.setOnTabClickListener(this);
-*/
         final int tabsUnselectedColor = R.color.zhl_dark;
         final int tabsSelectedColor = R.color.zhl_darker;
 
         final TextView homeSearchHeader = (TextView) ((LinearLayout) tabs.getChildAt(0))
                 .getChildAt(FRAGMENT_PRODUCT_SEARCH);
-        /*final TextView homeNearbyHeader = (TextView) ((LinearLayout) tabs.getChildAt(0))
-                .getChildAt(FRAGMENT_EXPERT_SEARCH);*/
-
         homeSearchHeader.setTextColor(getResources().getColor(tabsSelectedColor));
-       // homeNearbyHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
-
-        //setPageChangeListenerOnTabs(tabs, tabsUnselectedColor, tabsSelectedColor, homeSearchHeader, homeNearbyHeader);
     }
 
     public View getActionBarView() {
@@ -295,56 +275,6 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
 
         }
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
-
-    private void setPageChangeListenerOnTabs(ZPagerSlidingTabStrip tabs, final int tabsUnselectedColor,
-                                             final int tabsSelectedColor, final TextView homeSearchHeader, final TextView homeNearbyHeader) {
-        tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int arg0) {
-
-                currentPageSelected = arg0;
-
-                // SearchFragment
-                if (arg0 == FRAGMENT_PRODUCT_SEARCH) {
-
-                    homeSearchHeader.setTextColor(getResources().getColor(tabsSelectedColor));
-                    homeNearbyHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
-
-                    try {
-                        ((DrawerLayout) findViewById(R.id.drawer_layout))
-                                .setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                    } catch (Exception e) {
-                    }
-
-                }
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                if (position == 0) {
-
-                    int alphaValueUnderline = (int) ((((positionOffset - 0) * (255 - 0)) / (1 - 0)) + 0);
-                    ((ZPagerSlidingTabStrip) findViewById(R.id.tabs))
-                            .setUnderlineColor(Color.argb(alphaValueUnderline, 228, 228, 228));
-
-                } else if (position > 0) {
-                    ((ZPagerSlidingTabStrip) findViewById(R.id.tabs)).setUnderlineColor(Color.argb(255, 228, 228, 228));
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
     }
 
     @Override

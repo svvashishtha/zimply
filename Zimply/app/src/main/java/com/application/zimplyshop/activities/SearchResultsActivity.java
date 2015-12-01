@@ -259,12 +259,6 @@ public class SearchResultsActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-//        toolbar.findViewById(R.id.cart_item_true).setVisibility(View.GONE);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.filter_filter_layout:
