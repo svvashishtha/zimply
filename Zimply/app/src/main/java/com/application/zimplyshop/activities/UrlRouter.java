@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
-import com.application.zimplyshop.baseobjects.HomePhotoObj;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
@@ -20,7 +19,6 @@ import java.util.List;
 public class UrlRouter extends Activity implements GetRequestListener, RequestTags, ObjectTypes {
 
     private final String TAG = "URLRouter";
-    HomePhotoObj homePhotoObj;
     Intent intent;
     String firstSegment = "";
     String thirdSegment = "";
