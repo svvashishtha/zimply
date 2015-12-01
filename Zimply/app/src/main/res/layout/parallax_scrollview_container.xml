@@ -23,38 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-<!--
-                    <RelativeLayout
-                        android:id="@+id/obp_gradient"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:background="@color/parallax_overlay_black_trans">
-
-                        <View
-                            android:id="@+id/obp_gradient_top"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true" />
-
-                        <View
-                            android:id="@+id/obp_gradient_middle"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_above="@+id/obp_gradient_bottom"
-                            android:layout_below="@+id/obp_gradient_top"
-                            android:visibility="gone" />
-
-                        <View
-                            android:id="@+id/obp_gradient_bottom"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true" />
-                    </RelativeLayout>
--->
-                </RelativeLayout>
             </FrameLayout>
         </LinearLayout>
     </com.application.zimplyshop.utils.fadingActionBar.ObservableScrollView>

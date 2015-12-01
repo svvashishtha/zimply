@@ -537,13 +537,6 @@ public class ArticleDescriptionActivity extends BaseActivity implements GetReque
 
     }
 
-    protected void onStart() {
-        super.onStart();
-        // Connect your client
-
-
-    }
-
     @Override
     protected void onStop() {
 

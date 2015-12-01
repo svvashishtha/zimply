@@ -136,11 +136,6 @@ public class AboutUsPage extends BaseActivity {
 	}
 
 	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-	}
-	
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:

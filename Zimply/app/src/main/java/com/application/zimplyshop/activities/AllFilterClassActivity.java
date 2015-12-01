@@ -83,35 +83,6 @@ public class AllFilterClassActivity extends BaseDialogFragment implements View.O
         pager.setCurrentItem(1);
     }
 
-    /*@NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Dialog dialog = new Dialog(getActivity(), R.style.HJCustomDialogTheme);
-            bundle = getArguments();
-
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            DisplayMetrics metrics = new DisplayMetrics();
-
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-            dialog.setCanceledOnTouchOutside(true);
-            dialog.setContentView(view);
-
-            dialog.getWindow().setLayout(
-                    metrics.widthPixels - 2 * getResources().getDimensionPixelSize(R.dimen.margin_large),
-                    ((4 * metrics.heightPixels) / 5));
-
-            return dialog;
-        }
-    */
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-
-    }
-
     public void setOnApplyClickListener(OnApplyClickListener listener) {
         mListener = listener;
     }
