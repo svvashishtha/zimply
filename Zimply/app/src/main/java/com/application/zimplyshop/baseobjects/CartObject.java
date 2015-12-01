@@ -54,6 +54,15 @@ public class CartObject implements Serializable {
     public class ProdctDetail implements Serializable{
         String product_id, price, cart_item_id, quantity, image, name, available_quantity, slug;
         float shipping_charge, total_price, shipping_charges;
+        boolean is_o2o;
+
+        public boolean is_o2o() {
+            return is_o2o;
+        }
+
+        public void setIs_o2o(boolean is_o2o) {
+            this.is_o2o = is_o2o;
+        }
 
         public float getIndividualTotal_price() {
             return total_price;

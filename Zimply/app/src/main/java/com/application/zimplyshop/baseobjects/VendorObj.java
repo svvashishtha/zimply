@@ -70,9 +70,9 @@ public class VendorObj implements Serializable{
     }
 
     public class LocationObj{
-        String latitude;
+        Double latitude;
 
-        String longitude;
+        Double longitude;
 
         int id;
 
@@ -80,19 +80,19 @@ public class VendorObj implements Serializable{
 
         boolean serve;
 
-        public String getLatitude() {
+        public Double getLatitude() {
             return latitude;
         }
 
-        public void setLatitude(String latitude) {
+        public void setLatitude(Double latitude) {
             this.latitude = latitude;
         }
 
-        public String getLongitude() {
+        public Double getLongitude() {
             return longitude;
         }
 
-        public void setLongitude(String longitude) {
+        public void setLongitude(Double longitude) {
             this.longitude = longitude;
         }
 

@@ -49,6 +49,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     int buyingChannel;
 
+    boolean isCoc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,17 +63,18 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             totalPrice =Double.parseDouble(getIntent().getStringExtra("total_amount"));
             addressObj = (AddressObject)getIntent().getSerializableExtra("address");
             buyingChannel = getIntent().getIntExtra("buying_channel",0);
+            isCoc = getIntent().getBooleanExtra("is_coc",false);
         }
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(buyingChannel == AppConstants.BUYING_CHANNEL_ONLINE) {
+       /* if(buyingChannel == AppConstants.BUYING_CHANNEL_ONLINE) {
             ((CustomTextView)findViewById(R.id.pay_cash_counter)).setVisibility(View.GONE);
         }else{
             ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
-        }
-
+        }*/
+        ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
         ((CustomTextView)findViewById(R.id.pay_online)).setOnClickListener(this);
 
         UploadManager.getInstance().addCallback(this);
@@ -79,7 +82,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     public void addToolbarView(Toolbar toolbar){
         View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout,toolbar,false);
-        CustomTextView textView = (CustomTextView)view.findViewById(R.id.title_textview);
+        CustomTextView textView = (CustomTextView) view.findViewById(R.id.title_textview);
         textView.setText("Choose Payment Type");
         toolbar.addView(view);
     }
@@ -117,12 +120,17 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
                 break;
             case R.id.pay_cash_counter:
-                sendPaymentSuccessFullCashRequest();
+                if(isCoc) {
+                    sendPaymentSuccessFullCashRequest();
+                }else{
+                    Toast.makeText(this,"Cash on Counter not available for one or more items. Please remove those item from cart first",Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
 
     boolean paymentSuccess;
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PayU.RESULT) {
             if (resultCode == RESULT_OK) {

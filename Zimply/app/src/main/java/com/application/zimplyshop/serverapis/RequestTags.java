@@ -64,6 +64,7 @@ public interface RequestTags {
     String REMOVE_FROM_CART = "removeFromCart";
     String GET_CITY_LIST = "citiesList";
     String GET_CART_DETAILS = "getCartDetails";
+    String GET_ORDER_SUMMARY = "getordersummary";
     String GET_CART_COMPUTATION = "getcartcomputation";
     int SAVE_ADDRESS = 101;
 }

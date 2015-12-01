@@ -13,8 +13,8 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.fragments.AddressSelectionFragment;
 import com.application.zimplyshop.fragments.BaseFragment;
-import com.application.zimplyshop.fragments.CartBaseFragment;
 import com.application.zimplyshop.fragments.EditAddressFragment;
+import com.application.zimplyshop.fragments.MyCartFragment;
 import com.application.zimplyshop.fragments.OrderSummaryFragment;
 import com.application.zimplyshop.fragments.ZFragment;
 
@@ -53,7 +53,7 @@ public class ProductCheckoutActivity extends BaseActivity {
 
     //Without BackStack
     private void setMyCartFragment(Bundle savedInstanceState) {
-        myCartFrag = CartBaseFragment.newInstance(savedInstanceState);
+        myCartFrag = MyCartFragment.newInstance(savedInstanceState);
         titleText.setText("My Cart");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myCartFrag, CART_TAG).commit();
     }
@@ -211,7 +211,6 @@ public class ProductCheckoutActivity extends BaseActivity {
         titleText.setText("Order Summary");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, orderSummaryFrag, ORDER_SUMMARY).addToBackStack(null).commit();
     }
-
 
     public void setOrderSummaryFragmentWithoutBackstack(Bundle savedInstanceState) {
         savedInstanceState.putBoolean("from_checkout", true);
