@@ -5,7 +5,19 @@
               android:background="@drawable/white_card_bg"
               android:orientation="vertical"
     >
-
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/buy_offline_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available Offline"
+        android:layout_gravity="end|right"
+        android:background="@drawable/book_btn_bg"
+        android:textSize="@dimen/z_font_mini"
+        android:paddingLeft="@dimen/margin_medium"
+        android:paddingRight="@dimen/margin_medium"
+        android:paddingTop="@dimen/margin_mini"
+        android:paddingBottom="@dimen/margin_mini"
+        android:textColor="@color/white"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +48,20 @@
                 android:text="Granite Cheese Platter"
                 android:textColor="@color/heading_text_color"
                 android:textSize="@dimen/font_large" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
 
+                <com.application.zimplyshop.widgets.CustomTextViewBold
+                    android:id="@+id/product_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="\u20B9 2434"
+                    android:textColor="@color/zhl_darkest"
+                    android:textSize="@dimen/font_medium" />
+            </LinearLayout>
             <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/expected_delivery_date"
                 android:layout_width="wrap_content"
@@ -46,7 +71,7 @@
                 android:text="@string/expected_delivery_date"
                 android:textColor="@color/text_color1"
                 android:textSize="@dimen/font_small"
-                android:visibility="invisible" />
+                android:visibility="gone" />
 
             <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/expected_delivery_date_text"
@@ -59,7 +84,7 @@
                 android:text="25 Aug 2016"
                 android:textColor="@color/zhl_darkest"
                 android:textSize="@dimen/font_mini"
-                android:visibility="invisible" />
+                android:visibility="gone" />
             <LinearLayout
                 android:id="@+id/quantity_view"
                 android:layout_width="match_parent"
@@ -130,80 +155,7 @@
                  android:layout_alignParentRight="true"
                  android:layout_alignParentBottom="true"
                  />-->
-            <TableLayout
-                android:id="@+id/table_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
 
-                android:gravity="bottom">
-
-                <TableRow>
-
-                    <com.application.zimplyshop.widgets.CustomTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:text="@string/product_price"
-                        android:textColor="@color/zhl_darkest"
-                        android:textSize="@dimen/font_medium" />
-
-                    <com.application.zimplyshop.widgets.CustomTextViewBold
-                        android:id="@+id/product_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_column="2"
-                        android:layout_marginLeft="@dimen/margin_medium"
-                        android:text="\u20B9 2434"
-                        android:textColor="@color/zhl_darkest"
-                        android:textSize="@dimen/font_medium" />
-                </TableRow>
-
-                <!--    <TableRow>
-
-                        <CustomTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_column="1"
-                            android:text="@string/discount"
-                            android:textColor="@color/green_text_color"
-                            android:textSize="@dimen/font_medium" />
-
-                        <CustomTextView
-                            android:id="@+id/discount_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_column="2"
-                            android:gravity="right"
-                            android:layout_marginLeft="@dimen/margin_medium"
-                            android:text="\u20B9 500"
-                            android:textColor="@color/green_text_color"
-                            android:textSize="@dimen/font_medium" />
-                    </TableRow>-->
-
-
-                <!--    <TableRow>
-
-                        <CustomTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_column="1"
-                            android:text="@string/shipping_charges"
-                            android:textColor="@color/zhl_darkest"
-                            android:textSize="@dimen/font_medium" />
-
-                        <CustomTextView
-                            android:id="@+id/shipping_charges_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_column="2"
-                            android:layout_marginLeft="@dimen/margin_medium"
-                            android:text="\u20B9 500"
-                            android:gravity="right"
-                            android:textColor="@color/zhl_darkest"
-                            android:textSize="@dimen/font_medium" />
-                    </TableRow>-->
-            </TableLayout>
 
         </LinearLayout>
 
@@ -215,6 +167,91 @@
             android:src="@drawable/ic_cross" />
 
     </LinearLayout>
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/is_coc_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small"
+        android:textColor="@color/text_color1"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/font_medium" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color"></View>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small">
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Subtotal"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
 
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/subtotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="10000"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small">
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Shipping"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/shipping_charges"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="6.99"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small">
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Total"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/total_payment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="6.99"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
 
 </LinearLayout>

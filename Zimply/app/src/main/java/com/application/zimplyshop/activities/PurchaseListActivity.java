@@ -3,6 +3,7 @@ package com.application.zimplyshop.activities;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +43,8 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
 
     RecyclerView orderList;
     private boolean fromHome = false;
+
+    boolean backstackRemoved;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
         orderList = (RecyclerView)findViewById(R.id.categories_list);
         orderList.setLayoutManager(new LinearLayoutManager(this));
         orderList.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small)));
+        backstackRemoved = getIntent().getBooleanExtra("backstack_removed",false);
         GetRequestManager.getInstance().addCallbacks(this);
         UploadManager.getInstance().addCallback(this);
         setLoadingVariables();
@@ -223,6 +227,15 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
                 Toast.makeText(this,"Could not process request.Please try again",Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(backstackRemoved){
+            Intent intent = new Intent(this,HomeActivity.class);
+            startActivity(intent);
+        }
+        super.onBackPressed();
     }
 
     ProgressDialog dialog;

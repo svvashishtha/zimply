@@ -101,7 +101,7 @@ public class MapPage extends BaseActivity implements ZLocationCallback{
         View view = LayoutInflater.from(this).inflate(
                 R.layout.common_toolbar_text_layout, null);
         TextView titleText = (TextView) view.findViewById(R.id.title_textview);
-        titleText.setText("Product Demo");
+        titleText.setText(name);
         toolbar.addView(view);
     }
 
@@ -284,6 +284,8 @@ public class MapPage extends BaseActivity implements ZLocationCallback{
             }
         }
     }
+
+
 
 
 }

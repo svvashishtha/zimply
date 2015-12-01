@@ -49,66 +49,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            >
-            <com.application.zimplyshop.widgets.CustomTextView
-                android:id="@+id/book_store_visit"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/z_item_height_48"
-                android:text="Book Store Visit"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_medium"
-                android:background="@drawable/book_btn_bg"/>
-            <com.application.zimplyshop.widgets.CustomTextView
-                android:id="@+id/empty_btn"
-                android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="@dimen/z_item_height_48"
-                android:background="@drawable/round_book_btn_bg"/>
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="@dimen/size45"
-                android:layout_height="@dimen/size45"
-                android:layout_gravity="center"
-                android:max="100"
-                android:progress="0"
-                android:rotation="-90"
-                android:visibility="gone"
-                android:progressDrawable="@drawable/circle_progress_background" />
-
-            <ImageView
-                android:id="@+id/cross_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_cross"
-                android:visibility="gone"
-                android:scaleType="centerInside"
-                android:layout_gravity="center"/>
-            <ProgressBar
-                android:id="@+id/book_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:progressDrawable="@drawable/progressbar_layerlist" />
-            <include layout="@layout/product_detail_booking_confirm_card"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:visibility="gone"/>
-        </FrameLayout>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="horizontal">
             <com.application.zimplyshop.widgets.CustomTextView
-                android:id="@+id/buy_offline"
+                android:id="@+id/add_to_cart"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="@dimen/z_item_height_48"
@@ -120,7 +68,7 @@
                 android:textColor="@color/heading_text_color" />
 
             <com.application.zimplyshop.widgets.CustomTextView
-                android:id="@+id/add_to_cart"
+                android:id="@+id/buy_now"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/z_item_height_48"
                 android:layout_weight="1"

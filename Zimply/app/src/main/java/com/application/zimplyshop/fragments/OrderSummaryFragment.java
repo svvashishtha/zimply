@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
@@ -30,6 +31,9 @@ import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
+import com.application.zimplyshop.widgets.CartSpaceItemDecoration;
+import com.application.zimplyshop.widgets.CustomTextView;
+import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.payu.sdk.PayU;
 
 import org.apache.http.NameValuePair;
@@ -62,6 +66,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     int buyingChannel=-1;
 
+    String productIds,quantity;
 
     public static OrderSummaryFragment newInstance(Bundle bundle) {
         if(fragment == null) {
@@ -70,10 +75,11 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         fragment.setArguments(bundle);
         return fragment;
     }
-
+    LinearLayout buyLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.order_summary_fragment, container, false);
+        buyLayout = (LinearLayout)view.findViewById(R.id.payment_layout);
         return view;
     }
 
@@ -113,8 +119,14 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                     shippingAddress = (AddressObject) getArguments().getSerializable("addressShipping");
                 if(getArguments().containsKey("cartObject"))
                     cartObject = (CartObject) getArguments().getSerializable("cartObject");
+
             }
         }
+        if(getArguments()!=null){
+            productIds = getArguments().getString("productids");
+            quantity = getArguments().getString("quantity");
+        }
+
         isDestroyed = false;
 
         GetRequestManager.getInstance().addCallbacks(this);
@@ -124,6 +136,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         mListView = (RecyclerView) view.findViewById(R.id.orders_listview);
         linearLayoutManager = new LinearLayoutManager(mActivity == null ? getActivity() : mActivity);
         mListView.setLayoutManager(linearLayoutManager);
+        mListView.addItemDecoration(new CartSpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small)));
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
 
@@ -157,13 +170,9 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     }
 
     private void loadCartData() {
-        String url = AppApplication.getInstance().getBaseUrl() + GET_CART_URL + "?src=mob&userid=" + AppPreferences.getUserID(mActivity)+"&buying_channel="+buyingChannel;
-        ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(getActivity()), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+        String url = AppApplication.getInstance().getBaseUrl() + GET_ORDER_SUMMARY_URL+"?ids="+productIds+"&quantity="+quantity;
 
-        if (objs != null) {
-            url += "&ids=" + getProductIdStrings(objs) + "&quantity=" + getProductQuantityString(objs)+"&buying_channels="+getProductBuyingChannels(objs);
-        }
-        GetRequestManager.getInstance().makeAyncRequest(url, GET_CART_DETAILS, OBJECT_TYPE_CART);
+        GetRequestManager.getInstance().makeAyncRequest(url, GET_ORDER_SUMMARY, OBJECT_TYPE_CART);
     }
 
     public String getProductQuantityString(ArrayList<NonLoggedInCartObj> objs) {
@@ -229,13 +238,16 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 // view.findViewById(R.id.save).setVisibility(View.GONE);
                 showLoadingView();
                 changeViewVisiblity(mListView, View.GONE);
+                changeViewVisiblity(buyLayout,View.GONE);
             }
-        } else if (requestTag != null && requestTag.equals(GET_CART_DETAILS)) {
+        } else if (requestTag != null && requestTag.equals(GET_ORDER_SUMMARY)) {
             showLoadingView();
             changeViewVisiblity(mListView, View.GONE);
+            changeViewVisiblity(buyLayout,View.GONE);
             //view.findViewById(R.id.save).setVisibility(View.GONE);
         }
     }
+
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
@@ -258,13 +270,15 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             } else {
                 nextFragmentWithoutStack();
             }
-        } else if (requestTag != null && requestTag.equals(GET_CART_DETAILS)) {
+        } else if (requestTag != null && requestTag.equals(GET_ORDER_SUMMARY)) {
             if (zProgressDialog != null)
                 zProgressDialog.dismiss();
 
             if(((CartObject) obj).getCart().getDetail().size()>0){
                 showView();
-                changeViewVisiblity(mListView,View.VISIBLE);
+                changeViewVisiblity(mListView, View.VISIBLE);
+                changeViewVisiblity(buyLayout,View.VISIBLE);
+
                 cartObject = (CartObject) obj;
                 if(!AppPreferences.isUserLogIn(getActivity()))
                     GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), null, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
@@ -272,7 +286,8 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 AllProducts.getInstance().setCartCount(getCartQuantity());
             }else{
                 showNullCaseView("No Items");
-                changeViewVisiblity(mListView,View.GONE);
+                changeViewVisiblity(mListView, View.GONE);
+                changeViewVisiblity(buyLayout,View.GONE);
             }
 
         } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART)) {
@@ -307,7 +322,8 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                     }else {
                         cartObject.getCart().getDetail().remove(quantityUpdatePosition);
                         showNullCaseView("No items in cart");
-                        changeViewVisiblity(mListView,View.GONE);
+                        changeViewVisiblity(mListView, View.GONE);
+                        changeViewVisiblity(buyLayout,View.GONE);
                     }
 
 
@@ -342,13 +358,17 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
+
         if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !isDestroyed) {
             {
                 Toast.makeText(mActivity, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestTag != null && requestTag.equals(GET_CART_DETAILS)) {
+        } else if (requestTag != null && requestTag.equals(GET_ORDER_SUMMARY)) {
             showNetworkErrorView();
             // changeViewVisiblity(view.findViewById(R.id.save), View.GONE);
+        }else if(requestTag!=null && requestTag.equalsIgnoreCase(REMOVE_FROM_CART)&& !isDestroyed){
+            if(zProgressDialog!=null)
+                zProgressDialog.dismiss();
         }
     }
 
@@ -362,10 +382,20 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             intent.putExtra("email",shippingAddress.getEmail());
             intent.putExtra("address",shippingAddress);
             intent.putExtra("buying_channel",buyingChannel);
+            intent.putExtra("is_coc",isCoc());
             startActivity(intent);
 
 
         }
+    }
+
+    public boolean isCoc(){
+        for(int i = 0;i<cartObject.getCart().getDetail().size();i++){
+            if(!cartObject.getCart().getDetail().get(i).is_o2o()){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void nextFragmentWithoutStack() {
@@ -433,6 +463,13 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             }
         });
         mListView.setAdapter(mAdapter);
+        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total " + getResources().getString(R.string.rs_text) + " " + cartObject.getCart().getTotal_price());
+        ((CustomTextView)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendOrderPlaceRequest();
+            }
+        });
     }
 
     @Override
@@ -495,6 +532,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             } else if (requestType == PLACE_ORDER_REQUEST_TAG) {
                 if(status){
                     orderId = JSONUtils.getStringfromJSON(((JSONObject) response), "order_id");
+
                     nextFragment();
                 }else{
                     Toast.makeText(getActivity() , "Could not place order. Try again",Toast.LENGTH_SHORT).show();
@@ -569,6 +607,9 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PLACE_ORDER_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
+        list.add(new BasicNameValuePair("src","mob"));
+        list.add(new BasicNameValuePair("ids",productIds));
+        list.add(new BasicNameValuePair("quantity",quantity));
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
         list.add(new BasicNameValuePair("billing_address", billingAddress.getName() + ", " + billingAddress.getLine1() +
                 ", " + billingAddress.getLine2() + ", " + billingAddress.getCity() + ", " + billingAddress.getPincode()));

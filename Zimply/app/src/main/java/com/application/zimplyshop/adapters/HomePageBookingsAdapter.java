@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
+import com.application.zimplyshop.activities.MapPage;
 import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.utils.TimeUtils;
@@ -49,8 +48,8 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        ((BookingHolder)holder).productName.setText(objs.get(position).getProduct().getName());
-        ((BookingHolder)holder).productPrice.setText(mContext.getString(R.string.rs_text) + objs.get(position).getProduct().getPrice());
+        ((BookingHolder)holder).productName.setText("Zi Store");
+        ((BookingHolder)holder).productPrice.setText(objs.get(position).getVendor().getCompany_name());
         new ImageLoaderManager((HomeActivity)mContext).setImageFromUrl(objs.get(position).getProduct().getImage(), ((BookingHolder) holder).productImg, "users", mContext.getResources().getDimensionPixelSize(R.dimen.sub_cat_img_size), mContext.getResources().getDimensionPixelSize(R.dimen.sub_cat_img_size), false, false);
         ((BookingHolder)holder).visitTime.setText("* Visit before" + TimeUtils.getTimeStampDate(objs.get(position).getVisit_date(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY) + ", 9 PM");
         ((BookingHolder)holder).callCustomer.setOnClickListener(new View.OnClickListener() {
@@ -64,16 +63,20 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
         ((BookingHolder)holder).checkLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,"Vendor LAT LONG not available",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, MapPage.class);
+                intent.putExtra("lat",objs.get(position).getVendor().getReg_add().getLocation().getLatitude());
+                intent.putExtra("lon", objs.get(position).getVendor().getReg_add().getLocation().getLongitude());
+                intent.putExtra("name", objs.get(position).getVendor().getCompany_name());
+                mContext.startActivity(intent);
             }
         });
         ((BookingHolder)holder).productCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ProductDetailsActivity.class);
+               /* Intent intent = new Intent(mContext, ProductDetailsActivity.class);
                 intent.putExtra("slug", objs.get(position).getProduct().getSlug());
                 intent.putExtra("id", objs.get(position).getProduct().getId());
-                mContext.startActivity(intent);
+                mContext.startActivity(intent);*/
             }
         });
     }

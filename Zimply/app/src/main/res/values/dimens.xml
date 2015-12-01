@@ -191,6 +191,6 @@
 
     <dimen name="booking_card_height">144dp</dimen>
 
-
+    <dimen name="product_detail_padding_bottom">172dp</dimen>
 
 </resources>

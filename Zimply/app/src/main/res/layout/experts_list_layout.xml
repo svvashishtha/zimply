@@ -12,8 +12,40 @@
         android:clipToPadding="false"
         android:paddingTop="@dimen/margin_small"
         android:background="@color/pager_bg"
-        android:paddingBottom="@dimen/margin_medium">
+        android:paddingBottom="@dimen/pro_image_size">
     </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/payment_layout"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:background="@drawable/ic_card_bg"
+        android:padding="@dimen/margin_small"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:id="@+id/total_amount"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:textColor="@color/heading_text_color"
+            android:textStyle="bold"/>
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/buy_btn"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_xxlarge"
+            android:paddingRight="@dimen/margin_xxlarge"
+            android:layout_height="@dimen/z_item_height_48"
+            android:background="@drawable/orange_btn_bg"
+            android:text="Buy"
+            android:textSize="@dimen/font_medium"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
 
     <include layout="@layout/progress_layout" />
 

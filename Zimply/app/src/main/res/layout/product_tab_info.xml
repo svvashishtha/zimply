@@ -4,8 +4,8 @@
               android:id="@+id/base_parent_layout"
               android:layout_height="match_parent"
               android:background="@color/zhl"
+              android:paddingBottom="@dimen/product_detail_padding_bottom"
               android:orientation="vertical">
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/product_thumb_icons"
@@ -53,7 +53,61 @@
             android:layout_marginRight="@dimen/margin_small"
             android:src="@drawable/fav_bigger_bg"/>
     </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        >
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/book_store_visit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/z_item_height_48"
+            android:text="Book Store Visit"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_medium"
+            android:background="@drawable/book_btn_bg"/>
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/empty_btn"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="@dimen/z_item_height_48"
+            android:background="@drawable/round_book_btn_bg"/>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="@dimen/size50"
+            android:layout_height="@dimen/size50"
+            android:layout_gravity="center"
+            android:padding="@dimen/margin_mini"
+            android:max="100"
+            android:progress="0"
+            android:rotation="-90"
+            android:visibility="gone"
+            android:progressDrawable="@drawable/circle_progress_background" />
+
+        <ImageView
+            android:id="@+id/cross_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_cross"
+            android:visibility="gone"
+            android:scaleType="centerInside"
+            android:layout_gravity="center"/>
+        <ProgressBar
+            android:id="@+id/book_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:progressDrawable="@drawable/progressbar_layerlist" />
+        <include layout="@layout/product_detail_booking_confirm_card"
+                 android:layout_width="wrap_content"
+                 android:id="@+id/booking_confirm_card"
+                 android:layout_height="wrap_content"
+                 android:visibility="gone"/>
+    </FrameLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

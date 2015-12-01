@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,8 @@ import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
+import com.application.zimplyshop.widgets.CustomTextView;
+import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
 
 import org.apache.http.NameValuePair;
@@ -51,7 +54,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
     int quantityUpdatePosition = -1, updatedQuantity = -1;
     private ProgressDialog zProgressDialog;
 
-    int buyingChannel;
+    LinearLayout buyLayout;
 
     public static MyCartFragment newInstance(Bundle bundle) {
         MyCartFragment fragment = new MyCartFragment();
@@ -66,6 +69,8 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
         cartList = (RecyclerView) view.findViewById(R.id.experts_list);
         cartList.setLayoutManager(new LinearLayoutManager(getActivity()));
         cartList.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small), true));
+        buyLayout = (LinearLayout)view.findViewById(R.id.payment_layout);
+
         setLoadingVariables();
         return view;
     }
@@ -82,7 +87,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         bundle = getArguments();
-        buyingChannel = getArguments().getInt("buying_channel");
+
         UploadManager.getInstance().addCallback(this);
         GetRequestManager.getInstance().addCallbacks(this);
 
@@ -124,8 +129,8 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
     public void loadCartComputation(){
         ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj> )GetRequestManager.Request(AppPreferences.getDeviceID(getActivity()),RequestTags.NON_LOGGED_IN_CART_CACHE,GetRequestManager.CONSTANT);
         if(objs!=null && objs.size()>0){
-            String url = AppApplication.getInstance().getBaseUrl()+AppConstants.GET_CART_COMPUTATION+"?src=mob"+"&ids="+getProductIdStrings(objs)+"&quantity="+getProductQuantityString(objs)+"&buying_channels="+getProductBuyingChannels(objs)+"&buying_channel="+buyingChannel;
-            GetRequestManager.getInstance().makeAyncRequest(url ,RequestTags.GET_CART_COMPUTATION+buyingChannel,OBJECT_TYPE_CART);
+            String url = AppApplication.getInstance().getBaseUrl()+AppConstants.GET_CART_COMPUTATION+"?src=mob"+"&ids="+getProductIdStrings(objs)+"&quantity="+getProductQuantityString(objs)+"&buying_channels="+getProductBuyingChannels(objs);
+            GetRequestManager.getInstance().makeAyncRequest(url ,RequestTags.GET_CART_COMPUTATION,OBJECT_TYPE_CART);
         }else{
             showNullCaseView("No items in cart");
             changeViewVisiblity(cartList,View.GONE);
@@ -139,12 +144,12 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
     }
 
     public void loadData() {
-        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_CART_URL + "?src=mob&userid=" + AppPreferences.getUserID(getActivity())+"&buying_channel="+buyingChannel;
+        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_CART_URL + "?src=mob&userid=" + AppPreferences.getUserID(getActivity());
         ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>)GetRequestManager.Request(AppPreferences.getDeviceID(getActivity()),RequestTags.NON_LOGGED_IN_CART_CACHE,GetRequestManager.CONSTANT);
         if(objs!=null){
             url+="&ids="+getProductIdStrings(objs)+"&quantity="+getProductQuantityString(objs)+"&buying_channels="+getProductBuyingChannels(objs);
         }
-        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.GET_CART_DETAILS + buyingChannel, OBJECT_TYPE_CART);
+        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.GET_CART_DETAILS , OBJECT_TYPE_CART);
 
     }
 
@@ -164,9 +169,10 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag.equalsIgnoreCase(GET_CART_DETAILS + buyingChannel) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION + buyingChannel)) {
+        if (requestTag.equalsIgnoreCase(GET_CART_DETAILS) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION )) {
             showLoadingView();
             changeViewVisiblity(cartList, View.GONE);
+            changeViewVisiblity(buyLayout, View.GONE);
         }
     }
 
@@ -175,36 +181,26 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
         if (zProgressDialog != null)
             zProgressDialog.dismiss();
 
-        if (requestTag.equalsIgnoreCase(GET_CART_DETAILS+buyingChannel) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION+buyingChannel)) {
+        if (requestTag.equalsIgnoreCase(GET_CART_DETAILS) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION)) {
             if(((CartObject) obj).getCart().getDetail()!=null && ((CartObject) obj).getCart().getDetail().size()>0 ) {
                 showView();
+                changeViewVisiblity(buyLayout,View.VISIBLE);
                 changeViewVisiblity(cartList, View.VISIBLE);
                 cartObject = (CartObject) obj;
                 setAdapterData(cartObject);
-                if(buyingChannel == BUYING_CHANNEL_OFFLINE){
-                    AllProducts.getInstance().setOffineCartCount(getCartQuantity());
-                }else{
-                    AllProducts.getInstance().setOnlineCartCount(getCartQuantity());
-                }
-
-                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getOffineCartCount()+AllProducts.getInstance().getOnlineCartCount());
+                AllProducts.getInstance().setCartCount(getCartQuantity());
             }else{
                 showNullCaseView("No Items in cart");
                 changeViewVisiblity(cartList, View.GONE);
-                if(buyingChannel == BUYING_CHANNEL_OFFLINE){
-                    AllProducts.getInstance().setOffineCartCount(0);
-                }else{
-                    AllProducts.getInstance().setOnlineCartCount(0);
-                }
-
-                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getOffineCartCount()+AllProducts.getInstance().getOnlineCartCount());
+                changeViewVisiblity(buyLayout,View.GONE);
+                AllProducts.getInstance().setCartCount(getCartQuantity());
             }
 
-            if(requestTag.equalsIgnoreCase(GET_CART_DETAILS+buyingChannel)){
+            if(requestTag.equalsIgnoreCase(GET_CART_DETAILS)){
                 GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), null, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
             }
 
-        } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART+buyingChannel)) {
+        } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART)) {
             JSONObject jsonObject = (JSONObject) obj;
             try {
                 String message = jsonObject.getString("success");
@@ -233,6 +229,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                     cartObject.getCart().getDetail().remove(quantityUpdatePosition);
                     showNullCaseView("No items in cart");
                     changeViewVisiblity(cartList, View.GONE);
+                    changeViewVisiblity(buyLayout,View.GONE);
                 }
 
 
@@ -251,8 +248,9 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if (requestTag.equalsIgnoreCase(GET_CART_DETAILS+buyingChannel) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION+buyingChannel)) {
+        if (requestTag.equalsIgnoreCase(GET_CART_DETAILS) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION)) {
             showNullCaseView("No items");
+            changeViewVisiblity(buyLayout, View.GONE);
         }
         if (zProgressDialog != null)
             zProgressDialog.dismiss();
@@ -267,6 +265,27 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
     }
 
+    public String getProductIdStringsFromCart(){
+        StringBuilder s = new StringBuilder();
+        for(int i=0;i<cartObject.getCart().getDetail().size();i++){
+            s.append(cartObject.getCart().getDetail().get(i).getProduct_id()+"");
+            if(i!= cartObject.getCart().getDetail().size()-1) {
+                s.append(".");
+            }
+        }
+        return s.toString();
+    }
+    public String getProductQuantityStringsFromCart(){
+        StringBuilder s = new StringBuilder();
+        for(int i=0;i<cartObject.getCart().getDetail().size();i++){
+            s.append(cartObject.getCart().getDetail().get(i).getQuantity()+"");
+            if(i!= cartObject.getCart().getDetail().size()-1) {
+                s.append(".");
+            }
+        }
+        return s.toString();
+    }
+
     public void setAdapterData(CartObject obj) {
         MyCartAdapter adapter = new MyCartAdapter(getActivity(), obj);
         cartList.setAdapter(adapter);
@@ -274,6 +293,9 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
             @Override
             public void checkOut(int position) {
                 if (getActivity() != null && AppPreferences.isUserLogIn(getActivity())) {
+
+                    bundle.putString("productids", getProductIdStringsFromCart());
+                    bundle.putString("quantity",getProductQuantityStringsFromCart());
                     ((ProductCheckoutActivity) getActivity()).setOrderSummaryFragmentWithBackstack(bundle);
                 } else {
                     Intent intent = new Intent(getActivity(), BaseLoginSignupActivity.class);
@@ -291,7 +313,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(mActivity)));
                 quantityUpdatePosition = position;
                 updatedQuantity = quantity;
-                UploadManager.getInstance().makeAyncRequest(url, QUANTITY_UPDATE+buyingChannel, cartObject.getCart().getDetail().get(position).getSlug(),
+                UploadManager.getInstance().makeAyncRequest(url, QUANTITY_UPDATE, cartObject.getCart().getDetail().get(position).getSlug(),
                         OBJECT_ADD_TO_CART, null, nameValuePair, null);
 
             }
@@ -318,6 +340,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
                     }
                     loadCartComputation();
+
                     //cartObject.getCart().getDetail().remove(position);
                     // setAdapterData(cartObject);
                 } else {
@@ -325,13 +348,29 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                     String url = AppApplication.getInstance().getBaseUrl() +
                             "ecommerce/remove-cart/" + cartObject.getCart().getDetail().get(position).getCart_item_id() + "/";
                     quantityUpdatePosition = position;
-                    GetRequestManager.getInstance().makeAyncRequest(url, REMOVE_FROM_CART+buyingChannel, OBJECT_TYPE_ITEM_REMOVED);
+                    GetRequestManager.getInstance().makeAyncRequest(url, REMOVE_FROM_CART , OBJECT_TYPE_ITEM_REMOVED);
                 }
             }
 
             @Override
             public void changeAddress() {
 
+            }
+        });
+
+        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total " + getResources().getString(R.string.rs_text)+" "+obj.getCart().getTotal_price());
+        ((CustomTextView)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null && AppPreferences.isUserLogIn(getActivity())) {
+                    bundle.putString("productids", getProductIdStringsFromCart());
+                    bundle.putString("quantity",getProductQuantityStringsFromCart());
+                    ((ProductCheckoutActivity) getActivity()).setOrderSummaryFragmentWithBackstack(bundle);
+                } else {
+                    Intent intent = new Intent(getActivity(), BaseLoginSignupActivity.class);
+                    intent.putExtra("inside", true);
+                    getActivity().startActivity(intent);
+                }
             }
         });
     }

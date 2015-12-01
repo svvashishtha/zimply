@@ -43,8 +43,11 @@ public class PostPaymentThankYouActivity extends ActionBarActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(PostPaymentThankYouActivity.this,
                             PurchaseListActivity.class);
-                    startActivity(intent);
+                    intent.putExtra("backstack_removed",true);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     finish();
+                    startActivity(intent);
+
                 }
             });
         }else{

@@ -43,6 +43,7 @@ import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
+import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
 import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -164,7 +165,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                         checkPincodeAvailabilty(((EditText) findViewById(R.id.pincode)).getText().toString());
                     } else {
                         showToast("Please enter a valid pincode");
-                      //  Toast.makeText(ProductDetailsActivity.this, "Please enter a valid pincode", Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(ProductDetailsActivity.this, "Please enter a valid pincode", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -240,9 +241,15 @@ public class ProductDetailsActivity extends ActionBarActivity
         bookAVisitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bookAVisitBtn.setVisibility(View.GONE);
-                emptyBtn.setVisibility(View.VISIBLE);
-                scaleView(emptyBtn, 1f, 0.15f,true);
+                if (AppPreferences.isUserLogIn(ProductDetailsActivity.this)) {
+                    bookAVisitBtn.setVisibility(View.GONE);
+                    emptyBtn.setVisibility(View.VISIBLE);
+                    scaleView(emptyBtn, 1f, 0.15f, true);
+                } else {
+                    Intent intent = new Intent(ProductDetailsActivity.this, BaseLoginSignupActivity.class);
+                    intent.putExtra("inside", true);
+                    startActivity(intent);
+                }
             }
         });
         addToCart.setOnClickListener(new View.OnClickListener() {
@@ -250,136 +257,96 @@ public class ProductDetailsActivity extends ActionBarActivity
             public void onClick(View v) {
                 if (isLoading) {
                     showToast("Please wait while loading..");
-                   // Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
                 } else {
                     if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
 
-                        if (isScannedProduct) {
-                            Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckoutActivity.class);
-                            intent.putExtra("OrderSummaryFragment", false);
-                            intent.putExtra("buying_channel",BUYING_CHANNEL_OFFLINE);
-                            startActivity(intent);
+                        String userId = AppPreferences.getUserID(mContext);
+                        if (AppPreferences.isUserLogIn(ProductDetailsActivity.this)) {
+                            if (!(addToCart.getText().toString().equalsIgnoreCase("Go To Cart"))) {
+                                isOfflinePurchase = false;
+                                String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                                List<NameValuePair> nameValuePair = new ArrayList<>();
+                                nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE+""));
+                                nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
+                                nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+                                nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(mContext)));
+
+                                UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, product.getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+
+                            } else {
+                                Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckoutActivity.class);
+                                intent.putExtra("OrderSummaryFragment", false);
+                                intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
+                                startActivity(intent);
+                            }
+
                         } else {
 
-                            String userId = AppPreferences.getUserID(mContext);
-                            if (AppPreferences.isUserLogIn(ProductDetailsActivity.this)) {
-                                if (!(addToCart.getText().toString().equalsIgnoreCase("Go To Cart"))) {
-                                    isOfflinePurchase = false;
-                                    String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
-                                    List<NameValuePair> nameValuePair = new ArrayList<>();
-                                    nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE+""));
-                                    nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
-                                    nameValuePair.add(new BasicNameValuePair("quantity", "1"));
-                                    nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(mContext)));
-
-                                    UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, product.getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+                            if (!(addToCart.getText().toString().equalsIgnoreCase("Go To Cart"))) {
+                                ArrayList<NonLoggedInCartObj> oldObj = ((ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(ProductDetailsActivity.this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT));
+                                if (oldObj == null) {
+                                    oldObj = new ArrayList<NonLoggedInCartObj>();
+                                }
+                                NonLoggedInCartObj item = new NonLoggedInCartObj(productId + "", 1,BUYING_CHANNEL_ONLINE);
+                                if (oldObj.contains(item)) {
+                                    showToast("Already added to cart");
+                                    //Toast.makeText(mContext, "Already added to cart", Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckoutActivity.class);
-                                    intent.putExtra("OrderSummaryFragment", false);
-                                    intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
-                                    startActivity(intent);
+                                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                                    checkCartCount();
+                                    ((CustomTextView)findViewById(R.id.add_to_cart)).setText("Go To Cart");
+                                    oldObj.add(item);
+                                    GetRequestManager.Update(AppPreferences.getDeviceID(mContext), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                                    showToast("Successfully added to cart");
+                                    //  Toast.makeText(mContext, "Successfully added to cart", Toast.LENGTH_SHORT).show();
                                 }
 
                             } else {
-
-                                if (!(addToCart.getText().toString().equalsIgnoreCase("Go To Cart"))) {
-                                    ArrayList<NonLoggedInCartObj> oldObj = ((ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(ProductDetailsActivity.this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT));
-                                    if (oldObj == null) {
-                                        oldObj = new ArrayList<NonLoggedInCartObj>();
-                                    }
-                                    NonLoggedInCartObj item = new NonLoggedInCartObj(productId + "", 1,BUYING_CHANNEL_ONLINE);
-                                    if (oldObj.contains(item)) {
-                                        showToast("Already added to cart");
-                                        //Toast.makeText(mContext, "Already added to cart", Toast.LENGTH_SHORT).show();
-
-                                    } else {
-                                        AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
-                                        checkCartCount();
-
-                                        oldObj.add(item);
-                                        GetRequestManager.Update(AppPreferences.getDeviceID(mContext), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
-                                        showToast("Successfully added to cart");
-                                        //  Toast.makeText(mContext, "Successfully added to cart", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                } else {
-                                    Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckoutActivity.class);
-                                    intent.putExtra("OrderSummaryFragment", false);
-                                    intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
-                                    startActivity(intent);
-                                }
+                                Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckoutActivity.class);
+                                intent.putExtra("OrderSummaryFragment", false);
+                                intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
+                                startActivity(intent);
                             }
                         }
+
                     } else {
                         showToast("No network available");
-                       // Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
 
 
-        findViewById(R.id.buy_offline).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.buy_now).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isLoading) {
                     showToast("Please wait while loading..");
-                   // Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(ProductDetailsActivity.this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (isScannedProduct) {
-                        ProductDetailsActivity.this.finish();
+
+                    if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
+
+                        if(AppPreferences.isUserLogIn(ProductDetailsActivity.this)){
+                            Intent intent =new Intent(ProductDetailsActivity.this,ProductCheckoutActivity.class);
+                            intent.putExtra("OrderSummaryFragment", true);
+                            intent.putExtra("productids",product.getId()+"");
+                            intent.putExtra("quantity","1");
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(ProductDetailsActivity.this, BaseLoginSignupActivity.class);
+                            intent.putExtra("inside", true);
+                            startActivity(intent);
+                        }
+
                     } else {
-                        if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
-                                /*Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                                intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                                PackageManager packageMgr = getPackageManager();
-                                List<ResolveInfo> activities = packageMgr.queryIntentActivities(intent, 0);
-                                if (activities.size() > 0) {
-                                    startActivityForResult(intent, 0);
-                                } else {
-                                    Toast.makeText(ProductDetailsActivity.this ,"Barcode scanner is not available in your device",Toast.LENGTH_SHORT ).show();
-
-                                }*/
-                            /*Intent intent = new Intent(ProductDetailsActivity.this, BarcodeScannerActivity.class);
-                            startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);*/
-                            /*Intent intent = new Intent(ProductDetailsActivity.this, ProductDemoActivity.class);
-                            startActivity(intent);*/
-                            if(AppPreferences.isUserLogIn(ProductDetailsActivity.this)){
-                        if(((TextView) findViewById(R.id.buy_offline)).getText().toString().equalsIgnoreCase("Visit Booked")){
-
-                        }else {
-                            final AlertDialog logoutDialog;
-                            logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this)
-                                    .setTitle("Confirm Booking")
-                                    .setMessage(getString(R.string.confirm_booking_message))
-                                    .setPositiveButton("Confirm",
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    makeProductPreviewRequest();
-                                                }
-                                            }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    dialog.dismiss();
-                                                }
-                                            }).create();
-                            logoutDialog.show();
-                        }
-                            }else{
-                                Intent intent = new Intent(ProductDetailsActivity.this, BaseLoginSignupActivity.class);
-                                intent.putExtra("inside", true);
-                                startActivity(intent);
-                            }
-
-
-                        } else {
-                            showToast("No network available");
-                            //Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
-                        }
+                        showToast("No network available");
+                        //Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
                     }
+
                 }
             }
         });
@@ -436,10 +403,10 @@ public class ProductDetailsActivity extends ActionBarActivity
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if(isAnimateIn) {
+                if (isAnimateIn) {
                     startProgressBarLayout();
-                }else{
-                   // v.setVisibility(View.GONE);
+                } else {
+                    // v.setVisibility(View.GONE);
                     showBookBtnNormal();
                 }
             }
@@ -457,7 +424,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         bookAVisitBtn.setVisibility(View.VISIBLE);
         emptyBtn.setVisibility(View.INVISIBLE);
     }
-    int seconds = 60;
+    int seconds = 30;
 
     public void startProgressBarLayout(){
         if(!isDestroyed) {
@@ -482,16 +449,16 @@ public class ProductDetailsActivity extends ActionBarActivity
                             if (!destroyed) {
                                 seconds -= 1;
                                 if (seconds <= 0) {
-                                    seconds = 60;
+                                    seconds = 30;
                                     timer.cancel();
                                     crossImg.setVisibility(View.GONE);
                                     bookVisitProgress.setVisibility(View.GONE);
-                                   // emptyBtn.setVisibility(View.GONE);
+                                    // emptyBtn.setVisibility(View.GONE);
                                     findViewById(R.id.book_progress).setVisibility(View.VISIBLE);
                                     makeProductPreviewRequest();
 
                                 } else {
-                                    bookVisitProgress.setProgress(100 - ((seconds*100)/60));
+                                    bookVisitProgress.setProgress(100 - ((seconds*100)/30));
                                 }
 
                             }
@@ -505,7 +472,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 @Override
                 public void onClick(View v) {
                     timer.cancel();
-                    seconds=60;
+                    seconds=30;
                     bookVisitProgress.setVisibility(View.GONE);
                     crossImg.setVisibility(View.GONE);
                     emptyBtn.setVisibility(View.VISIBLE);
@@ -532,7 +499,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             GetRequestManager.getInstance().makeAyncRequest(url, CHECKPINCODEREQUESTTAG, ObjectTypes.OBJECT_TYPE_CHECK_PINCODE);
         } else {
             showToast( "No network available");
-          //  Toast.makeText(this, "No network available", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(this, "No network available", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -651,7 +618,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 restPageContent.findViewById(R.id.product_page_content).setVisibility(View.VISIBLE);
 
                 showView();
-                 setUpIndexingApi();
+                setUpIndexingApi();
             } else {
                 showNullCaseView("No Info Available");
             }
@@ -681,13 +648,13 @@ public class ProductDetailsActivity extends ActionBarActivity
         if (requestTag != null && requestTag.equals(RequestTags.GET_USER_DATA) && !destroyed) {
             showNetworkErrorView();
             if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
-              // Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                 showToast("Something went wrong. Please try again");
             }else {
                 // Toast.makeText(ProductDetailsActivity.this, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
                 showToast("Something went wrong. Please try again");
             }
-                isLoading = false;
+            isLoading = false;
         }
         if (requestTag != null && requestTag.equals(PRODUCT_DETAIL_REQUEST_TAG) && !destroyed) {
             // findViewById(R.id.progress_container).setVisibility(View.GONE);
@@ -700,12 +667,12 @@ public class ProductDetailsActivity extends ActionBarActivity
                 showToast("Internet not available. Please try again");
                 //  Toast.makeText(ProductDetailsActivity.this, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
             }
-                isLoading = false;
+            isLoading = false;
         }
         if (requestTag != null && requestTag.equals(CHECKPINCODEREQUESTTAG) && !destroyed) {
             if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
                 showToast("Something went wrong. Please try again");
-             //   Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
             else {
                 showToast("Internet not available. Please try again");
@@ -805,7 +772,10 @@ public class ProductDetailsActivity extends ActionBarActivity
         thumbList.addItemDecoration(new ProductThumbListItemDecorator(getResources().getDimensionPixelSize(R.dimen.margin_small)));
         final ProductThumbAdapters adapter = new ProductThumbAdapters(this, product.getThumbs(), getResources().getDimensionPixelSize(R.dimen.pro_image_size), getResources().getDimensionPixelSize(R.dimen.pro_image_size));
         thumbList.setAdapter(adapter);
-
+        if (AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
+            ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
+        else
+            ((TextView) findViewById(R.id.add_to_cart)).setText("Add To Cart");
         adapter.setOnItemClickListener(new ProductThumbAdapters.OnItemClickListener() {
             @Override
             public void onItemClick(final int pos) {
@@ -936,7 +906,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
                     message = jsonObject.getString("success");
                 if (message != null) {
-
+                    ((CustomTextView)findViewById(R.id.add_to_cart)).setText("Go To Cart");
                     if(isOfflinePurchase ){
                         AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int)scannedProductId, 1));
                         AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
@@ -954,6 +924,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
                 }
+
                 if (progressDialog != null)
                     progressDialog.dismiss();
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
@@ -987,22 +958,86 @@ public class ProductDetailsActivity extends ActionBarActivity
             }
         }else if(requestType == MARK_PRODUCT_REVIEW_TAG){
             findViewById(R.id.book_progress).setVisibility(View.GONE);
-            bookAVisitBtn.setVisibility(View.VISIBLE);
+            bookAVisitBtn.setVisibility(View.GONE);
             if(status) {
+
                /* AllProducts.getInstance().getBookedObjs().add(new BaseCartProdutQtyObj((int)product.getId(),1));
                 Intent intent = new Intent(this, ProductDemoActivity.class);
                 intent.putExtra("product_vendor_time", ((ProductVendorTimeObj) response));
                 startActivity(intent);*/
-                showVisitBookedCard();
+                showVisitBookedCard(((ProductVendorTimeObj) response));
             }else{
                 Toast.makeText(this,((ErrorObject)response).getErrorMessage(),Toast.LENGTH_SHORT).show();
+            }
+        }else if(!isDestroyed && requestType == CANCEL_PRODUCT_REVIEW_TAG){
+            if (progressDialog != null)
+                progressDialog.dismiss();
+            if(status) {
+                findViewById(R.id.booking_confirm_card).setVisibility(View.GONE);
+                bookAVisitBtn.setVisibility(View.VISIBLE);
+                showToast("Successfully cancelled");
+            }else{
+                showToast("Cannot cancel request. Try again");
             }
         }
         isRequestFailed = !status;
     }
 
-    public void showVisitBookedCard(){
+    public void cancelBooking(ProductVendorTimeObj obj){
+        String url = AppApplication.getInstance().getBaseUrl() + REMOVE_PRODUCT_REVIEW_URL;
+        List<NameValuePair> list = new ArrayList<NameValuePair>();
 
+        list.add(new BasicNameValuePair("book_product_id", obj.getBook_product_id() + ""));
+        UploadManager.getInstance().makeAyncRequest(url, RequestTags.CANCEL_PRODUCT_REVIEW_TAG, obj.getBook_product_id() + "",
+                ObjectTypes.OBJECT_TYPE_REMOVE_PRODUCT_REVIEW, obj, list, null);
+    }
+
+    public void showVisitBookedCard(final ProductVendorTimeObj obj){
+        View view = findViewById(R.id.booking_confirm_card);
+        view.setVisibility(View.VISIBLE);
+        ((CustomTextView)view.findViewById(R.id.address)).setText(obj.getLine1() + "\n" + obj.getCity());
+        ((ImageView)view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + obj.getPincode()));
+                mContext.startActivity(callIntent);
+            }
+        });
+
+        ((ImageView)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext,"Vendor LAT LONG not available",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ((ImageView)view.findViewById(R.id.close_card)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog logoutDialog;
+                logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this)
+                        .setTitle("Confirm?")
+                        .setCancelable(false)
+                        .setMessage("Are you sure you want to cancel?")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        cancelBooking(obj);
+                                    }
+                                }).create();
+                logoutDialog.show();
+
+            }
+        });
     }
 
     @Override
@@ -1016,6 +1051,8 @@ public class ProductDetailsActivity extends ActionBarActivity
         }else if(requestType == MARK_PRODUCT_REVIEW_TAG){
             //progressDialog = ProgressDialog.show(this, null, "Loading. Please wait");
 //            ((ProgressBar)findViewById(R.id.progress_book_visit)).setIndeterminate(true);
+        }else if(requestType == CANCEL_PRODUCT_REVIEW_TAG){
+            progressDialog = ProgressDialog.show(this, null, "Cancelling booking. Please wait");
         }
     }
 
@@ -1169,7 +1206,7 @@ public class ProductDetailsActivity extends ActionBarActivity
 
     private void toggleButtonsState(boolean clickable) {
         findViewById(R.id.add_to_cart).setClickable(clickable);
-        findViewById(R.id.buy_offline).setClickable(clickable);
+        findViewById(R.id.buy_now).setClickable(clickable);
     }
 
     private void setUpIndexingApi() {
@@ -1227,6 +1264,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         if (AllProducts.getInstance().getCartCount() > 0) {
             cartCount.setVisibility(View.VISIBLE);
             cartCount.setText(AllProducts.getInstance().getCartCount() + "");
+
         } else {
             cartCount.setVisibility(View.GONE);
         }
@@ -1242,7 +1280,10 @@ public class ProductDetailsActivity extends ActionBarActivity
         super.onResume();
 
         if (AppPreferences.isUserLogIn(this)) {
-
+            if (product != null && AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
+                ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
+            else
+                ((TextView) findViewById(R.id.add_to_cart)).setText("Add To Cart");
         } else {
             ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
             if (objs != null) {
@@ -1252,7 +1293,10 @@ public class ProductDetailsActivity extends ActionBarActivity
                 }
                 AllProducts.getInstance().setCartCount(objs.size());
             }
-
+            if (product != null && AllProducts.getInstance().getCartObjs() != null && AllProducts.getInstance().cartContains((int) product.getId()))
+                ((TextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
+            else
+                ((TextView) findViewById(R.id.add_to_cart)).setText("Add To Cart");
         }
         checkCartCount();
     }
@@ -1399,6 +1443,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             } else {
                 AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                 // checkCartCount();
+                ((CustomTextView)findViewById(R.id.add_to_cart)).setText("Go To Cart");
                 oldObj.add(item);
                 GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
