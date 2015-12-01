@@ -130,6 +130,11 @@ public class ProductsRecyclerViewGridAdapter extends
                             .getImage());
                 }
             }
+            if(objs.get(position).is_o2o()){
+                ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.VISIBLE);
+            }else{
+                ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.GONE);
+            }
             ((ProductViewHolder) holder).productName.setText(objs.get(position)
                     .getName());
             try {
@@ -199,7 +204,7 @@ public class ProductsRecyclerViewGridAdapter extends
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView img;
-        TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
+        TextView productName, productDiscountedPrice, productPrice, productDiscountFactor,buyOfflineTag;
 
         public ProductViewHolder(View view) {
             super(view);
@@ -210,6 +215,7 @@ public class ProductsRecyclerViewGridAdapter extends
             productPrice = (TextView) view
                     .findViewById(R.id.product_price);
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
+            buyOfflineTag = (TextView)view.findViewById(R.id.buy_offline_tag);
         }
     }
 

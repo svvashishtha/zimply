@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -201,7 +200,7 @@ public class MyCartAdapter extends RecyclerView.Adapter {
 
         public CartItemHolder(View itemView) {
             super(itemView);
-            itemView.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.white)));
+            //itemView.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.white)));
             price = (TextView) itemView.findViewById(R.id.product_price);
             quantity = (TextView) itemView.findViewById(R.id.cart_quantity);
             delivery_date = (TextView) itemView.findViewById(R.id.expected_delivery_date_text);

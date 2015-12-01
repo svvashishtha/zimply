@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/white_card_bg"
+              android:background="@drawable/dropshadowcard"
               android:orientation="vertical"
     >
     <com.application.zimplyshop.widgets.CustomTextView
@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
 
         <ImageView
             android:id="@+id/product_image"
