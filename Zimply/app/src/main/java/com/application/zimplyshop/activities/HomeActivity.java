@@ -177,31 +177,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // getSupportActionBar().setIcon(R.drawable.ic_app_title_logo);
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        // Adding action bar drawer toggle
-        ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.app_name,
-                R.string.app_name);
-        mDrawer.setDrawerListener(mToggle);
-        mDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
-
-            @Override
-            public void onDrawerStateChanged(int arg0) {
-            }
-
-            @Override
-            public void onDrawerSlide(View arg0, float arg1) {
-                scaleFAB(arg1);
-            }
-
-            @Override
-            public void onDrawerOpened(View arg0) {
-            }
-
-            @Override
-            public void onDrawerClosed(View arg0) {
-            }
-        });
-
         mToggle.syncState();
         setUpDrawer();
         setUpFAB();
@@ -729,6 +704,31 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     private void setUpDrawer() {
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // Adding action bar drawer toggle
+        ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.app_name,
+                R.string.app_name);
+        mDrawer.setDrawerListener(mToggle);
+        mDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+
+            @Override
+            public void onDrawerStateChanged(int arg0) {
+            }
+
+            @Override
+            public void onDrawerSlide(View arg0, float arg1) {
+                scaleFAB(arg1);
+            }
+
+            @Override
+            public void onDrawerOpened(View arg0) {
+            }
+
+            @Override
+            public void onDrawerClosed(View arg0) {
+            }
+        });
+
         navView = (NavigationView) findViewById(R.id.navigation_view);
 
         CircularImageView userImage = (CircularImageView) navView.findViewById(R.id.user_img);
