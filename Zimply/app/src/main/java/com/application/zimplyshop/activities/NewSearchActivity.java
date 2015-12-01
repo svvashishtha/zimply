@@ -30,7 +30,6 @@ import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
-import com.application.zimplyshop.fragments.ExpertSearchFragment;
 import com.application.zimplyshop.fragments.ProductSearchFragment;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.objects.AllProducts;
@@ -58,7 +57,6 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
 
     public static final int FRAGMENT_PRODUCT_SEARCH = 0;
     public static final int FRAGMENT_EXPERT_SEARCH = 1;
-    public static final int VIEWPAGER_INDEX_ME_FRAGMENT = 2;
 
     private NoSwipeViewPager homePager;
     private SparseArray<SoftReference<Fragment>> fragments = new SparseArray<SoftReference<Fragment>>();
@@ -290,30 +288,6 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                         }
                         break;
 
-                    case FRAGMENT_EXPERT_SEARCH:
-
-                        // Search Scroll Top
-                        if (fragments.get(FRAGMENT_EXPERT_SEARCH) != null) {
-                            ExpertSearchFragment srf = (ExpertSearchFragment) fragments.get(FRAGMENT_EXPERT_SEARCH).get();
-                            if (srf != null) {
-                                srf.scrollSearchToTop();
-                            }
-
-                        } else {
-                            HomePagerAdapter hAdapter = (HomePagerAdapter) homePager.getAdapter();
-                            if (hAdapter != null) {
-                                try {
-                                    ExpertSearchFragment fragMent = (ExpertSearchFragment) hAdapter.instantiateItem(homePager,
-                                            FRAGMENT_EXPERT_SEARCH);
-                                    if (fragMent != null)
-                                        fragMent.scrollSearchToTop();
-                                } catch (Exception e) {
-                                }
-                            }
-                        }
-
-                        break;
-
                 }
             } catch (Exception e) {
 
@@ -339,43 +313,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                 currentPageSelected = arg0;
 
                 // SearchFragment
-                if (arg0 == FRAGMENT_EXPERT_SEARCH) {
-
-                    if (fragments.get(FRAGMENT_EXPERT_SEARCH) != null) {
-
-                        if (fragments.get(FRAGMENT_EXPERT_SEARCH).get() instanceof ExpertSearchFragment) {
-                            ExpertSearchFragment srf = (ExpertSearchFragment) fragments.get(FRAGMENT_EXPERT_SEARCH).get();
-                            if (srf != null) {
-
-                                // if (!srf.searchCallsInitiatedFromHome)
-                                // srf.initiateSearchCallFromHome();
-
-                            }
-                        }
-
-                    } else {
-                        HomePagerAdapter hAdapter = (HomePagerAdapter) homePager.getAdapter();
-                        if (hAdapter != null) {
-                            try {
-                                ExpertSearchFragment fragMent = (ExpertSearchFragment) hAdapter.instantiateItem(homePager,
-                                        FRAGMENT_EXPERT_SEARCH);
-                                if (fragMent != null) {
-
-                                    // if
-                                    // (!fragMent.searchCallsInitiatedFromHome)
-                                    // fragMent.initiateSearchCallFromHome();
-
-                                }
-                            } catch (Exception e) {
-                                // Crashlytics.logException(e);
-                            }
-                        }
-                    }
-
-                    homeSearchHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
-                    homeNearbyHeader.setTextColor(getResources().getColor(tabsSelectedColor));
-
-                } else if (arg0 == FRAGMENT_PRODUCT_SEARCH) {
+                if (arg0 == FRAGMENT_PRODUCT_SEARCH) {
 
                     homeSearchHeader.setTextColor(getResources().getColor(tabsSelectedColor));
                     homeNearbyHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
@@ -489,11 +427,6 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                     ProductSearchFragment home = new ProductSearchFragment();
                     fragments.put(FRAGMENT_PRODUCT_SEARCH, new SoftReference<Fragment>(home));
                     return home;
-
-                case FRAGMENT_EXPERT_SEARCH:
-                    ExpertSearchFragment details = new ExpertSearchFragment();
-                    fragments.put(FRAGMENT_EXPERT_SEARCH, new SoftReference<Fragment>(details));
-                    return details;
 
             }
             return null;
