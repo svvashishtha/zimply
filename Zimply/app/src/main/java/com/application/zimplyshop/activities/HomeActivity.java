@@ -177,8 +177,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // getSupportActionBar().setIcon(R.drawable.ic_app_title_logo);
-        mToggle.syncState();
         setUpDrawer();
+        mToggle.syncState();
         setUpFAB();
         setNavigationList();
 
@@ -706,7 +706,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     private void setUpDrawer() {
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         // Adding action bar drawer toggle
-        ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.app_name,
+        mToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.app_name,
                 R.string.app_name);
         mDrawer.setDrawerListener(mToggle);
         mDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
