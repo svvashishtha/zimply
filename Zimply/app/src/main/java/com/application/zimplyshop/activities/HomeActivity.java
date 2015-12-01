@@ -182,6 +182,26 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.app_name,
                 R.string.app_name);
         mDrawer.setDrawerListener(mToggle);
+        mDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+
+            @Override
+            public void onDrawerStateChanged(int arg0) {
+            }
+
+            @Override
+            public void onDrawerSlide(View arg0, float arg1) {
+                scaleFAB(arg1);
+            }
+
+            @Override
+            public void onDrawerOpened(View arg0) {
+            }
+
+            @Override
+            public void onDrawerClosed(View arg0) {
+            }
+        });
+
         mToggle.syncState();
         setUpDrawer();
         setUpFAB();
