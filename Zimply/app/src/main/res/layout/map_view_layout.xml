@@ -29,8 +29,6 @@
         android:layout_margin="20dp"
         android:src="@drawable/mapmarker" />
 
-    <include layout="@layout/progress_layout" />
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"

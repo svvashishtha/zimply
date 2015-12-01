@@ -112,10 +112,8 @@ public class MapPage extends BaseActivity implements ZLocationCallback{
     }
 
     private void refreshMap() {
-         if (lat != 0.0 && lon != 0.0) {
-            if (mMap == null)
-                setUpMapIfNeeded();
-         }
+        if (mMap == null)
+            setUpMapIfNeeded();
     }
 
     private boolean displayed = false;
@@ -216,7 +214,6 @@ public class MapPage extends BaseActivity implements ZLocationCallback{
                     MapsInitializer.initialize(MapPage.this);
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
-
             }
         }
     }
