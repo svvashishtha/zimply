@@ -18,5 +18,5 @@
         android:layout_width="124dp"
         android:layout_height="124dp"
         android:layout_gravity="center"
-        components:gif="@drawable/sq2" />
+        components:gif="@drawable/progress" />
 </LinearLayout>

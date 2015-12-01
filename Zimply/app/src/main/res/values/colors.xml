@@ -19,6 +19,8 @@
     <color name="apptheme_color">#0093b8</color>
     <color name="zhl_dark_custom">#66e4e4e4</color>
 
+    <color name="zimply_blue">#009dc7</color>
+
     <!-- Color Pallete for loading images -->
     <color name="color_pallete_1">#B3EFFF</color>
     <color name="color_pallete_2">#FFFD8A</color>

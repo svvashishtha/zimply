@@ -25,7 +25,7 @@
     <string name="try_again_text">Try again</string>
     <string name="Rs">\u20B9</string>
     <string name="about_version">v1.0.7</string>
-    <string name="about_text">Zimply brings you closer to your dream home interiors. Explore amazing ideas for your decor matching your tastes &amp; Shop from our endless stream of curated products, in multiple categories. If you decide to hire an expert, simply do it in a tap and get multiple ideas from relevant professionals in your location.\nFurnish your home simply.</string>
+    <string name="about_text">Blending the ease of online shopping with the magic of retail experience, we bring to you the Zimply App. Make your dream home, with the 5000+ hand picked home furniture and decor products. Shop online with just a click and relax! We do the rest, from delivery to installation. And if you are not a fan of shopping online, discover the products on the app, visit our partner stores and look before you buy!</string>
     <string name="about_us_terms_of_use">Terms of Use</string>
     <string name="about_us_faq">FAQ</string>
     <string name="about_us">About</string>
@@ -190,4 +190,5 @@
 
     <string name="load_error">Error occured in Google tag manager. Please try again later.</string>
 
+    <string name="take_me_there">Take me there</string>
 </resources>

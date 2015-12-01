@@ -155,7 +155,9 @@ public class ProductDetailsActivity extends ActionBarActivity
 
         restPageContent = inflater.inflate(R.layout.product_details_activity, null);
         if (AppPreferences.isPincodeSaved(this)) {
-            //   ((EditText) mainContent.findViewById(R.id.pincode)).setText(AppPreferences.getSavedPincode(this));
+            String pincode = AppPreferences.getSavedPincode(this);
+           ((EditText) mainContent.findViewById(R.id.pincode)).setText(pincode);
+            checkPincodeAvailabilty(false, pincode);
         }
         if (restPageContent != null) {
             ((ViewGroup) restPageContent.findViewById(R.id.product_page_content)).addView(mainContent, 0);
@@ -163,7 +165,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 @Override
                 public void onClick(View v) {
                     if (((EditText) mainContent.findViewById(R.id.pincode)).getText().toString().length() == 6) {
-                        checkPincodeAvailabilty(((EditText) findViewById(R.id.pincode)).getText().toString());
+                        checkPincodeAvailabilty(true, ((EditText) findViewById(R.id.pincode)).getText().toString());
                     } else {
                         showToast("Please enter a valid pincode");
                         //  Toast.makeText(ProductDetailsActivity.this, "Please enter a valid pincode", Toast.LENGTH_SHORT).show();
@@ -191,7 +193,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
                 if (input.length() == 6) {
-                    checkPincodeAvailabilty(((EditText) findViewById(R.id.pincode)).getText().toString());
+                    checkPincodeAvailabilty(true, ((EditText) findViewById(R.id.pincode)).getText().toString());
                 }
             }
         };
@@ -494,8 +496,10 @@ public class ProductDetailsActivity extends ActionBarActivity
                 OBJECT_TYPE_MARK_PRODUCT_REVIEW, product, list, null);
     }
 
-    public void checkPincodeAvailabilty(String text) {
+    public void checkPincodeAvailabilty(boolean showProgress, String text) {
         if (CommonLib.isNetworkAvailable(this)) {
+            if(showProgress)
+                progressDialog = ProgressDialog.show(this, null, "Checking availability.Please Wait..");
             AppPreferences.setSavedPincode(this, text);
             AppPreferences.setIsPincodeSaved(this, true);
             String url = AppApplication.getInstance().getBaseUrl() + AppConstants.CHECK_PINCODE + "?pincode=" + text;
@@ -593,7 +597,6 @@ public class ProductDetailsActivity extends ActionBarActivity
             isLoading = true;
             showLoadingView();
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) && !destroyed) {
-            progressDialog = ProgressDialog.show(this, null, "Checking availability.Please Wait..");
         }
     }
 
@@ -626,19 +629,19 @@ public class ProductDetailsActivity extends ActionBarActivity
             }
             isLoading = false;
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) && !destroyed) {
-            if (progressDialog != null) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
-                if (((boolean) obj)) {
-                    findViewById(R.id.is_available_pincode).setVisibility(View.VISIBLE);
-                    ((TextView) findViewById(R.id.is_available_pincode)).setTextColor(getResources().getColor(R.color.green_text_color));
-                    ((TextView) findViewById(R.id.is_available_pincode)).setText("Available at selected pincode");
-                } else {
-                    findViewById(R.id.is_available_pincode).setVisibility(View.VISIBLE);
-                    ((TextView) findViewById(R.id.is_available_pincode)).setTextColor(getResources().getColor(R.color.red_text_color));
-                    ((TextView) findViewById(R.id.is_available_pincode)).setText("Not available at selected pincode");
-                }
-                CommonLib.hideKeyBoard(mContext, findViewById(R.id.pincode));
             }
+            if (((boolean) obj)) {
+                findViewById(R.id.is_available_pincode).setVisibility(View.VISIBLE);
+                ((TextView) findViewById(R.id.is_available_pincode)).setTextColor(getResources().getColor(R.color.green_text_color));
+                ((TextView) findViewById(R.id.is_available_pincode)).setText("Available at selected pincode");
+            } else {
+                findViewById(R.id.is_available_pincode).setVisibility(View.VISIBLE);
+                ((TextView) findViewById(R.id.is_available_pincode)).setTextColor(getResources().getColor(R.color.red_text_color));
+                ((TextView) findViewById(R.id.is_available_pincode)).setText("Not available at selected pincode");
+            }
+            CommonLib.hideKeyBoard(mContext, findViewById(R.id.pincode));
 
             isLoading = false;
         }
