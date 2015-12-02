@@ -51,7 +51,8 @@ public class SearchResultsActivity extends BaseActivity implements
 
     boolean isRefreshData;
     ArrayList<HomeProductObj> homeProductObjs;
-    private String query, value;
+    private String query;
+    private String value = "";
     private int type = -1;
     private int pageNo = 1;
 
@@ -115,7 +116,7 @@ public class SearchResultsActivity extends BaseActivity implements
         String finalUrl;
         String queryUrl = "&query=" + query;
         String field = (type == -1)? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
-        String valueQuery = (value == null) ? "" : "&value="+value;
+        String valueQuery = (value == "") ? "" : "&value="+value;
         finalUrl = AppApplication.getInstance().getBaseUrl() + url
                 + "?width=" + ((width / 2) - (width / 15))
                 + field

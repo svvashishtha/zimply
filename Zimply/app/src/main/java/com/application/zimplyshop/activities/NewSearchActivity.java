@@ -106,10 +106,6 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                         if (hf != null && hf.isVisible()) {
                             hf.performSearch(input);
                         }
-                        /*ExpertSearchFragment srf = (ExpertSearchFragment) fragments.get(FRAGMENT_EXPERT_SEARCH).get();
-                        if (srf != null && srf.isVisible()) {
-                            srf.performSearch(input);
-                        }*/
                     }
                 }
 
