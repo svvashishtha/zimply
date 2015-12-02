@@ -352,6 +352,8 @@ public class SearchResultsActivity extends BaseActivity implements
                 && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG)) {
             if (productList.getAdapter() == null
                     || productList.getAdapter().getItemCount() == 1) {
+                if(CommonLib.isNetworkAvailable(SearchResultsActivity.this))
+                    showToast("Please check your internet connection");
                 showNetworkErrorView();
                 changeViewVisiblity(productList, View.GONE);
                 isRefreshData = false;
