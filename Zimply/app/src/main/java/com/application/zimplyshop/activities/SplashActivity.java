@@ -2,6 +2,7 @@ package com.application.zimplyshop.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -62,7 +63,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
     AtomicInteger msgId = new AtomicInteger();
     String regId;
     int hardwareRegistered = 0;
-    private boolean windowHasFocus = false;
+    private boolean windowHasFocus = true;
     private ImageView imageView;
     private Activity mContext;
 
@@ -150,9 +151,21 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        windowHasFocus = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        windowHasFocus = true;
+    }
+    @Override
     protected void onDestroy() {
         GetRequestManager.getInstance().removeCallbacks(this);
         isDestroyed = true;
+        windowHasFocus = false;
         super.onDestroy();
     }
 
@@ -222,6 +235,40 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
         }
 
     }
+
+    protected Dialog onCreateDialog(int id) {
+
+        Dialog dialog;
+
+        switch (id) {
+
+            case PLAY_SERVICES_RESOLUTION_REQUEST:
+                AlertDialog.Builder builder_google_play_services = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
+                builder_google_play_services.setMessage(getResources().getString(R.string.update_google_play_services)).setCancelable(false)
+                        .setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                try {
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.gms"));
+                                    startActivityForResult(browserIntent, PLAY_SERVICES_RESOLUTION_REQUEST);
+                                } catch (ActivityNotFoundException e) {
+
+                                } catch (Exception e) {
+
+                                }
+                            }
+                        }).setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        moveToHomePage();
+                    }
+                });
+                dialog = builder_google_play_services.create();
+                break;
+            default:
+                dialog = null;
+        }
+        return dialog;
+    }
+
 
     /**
      * Gets the current registration ID for application on GCM service.
