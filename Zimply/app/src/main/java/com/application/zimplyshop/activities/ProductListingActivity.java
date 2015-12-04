@@ -51,7 +51,7 @@ public class ProductListingActivity extends BaseActivity implements
 
     int width;
 
-    int categoryId = 0, sortId = 1, priceLte = 1, priceHigh = 100000;
+    int categoryId = 0, sortId = -1, priceLte = 1, priceHigh = 100000;
 
     boolean isRefreshData;
     Context context;
@@ -276,7 +276,7 @@ public class ProductListingActivity extends BaseActivity implements
                     isO2o = bundle.getBoolean("is_o2o");
                     nextUrl = url + "?filter=0" + ((categoryId != 0) ? ("&category__id__in=" + Integer.parseInt(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category()
                             .get(categoryId - 1).getId())) : "")
-                            + ("&low_to_high=" + sortId) + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
+                            + (sortId!=-1?"&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                             + (AppPreferences.isUserLogIn(ProductListingActivity.this)
                             ? "&userid=" + AppPreferences.getUserID(ProductListingActivity.this) : "")
                             +(isO2o?"&is_o2o="+1:"");

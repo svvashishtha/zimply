@@ -48,7 +48,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
         //sortById = 1;
         if (sortById == 1) {
             view.findViewById(R.id.low_to_high).setSelected(true);
-        } else {
+        } else if(sortById == 2){
             view.findViewById(R.id.high_to_low).setSelected(true);
         }
         ((CheckBox)view.findViewById(R.id.zi_experience_tag)).setChecked(isZiExperience);
@@ -229,8 +229,8 @@ public class ProductPriceFilterFragment extends BaseFragment {
 
 
     public void changeSelectedValues() {
-        sortById = 1;
-        view.findViewById(R.id.low_to_high).setSelected(true);
+        sortById = -1;
+        view.findViewById(R.id.low_to_high).setSelected(false);
         view.findViewById(R.id.high_to_low).setSelected(false);
         seekBar.setSelectedMaxValue(TO_PRICE);
         seekBar.setSelectedMinValue(FROM_PRICE);
