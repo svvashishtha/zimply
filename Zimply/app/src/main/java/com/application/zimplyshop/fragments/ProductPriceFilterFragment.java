@@ -6,6 +6,8 @@ import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.application.zimplyshop.R;
@@ -22,6 +24,12 @@ public class ProductPriceFilterFragment extends BaseFragment {
     int sortById;
 
     int fromPrice,toPrice;
+
+    boolean isZiExperience;
+
+    int FROM_PRICE = 1;
+
+    int TO_PRICE=100000;
 
     public static ProductPriceFilterFragment newInstance(Bundle bundle) {
         ProductPriceFilterFragment fragment = new ProductPriceFilterFragment();
@@ -44,6 +52,12 @@ public class ProductPriceFilterFragment extends BaseFragment {
             view.findViewById(R.id.high_to_low).setSelected(true);
         }
 
+        ((CheckBox)view.findViewById(R.id.zi_experience_tag)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isZiExperience =isChecked;
+            }
+        });
         ((EditText) view.findViewById(R.id.from_price)).setText(priceLow + "");
         ((EditText) view.findViewById(R.id.to_price)).setText(priceHigh + "");
         setSortByClicks();
@@ -59,7 +73,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
                 if (s.length() > 0) {
                     int number = -1;
                     try {
-                        number = Integer.parseInt(s.toString());
+                        number = Double.parseDouble(s.toString());
                     } catch(NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -84,10 +98,12 @@ public class ProductPriceFilterFragment extends BaseFragment {
                 if (!hasFocus) {
                     try {
                         if (Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) < Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())) {
-                            ((EditText) view.findViewById(R.id.to_price)).setText(((EditText) view.findViewById(R.id.from_price)).getText());
+                            ((EditText) view.findViewById(R.id.to_price)).setText(Double.parseDouble((((EditText) view.findViewById(R.id.from_price)).getText().toString()) + 1)+"");
+                        }else if(Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) >TO_PRICE){
+                            ((EditText) view.findViewById(R.id.to_price)).setText(TO_PRICE+"");
                         }
                     } catch (Exception e) {
-                        ((EditText) view.findViewById(R.id.to_price)).setText("50000");
+                        ((EditText) view.findViewById(R.id.to_price)).setText(TO_PRICE+"");
                     }
                 }
             }
@@ -99,8 +115,10 @@ public class ProductPriceFilterFragment extends BaseFragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
                     try{
-                        if(Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())>Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString())){
-                            ((EditText) view.findViewById(R.id.from_price)).setText(((EditText) view.findViewById(R.id.to_price)).getText());
+                        if(Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())>Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString())) {
+                            ((EditText) view.findViewById(R.id.from_price)).setText((Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) - 1)+"");
+                        }else if(Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString()) <FROM_PRICE){
+                            ((EditText) view.findViewById(R.id.from_price)).setText(FROM_PRICE+"");
                         }
                     }catch(Exception e){
                         ((EditText) view.findViewById(R.id.from_price)).setText("1");
@@ -143,6 +161,20 @@ public class ProductPriceFilterFragment extends BaseFragment {
         return view;
     }
 
+    public boolean checkPriceRange(){
+        try {
+            if ((Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) > TO_PRICE) || (Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString()) < FROM_PRICE)
+                    ||(Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()))<=Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())){
+                showToast("Please check the price range");
+                return false;
+            }
+        }catch(Exception e){
+            showToast("Please check the price range");
+            return false;
+        }
+        return true;
+    }
+
     public void setSortByClicks() {
         view.findViewById(R.id.low_to_high).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,10 +195,10 @@ public class ProductPriceFilterFragment extends BaseFragment {
     }
 
     public void addMinMaxValueCheckForMinValue() {
-        int minValue = Integer.parseInt(((EditText) view.findViewById(R.id.from_price)).getText().toString().length() > 0 ? ((EditText) view.findViewById(R.id.from_price)).getText().toString() : "1");
-        int maxValue = Integer.parseInt((((EditText) view.findViewById(R.id.to_price)).getText().toString().length() > 0) ? ((EditText) view.findViewById(R.id.to_price)).getText().toString() : "50000");
+        double minValue = Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString().length() > 0 ? ((EditText) view.findViewById(R.id.from_price)).getText().toString() : FROM_PRICE+"");
+        double maxValue = Double.parseDouble((((EditText) view.findViewById(R.id.to_price)).getText().toString().length() > 0) ? ((EditText) view.findViewById(R.id.to_price)).getText().toString() : TO_PRICE + "");
         // ((EditText) view.findViewById(R.id.from_price)).setFilters(new InputFilter[]{new InputFilterMinMax("0", (maxValue - 1) + "")});
-        ((EditText) view.findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax((minValue + 1) + "", "50000")});
+        ((EditText) view.findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax((minValue + 1) + "", TO_PRICE+"")});
     }
 
     public void setMinEditTextValue(int value) {
@@ -195,9 +227,10 @@ public class ProductPriceFilterFragment extends BaseFragment {
         sortById = 1;
         view.findViewById(R.id.low_to_high).setSelected(true);
         view.findViewById(R.id.high_to_low).setSelected(false);
-        seekBar.setSelectedMaxValue(50000);
-        seekBar.setSelectedMinValue(1);
-        ((EditText) view.findViewById(R.id.from_price)).setText(1 + "");
-        ((EditText) view.findViewById(R.id.to_price)).setText(50000 + "");
+        seekBar.setSelectedMaxValue(TO_PRICE);
+        seekBar.setSelectedMinValue(FROM_PRICE);
+        ((EditText) view.findViewById(R.id.from_price)).setText(FROM_PRICE + "");
+        ((EditText) view.findViewById(R.id.to_price)).setText(TO_PRICE+ "");
+        ((CheckBox)view.findViewById(R.id.zi_experience_tag)).setChecked(false);
     }
 }

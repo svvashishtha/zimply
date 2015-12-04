@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
@@ -27,8 +28,9 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
     int height;
     Context mContext;
-    int TYPE_HEADER = 0;
-    int TYPE_CATEGORY = 1;
+    int TYPE_TITLE=0;
+    int TYPE_HEADER = 1;
+    int TYPE_CATEGORY = 2;
 
     HomeProductCategoryNBookingObj obj;
 
@@ -49,8 +51,12 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void addLatestBookingsData(ArrayList<LatestBookingObject> objs){
-        obj.setLatest_bookings(objs);
-        notifyItemInserted(-1);
+        if(objs!=null) {
+            obj.setLatest_bookings(objs);
+        }else{
+            obj.getLatest_bookings().clear();
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,10 +70,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         if (viewType == TYPE_CATEGORY) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_item_layout, null);
             holder = new ProductsCategoryViewHolder(view);
-        }else {
+        }else if(viewType == TYPE_HEADER){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bookings_recyclerview_layout
                     , null);
             holder = new HeaderViewHolder(view);
+        }else{
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_title_layout,null);
+            holder = new TitleViewHolder(view);
         }
         return holder;
     }
@@ -77,7 +86,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         if (getItemViewType(position) == TYPE_CATEGORY) {
             int newPos ;
             if(obj.getLatest_bookings().size()>0){
-                newPos = position-1;
+                newPos = position-2;
             }else{
                 newPos = position;
             }
@@ -89,10 +98,10 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
             if (obj.getProduct_category().get(newPos).getImage() != null) {
                 new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(obj.getProduct_category().get(newPos).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
             }
-        } else {
+        } else if(getItemViewType(position) == TYPE_HEADER){
             ((HeaderViewHolder)holder).recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
            // ((HeaderViewHolder)holder).recyclerView.addItemDecoration(new SpaceItemDecoration(mContext.getResources().getDimensionPixelSize(R.dimen.margin_small)));
-            HomePageBookingsAdapter adapter = new HomePageBookingsAdapter(mContext);
+            HomePageBookingsAdapter adapter = new HomePageBookingsAdapter(mContext,displayWidth,displayWidth);
             adapter.addData(obj.getLatest_bookings());
            /* LinearLayout.LayoutParams lp =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(int)mContext.getResources().getDimension(R.dimen.booking_card_height));
             ((HeaderViewHolder)holder).recyclerView.setLayoutParams(lp);*/
@@ -100,6 +109,8 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
           //  CommonLib.setListViewHeightBasedOnChildren(((HeaderViewHolder) holder).recyclerView.get);
             //((HeaderViewHolder)holder).recyclerView.setNestedScrollingEnabled(true);
+        }else{
+            ((TitleViewHolder) holder).customText.setText("Upcoming Visits");
         }
 
     }
@@ -108,7 +119,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     public int getItemCount() {
         if (obj != null) {
             if(obj.getLatest_bookings().size()>0){
-                return obj.getProduct_category().size()+1;
+                return obj.getProduct_category().size()+2;
             }else {
                 return obj.getProduct_category().size();
             }
@@ -118,11 +129,18 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0 && obj.getLatest_bookings().size()>0) {
-            return TYPE_HEADER;
-        }  else {
+        if(obj.getLatest_bookings().size()>0){
+            if(position == 0){
+                return TYPE_TITLE;
+            }else if(position == 1){
+                return TYPE_HEADER;
+            }else{
+                return TYPE_CATEGORY;
+            }
+        }else{
             return TYPE_CATEGORY;
         }
+
     }
 
     public class ProductsCategoryViewHolder extends RecyclerView.ViewHolder {
@@ -140,7 +158,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
                 public void onClick(View v) {
                     int pos ;
                     if(obj.getLatest_bookings().size()>0){
-                            pos = getAdapterPosition()-1;
+                        pos = getAdapterPosition()-2;
                     }else{
                         pos = getAdapterPosition();
                     }
@@ -164,5 +182,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
     }
 
+    public class TitleViewHolder extends RecyclerView.ViewHolder{
+        TextView customText;
+
+        public TitleViewHolder(View itemView) {
+            super(itemView);
+            customText = (TextView)itemView.findViewById(R.id.header_footer);
+        }
+    }
 
 }

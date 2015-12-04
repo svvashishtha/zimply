@@ -525,8 +525,20 @@ public class AllProducts {
         this.homeProCatNBookingObj = homeProCatNBookingObj;
     }
 
+    public ArrayList<Integer> getVendorIds() {
+        if(vendorIds == null)
+            vendorIds = new ArrayList<>();
+        return vendorIds;
+    }
+
+    public void setVendorIds(ArrayList<Integer> vendorIds) {
+        this.vendorIds = vendorIds;
+    }
 
     public boolean vendorIdsContains(int vendorId){
+        if(vendorIds == null){
+            return false;
+        }
         for(Integer vendor : vendorIds){
             if(vendor == vendorId){
                 return  true;

@@ -95,21 +95,29 @@ public class AllFilterClassActivity extends DialogFragment implements View.OnCli
                  if (this.bundle.getBoolean("is_products")) {
                     bundle.putInt("selected_pos", ((ArticleCategoryDialogFragment) fragments.get(0)).getSelectedPos());
                     bundle.putInt("sort_id", ((ProductPriceFilterFragment) fragments.get(1)).getSortById());
-                    if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue().length() > 0) {
-                        bundle.putInt("from_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue()));
-                    }
-                    if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMaxValue().length() > 0) {
-                        bundle.putInt("to_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMaxValue()));
-                    }
-                } else {
+                     if(((ProductPriceFilterFragment) fragments.get(1)).checkPriceRange()) {
+                         if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue().length() > 0) {
+                             bundle.putInt("from_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue()));
+                         }
+                         if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMaxValue().length() > 0) {
+                             bundle.putInt("to_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMaxValue()));
+                         }
+
+                         mListener.onApplyClick(bundle);
+                         dismiss();
+                     }
+                 } else {
+
                     bundle.putInt("selected_pos", ((ProductFilterFragment) fragments.get(0)).getSelectedCategoryId());
                     bundle.putInt("expand_group", ((ProductFilterFragment) fragments.get(0)).getExpandGroup());
                     bundle.putInt("parent_category_id", ((ProductFilterFragment) fragments.get(0)).getSelectedParent_categoryId());
                     bundle.putInt("city_id", ((ArticleCategoryDialogFragment) fragments.get(1)).getSelectedPos());
-                    bundle.putString("selected_category", ((ProductFilterFragment) fragments.get(0)).getSelectedCategoryName());
+                     bundle.putString("selected_category", ((ProductFilterFragment) fragments.get(0)).getSelectedCategoryName());
+                     mListener.onApplyClick(bundle);
+                     dismiss();
                 }
-                mListener.onApplyClick(bundle);
-                dismiss();
+
+
                 break;
             case R.id.reset_btn:
                 if (this.bundle.getBoolean("is_products")) {

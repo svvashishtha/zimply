@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <com.application.zimplyshop.widgets.CustomTextViewBold
+        android:id="@+id/header_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/margin_small"
+        android:text="You booked a visit for"
+        android:textColor="@color/heading_text_color"
+        android:textSize="@dimen/font_medium"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/product_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dropshadowcard">
+
+        <ImageView
+            android:id="@+id/product_img"
+            android:layout_width="@dimen/product_img_size"
+            android:layout_height="@dimen/product_img_size"
+            android:layout_marginRight="@dimen/margin_small"
+            android:scaleType="centerCrop"/>
+        <ImageView
+            android:id="@+id/exp_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_zi_experience"
+            android:layout_alignParentRight="true"/>
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/product_name"
+            android:layout_below="@id/exp_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ansarv"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_toRightOf="@id/product_img"
+            android:textColor="@color/heading_text_color"
+            android:textSize="@dimen/font_large"/>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_below="@id/product_name"
+            android:text="Ansarv"
+            android:layout_toRightOf="@id/product_img"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_large"/>
+    </RelativeLayout>
+    <com.application.zimplyshop.widgets.CustomTextViewBold
+        android:id="@+id/footer_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="Other products from this store"
+        android:textColor="@color/heading_text_color"
+        android:textSize="@dimen/font_medium"
+        android:textStyle="bold" />
+</LinearLayout>

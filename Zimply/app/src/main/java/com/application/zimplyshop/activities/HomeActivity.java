@@ -405,6 +405,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 switch (position) {
                     case 0:
                         intent = new Intent(HomeActivity.this, SelectCity.class);
+                        intent.putExtra("show_back",true);
                         mDrawer.closeDrawers();
                         startActivity(intent);
                         break;
@@ -562,6 +563,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                                                 AppPreferences.setUserID(HomeActivity.this, "");
                                                 AllProducts.getInstance().setCartCount(0);
                                                 AllProducts.getInstance().setCartObjs(null);
+                                                AllProducts.getInstance().getVendorIds().clear();
                                                 Intent loginIntent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
                                                 loginIntent.putExtra("is_logout", true);
 
@@ -654,7 +656,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         Intent intent = new Intent(this, ProductDetailsActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
-        intent.putExtra("is_scanned",true);
+        intent.putExtra("is_scanned", true);
         startActivity(intent);
     }
 
@@ -906,11 +908,13 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     //   loadData();
                     break;
             case R.id.drawer_user_container:
-                Intent loginIntent = new Intent(this, BaseLoginSignupActivity.class);
-                loginIntent.putExtra("inside", true);
-                isToLoginPage = true;
-                mDrawer.closeDrawers();
-                startActivity(loginIntent);
+                if(!AppPreferences.isUserLogIn(this)) {
+                    Intent loginIntent = new Intent(this, BaseLoginSignupActivity.class);
+                    loginIntent.putExtra("inside", true);
+                    isToLoginPage = true;
+                    mDrawer.closeDrawers();
+                    startActivity(loginIntent);
+                }
                 break;
         }
     }

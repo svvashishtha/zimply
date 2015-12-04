@@ -231,6 +231,7 @@ public class BaseLoginSignupActivity extends BaseActivity
 				} else {
 					intent = new Intent(this, SelectCity.class);
 					intent.putExtra("show_back", false);
+					intent.putExtra("fetch_location",true);
 					this.finish();
 					startActivity(intent);
 				}
@@ -328,6 +329,7 @@ public class BaseLoginSignupActivity extends BaseActivity
 						Intent intent = new Intent(this, SelectCity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 						intent.putExtra("show_back", false);
+						intent.putExtra("fetch_location",true);
 						this.finish();
 						startActivity(intent);
 					}
@@ -375,12 +377,12 @@ public class BaseLoginSignupActivity extends BaseActivity
 
 	public class MyPagerAdapter extends PagerAdapter {
 
-		int[] resId = {R.drawable.ic_tut3,R.drawable.ic_tut1, R.drawable.ic_tut2,  R.drawable.ic_tut4};
-		String[] texts = {"","Shop Exclusive Home Products Online", "Book a product to have a look at your nearest Zimply Store", "Experience the delight of shopping at our store" };
+		int[] resId = {R.drawable.ic_tut1,R.drawable.ic_tut2, R.drawable.ic_tut3,  R.drawable.ic_tut4,R.drawable.ic_tut5};
+		String[] texts = {"","Shop for furniture & home decor products online.", "For products with the Zi Experience tag, you can visit the store before you buy.", "Super-fast delivery and installation.","Get Zimply-quality assured products at the best prices." };
 
 		@Override
 		public int getCount() {
-			return 4;
+			return 5;
 		}
 
 		@Override

@@ -31,7 +31,7 @@ public class CheckPhoneVerificationActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.check_phone_verification_activity);
-        setFinishOnTouchOutside(true);
+        setFinishOnTouchOutside(false);
         setCategoryFragment();
     }
     Fragment fragment;
@@ -94,4 +94,8 @@ public class CheckPhoneVerificationActivity extends BaseActivity {
         return super.onTouchEvent(event);
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }
