@@ -9,12 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -71,6 +76,32 @@ public class LoginActivity extends BaseActivity
 
 		email = (EditText) findViewById(R.id.email);
 		password = (EditText) findViewById(R.id.password);
+
+		password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+				if(CommonLib.isNetworkAvailable(LoginActivity.this)) {
+					checkLogin();
+				}else{
+					showToast("Failed to load. Check your internet connection");
+
+				}
+			}
+				return false;
+			}
+		});
+		((CheckBox)findViewById(R.id.show_password_check)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					password.setTransformationMethod(null);
+				} else {
+					password.setTransformationMethod(new PasswordTransformationMethod());
+				}
+			}
+		});
+
 		mShouldResolve = false;
 		findViewById(R.id.login_btn).setOnClickListener(this);
 		findViewById(R.id.facebook_login).setOnClickListener(this);
@@ -171,10 +202,10 @@ public class LoginActivity extends BaseActivity
 
 		if (email.getText().toString().trim().length() > 0 && checkEmailFormat(email.getText())) {
 			if (password.getText().toString().trim().length() > 0) {
-				if (password.getText().toString().trim().length() >= 6) {
+				if (password.getText().toString().trim().length() >= 8) {
 					addEmailLoginRequest();
 				} else {
-                    showToast("Password has to be 6 characters long");
+					showToast("Password has to be 8 characters long");
 
 				}
 			} else {

@@ -44,14 +44,14 @@ public class ProductPriceFilterFragment extends BaseFragment {
         int sortById = getArguments().getInt("sort_id");
         final int priceHigh = getArguments().getInt("price_high");
         final int priceLow = getArguments().getInt("price_low");
-
+        isZiExperience = getArguments().getBoolean("is_o2o");
         //sortById = 1;
         if (sortById == 1) {
             view.findViewById(R.id.low_to_high).setSelected(true);
         } else {
             view.findViewById(R.id.high_to_low).setSelected(true);
         }
-
+        ((CheckBox)view.findViewById(R.id.zi_experience_tag)).setChecked(isZiExperience);
         ((CheckBox)view.findViewById(R.id.zi_experience_tag)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -98,7 +98,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
                 if (!hasFocus) {
                     try {
                         if (Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) < Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())) {
-                            ((EditText) view.findViewById(R.id.to_price)).setText(Double.parseDouble((((EditText) view.findViewById(R.id.from_price)).getText().toString()) + 1)+"");
+                            ((EditText) view.findViewById(R.id.to_price)).setText(Math.round(Double.parseDouble((((EditText) view.findViewById(R.id.from_price)).getText().toString())))+"");
                         }else if(Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) >TO_PRICE){
                             ((EditText) view.findViewById(R.id.to_price)).setText(TO_PRICE+"");
                         }
@@ -116,7 +116,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
                 if(!hasFocus){
                     try{
                         if(Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())>Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString())) {
-                            ((EditText) view.findViewById(R.id.from_price)).setText((Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) - 1)+"");
+                            ((EditText) view.findViewById(R.id.from_price)).setText(Math.round((Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString())))+"");
                         }else if(Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString()) <FROM_PRICE){
                             ((EditText) view.findViewById(R.id.from_price)).setText(FROM_PRICE+"");
                         }
@@ -159,6 +159,11 @@ public class ProductPriceFilterFragment extends BaseFragment {
         //addMinMaxValueCheckForMinValue();
 
         return view;
+    }
+
+
+    public boolean isZiExperience() {
+        return isZiExperience;
     }
 
     public boolean checkPriceRange(){

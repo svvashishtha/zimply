@@ -93,8 +93,10 @@ public class AllFilterClassActivity extends DialogFragment implements View.OnCli
                 Bundle bundle = new Bundle();
 
                  if (this.bundle.getBoolean("is_products")) {
+
                     bundle.putInt("selected_pos", ((ArticleCategoryDialogFragment) fragments.get(0)).getSelectedPos());
-                    bundle.putInt("sort_id", ((ProductPriceFilterFragment) fragments.get(1)).getSortById());
+                     bundle.putBoolean("is_o2o", ((ProductPriceFilterFragment) fragments.get(1)).isZiExperience());
+                     bundle.putInt("sort_id", ((ProductPriceFilterFragment) fragments.get(1)).getSortById());
                      if(((ProductPriceFilterFragment) fragments.get(1)).checkPriceRange()) {
                          if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue().length() > 0) {
                              bundle.putInt("from_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue()));
@@ -111,7 +113,8 @@ public class AllFilterClassActivity extends DialogFragment implements View.OnCli
                     bundle.putInt("selected_pos", ((ProductFilterFragment) fragments.get(0)).getSelectedCategoryId());
                     bundle.putInt("expand_group", ((ProductFilterFragment) fragments.get(0)).getExpandGroup());
                     bundle.putInt("parent_category_id", ((ProductFilterFragment) fragments.get(0)).getSelectedParent_categoryId());
-                    bundle.putInt("city_id", ((ArticleCategoryDialogFragment) fragments.get(1)).getSelectedPos());
+                     bundle.putInt("city_id", ((ArticleCategoryDialogFragment) fragments.get(1)).getSelectedPos());
+
                      bundle.putString("selected_category", ((ProductFilterFragment) fragments.get(0)).getSelectedCategoryName());
                      mListener.onApplyClick(bundle);
                      dismiss();

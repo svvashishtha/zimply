@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -93,7 +95,13 @@ public class BaseLoginSignupActivity extends BaseActivity
 		findViewById(R.id.signup).setOnClickListener(this);
 		findViewById(R.id.login).setOnClickListener(this);
 
-		findViewById(R.id.skip_btn).setOnClickListener(this);
+
+		TextView textView = (TextView)findViewById(R.id.skip_btn);
+		SpannableString content = new SpannableString("Skip Login");
+		content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+		textView.setText(content);
+		textView.setOnClickListener(this);
+
 		final ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
 //		pager.setPageTransformer(true, new ZoomOutPageTransformer());
 		pager.setPageTransformer(true, new ParallaxPageTransformer((float) .5, (float) .5, R.id.img));

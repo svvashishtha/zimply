@@ -24,7 +24,9 @@
             android:id="@+id/facebook_login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height48"
-            android:layout_margin="@dimen/margin_medium"
+            android:layout_marginLeft="@dimen/margin_medium"
+            android:layout_marginRight="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
             android:background="@drawable/facebook_btn_bg"
             android:orientation="horizontal" >
 
@@ -146,14 +148,21 @@
             android:layout_marginRight="@dimen/margin_large"
             android:background="@drawable/login_edittext_bg"
             android:gravity="center_vertical"
-            android:hint="Password"
+            android:hint="Password(Min 8 Characters)"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/margin_small"
             android:textColor="@color/text_color1"
             android:textColorHint="@color/edittext_dim_white_color"
             android:textSize="@dimen/font_medium" />
-
+        <com.application.zimplyshop.widgets.CustomCheckBox
+            android:id="@+id/show_password_check"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:gravity="center_vertical"
+            android:textColor="@color/text_color1"
+            android:text="Show Password"
+            android:layout_height="wrap_content"/>
         <Button
             android:id="@+id/signup_btn"
             android:layout_width="match_parent"
@@ -190,7 +199,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center_horizontal"
                 android:text="Login"
-                android:textColor="@color/text_color1"
+                android:textColor="@color/blue"
                 android:textSize="@dimen/font_medium" />
         </LinearLayout>
     </LinearLayout>

@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,7 +28,7 @@ public class ForgotPassword extends BaseActivity implements GetRequestListener, 
 	boolean isDestroyed = false;
 	private Activity mContext;
 	private ProgressDialog zProgressDialog;
-    EditText email;
+	EditText email;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,21 @@ public class ForgotPassword extends BaseActivity implements GetRequestListener, 
 		View view = LayoutInflater.from(this).inflate(R.layout.login_signup_toolbar_layout, toolbar, false);
 		view.findViewById(R.id.cancel_action).setOnClickListener(this);
 		((TextView) view.findViewById(R.id.signup_layout_text)).setText("Forgot Password?");
-        email = (EditText) findViewById(R.id.email_et);
+		email = (EditText) findViewById(R.id.email_et);
+		email.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+					if(CommonLib.isNetworkAvailable(ForgotPassword.this)) {
+						addForgotPasswordRequest();
+					}else{
+						showToast("Failed to load. Check your internet connection");
+
+					}
+				}
+				return false;
+			}
+		});
 		toolbar.addView(view);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -52,48 +68,49 @@ public class ForgotPassword extends BaseActivity implements GetRequestListener, 
 
 	private void setListeners() {
 		findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
-            @Override
+			@Override
 			public void onClick(View v) {
-
-                String email = String.valueOf(((EditText) mContext.findViewById(R.id.email_et)).getText());
-                if (CommonLib.isNetworkAvailable(ForgotPassword.this)) {
-                    if (checkEmail()) {
-                        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.FORGOT_PASSWORD + "?email="
-                                + email;
-                        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.FORGOT_PASSWORD_REQUEST_TAG,
-                                ObjectTypes.OBJECT_TYPE_FORGOT_PASSWORD);
-                    }
-                }else{
-                    showToast("Failed to load. Check your internet connection");
-                }
-            }
+				addForgotPasswordRequest();
+			}
 		});
 	}
+	public void addForgotPasswordRequest(){
+		String email = String.valueOf(((EditText) mContext.findViewById(R.id.email_et)).getText());
+		if (CommonLib.isNetworkAvailable(ForgotPassword.this)) {
+			if (checkEmail()) {
+				String url = AppApplication.getInstance().getBaseUrl() + AppConstants.FORGOT_PASSWORD + "?email="
+						+ email;
+				GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.FORGOT_PASSWORD_REQUEST_TAG,
+						ObjectTypes.OBJECT_TYPE_FORGOT_PASSWORD);
+			}
+		}else{
+			showToast("Failed to load. Check your internet connection");
+		}
+	}
+	public boolean checkEmail(){
+		if(email.getText().toString().trim().length()>0){
+			if(checkEmailFormat(email.getText().toString().trim())){
+				return true;
+			}else {
+				showToast("Please enter a valid email address");
 
-    public boolean checkEmail(){
-        if(email.getText().toString().trim().length()>0){
-            if(checkEmailFormat(email.getText().toString().trim())){
-                return true;
-            }else {
-                showToast("Please enter a valid email address");
+				return false;
+			}
+		}else{
+			showToast("Please enter an email address");
+			return false;
+		}
+	}
 
-                return false;
-            }
-        }else{
-            showToast("Please enter an email address");
-            return false;
-        }
-    }
+	private boolean checkEmailFormat(CharSequence target) {
 
-    private boolean checkEmailFormat(CharSequence target) {
+		if (target == null) {
+			return false;
+		} else {
+			return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
 
-        if (target == null) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-
-        }
-    }
+		}
+	}
 	@Override
 	public void onDestroy() {
 		destroyed = true;
@@ -115,8 +132,8 @@ public class ForgotPassword extends BaseActivity implements GetRequestListener, 
 		if (requestTag.equals(RequestTags.FORGOT_PASSWORD_REQUEST_TAG)) {
 			if (!destroyed) {
 				if (zProgressDialog != null)
-                    zProgressDialog.dismiss();
-                showToast((String) obj);
+					zProgressDialog.dismiss();
+				showToast((String) obj);
 
 				mContext.finish();
 			}
@@ -129,7 +146,7 @@ public class ForgotPassword extends BaseActivity implements GetRequestListener, 
 			if (!destroyed) {
 				if (zProgressDialog != null)
 					zProgressDialog.dismiss();
-                showToast(((ErrorObject)obj).getErrorMessage());
+				showToast(((ErrorObject)obj).getErrorMessage());
 			}
 		}
 	}
@@ -137,9 +154,9 @@ public class ForgotPassword extends BaseActivity implements GetRequestListener, 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.cancel_action:
-			onBackPressed();
-			break;
+			case R.id.cancel_action:
+				onBackPressed();
+				break;
 		}
 	}
 

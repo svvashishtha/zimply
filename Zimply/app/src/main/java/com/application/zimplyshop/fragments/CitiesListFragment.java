@@ -429,8 +429,8 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                         // All location settings are satisfied. The client can initialize location
                         // requests here.
                         //...
-                        if(forced) {
-                            mLastLocation= LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        if (forced) {
+                            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                             makeCityRequest1();
                         }
                         break;
@@ -440,7 +440,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                         try {
                             // Show the dialog by calling startResolutionForResult(),
                             // and check the result in onActivityResult().
-                            if(forced) {
+                            if (forced && getActivity() != null) {
                                 status.startResolutionForResult(
                                         getActivity(),
                                         REQUEST_LOCATION);
@@ -503,6 +503,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                         }*/
                         // startLocationCheck1();
                        // checkLocationConnection();
+                        forced = true;
                         if(mGoogleApiClient.isConnected()){
                             showToast("Google Api Client connected");
                         }
@@ -522,6 +523,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                     case Activity.RESULT_CANCELED:
                     {
                         // The user was asked to change settings, but chose not to
+                        forced = false;
                         Toast.makeText(getActivity(), "Location not enabled, user cancelled.", Toast.LENGTH_LONG).show();
                         break;
                     }

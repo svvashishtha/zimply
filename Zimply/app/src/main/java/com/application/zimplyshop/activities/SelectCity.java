@@ -150,6 +150,7 @@ public class SelectCity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            closeKeyboard();
             this.finish();
         }
         return super.onOptionsItemSelected(item);
@@ -157,16 +158,13 @@ public class SelectCity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (currentFragmentCount == 2) {
-            currentFragmentCount = 1;
-            setToolbartext("Select City");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        } else {
-            currentFragmentCount = 0;
-        }
+        closeKeyboard();
         super.onBackPressed();
     }
-
+public void closeKeyboard(){
+    if(searchEditText!=null)
+        CommonLib.hideKeyBoard(this,searchEditText);
+}
 
  /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,10 +179,10 @@ public class SelectCity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (citiesListFragment!=null && requestCode == CitiesListFragment.REQUEST_LOCATION){
-                citiesListFragment.onActivityResult(requestCode, resultCode, data);
-            }
-            else {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
+            citiesListFragment.onActivityResult(requestCode, resultCode, data);
         }
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }

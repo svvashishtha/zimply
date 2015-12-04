@@ -57,7 +57,7 @@ public class ProductListingActivity extends BaseActivity implements
     Context context;
     TextView titleText;
 
-    boolean isNotification;
+    boolean isNotification,isO2o;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +123,7 @@ public class ProductListingActivity extends BaseActivity implements
             int width = (getDisplayMetrics().widthPixels-(3*getResources().getDimensionPixelSize(R.dimen.margin_small)))/3;
             if(!isHideFilter) {
                 finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
-                        + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(categoryId - 1).getId() : "");
+                        + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(categoryId - 1).getId() : "")+(isO2o?"&is_o2o="+1:"");
             }else{
                 finalUrl = AppApplication.getInstance().getBaseUrl() + url ;
             }
@@ -262,6 +262,7 @@ public class ProductListingActivity extends BaseActivity implements
             bundle.putInt("sort_id", sortId);
             bundle.putInt("price_high", priceHigh);
             bundle.putInt("price_low", priceLte);
+            bundle.putBoolean("is_o2o",isO2o);
             AllFilterClassActivity dialogFragment = AllFilterClassActivity.newInstance(bundle);
             dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.HJFullScreenDialogTheme);
             dialogFragment.setOnApplyClickListener(new AllFilterClassActivity.OnApplyClickListener() {
@@ -272,11 +273,13 @@ public class ProductListingActivity extends BaseActivity implements
                     sortId = bundle.getInt("sort_id");
                     priceLte = bundle.getInt("from_price");
                     priceHigh = bundle.getInt("to_price");
+                    isO2o = bundle.getBoolean("is_o2o");
                     nextUrl = url + "?filter=0" + ((categoryId != 0) ? ("&category__id__in=" + Integer.parseInt(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category()
                             .get(categoryId - 1).getId())) : "")
                             + ("&low_to_high=" + sortId) + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                             + (AppPreferences.isUserLogIn(ProductListingActivity.this)
-                            ? "&userid=" + AppPreferences.getUserID(ProductListingActivity.this) : "");
+                            ? "&userid=" + AppPreferences.getUserID(ProductListingActivity.this) : "")
+                            +(isO2o?"&is_o2o="+1:"");
 
                     isRefreshData = true;
                     if (categoryId != 0 || sortId != 1 || priceHigh != 100000 || priceLte != 1)
