@@ -24,6 +24,7 @@ public class CheckPhoneVerificationActivity extends BaseActivity {
     int width;
     private boolean destroyed = false;
     int fragmentType;
+    private boolean is_cancellable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,12 @@ public class CheckPhoneVerificationActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.check_phone_verification_activity);
-        setFinishOnTouchOutside(false);
+
+        if(getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("finish_on_touch_outside"))
+            is_cancellable = getIntent().getBooleanExtra("finish_on_touch_outside", false);
+
+        setFinishOnTouchOutside(is_cancellable);
+
         setCategoryFragment();
     }
     Fragment fragment;
@@ -97,5 +103,13 @@ public class CheckPhoneVerificationActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
 
+    }
+
+    public boolean is_cancellable() {
+        return is_cancellable;
+    }
+
+    public void setIs_cancellable(boolean is_cancellable) {
+        this.is_cancellable = is_cancellable;
     }
 }

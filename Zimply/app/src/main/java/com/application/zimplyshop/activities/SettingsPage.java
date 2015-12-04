@@ -32,6 +32,7 @@ public class SettingsPage extends BaseActivity {
             public void onClick(View v) {
                 if (AppPreferences.isUserLogIn(SettingsPage.this)) {
                     Intent intent = new Intent(SettingsPage.this, CheckPhoneVerificationActivity.class);
+                    intent.putExtra("finish_on_touch_outside", true);
                     startActivity(intent);
                 } else {
                     showToast("Please Login to continue");
