@@ -604,7 +604,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 // Intent workintent = new Intent(this, ProductDetailsActivity.class);
                 productId=(long) JSONUtils.getIntegerfromJSON(obj, "id");
                 slug = JSONUtils.getStringfromJSON(obj, "slug");
-                addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
+                moveToProductDetail(productId,slug);
+               // addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
                 // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
                 // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
                 // startActivity(workintent );

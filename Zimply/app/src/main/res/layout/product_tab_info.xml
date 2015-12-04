@@ -5,6 +5,7 @@
               android:layout_height="match_parent"
               android:background="@color/zhl"
               android:paddingBottom="@dimen/z_item_height_48"
+              android:animateLayoutChanges="true"
               android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
@@ -73,27 +74,49 @@
             android:layout_height="@dimen/z_item_height_48"
             android:background="@drawable/round_book_btn_bg"/>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="@dimen/size50"
-            android:layout_height="@dimen/size50"
-            android:layout_gravity="center"
-            android:padding="@dimen/margin_mini"
-            android:max="100"
-            android:progress="0"
-            android:rotation="-90"
-            android:visibility="gone"
-            android:progressDrawable="@drawable/circle_progress_background" />
+        <FrameLayout android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/loading_layout"
+                     android:visibility="gone"
+                     android:layout_gravity="center">
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="@dimen/size50"
+                android:layout_height="@dimen/size50"
+                android:layout_gravity="center"
+                android:padding="@dimen/margin_mini"
+                android:max="100"
+                android:progress="0"
+                android:rotation="-90"
 
-        <ImageView
-            android:id="@+id/cross_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_cross"
+                android:progressDrawable="@drawable/circle_progress_background" />
+
+            <ImageView
+                android:id="@+id/cross_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cross"
+
+                android:scaleType="centerInside"
+                android:layout_gravity="center"/>
+        </FrameLayout >
+        <LinearLayout
+            android:id="@+id/congrats_layout"
+            android:layout_width="match_parent"
             android:visibility="gone"
-            android:scaleType="centerInside"
-            android:layout_gravity="center"/>
+            android:background="@drawable/dropshadowcard"
+            android:gravity="center"
+            android:padding="@dimen/margin_small"
+            android:layout_height="wrap_content">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:layout_gravity="center_horizontal"
+                      android:textSize="@dimen/font_xxxlarge"
+                      android:drawableTop="@drawable/ic_acceptbig"
+                      android:text="Congratulations"
+                      android:drawablePadding="@dimen/margin_small"
+                      android:textColor="@color/heading_text_color"/>
+        </LinearLayout>
         <ProgressBar
             android:id="@+id/book_progress"
             android:layout_width="wrap_content"

@@ -21,6 +21,8 @@ public class BookedProductHistoryObject implements Serializable{
 
     String line2;
 
+    int vendor_id;
+
     public String getLine1() {
         return line1;
     }
@@ -42,6 +44,14 @@ public class BookedProductHistoryObject implements Serializable{
     String pincode;
 
     String city;
+
+    public int getVendor_id() {
+        return vendor_id;
+    }
+
+    public void setVendor_id(int vendor_id) {
+        this.vendor_id = vendor_id;
+    }
 
     public String getVendor() {
         return vendor;

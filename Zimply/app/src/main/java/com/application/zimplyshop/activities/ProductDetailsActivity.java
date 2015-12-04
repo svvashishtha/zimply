@@ -1,5 +1,8 @@
 package com.application.zimplyshop.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -125,6 +128,12 @@ public class ProductDetailsActivity extends ActionBarActivity
     CustomTextView bookAVisitBtn;
     CustomTextView emptyBtn;
 
+    int BOOK_BTN_CLICK=1;
+    int PROGRESS_TIME_COMPLETE = 2;
+    int PROGRESS_LOADING_COMPLETE=3;
+    int BOOK_PROCESS_COMPLETE = 4;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -247,9 +256,10 @@ public class ProductDetailsActivity extends ActionBarActivity
             @Override
             public void onClick(View v) {
                 if (AppPreferences.isUserLogIn(ProductDetailsActivity.this)) {
-                    bookAVisitBtn.setVisibility(View.GONE);
-                    emptyBtn.setVisibility(View.VISIBLE);
-                    scaleView(emptyBtn, 1f, 0.15f, true);
+                   // bookAVisitBtn.setVisibility(View.GONE);
+                    //emptyBtn.setVisibility(View.VISIBLE);
+                    // scaleView(emptyBtn, 1f, 0.15f, true);
+                    slideViewsRightToLeft(bookAVisitBtn,findViewById(R.id.loading_layout),BOOK_BTN_CLICK);
                 } else {
                     Intent intent = new Intent(ProductDetailsActivity.this, BaseLoginSignupActivity.class);
                     intent.putExtra("inside", true);
@@ -393,6 +403,80 @@ public class ProductDetailsActivity extends ActionBarActivity
         findViewById(R.id.relativeParent).setBackgroundColor(getResources().getColor(R.color.white));
     }
 
+    public void slideViewsRightToLeft(final View v1,View v2,final int checkCase){
+
+        AnimatorSet set = new AnimatorSet();
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(v1,View.TRANSLATION_X,0,-width);
+        anim1.setDuration(300);
+        v2.setVisibility(View.VISIBLE);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(v2,View.TRANSLATION_X,width,0);
+        anim2.setDuration(300);
+        set.playTogether(anim1, anim2);
+        set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                v1.setVisibility(View.GONE);
+                if(checkCase==BOOK_BTN_CLICK){
+                    startProgressBarLayout();
+                }else if(checkCase == PROGRESS_TIME_COMPLETE){
+                    makeProductPreviewRequest();
+                }else if(checkCase == PROGRESS_LOADING_COMPLETE){
+                    moveBookingCompleteCardIn();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        set.start();
+    }
+    public void slideViewsLeftToRight(final View v1,final View v2,int checkCase){
+
+        AnimatorSet set = new AnimatorSet();
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(v1,View.TRANSLATION_X,0,width);
+        anim1.setDuration(300);
+        v2.setVisibility(View.VISIBLE);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(v2,View.TRANSLATION_X,-width,0);
+        anim2.setDuration(300);
+        set.playTogether(anim1, anim2);
+        set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                v1.setVisibility(View.GONE);
+
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        set.start();
+    }
+
     public void scaleView(final View v, float startScale, float endScale,final  boolean isAnimateIn) {
         Animation anim = new ScaleAnimation(
                 startScale, endScale, // Start and end values for the X axis scaling
@@ -434,14 +518,9 @@ public class ProductDetailsActivity extends ActionBarActivity
     public void startProgressBarLayout(){
         if(!isDestroyed) {
 
-            mContext.findViewById(R.id.empty_btn).clearAnimation();
-            mContext.findViewById(R.id.empty_btn).setVisibility(View.GONE);
             final ProgressBar bookVisitProgress = (ProgressBar) findViewById(R.id.progressBar);
 
             final ImageView crossImg = (ImageView) findViewById(R.id.cross_img);
-
-            crossImg.setVisibility(View.VISIBLE);
-            bookVisitProgress.setVisibility(View.VISIBLE);
 
             final Timer timer = new Timer();
 
@@ -456,11 +535,11 @@ public class ProductDetailsActivity extends ActionBarActivity
                                 if (seconds <= 0) {
                                     seconds = 30;
                                     timer.cancel();
-                                    crossImg.setVisibility(View.GONE);
-                                    bookVisitProgress.setVisibility(View.GONE);
+
                                     // emptyBtn.setVisibility(View.GONE);
-                                    findViewById(R.id.book_progress).setVisibility(View.VISIBLE);
-                                    makeProductPreviewRequest();
+                                    slideViewsRightToLeft(findViewById(R.id.loading_layout), findViewById(R.id.book_progress),PROGRESS_TIME_COMPLETE);
+
+                                    //makeProductPreviewRequest();
 
                                 } else {
                                     bookVisitProgress.setProgress(100 - ((seconds*100)/30));
@@ -478,10 +557,9 @@ public class ProductDetailsActivity extends ActionBarActivity
                 public void onClick(View v) {
                     timer.cancel();
                     seconds = 30;
-                    bookVisitProgress.setVisibility(View.GONE);
-                    crossImg.setVisibility(View.GONE);
-                    emptyBtn.setVisibility(View.VISIBLE);
-                    scaleView(emptyBtn, 0.15f, 1f, false);
+                    bookVisitProgress.setProgress(0);
+                    slideViewsLeftToRight(findViewById(R.id.loading_layout),bookAVisitBtn,BOOK_BTN_CLICK);
+                    //scaleView(emptyBtn, 0.15f, 1f, false);
                 }
             });
         }
@@ -849,7 +927,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         }, 200);
 
         ((TextView) findViewById(R.id.product_title)).setText(product.getName());
-        ((TextView) findViewById(R.id.product_price)).setText(getString(R.string.rs_text) + " " + product.getPrice() + "");
+        ((TextView) findViewById(R.id.product_price)).setText(getString(R.string.rs_text) + " " + Math.round(product.getPrice()) + "");
         ((TextView) findViewById(R.id.delivery)).setText(product.getMinShippingDays() + "-" + product.getMaxShippingDays() + " Days");
         ((TextView) findViewById(R.id.shipping_charges)).setText(getString(R.string.rs_text) + " " + product.getShippingCharges());
         ((TextView) findViewById(R.id.sold_by)).setText(product.getVendor().getCompany_name());
@@ -995,8 +1073,8 @@ public class ProductDetailsActivity extends ActionBarActivity
                 }
             }
         }else if(requestType == MARK_PRODUCT_REVIEW_TAG){
-            findViewById(R.id.book_progress).setVisibility(View.GONE);
-            bookAVisitBtn.setVisibility(View.GONE);
+            //findViewById(R.id.book_progress).setVisibility(View.GONE);
+            //bookAVisitBtn.setVisibility(View.GONE);
             if(status) {
 
                /* AllProducts.getInstance().getBookedObjs().add(new BaseCartProdutQtyObj((int)product.getId(),1));
@@ -1012,9 +1090,10 @@ public class ProductDetailsActivity extends ActionBarActivity
             if (progressDialog != null)
                 progressDialog.dismiss();
             if(status) {
-                AllProducts.getInstance().getVendorIds().remove((Integer)product.getVendor().getVendor_id());
-                findViewById(R.id.booking_confirm_card).setVisibility(View.GONE);
-                bookAVisitBtn.setVisibility(View.VISIBLE);
+                AllProducts.getInstance().getVendorIds().remove((Integer) product.getVendor().getVendor_id());
+                //findViewById(R.id.booking_confirm_card).setVisibility(View.GONE);
+               // bookAVisitBtn.setVisibility(View.VISIBLE);
+                slideViewsLeftToRight(findViewById(R.id.booking_confirm_card),bookAVisitBtn,BOOK_BTN_CLICK);
                 showToast("Successfully cancelled");
             }else{
                 showToast("Cannot cancel request. Try again");
@@ -1042,7 +1121,7 @@ public class ProductDetailsActivity extends ActionBarActivity
     }
     public void showVisitBookedCard(final ProductVendorTimeObj obj){
         View view = findViewById(R.id.booking_confirm_card);
-        view.setVisibility(View.VISIBLE);
+        //view.setVisibility(View.VISIBLE);
         ((CustomTextView)view.findViewById(R.id.address)).setText(obj.getLine1() + "\n" + obj.getCity());
         ((LinearLayout)view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1057,7 +1136,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MapPage.class);
-                intent.putExtra("lat",product.getVendor().getReg_add().getLocation().getLatitude());
+                intent.putExtra("lat", product.getVendor().getReg_add().getLocation().getLatitude());
                 intent.putExtra("lon", product.getVendor().getReg_add().getLocation().getLongitude());
                 intent.putExtra("name", product.getVendor().getReg_add().getLocation().getName());
                 mContext.startActivity(intent);
@@ -1090,8 +1169,19 @@ public class ProductDetailsActivity extends ActionBarActivity
 
             }
         });
+
+        slideViewsRightToLeft(findViewById(R.id.book_progress), findViewById(R.id.congrats_layout), PROGRESS_LOADING_COMPLETE);
+
     }
 
+    public void moveBookingCompleteCardIn(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                slideViewsRightToLeft(findViewById(R.id.congrats_layout), findViewById(R.id.booking_confirm_card), BOOK_PROCESS_COMPLETE);
+            }
+        },3000);
+    }
     public void showVisitBookedInitialCard(final VendorObj obj){
         View view = findViewById(R.id.booking_confirm_card);
         view.setVisibility(View.VISIBLE);

@@ -383,6 +383,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             intent.putExtra("address",shippingAddress);
             intent.putExtra("buying_channel",buyingChannel);
             intent.putExtra("is_coc",isCoc());
+            intent.putExtra("is_all_online",isAllOnline());
             startActivity(intent);
 
 
@@ -392,6 +393,14 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     public boolean isCoc(){
         for(int i = 0;i<cartObject.getCart().getDetail().size();i++){
             if(!cartObject.getCart().getDetail().get(i).is_o2o()){
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean isAllOnline(){
+        for(int i = 0;i<cartObject.getCart().getDetail().size();i++){
+            if(cartObject.getCart().getDetail().get(i).is_o2o()){
                 return false;
             }
         }
@@ -612,8 +621,8 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         list.add(new BasicNameValuePair("ids",productIds));
         list.add(new BasicNameValuePair("quantity",quantity));
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
-        list.add(new BasicNameValuePair("billing_address", billingAddress.getName() + ", " + billingAddress.getLine1() +
-                ", " + billingAddress.getLine2() + ", " + billingAddress.getCity() + ", " + billingAddress.getPincode()));
+        list.add(new BasicNameValuePair("billing_address", shippingAddress.getName() + ", " + shippingAddress.getLine1() +
+                ", " + shippingAddress.getLine2() + ", " + shippingAddress.getCity() + ", " + shippingAddress.getPincode()));
         list.add(new BasicNameValuePair("shipping_address", shippingAddress.getName() + ", " + shippingAddress.getLine1() +
                 ", " + shippingAddress.getLine2() + ", " + shippingAddress.getCity() + ", " + shippingAddress.getPincode()));
         list.add(new BasicNameValuePair("shipping_address_id",shippingAddress.getId()+""));

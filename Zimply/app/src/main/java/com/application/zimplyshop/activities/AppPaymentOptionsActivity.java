@@ -51,7 +51,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     int buyingChannel;
 
-    boolean isCoc;
+    boolean isCoc,isAllOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +64,10 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             email = getIntent().getStringExtra("email");
             totalPrice =Double.parseDouble(getIntent().getStringExtra("total_amount"));
             addressObj = (AddressObject)getIntent().getSerializableExtra("address");
-            buyingChannel = getIntent().getIntExtra("buying_channel",0);
-            isCoc = getIntent().getBooleanExtra("is_coc",false);
+            buyingChannel = getIntent().getIntExtra("buying_channel", 0);
+            isCoc = getIntent().getBooleanExtra("is_coc", false);
+
+            isAllOnline =  getIntent().getBooleanExtra("is_all_online",false);
         }
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         addToolbarView(toolbar);
@@ -93,6 +95,9 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         paymentType = PAYMENT_TYPE_CARD;
         findViewById(R.id.pay_online).setSelected(true);
         findViewById(R.id.pay_cash_counter).setSelected(false);
+        if( isAllOnline ){
+            ((CustomTextView)findViewById(R.id.pay_cash_counter)).setVisibility(View.GONE);
+        }
     }
 
     public void addToolbarView(Toolbar toolbar){

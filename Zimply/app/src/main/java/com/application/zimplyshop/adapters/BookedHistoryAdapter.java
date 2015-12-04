@@ -87,6 +87,11 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
         notifyDataSetChanged();
     }
 
+    public Object getItem(int pos){
+        if(objs!=null )
+            return objs.get(pos);
+        return null;
+    }
 
     public void changeAddBtnText(int id){
         notifyDataSetChanged();

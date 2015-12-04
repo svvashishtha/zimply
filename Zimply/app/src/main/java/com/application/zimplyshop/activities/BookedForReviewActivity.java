@@ -92,7 +92,9 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
+                                        AllProducts.getInstance().getVendorIds().remove((Integer) ((BookedProductHistoryObject) adapter.getItem(clickedPos)).getVendor_id());
                                         adapter.removePos(clickedPos);
+
                                     }
                                 }).create();
                 logoutDialog.show();
@@ -101,14 +103,14 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
             if(progressDialog!=null){
                 progressDialog.dismiss();
             }
-                if(status){
-                    showToast("Successfully added to cart");
-                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(addToCartId, 1));
-                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
-                    adapter.changeAddBtnText(addToCartId);
-                }else{
-                    showToast("Could not add into cart. Try again");
-                }
+            if(status){
+                showToast("Successfully added to cart");
+                AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(addToCartId, 1));
+                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                adapter.changeAddBtnText(addToCartId);
+            }else{
+                showToast("Could not add into cart. Try again");
+            }
         }
     }
 

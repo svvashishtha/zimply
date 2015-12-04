@@ -89,16 +89,17 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
                     setResult(RESULT_OK, intent);
                     this.finish();
                 } else {
-                    setResult(RESULT_CANCELED, intent);
-                    this.finish();
+                    showToast("Not a valid QR code");
+                  //  setResult(RESULT_CANCELED, intent);
+                    //this.finish();
                 }
             }catch(Exception e){
-                setResult(RESULT_CANCELED, intent);
-                this.finish();
+                showToast("Not a valid QR code");
+                /*setResult(RESULT_CANCELED, intent);
+                this.finish();*/
             }
         }else{
-            setResult(RESULT_CANCELED, intent);
-            this.finish();
+           showToast("Not a valid QR code");
         }
     }
 
