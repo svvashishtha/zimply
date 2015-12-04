@@ -30,7 +30,7 @@
         android:layout_gravity="bottom"
         android:paddingLeft="@dimen/margin_large"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/margin_medium" >
+        android:paddingBottom="@dimen/margin_small" >
 
         <com.application.zimplyshop.widgets.CircularImageView
             android:id="@+id/user_img"
@@ -48,6 +48,14 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="@dimen/size16"
+            android:textStyle="bold" />
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/drawer_user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textSize="@dimen/size14"
             android:textStyle="bold" />
     </LinearLayout>
 

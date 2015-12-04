@@ -140,7 +140,7 @@
         android:layout_gravity="end"
         android:background="@drawable/action_bar_item_bg"
         android:padding="@dimen/margin_small"
-        android:text="SKIP"
+        android:text="SKIP LOGIN"
         android:textColor="@color/text_color1" />
 
 </FrameLayout>

@@ -743,6 +743,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 userImage.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_user, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material), getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)));
                 backgroundImg.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_user_profile_bg, width, width));
             }
+            ((TextView)navView.findViewById(R.id.drawer_user_email)).setVisibility(View.VISIBLE);
+            ((TextView)navView.findViewById(R.id.drawer_user_email)).setText(AppPreferences.getUserEmail(this));
             userName.setText(AppPreferences.getUserName(this));
         } else {
             SpannableString spannablecontent = new SpannableString("Hello! Login/Signup ?");

@@ -10,12 +10,17 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -66,6 +71,7 @@ public class SignupActivity extends BaseActivity
 		toolbar.addView(view);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 		mShouldResolve = false;
 		name = (EditText) findViewById(R.id.name);
 		email = (EditText) findViewById(R.id.email);
@@ -90,6 +96,32 @@ public class SignupActivity extends BaseActivity
 			@Override
 			public void afterTextChanged(Editable s) {
 
+			}
+		});
+
+		((CheckBox)findViewById(R.id.show_password_check)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					password.setTransformationMethod(null);
+				} else {
+					password.setTransformationMethod(new PasswordTransformationMethod());
+				}
+			}
+		});
+
+		password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					if (CommonLib.isNetworkAvailable(SignupActivity.this)) {
+						checkLogin();
+					} else {
+						showToast("Failed to load. Check your internet connection");
+
+					}
+				}
+				return false;
 			}
 		});
 		findViewById(R.id.facebook_login).setOnClickListener(this);
@@ -174,10 +206,10 @@ public class SignupActivity extends BaseActivity
 		if (name.getText().toString().trim().length() > 0) {
 			if (email.getText().toString().trim().length() > 0 && checkEmailFormat(email.getText())) {
 				if (password.getText().toString().trim().length() > 0) {
-					if (password.getText().toString().trim().length() >= 6) {
+					if (password.getText().toString().trim().length() >= 8) {
 						addEmailLoginRequest();
 					} else {
-                        showToast("Password has to be 6 characters long");
+						showToast("Password has to be 8 characters long");
 
 					}
 				} else {

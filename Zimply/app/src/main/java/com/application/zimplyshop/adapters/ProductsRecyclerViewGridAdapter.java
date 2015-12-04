@@ -141,12 +141,12 @@ public class ProductsRecyclerViewGridAdapter extends
                 if (objs.get(position).getDiscounted_price() != 0) {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + objs.get(position).getDiscounted_price());
+                                    + Math.round(objs.get(position).getDiscounted_price()));
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.VISIBLE);
                     ((ProductViewHolder) holder).productPrice.setText(mContext
                             .getString(R.string.Rs)
                             + " "
-                            + objs.get(position).getPrice());
+                            + Math.round(objs.get(position).getPrice()));
                     ((ProductViewHolder) holder).productPrice
                             .setPaintFlags(((ProductViewHolder) holder).productPrice
                                     .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -155,7 +155,7 @@ public class ProductsRecyclerViewGridAdapter extends
                 } else {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + objs.get(position).getPrice());
+                                    + Math.round(objs.get(position).getPrice()));
 
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
