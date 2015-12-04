@@ -1486,10 +1486,10 @@ public class ProductDetailsActivity extends ActionBarActivity
             int result = -1;
             try {
                 int userId = Integer.parseInt(AppPreferences.getUserID(mContext));
-                result = RecentProductsDBWrapper.addProduct(product, userId, (int) product.getId(), System.currentTimeMillis());
+                result = RecentProductsDBWrapper.addProduct(product, userId, System.currentTimeMillis());
             } catch (NumberFormatException e) {
                 try {
-                    result = RecentProductsDBWrapper.addProduct(product, -1, (int) product.getId(), System.currentTimeMillis());
+                    result = RecentProductsDBWrapper.addProduct(product, -1, System.currentTimeMillis());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

@@ -14,8 +14,8 @@ public class RecentProductsDBWrapper {
         helper = new RecentProductsDBManager(context);
     }
 
-    public static int addProduct(HomeProductObj location, int userId, int wishId, long timestamp) {
-        return helper.addProduct(location, userId, wishId, timestamp);
+    public static int addProduct(HomeProductObj location, int userId, long timestamp) {
+        return helper.addProduct(location, userId, timestamp);
     }
 
     public static ArrayList<HomeProductObj> getProducts(int userId) {

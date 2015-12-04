@@ -102,6 +102,7 @@
     <string name="search_categories">Search Categories</string>
 
     <string name="search_category_hint">Search Your Category</string>
+    <string name="search_products_hint">Search for Products</string>
     <string name="search_location_hint">Search Your Location</string>
     <string name="search_suggestions">Search Suggestions</string>
     <string name="search_experts">Search Experts</string>

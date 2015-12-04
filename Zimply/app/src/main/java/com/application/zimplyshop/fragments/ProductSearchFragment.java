@@ -81,6 +81,8 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
         mListView = (ListView) getView.findViewById(R.id.listview);
         recentSearchesListView = (ListView) getView.findViewById(R.id.recent_searches_listview);
 
+        recentSearchesListView.setVisibility(View.VISIBLE);
+        mListView.setVisibility(View.GONE);
         loadData(null, true);
     }
 
@@ -94,8 +96,12 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             loadData(input.trim(), false);
         } else {
             if( input.trim().length() == 0 ) {
+                if(mAsyncRunning != null)
+                    mAsyncRunning.cancel(true);
                 getView.findViewById(R.id.recent_searches_container).setVisibility(View.VISIBLE);
                 getView.findViewById(R.id.listview_container).setVisibility(View.GONE);
+                getView.findViewById(R.id.progress_container).setVisibility(View.GONE);
+                getView.findViewById(R.id.progress_recent).setVisibility(View.GONE);
             }
         }
     }
@@ -177,8 +183,13 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 //if products size is 0, display recent
                 if(products != null && products.size() > 0) {
                     getView.findViewById(R.id.listview_container).setVisibility(View.VISIBLE);
+                    mListView.setVisibility(View.VISIBLE);
+                    recentSearchesListView.setVisibility(View.GONE);
                 } else {//else display products
                     getView.findViewById(R.id.listview_container).setVisibility(View.GONE);
+                    getView.findViewById(R.id.recent_searches_container).setVisibility(View.VISIBLE);
+                    getView.findViewById(R.id.progress_container).setVisibility(View.GONE);
+                    getView.findViewById(R.id.progress_recent).setVisibility(View.GONE);
                 }
             }
         }

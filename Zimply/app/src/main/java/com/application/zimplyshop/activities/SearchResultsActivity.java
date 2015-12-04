@@ -207,6 +207,7 @@ public class SearchResultsActivity extends BaseActivity implements
         inflater.inflate(R.menu.main, menu);
         menu.findItem(R.id.cart).setVisible(false);
         menu.findItem(R.id.search).setVisible(false);
+        menu.findItem(R.id.filter).setVisible(true);
         return true;
     }
 
