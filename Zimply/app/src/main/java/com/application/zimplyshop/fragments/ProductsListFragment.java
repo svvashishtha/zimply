@@ -76,13 +76,25 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
 
     }
 
+    boolean isSecondTime,isBookingsLoading;
     @Override
     public void onResume() {
         destroyed = false;
+        if(!isSecondTime){
+            isSecondTime = true;
+        }else {
+            if(!isBookingsLoading &&AllProducts.getInstance().getVendorIds().size()!=AllProducts.getInstance().getHomeProCatNBookingObj().getLatest_bookings().size()){
+                loadBookingData();
+            }
+        }
+
         if (productsCategoryGridAdapter != null)
             productsCategoryGridAdapter.notifyDataSetChanged();
+
         super.onResume();
     }
+
+
 
     @Override
     public void onDestroy() {
@@ -105,6 +117,8 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                 showLoadingView();
                 changeViewVisiblity(cateoryList, View.GONE);
             }
+        }else if(requestTag != null && requestTag.equalsIgnoreCase(RequestTags.LATEST_BOOKINGS_TAG)){
+            isBookingsLoading =true;
         }
     }
 
@@ -127,7 +141,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
 
                         showView();
                         changeViewVisiblity(cateoryList, View.VISIBLE);
-                        // loadBookingData();
+                        loadBookingData();
                     }
                 } else {
                     Toast.makeText(mActivity, "Something went wrong. Please try again..", Toast.LENGTH_SHORT).show();
@@ -142,7 +156,10 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                 }
                 productsCategoryGridAdapter.addLatestBookingsData(AllProducts.getInstance().getHomeProCatNBookingObj().getLatest_bookings());
                 cateoryList.smoothScrollToPosition(0);
+            }else{
+                productsCategoryGridAdapter.addLatestBookingsData(null);
             }
+            isBookingsLoading =false;
         }
     }
     public void loadBookingData(){
@@ -158,6 +175,8 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                 showNetworkErrorView();
                 changeViewVisiblity(cateoryList, View.GONE);
             }
+        }else if(requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)){
+            isBookingsLoading=false;
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.application.zimplyshop.baseobjects;
 
-public class VendorLocationObj {
+import java.io.Serializable;
+
+public class VendorLocationObj implements Serializable{
     Double latitude;
 
     Double longitude;

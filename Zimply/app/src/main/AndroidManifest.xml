@@ -91,6 +91,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
+            android:name="com.application.zimplyshop.activities.BookingStoreProductListingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name="com.application.zimplyshop.activities.ShopSubCategoriesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

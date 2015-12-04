@@ -1,6 +1,8 @@
 package com.application.zimplyshop.baseobjects;
 
-public class VendorAddressObj{
+import java.io.Serializable;
+
+public class VendorAddressObj implements Serializable{
     String phone;
 
     int id;

@@ -2,7 +2,6 @@ package com.application.zimplyshop.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.BookedForReviewActivity;
 import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
-import com.application.zimplyshop.managers.ImageLoaderManager;
-import com.application.zimplyshop.objects.AllProducts;
-import com.application.zimplyshop.utils.TimeUtils;
+import com.application.zimplyshop.utils.CommonLib;
 
 import java.util.ArrayList;
 
@@ -41,34 +37,31 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        new ImageLoaderManager((BookedForReviewActivity)mContext).setImageFromUrl(objs.get(position).getProductImg(), ((OrderItemHolder) holder).storePic, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
-        ((OrderItemHolder)holder).orderDate.setText(Html.fromHtml("Visit store on or before <b>" + TimeUtils.getTimeStampDate(objs.get(position).getVendorTimeObj().getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY)+"</b>" + " by 9 PM"));
-        ((OrderItemHolder)holder).storeAddress.setText(objs.get(position).getVendorTimeObj().getLine1()+"\n"+objs.get(position).getVendorTimeObj().getCity()+"\nPincode-"+objs.get(position).getVendorTimeObj().getPincode());
-        ((OrderItemHolder)holder).itemName.setText(objs.get(position).getName());
+        //new ImageLoaderManager((BookedForReviewActivity)mContext).setImageFromUrl(objs.get(position).getProductImg(), ((OrderItemHolder) holder).storePic, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
+        ((OrderItemHolder) holder).storePic.setImageBitmap(CommonLib.getBitmap(mContext,R.drawable.ic_home_store,mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size),mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size)));
+
+        ((OrderItemHolder)holder).storeAddress.setText(objs.get(position).getVendorTimeObj().getLine1()+"\n"+objs.get(position).getVendorTimeObj().getPincode()+"\nPincode-"+objs.get(position).getVendorTimeObj().getCity());
         ((OrderItemHolder)holder).storeName.setText(objs.get(position).getVendorTimeObj().getVendor());
-        ((OrderItemHolder)holder).itemPrice.setText(mContext.getResources().getString(R.string.rs_text) + objs.get(position).getPrice() + "");
+
 
        /* ColorFilter filter = new LightingColorFilter(
                 objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green),
                 objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green));
         ((OrderItemHolder) holder).bookingStatus.getBackground().setColorFilter(filter);*/
 
-        if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL") || objs.get(position).getStatus().equalsIgnoreCase("EXPIRED")){
-            if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL")) {
-                ((OrderItemHolder) holder).bookingStatus.setText("CANCELLED");
-            }else{
-                ((OrderItemHolder) holder).bookingStatus.setText(objs.get(position).getStatus());
-            }
+        if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL")){
+            ((OrderItemHolder) holder).bookingStatus.setVisibility(View.VISIBLE);
+            ((OrderItemHolder) holder).bookingStatus.setText("CANCELLED");
+            ((OrderItemHolder) holder).cancelBooking.setVisibility(View.GONE);
+        }else if(objs.get(position).getStatus().equalsIgnoreCase("EXPIRED")){
+            ((OrderItemHolder) holder).bookingStatus.setVisibility(View.VISIBLE);
+            ((OrderItemHolder) holder).bookingStatus.setText(objs.get(position).getStatus());
+            ((OrderItemHolder) holder).cancelBooking.setVisibility(View.GONE);
+        }else {
+            ((OrderItemHolder) holder).bookingStatus.setVisibility(View.GONE);
+            ((OrderItemHolder) holder).cancelBooking.setVisibility(View.VISIBLE);
 
-
-
-            ((OrderItemHolder)holder).btnLayout.setVisibility(View.GONE);
-            ((OrderItemHolder)holder).separatorView.setVisibility(View.GONE);
-        }else{
-            ((OrderItemHolder)holder).bookingStatus.setText(objs.get(position).getStatus());
-            ((OrderItemHolder)holder).btnLayout.setVisibility(View.VISIBLE);
-            ((OrderItemHolder)holder).separatorView.setVisibility(View.VISIBLE);
-            ((OrderItemHolder)holder).cancelBooking.setOnClickListener(new View.OnClickListener() {
+            ((OrderItemHolder) holder).cancelBooking.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
@@ -76,35 +69,16 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 }
             });
-            if(AllProducts.getInstance().cartContains(objs.get(position).getId())){
-                ((OrderItemHolder)holder).addToCart.setText("Go to Cart");
-            }else{
-                ((OrderItemHolder)holder).addToCart.setText("Add to Cart");
-            }
-            ((OrderItemHolder)holder).addToCart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(((OrderItemHolder)holder).addToCart.getText().toString().equalsIgnoreCase("Add to Cart")) {
-                        if (mListener != null) {
-                            mListener.addToCartClick(position, objs.get(position).getId());
-                        }
-                    }else{
-                        mListener.moveToCartActivity();
-                    }
-                }
-            });
         }
+
+
         /*ColorFilter filter = new LightingColorFilter(
                 objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green),
                 objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green));
 */
 
        // ((OrderItemHolder) holder).bookingStatus.getBackground().setColorFilter(filter);
-        if(objs.get(position).getStatus().equalsIgnoreCase("CANCEL")){
-            ((OrderItemHolder) holder).bookingStatus.setBackgroundResource(R.drawable.red_bg);
-        }else {
-            ((OrderItemHolder) holder).bookingStatus.setBackgroundResource(R.drawable.green_btn_rectangle_bg);
-        }
+
     }
 
     public void removePos(int pos){
@@ -124,20 +98,16 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public class OrderItemHolder extends RecyclerView.ViewHolder{
-        TextView  orderDate,itemPrice,storeName,storeAddress,itemName,cancelBooking,bookingStatus,addToCart;
+        TextView  storeName,storeAddress,cancelBooking,bookingStatus;
         ImageView storePic,callCustomer,getDirections;
-        View separatorView;
 
         LinearLayout btnLayout;
         public OrderItemHolder(View itemView) {
             super(itemView);
-            separatorView = itemView.findViewById(R.id.separator);
-            itemName = (TextView)itemView.findViewById(R.id.product_name);
-            orderDate = (TextView)itemView.findViewById(R.id.product_delivery_date);
             storeName = (TextView)itemView.findViewById(R.id.store_name);
             storeAddress = (TextView)itemView.findViewById(R.id.store_address);
-            itemPrice = (TextView)itemView.findViewById(R.id.product_price);
-            storePic = (ImageView)itemView.findViewById(R.id.product_img);
+            bookingStatus = (TextView)itemView.findViewById(R.id.booking_status);
+            storePic = (ImageView)itemView.findViewById(R.id.store_img);
             cancelBooking = (TextView)itemView.findViewById(R.id.cancel_booking);
             callCustomer = (ImageView)itemView.findViewById(R.id.call_customer);
             getDirections = (ImageView)itemView.findViewById(R.id.get_direction_customer);

@@ -192,4 +192,6 @@
 
     <string name="take_me_there">Take me there</string>
     <string name="update_google_play_services">Update google play services</string>
+    <string name="online_payment">Online Payment</string>
+    <string name="cash_at_counter">Cash-at-Counter</string>
 </resources>

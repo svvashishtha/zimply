@@ -64,14 +64,14 @@
                 android:gravity="center"
                 android:textAllCaps="true"
                 android:text="@string/add_to_cart"
-                android:textSize="@dimen/font_medium"
+                android:textSize="@dimen/font_small"
                 android:textColor="@color/heading_text_color" />
 
-            <com.application.zimplyshop.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/buy_now"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/z_item_height_48"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:background="@drawable/orange_btn_bg"
                 android:gravity="center"
                 android:text="@string/buy_now"

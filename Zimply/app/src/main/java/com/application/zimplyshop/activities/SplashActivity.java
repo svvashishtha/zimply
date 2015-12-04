@@ -178,6 +178,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
             }else{
                 Intent intent = new Intent(this, SelectCity.class);
                 intent.putExtra("show_back", false);
+                intent.putExtra("fetch_location", true);
                 startActivity(intent);
                 this.finish();
             }

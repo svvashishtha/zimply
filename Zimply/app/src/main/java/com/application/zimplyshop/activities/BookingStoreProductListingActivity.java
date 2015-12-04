@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
+import com.application.zimplyshop.adapters.BookedStoreProductListAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
@@ -39,7 +39,7 @@ import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
 
 import java.util.ArrayList;
 
-public class ProductListingActivity extends BaseActivity implements
+public class BookingStoreProductListingActivity extends BaseActivity implements
         OnClickListener, GetRequestListener, RequestTags, AppConstants {
 
     String url, nextUrl;
@@ -51,7 +51,7 @@ public class ProductListingActivity extends BaseActivity implements
 
     int width;
 
-    int categoryId = 0, sortId = 1, priceLte = 1, priceHigh = 100000;
+    int vendorId = 0, sortId = 1, priceLte = 1, priceHigh = 50000;
 
     boolean isRefreshData;
     Context context;
@@ -59,15 +59,15 @@ public class ProductListingActivity extends BaseActivity implements
 
     boolean isNotification;
 
+    HomeProductObj obj;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
         context = getApplicationContext();
-        if(getIntent().getStringExtra("category_id")!=null)
-            categoryId = getSelectedCatgeoryId(Integer.parseInt(getIntent().getStringExtra("category_id"))) + 1;
-
-        isNotification = getIntent().getBooleanExtra("is_notification",false);
+        vendorId = getIntent().getIntExtra("vendor_id", 0);
+        isNotification = getIntent().getBooleanExtra("is_notification", false);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
@@ -82,7 +82,7 @@ public class ProductListingActivity extends BaseActivity implements
                 (int) getResources().getDimension(R.dimen.margin_mini)));
 
         // setProductsGrid();
-
+        obj = (HomeProductObj)getIntent().getSerializableExtra("booked_obj");
         url = getIntent().getStringExtra("url");
         isHideFilter = getIntent().getBooleanExtra("hide_filter",false);
         setStatusBarColor();
@@ -119,14 +119,10 @@ public class ProductListingActivity extends BaseActivity implements
     private void loadData() {
         String finalUrl;
         if (nextUrl == null) {
-
             int width = (getDisplayMetrics().widthPixels-(3*getResources().getDimensionPixelSize(R.dimen.margin_small)))/3;
-            if(!isHideFilter) {
-                finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
-                        + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(categoryId - 1).getId() : "");
-            }else{
-                finalUrl = AppApplication.getInstance().getBaseUrl() + url ;
-            }
+            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
+                        + "&width=" + width + "&vendor__id__in="+vendorId ;
+
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
@@ -140,8 +136,8 @@ public class ProductListingActivity extends BaseActivity implements
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
-                    this, this, height);
+            BookedStoreProductListAdapter adapter = new BookedStoreProductListAdapter(
+                    this, this, height,obj);
             productList.setAdapter(adapter);
             productList
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -168,7 +164,7 @@ public class ProductListingActivity extends BaseActivity implements
                         @Override
                         public void onScrollStateChanged(
                                 RecyclerView recyclerView, int newState) {
-                            new ImageLoaderManager(ProductListingActivity.this)
+                            new ImageLoaderManager(BookingStoreProductListingActivity.this)
                                     .setScrollState(newState);
                             super.onScrollStateChanged(recyclerView, newState);
                         }
@@ -180,8 +176,10 @@ public class ProductListingActivity extends BaseActivity implements
                             switch (productList
                                     .getAdapter().getItemViewType(position)) {
                                 case 0:
-                                    return 1;
+                                    return 2;
                                 case 1:
+                                    return 1;
+                                case 2:
                                     return 2;
                                 default:
                                     return -1;
@@ -190,7 +188,7 @@ public class ProductListingActivity extends BaseActivity implements
                     });
 
         }
-        ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+        ((BookedStoreProductListAdapter) productList.getAdapter())
                 .addData(objs);
     }
 
@@ -198,8 +196,8 @@ public class ProductListingActivity extends BaseActivity implements
         View view = LayoutInflater.from(this).inflate(
                 R.layout.common_toolbar_text_layout, null);
         titleText = (TextView) view.findViewById(R.id.title_textview);
-        if (getIntent().getStringExtra("category_name") != null) {
-            titleText.setText(getIntent().getStringExtra("category_name"));
+        if (getIntent().getStringExtra("vendor_name") != null) {
+            titleText.setText(getIntent().getStringExtra("vendor_name"));
         } else {
             titleText.setText("Products");
         }
@@ -258,7 +256,7 @@ public class ProductListingActivity extends BaseActivity implements
         } else {
             Bundle bundle = new Bundle();
             bundle.putBoolean("is_products", true);
-            bundle.putInt("selected_pos", categoryId);
+            bundle.putInt("selected_pos", vendorId);
             bundle.putInt("sort_id", sortId);
             bundle.putInt("price_high", priceHigh);
             bundle.putInt("price_low", priceLte);
@@ -268,22 +266,22 @@ public class ProductListingActivity extends BaseActivity implements
                 @Override
                 public void onApplyClick(Bundle bundle) {
 
-                    categoryId = bundle.getInt("selected_pos");
+                    vendorId = bundle.getInt("selected_pos");
                     sortId = bundle.getInt("sort_id");
                     priceLte = bundle.getInt("from_price");
                     priceHigh = bundle.getInt("to_price");
-                    nextUrl = url + "?filter=0" + ((categoryId != 0) ? ("&category__id__in=" + Integer.parseInt(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category()
-                            .get(categoryId - 1).getId())) : "")
+                    nextUrl = url + "?filter=0" + ((vendorId != 0) ? ("&category__id__in=" + Integer.parseInt(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category()
+                            .get(vendorId - 1).getId())) : "")
                             + ("&low_to_high=" + sortId) + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
-                            + (AppPreferences.isUserLogIn(ProductListingActivity.this)
-                            ? "&userid=" + AppPreferences.getUserID(ProductListingActivity.this) : "");
+                            + (AppPreferences.isUserLogIn(BookingStoreProductListingActivity.this)
+                            ? "&userid=" + AppPreferences.getUserID(BookingStoreProductListingActivity.this) : "");
 
                     isRefreshData = true;
-                    if (categoryId != 0 || sortId != 1 || priceHigh != 100000 || priceLte != 1)
+                    if (vendorId != 0 || sortId != 1 || priceHigh != 50000 || priceLte != 1)
                         isFilterApplied = true;
                     else isFilterApplied = false;
-                    if (categoryId != 0)
-                        titleText.setText(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(categoryId - 1).getName());
+                    if (vendorId != 0)
+                        titleText.setText(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(vendorId - 1).getName());
                     else
                         titleText.setText("All");
                     titleText.requestLayout();
@@ -328,7 +326,7 @@ public class ProductListingActivity extends BaseActivity implements
                 showLoadingView();
                 changeViewVisiblity(productList, View.GONE);
                 if (productList.getAdapter() != null)
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter()).removePreviousData();
+                    ((BookedStoreProductListAdapter) productList.getAdapter()).removePreviousData();
             } else {
 
             }
@@ -347,7 +345,7 @@ public class ProductListingActivity extends BaseActivity implements
 
                 } else {
                     showToast("No more Products");
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                    ((BookedStoreProductListAdapter) productList.getAdapter())
                             .removeItem();
                 }
                 isRequestAllowed = false;
@@ -358,7 +356,7 @@ public class ProductListingActivity extends BaseActivity implements
                 changeViewVisiblity(productList, View.VISIBLE);
                 if (((ProductListObject) obj).getProducts().size() < 10) {
                     isRequestAllowed = false;
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                    ((BookedStoreProductListAdapter) productList.getAdapter())
                             .removeItem();
                 } else {
                     isRequestAllowed = true;
@@ -397,7 +395,7 @@ public class ProductListingActivity extends BaseActivity implements
 
                 }
 
-                ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                ((BookedStoreProductListAdapter) productList.getAdapter())
                         .removeItem();
                 isRequestAllowed = false;
             }

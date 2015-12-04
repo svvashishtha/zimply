@@ -273,6 +273,7 @@ public class AppApplication extends Application {
         } else {
             state = CommonLib.LOCATION_NOT_ENABLED;
             zll.locationNotEnabled();
+
         }
     }
 

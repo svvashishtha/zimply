@@ -14,6 +14,42 @@ public class ProductVendorTimeObj implements Serializable{
     private String pincode;
     private String created_on;
     private int book_product_id;
+    private int vendor_id;
+    private Double latitude;
+    private Double longitude;
+    private String phone;
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public int getVendor_id() {
+        return vendor_id;
+    }
+
+    public void setVendor_id(int vendor_id) {
+        this.vendor_id = vendor_id;
+    }
 
     public int getBook_product_id() {
         return book_product_id;

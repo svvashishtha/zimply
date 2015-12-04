@@ -7,9 +7,23 @@
               android:padding="@dimen/margin_small"
               android:layout_height="match_parent">
 
+
+    <com.application.zimplyshop.widgets.CustomCheckBox
+        android:id="@+id/zi_experience_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:textSize="@dimen/font_medium"
+        android:gravity="center_vertical"
+        android:drawableRight="@drawable/ic_zi_experience"
+        android:text="Products with "
+        android:textColor="@color/heading_text_color"/>
+
+
     <com.application.zimplyshop.widgets.CustomTextView
         android:layout_width="match_parent"
-        android:text="Sort By"
+        android:text="Sort By Price"
         android:textSize="@dimen/font_medium"
         android:textStyle="bold"
         android:textColor="@color/heading_text_color"
@@ -45,7 +59,7 @@
 
     <com.application.zimplyshop.widgets.CustomTextView
         android:layout_width="match_parent"
-        android:text="Select Range"
+        android:text="Select Price Range"
         android:textSize="@dimen/font_medium"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/margin_large"

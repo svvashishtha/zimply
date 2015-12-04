@@ -39,16 +39,22 @@ public class SelectCity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Bundle bundle  = new Bundle();
+
         try {
             if (getIntent().getExtras() != null) {
-                if (getIntent().getExtras().containsKey("show_back"))
+                if (getIntent().getExtras().containsKey("show_back")) {
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+                }
+
+                bundle.putBoolean("fetch_location",getIntent().getExtras().getBoolean("fetch_location"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        citiesListFragment = CitiesListFragment.newInstance();
+        citiesListFragment = CitiesListFragment.newInstance(bundle);
         citiesListFragment.setFragmentInteractionListener(new CitiesListFragment.FragmentInteractionListener() {
 
             @Override
@@ -171,4 +177,14 @@ public class SelectCity extends BaseActivity {
     }
 */
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (citiesListFragment!=null && requestCode == CitiesListFragment.REQUEST_LOCATION){
+                citiesListFragment.onActivityResult(requestCode, resultCode, data);
+            }
+            else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        }
 }

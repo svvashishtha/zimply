@@ -537,7 +537,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             public void onClick(View v) {
                 final AlertDialog logoutDialog;
                 logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this).setTitle(getResources().getString(R.string.return_policy))
-                        .setMessage(((TextView) findViewById(R.id.return_value)).getText().toString())
+                        .setMessage(product.getReturnPolicy())
                         .setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -549,6 +549,25 @@ public class ProductDetailsActivity extends ActionBarActivity
 
             }
         });
+
+        findViewById(R.id.description_title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog logoutDialog;
+                logoutDialog = new AlertDialog.Builder(ProductDetailsActivity.this).setTitle(getResources().getString(R.string.description))
+                        .setMessage(product.getDescription())
+                        .setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                logoutDialog.show();
+
+            }
+        });
+
     }
 
     @Override
@@ -773,6 +792,12 @@ public class ProductDetailsActivity extends ActionBarActivity
         //Umesh
         ((ImageView) findViewById(R.id.product_fav)).setSelected(product.is_favourite());
         RecyclerView thumbList = (RecyclerView) findViewById(R.id.product_thumb_icons);
+        if(product.is_o2o()){
+            ((TextView)findViewById(R.id.coc_avaiable)).setText("Available");
+        }else{
+            ((TextView)findViewById(R.id.coc_avaiable)).setText("Not Available");
+        }
+        ((TextView)findViewById(R.id.online_payment_available)).setText("Available");
         thumbList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         thumbList.addItemDecoration(new ProductThumbListItemDecorator(getResources().getDimensionPixelSize(R.dimen.margin_small)));
         final ProductThumbAdapters adapter = new ProductThumbAdapters(this, product.getThumbs(), getResources().getDimensionPixelSize(R.dimen.pro_image_size), getResources().getDimensionPixelSize(R.dimen.pro_image_size));
@@ -828,8 +853,6 @@ public class ProductDetailsActivity extends ActionBarActivity
         ((TextView) findViewById(R.id.delivery)).setText(product.getMinShippingDays() + "-" + product.getMaxShippingDays() + " Days");
         ((TextView) findViewById(R.id.shipping_charges)).setText(getString(R.string.rs_text) + " " + product.getShippingCharges());
         ((TextView) findViewById(R.id.sold_by)).setText(product.getVendor().getCompany_name());
-        ((TextView) findViewById(R.id.description_value)).setText(product.getDescription().trim());
-        ((TextView) findViewById(R.id.return_value)).setText(product.getReturnPolicy());
 
         ((TextView) mActionBarCustomView.findViewById(R.id.title)).setText(product.getName());
 
@@ -870,7 +893,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 logoutDialog.show();
             }
         });
-        LinearLayout specificationsLayout = (LinearLayout) findViewById(R.id.specifications);
+        /*LinearLayout specificationsLayout = (LinearLayout) findViewById(R.id.specifications);
         for (ProductAttribute attribute : product.getAttributes()) {
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -885,7 +908,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             unit.setText(attribute.getKey() + " : " + attribute.getValue() + " " + attribute.getUnit());
             layout.addView(unit);
             specificationsLayout.addView(layout);
-        }
+        }*/
         toggleButtonsState(true);
         if(AllProducts.getInstance().vendorIdsContains(product.getVendor().getVendor_id())){
             bookAVisitBtn.setVisibility(View.GONE);
@@ -980,6 +1003,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 Intent intent = new Intent(this, ProductDemoActivity.class);
                 intent.putExtra("product_vendor_time", ((ProductVendorTimeObj) response));
                 startActivity(intent);*/
+                AllProducts.getInstance().getVendorIds().add(((ProductVendorTimeObj) response).getVendor_id());
                 showVisitBookedCard(((ProductVendorTimeObj) response));
             }else{
                 Toast.makeText(this,((ErrorObject)response).getErrorMessage(),Toast.LENGTH_SHORT).show();
@@ -988,6 +1012,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             if (progressDialog != null)
                 progressDialog.dismiss();
             if(status) {
+                AllProducts.getInstance().getVendorIds().remove((Integer)product.getVendor().getVendor_id());
                 findViewById(R.id.booking_confirm_card).setVisibility(View.GONE);
                 bookAVisitBtn.setVisibility(View.VISIBLE);
                 showToast("Successfully cancelled");
@@ -1019,19 +1044,23 @@ public class ProductDetailsActivity extends ActionBarActivity
         View view = findViewById(R.id.booking_confirm_card);
         view.setVisibility(View.VISIBLE);
         ((CustomTextView)view.findViewById(R.id.address)).setText(obj.getLine1() + "\n" + obj.getCity());
-        ((ImageView)view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
+        ((LinearLayout)view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + obj.getPincode()));
+                callIntent.setData(Uri.parse("tel:" + product.getVendor().getReg_add().getPhone()));
                 mContext.startActivity(callIntent);
             }
         });
 
-        ((ImageView)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
+        ((LinearLayout)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "Vendor LAT LONG not available", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, MapPage.class);
+                intent.putExtra("lat",product.getVendor().getReg_add().getLocation().getLatitude());
+                intent.putExtra("lon", product.getVendor().getReg_add().getLocation().getLongitude());
+                intent.putExtra("name", product.getVendor().getReg_add().getLocation().getName());
+                mContext.startActivity(intent);
             }
         });
 
@@ -1067,19 +1096,23 @@ public class ProductDetailsActivity extends ActionBarActivity
         View view = findViewById(R.id.booking_confirm_card);
         view.setVisibility(View.VISIBLE);
         ((CustomTextView)view.findViewById(R.id.address)).setText(obj.getReg_add().getLine1() + "\n" + obj.getReg_add().getLocation().getName());
-        ((ImageView)view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
+        ((LinearLayout)view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + obj.getReg_add().getPhone()));
+                callIntent.setData(Uri.parse("tel:" +product.getVendor().getReg_add().getPhone()));
                 mContext.startActivity(callIntent);
             }
         });
 
-        ((ImageView)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
+        ((LinearLayout)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,"Vendor LAT LONG not available",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, MapPage.class);
+                intent.putExtra("lat",product.getVendor().getReg_add().getLocation().getLatitude());
+                intent.putExtra("lon", product.getVendor().getReg_add().getLocation().getLongitude());
+                intent.putExtra("name", product.getVendor().getReg_add().getLocation().getName());
+                mContext.startActivity(intent);
             }
         });
 
@@ -1324,7 +1357,6 @@ public class ProductDetailsActivity extends ActionBarActivity
                         } else {
                             CommonLib.ZLog("ProductDetailsActivity", "App Indexing API: There was an error recording the product view." + status.toString());
                         }
-
                     }
                 });
             }
