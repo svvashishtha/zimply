@@ -51,7 +51,8 @@ public class SearchResultsActivity extends BaseActivity implements
 
     boolean isRefreshData;
     ArrayList<HomeProductObj> homeProductObjs;
-    private String query, value;
+    private String query;
+    private String value = "";
     private int type = -1;
     private int pageNo = 1;
 
@@ -115,7 +116,7 @@ public class SearchResultsActivity extends BaseActivity implements
         String finalUrl;
         String queryUrl = "&query=" + query;
         String field = (type == -1)? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
-        String valueQuery = (value == null) ? "" : "&value="+value;
+        String valueQuery = (value == "") ? "" : "&value="+value;
         finalUrl = AppApplication.getInstance().getBaseUrl() + url
                 + "?width=" + ((width / 2) - (width / 15))
                 + field
@@ -206,6 +207,7 @@ public class SearchResultsActivity extends BaseActivity implements
         inflater.inflate(R.menu.main, menu);
         menu.findItem(R.id.cart).setVisible(false);
         menu.findItem(R.id.search).setVisible(false);
+        menu.findItem(R.id.filter).setVisible(true);
         return true;
     }
 
@@ -351,6 +353,8 @@ public class SearchResultsActivity extends BaseActivity implements
                 && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG)) {
             if (productList.getAdapter() == null
                     || productList.getAdapter().getItemCount() == 1) {
+                if(CommonLib.isNetworkAvailable(SearchResultsActivity.this))
+                    showToast("Please check your internet connection");
                 showNetworkErrorView();
                 changeViewVisiblity(productList, View.GONE);
                 isRefreshData = false;

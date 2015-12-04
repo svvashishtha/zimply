@@ -17,8 +17,7 @@ import java.util.ArrayList;
 public class RecentProductsDBManager extends SQLiteOpenHelper {
 
     private static final String ID = "ID";
-    private static final String MESSAGEID = "MessageID";
-    private static final String WISHID = "WishID";
+    private static final String USERID = "UserID";
     private static final String TYPE = "Type";
     private static final String TIMESTAMP = "Timestamp";
     private static final String BUNDLE = "Bundle";
@@ -26,11 +25,13 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 2;
     private static final String CACHE_TABLE_NAME = "PRODUCTS";
-    private static final String DICTIONARY_TABLE_CREATE = "CREATE TABLE " + CACHE_TABLE_NAME + " (" + ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + MESSAGEID + " INTEGER, " + WISHID + " INTEGER, "
-            + TIMESTAMP + " INTEGER, " + TYPE + " INTEGER, " + BUNDLE + " BLOB);";
-
-
+    private static final String DICTIONARY_TABLE_CREATE =
+            "CREATE TABLE " + CACHE_TABLE_NAME + " (" +
+                    ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    USERID + " INTEGER, " +
+                    TIMESTAMP + " INTEGER, " +
+                    TYPE + " INTEGER, " +
+                    BUNDLE + " BLOB);";
     private static final String DATABASE_NAME = "PRODUCTSDB";
     Context ctx;
 
@@ -53,50 +54,55 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
 
     }
 
-    public int addProduct(HomeProductObj location, int userId, int wishId, long timestamp) {
+    public int addProduct(HomeProductObj user, int userId, long timestamp) {
 
-        ArrayList<HomeProductObj> locations = getProducts(userId);
+        ArrayList<HomeProductObj> users = getProducts(userId);
         int result = -1;
 
         try {
 
             this.getReadableDatabase();
 
-            SQLiteDatabase db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME,
-                    SQLiteDatabase.OPEN_READWRITE, null);
+            SQLiteDatabase db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READWRITE, null);
             ContentValues values = new ContentValues();
             values.put(TIMESTAMP, timestamp);
 
-            if (locations.contains(location)) {
-                result = (int) db.update(CACHE_TABLE_NAME, values, TYPE + "=?",
-                        new String[] { location.getId()+""});
+            boolean exists = false;
 
-                CommonLib.ZLog("zloc addlocations if ", userId + " : " + location.getId());
+            for(HomeProductObj product: users) {
+                if(product.getId() == user.getId())
+                    exists = true;
+            }
+
+
+            if(exists) {
+                result = (int) db.update(CACHE_TABLE_NAME, values, TYPE + "=?", new String[] {user.getId()+""});
+
+                CommonLib.ZLog("zuser addusers if ", userId + " : " +  user.getId() +"=?");
 
             } else {
 
-                byte[] bundle = GetRequestManager.Serialize_Object(location);
+                byte[] bundle = GetRequestManager.Serialize_Object(user);
 
-                values.put(MESSAGEID, userId);
-                values.put(WISHID, wishId);
-                values.put(TYPE, location.getId());
+                values.put(USERID, userId);
+                values.put(TYPE, user.getId());
                 values.put(BUNDLE, bundle);
 
-                // Inserting Row
+                // 	Inserting Row
                 result = (int) db.insert(CACHE_TABLE_NAME, null, values);
-                CommonLib.ZLog("zloc addlocations else ", userId + " . " + location.getId());
+                CommonLib.ZLog("zuser addusers else ", userId + " . " +  user.getId());
             }
 
             db.close();
             this.close();
-        } catch (Exception E) {
-            E.printStackTrace();
+        }
+        catch(Exception E) {
             try {
                 this.close();
-            } catch (Exception ex) {
+            } catch(Exception ex) {
                 ex.printStackTrace();
             }
-            result = -1;
+            result = - 1;
         }
         return result;
         // Closing database connection
@@ -109,18 +115,17 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         Cursor cursor = null;
         ArrayList<HomeProductObj> queries = new ArrayList<HomeProductObj>();
 
-        try {
-            db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME,
-                    SQLiteDatabase.OPEN_READONLY, null);
-
-            cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, MESSAGEID, WISHID, TIMESTAMP, TYPE, BUNDLE },
-                    MESSAGEID + "=?", new String[] {Integer.toString(userId)}, null, null, TIMESTAMP + " ASC", null);
+        try{
+            db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
+            cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, USERID,TIMESTAMP,TYPE,BUNDLE }, /*CITYID + "=? AND " +*/ USERID + "=?",
+                    new String[] { /*Integer.toString(cityId),*/ Integer.toString(userId) }, null, null, TIMESTAMP + " DESC", "20");
             if (cursor != null)
                 cursor.moveToFirst();
 
-            for (int i = 0; i < cursor.getCount(); i++) {
+            for (int i=0;i<cursor.getCount();i++)
+            {
                 cursor.moveToPosition(i);
-                location = (HomeProductObj) GetRequestManager.Deserialize_Object(cursor.getBlob(5), "");
+                location = (HomeProductObj) GetRequestManager.Deserialize_Object(cursor.getBlob(4), "");
                 queries.add(location);
             }
 
@@ -128,27 +133,54 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
             db.close();
             this.close();
             return queries;
-        } catch (SQLiteException e) {
+        }
+        catch (SQLiteException e) {
 
-            e.printStackTrace();
             this.close();
-        } catch (Exception E) {
-            E.printStackTrace();
+        }
+        catch(Exception E)
+        {
             try {
                 cursor.close();
                 db.close();
                 this.close();
-            } catch (Exception ec) {
+            }
+            catch(Exception ec) {
                 try {
-                    ec.printStackTrace();
                     db.close();
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     this.close();
                 }
                 this.close();
             }
         }
         return queries;
+    }
+
+    public int removeUsers(int userId) {
+
+        int result = -1;
+        try {
+            this.getReadableDatabase();
+
+            SQLiteDatabase db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READWRITE, null);
+
+            result = db.delete(CACHE_TABLE_NAME, null, null);
+            CommonLib.ZLog("zuser delete all users", userId );
+
+            db.close();
+            this.close();
+        }
+        catch(Exception E) {
+            try {
+                this.close();
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
+            result = - 1;
+        }
+        return result;
     }
 
 }

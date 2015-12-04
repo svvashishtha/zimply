@@ -100,19 +100,14 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
 
                 } else {
                     actionBarView.findViewById(R.id.clear_text_view_category).setVisibility(View.GONE);
-                    //send the api call to the fragment
+//                        //send the api call to the fragment
                     if (fragments.get(FRAGMENT_PRODUCT_SEARCH) != null || fragments.get(FRAGMENT_EXPERT_SEARCH) != null) {
                         ProductSearchFragment hf = (ProductSearchFragment) fragments.get(FRAGMENT_PRODUCT_SEARCH).get();
                         if (hf != null && hf.isVisible()) {
                             hf.performSearch(input);
                         }
-                        /*ExpertSearchFragment srf = (ExpertSearchFragment) fragments.get(FRAGMENT_EXPERT_SEARCH).get();
-                        if (srf != null && srf.isVisible()) {
-                            srf.performSearch(input);
-                        }*/
                     }
                 }
-
             }
         };
 
@@ -141,6 +136,14 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if( actionBarView != null )
+            CommonLib.hideKeyBoard(this, actionBarView.findViewById(R.id.search_category));
+        super.onBackPressed();
+    }
+
     private void addToolbarView(Toolbar toolbar) {
         actionBarView = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar, false);
         actionBarView.findViewById(R.id.title_textview).setVisibility(View.GONE);
@@ -167,6 +170,17 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             @Override
             public void onClick(View v) {
                 ((TextView) findViewById(R.id.search_category)).setText("");
+                //stop the progress
+                actionBarView.findViewById(R.id.clear_text_view_category).setVisibility(View.GONE);
+//                        //send the api call to the fragment
+                if (fragments.get(FRAGMENT_PRODUCT_SEARCH) != null || fragments.get(FRAGMENT_EXPERT_SEARCH) != null) {
+                    ProductSearchFragment hf = (ProductSearchFragment) fragments.get(FRAGMENT_PRODUCT_SEARCH).get();
+                    if (hf != null && hf.isVisible()) {
+                        hf.performSearch("");
+                    }
+                }
+                //cancel the api call
+                //call the fragment on perform search
             }
         });
 
@@ -181,6 +195,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             }
         });
 
+        ((TextView)actionBarView.findViewById(R.id.search_category)).setHint(getResources().getString(R.string.search_products_hint));
         toolbar.addView(actionBarView);
     }
 
@@ -233,6 +248,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         final TextView homeSearchHeader = (TextView) ((LinearLayout) tabs.getChildAt(0))
                 .getChildAt(FRAGMENT_PRODUCT_SEARCH);
         homeSearchHeader.setTextColor(getResources().getColor(tabsSelectedColor));
+
     }
 
     public View getActionBarView() {

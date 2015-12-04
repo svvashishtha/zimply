@@ -1344,23 +1344,27 @@ public class ProductDetailsActivity extends ActionBarActivity
         // Call end() and disconnect the client
 
       /* final Uri APP_URI = Uri.parse(baseAppUri + slug); */
-        /*if (product != null) {
-            Action viewAction = Action.newAction(Action.TYPE_VIEW, product.getName(), APP_URI);
-            PendingResult<Status> result = AppIndex.AppIndexApi.end(mClient, viewAction);
+        try {
+            if (product != null) {
+                Action viewAction = Action.newAction(Action.TYPE_VIEW, product.getName(), APP_URI);
+                PendingResult<Status> result = AppIndex.AppIndexApi.end(mClient, viewAction);
 
-            result.setResultCallback(new ResultCallback<Status>() {
-                @Override
-                public void onResult(Status status) {
-                    if (status.isSuccess()) {
-                        CommonLib.ZLog("ProductDetailsActivity", "App Indexing API: Recorded product " + product.getName() + " view end successfully.");
-                    } else {
-                        CommonLib.ZLog("ProductDetailsActivity", "App Indexing API: There was an error recording the product view." + status.toString());
+                result.setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        if (status.isSuccess()) {
+                            CommonLib.ZLog("ProductDetailsActivity", "App Indexing API: Recorded product " + product.getName() + " view end successfully.");
+                        } else {
+                            CommonLib.ZLog("ProductDetailsActivity", "App Indexing API: There was an error recording the product view." + status.toString());
+                        }
                     }
-
-                }
-            });
-        }*/
-        mClient.disconnect();
+                });
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        if(mClient != null)
+            mClient.disconnect();
         super.onStop();
     }
 
@@ -1482,10 +1486,10 @@ public class ProductDetailsActivity extends ActionBarActivity
             int result = -1;
             try {
                 int userId = Integer.parseInt(AppPreferences.getUserID(mContext));
-                result = RecentProductsDBWrapper.addProduct(product, userId, (int) product.getId(), System.currentTimeMillis());
+                result = RecentProductsDBWrapper.addProduct(product, userId, System.currentTimeMillis());
             } catch (NumberFormatException e) {
                 try {
-                    result = RecentProductsDBWrapper.addProduct(product, -1, (int) product.getId(), System.currentTimeMillis());
+                    result = RecentProductsDBWrapper.addProduct(product, -1, System.currentTimeMillis());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

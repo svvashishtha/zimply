@@ -536,9 +536,8 @@ public class AllProducts {
     }
 
     public boolean vendorIdsContains(int vendorId){
-        if(vendorIds == null){
+        if(vendorIds == null)
             return false;
-        }
         for(Integer vendor : vendorIds){
             if(vendor == vendorId){
                 return  true;

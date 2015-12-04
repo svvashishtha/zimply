@@ -67,7 +67,7 @@ public class CommonLib {
 	/**
 	 * Application version
 	 * */
-	public static final int VERSION = 11;
+	public static final int VERSION = 12;
 
 	/**
 	 * Types
