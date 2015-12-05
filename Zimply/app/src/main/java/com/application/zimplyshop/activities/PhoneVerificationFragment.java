@@ -1,9 +1,11 @@
 package com.application.zimplyshop.activities;
 
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,7 +56,7 @@ public class PhoneVerificationFragment extends BaseFragment implements UploadMan
         getView = getView();
         destroyed = false;
         width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-
+        ((EditText)getView.findViewById(R.id.phone_number)).setInputType(InputType.TYPE_CLASS_PHONE);
         UploadManager.getInstance().addCallback(this);
 
         View verifyButton = getView.findViewById(R.id.proceed_button);

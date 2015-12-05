@@ -160,7 +160,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
         PackageManager pm = AppApplication.getInstance().getPackageManager();
         if(pm.hasSystemFeature(PackageManager.FEATURE_LOCATION))
         {
-            if(mGoogleApiClient == null) {
+            if(getActivity()!=null && mGoogleApiClient == null) {
                 mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                         .addConnectionCallbacks(this)
                         .addOnConnectionFailedListener(this)
@@ -169,10 +169,11 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
 
             }
-            if(mGoogleApiClient.isConnected()){
+            if(mGoogleApiClient !=null && mGoogleApiClient.isConnected()){
                 mGoogleApiClient.disconnect();
             }
-            mGoogleApiClient.connect();
+            if(mGoogleApiClient !=null)
+                mGoogleApiClient.connect();
         }
     }
 

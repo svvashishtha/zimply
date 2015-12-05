@@ -102,7 +102,9 @@ public class CheckPhoneVerificationActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-
+        if(is_cancellable){
+            super.onBackPressed();
+        }
     }
 
     public boolean is_cancellable() {

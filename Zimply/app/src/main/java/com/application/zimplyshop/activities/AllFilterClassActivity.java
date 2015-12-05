@@ -92,39 +92,39 @@ public class AllFilterClassActivity extends DialogFragment implements View.OnCli
             case R.id.apply_btn:
                 Bundle bundle = new Bundle();
 
-                 if (this.bundle.getBoolean("is_products")) {
-
+                if (this.bundle.getBoolean("is_products")) {
+                    bundle.putBoolean("is_reset", ((ProductPriceFilterFragment) fragments.get(1)).isReseted());
                     bundle.putInt("selected_pos", ((ArticleCategoryDialogFragment) fragments.get(0)).getSelectedPos());
-                     bundle.putBoolean("is_o2o", ((ProductPriceFilterFragment) fragments.get(1)).isZiExperience());
-                     bundle.putInt("sort_id", ((ProductPriceFilterFragment) fragments.get(1)).getSortById());
-                     if(((ProductPriceFilterFragment) fragments.get(1)).checkPriceRange()) {
-                         if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue().length() > 0) {
-                             bundle.putInt("from_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue()));
-                         }
-                         if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMaxValue().length() > 0) {
-                             bundle.putInt("to_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMaxValue()));
-                         }
+                    bundle.putBoolean("is_o2o", ((ProductPriceFilterFragment) fragments.get(1)).isZiExperience());
+                    bundle.putInt("sort_id", ((ProductPriceFilterFragment) fragments.get(1)).getSortById());
+                    if(((ProductPriceFilterFragment) fragments.get(1)).checkPriceRange()) {
+                        if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue().length() > 0) {
+                            bundle.putInt("from_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMinValue()));
+                        }
+                        if (((ProductPriceFilterFragment) fragments.get(1)).getSelectedMaxValue().length() > 0) {
+                            bundle.putInt("to_price", Integer.parseInt(((ProductPriceFilterFragment) fragments.get(1)).getSelectedMaxValue()));
+                        }
 
-                         mListener.onApplyClick(bundle);
-                         dismiss();
-                     }
-                 } else {
+                        mListener.onApplyClick(bundle);
+                        dismiss();
+                    }
+                } else {
 
                     bundle.putInt("selected_pos", ((ProductFilterFragment) fragments.get(0)).getSelectedCategoryId());
                     bundle.putInt("expand_group", ((ProductFilterFragment) fragments.get(0)).getExpandGroup());
                     bundle.putInt("parent_category_id", ((ProductFilterFragment) fragments.get(0)).getSelectedParent_categoryId());
-                     bundle.putInt("city_id", ((ArticleCategoryDialogFragment) fragments.get(1)).getSelectedPos());
+                    bundle.putInt("city_id", ((ArticleCategoryDialogFragment) fragments.get(1)).getSelectedPos());
 
-                     bundle.putString("selected_category", ((ProductFilterFragment) fragments.get(0)).getSelectedCategoryName());
-                     mListener.onApplyClick(bundle);
-                     dismiss();
+                    bundle.putString("selected_category", ((ProductFilterFragment) fragments.get(0)).getSelectedCategoryName());
+                    mListener.onApplyClick(bundle);
+                    dismiss();
                 }
 
 
                 break;
             case R.id.reset_btn:
                 if (this.bundle.getBoolean("is_products")) {
-                    ((ArticleCategoryDialogFragment) fragments.get(0)).setSelectedPos(0);
+                    //  ((ArticleCategoryDialogFragment) fragments.get(0)).setSelectedPos(0);
                     ((ProductPriceFilterFragment) fragments.get(1)).changeSelectedValues();
                 } else {
 

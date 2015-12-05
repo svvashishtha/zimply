@@ -150,12 +150,12 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             totalPrice = Float.parseFloat(cartObject.getCart().getTotal_price());
             float price = Float.parseFloat(cartObject.getCart().getPrice());
             if (totalPrice == 0) {
-                summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs) + cartObject.getCart().getPrice());
-                summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) + cartObject.getCart().getTotal_price());
+                summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs) +" "+ cartObject.getCart().getPrice());
+                summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) + " "+cartObject.getCart().getTotal_price());
             }
-            summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs) + price);
-            summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) + totalPrice);
-            summaryHolder.shipping.setText((cartObject.getCart().getTotal_shipping().equalsIgnoreCase("0")) ? "Free" : context.getResources().getString(R.string.Rs) + cartObject.getCart().getTotal_shipping());
+            summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs) + " "+price);
+            summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) + " "+totalPrice);
+            summaryHolder.shipping.setText((cartObject.getCart().getTotal_shipping().equalsIgnoreCase("0")) ? "Free" : context.getResources().getString(R.string.Rs) + " "+cartObject.getCart().getTotal_shipping());
             /*summaryHolder.checkOut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

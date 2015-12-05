@@ -56,7 +56,7 @@
             android:textSize="@dimen/font_medium"
             android:textColor="@color/heading_text_color"
             android:textStyle="bold"/>
-        <com.application.zimplyshop.widgets.CustomTextView
+        <com.application.zimplyshop.widgets.CustomTextViewBold
             android:id="@+id/buy_btn"
             android:layout_width="wrap_content"
             android:gravity="center"
@@ -65,7 +65,7 @@
             android:layout_height="@dimen/z_item_height_48"
             android:background="@drawable/orange_btn_bg"
             android:text="Buy"
-            android:textSize="@dimen/font_medium"
+            android:textSize="@dimen/font_large"
             android:textColor="@color/white"/>
     </LinearLayout>
 

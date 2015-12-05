@@ -274,6 +274,7 @@ public class ProductListingActivity extends BaseActivity implements
                     priceLte = bundle.getInt("from_price");
                     priceHigh = bundle.getInt("to_price");
                     isO2o = bundle.getBoolean("is_o2o");
+                    boolean isResetClicked = bundle.getBoolean("is_reset");
                     nextUrl = url + "?filter=0" + ((categoryId != 0) ? ("&category__id__in=" + Integer.parseInt(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category()
                             .get(categoryId - 1).getId())) : "")
                             + (sortId!=-1?"&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
@@ -282,9 +283,12 @@ public class ProductListingActivity extends BaseActivity implements
                             +(isO2o?"&is_o2o="+1:"");
 
                     isRefreshData = true;
-                    if (categoryId != 0 || sortId != 1 || priceHigh != 100000 || priceLte != 1)
+                    if(sortId==-1 && priceHigh == 100000 && priceLte == 1 && !isO2o){
+                        isFilterApplied = false;
+                    }else {
                         isFilterApplied = true;
-                    else isFilterApplied = false;
+                    }
+
                     if (categoryId != 0)
                         titleText.setText(AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().get(categoryId - 1).getName());
                     else

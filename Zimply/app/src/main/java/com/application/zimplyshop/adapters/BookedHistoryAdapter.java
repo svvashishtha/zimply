@@ -1,7 +1,15 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
 import com.application.zimplyshop.utils.CommonLib;
 
@@ -38,9 +47,12 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         //new ImageLoaderManager((BookedForReviewActivity)mContext).setImageFromUrl(objs.get(position).getProductImg(), ((OrderItemHolder) holder).storePic, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
-        ((OrderItemHolder) holder).storePic.setImageBitmap(CommonLib.getBitmap(mContext,R.drawable.ic_home_store,mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size),mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size)));
-
-        ((OrderItemHolder)holder).storeAddress.setText(objs.get(position).getVendorTimeObj().getLine1()+"\n"+objs.get(position).getVendorTimeObj().getPincode()+"\nPincode-"+objs.get(position).getVendorTimeObj().getCity());
+        ((OrderItemHolder) holder).storePic.setImageBitmap(CommonLib.getBitmap(mContext, R.drawable.ic_home_store, mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size)));
+        SpannableString string = new SpannableString("Store Address "+objs.get(position).getVendorTimeObj().getLine1()+" "+objs.get(position).getVendorTimeObj().getPincode()+" Pincode-"+objs.get(position).getVendorTimeObj().getCity());
+        string.setSpan(new RelativeSizeSpan(1.1f),0,14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        string.setSpan(new StyleSpan(Typeface.BOLD),0,14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        string.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ((OrderItemHolder)holder).storeAddress.setText(string);
         ((OrderItemHolder)holder).storeName.setText(objs.get(position).getVendorTimeObj().getVendor());
 
 
@@ -70,6 +82,29 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
         }
+
+        ((OrderItemHolder) holder).callCustomer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + objs.get(position).getVendorTimeObj().getPhone()));
+                mContext.startActivity(callIntent);
+            }
+        });
+
+        ((OrderItemHolder) holder).getDirections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + objs.get(position).getVendorTimeObj().getLatitude()+ "," + objs.get(position).getVendorTimeObj().getLongitude() + "(" + objs.get(position).getVendorTimeObj().getVendor() + ")");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                mContext.startActivity(intent);
+                /*Intent intent = new Intent(mContext, MapPage.class);
+                intent.putExtra("lat", product.getVendor().getReg_add().getLocation().getLatitude());
+                intent.putExtra("lon", product.getVendor().getReg_add().getLocation().getLongitude());
+                intent.putExtra("name", product.getVendor().getReg_add().getLocation().getName());
+                mContext.startActivity(intent);*/
+            }
+        });
 
 
         /*ColorFilter filter = new LightingColorFilter(
@@ -104,9 +139,8 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class OrderItemHolder extends RecyclerView.ViewHolder{
         TextView  storeName,storeAddress,cancelBooking,bookingStatus;
-        ImageView storePic,callCustomer,getDirections;
-
-        LinearLayout btnLayout;
+        ImageView storePic;
+        LinearLayout btnLayout,callCustomer,getDirections;
         public OrderItemHolder(View itemView) {
             super(itemView);
             storeName = (TextView)itemView.findViewById(R.id.store_name);
@@ -114,8 +148,8 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
             bookingStatus = (TextView)itemView.findViewById(R.id.booking_status);
             storePic = (ImageView)itemView.findViewById(R.id.store_img);
             cancelBooking = (TextView)itemView.findViewById(R.id.cancel_booking);
-            callCustomer = (ImageView)itemView.findViewById(R.id.call_customer);
-            getDirections = (ImageView)itemView.findViewById(R.id.get_direction_customer);
+            callCustomer = (LinearLayout)itemView.findViewById(R.id.call_layout);
+            getDirections = (LinearLayout)itemView.findViewById(R.id.direction_layout);
         }
     }
 

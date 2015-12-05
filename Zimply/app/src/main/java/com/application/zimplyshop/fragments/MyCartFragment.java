@@ -31,7 +31,6 @@ import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
-import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
 
@@ -358,9 +357,9 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
             }
         });
 
-        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total " + getResources().getString(R.string.rs_text) + " " + obj.getCart().getTotal_price());
-        ((CustomTextView)view.findViewById(R.id.buy_btn)).setText("Checkout");
-        ((CustomTextView)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
+        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total : " + getResources().getString(R.string.rs_text) + " " + obj.getCart().getTotal_price());
+        ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setText("Checkout");
+        ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() != null && AppPreferences.isUserLogIn(getActivity())) {

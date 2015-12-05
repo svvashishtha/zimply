@@ -176,7 +176,11 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
                             switch (productList
                                     .getAdapter().getItemViewType(position)) {
                                 case 0:
-                                    return 2;
+                                    if (obj != null) {
+                                        return 2;
+                                    } else {
+                                        return 1;
+                                    }
                                 case 1:
                                     return 1;
                                 case 2:

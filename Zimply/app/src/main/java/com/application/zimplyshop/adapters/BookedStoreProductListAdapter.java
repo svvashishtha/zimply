@@ -96,9 +96,17 @@ public class BookedStoreProductListAdapter extends
     public int getItemCount() {
         if (objs != null) {
             if (isFooterRemoved) {
-                return objs.size()+1;
+                if(obj!=null) {
+                    return objs.size() + 1;
+                }else{
+                    return objs.size();
+                }
             } else {
-                return objs.size() + 2;
+                if(obj!=null) {
+                    return objs.size() + 2;
+                }else{
+                    return objs.size()+1 ;
+                }
             }
         }
         return 0;
@@ -110,63 +118,73 @@ public class BookedStoreProductListAdapter extends
 
     @Override
     public int getItemViewType(int position) {
-        if (position == objs.size()+1) {
+        if(position == 0){
+            if(obj!=null){
+                return TYPE_HEADER;
+            }else{
+                return TYPE_DATA;
+            }
+        }else if(position==objs.size()+1){
             return TYPE_LOADER;
-        } else if(position == 0){
-            return TYPE_HEADER;
+        }else if(position == objs.size()){
+            if(obj!=null){
+                return TYPE_DATA;
+            }else{
+                return TYPE_LOADER;
+            }
         }else{
             return TYPE_DATA;
         }
-
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_DATA) {
+            final int newPos = (obj!=null)?position-1:position;
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, height);
             ((ProductViewHolder) holder).img.setLayoutParams(lp);
-            if (objs.get(position-1).getImage() != null) {
+            if (objs.get(newPos).getImage() != null) {
                 if (((ProductViewHolder) holder).img.getTag() == null
                         || !(((String) ((ProductViewHolder) holder).img
-                        .getTag()).equalsIgnoreCase(objs.get(position-1)
+                        .getTag()).equalsIgnoreCase(objs.get(newPos)
                         .getImage()))) {
 
                     new ImageLoaderManager(activity).setImageFromUrl(
-                            objs.get(position-1).getImage(),
+                            objs.get(newPos).getImage(),
                             ((ProductViewHolder) holder).img, "users", height,
                             height, true, false);
 
-                    ((ProductViewHolder) holder).img.setTag(objs.get(position-1)
+                    ((ProductViewHolder) holder).img.setTag(objs.get(newPos)
                             .getImage());
                 }
             }
-            if(objs.get(position-1).is_o2o()){
+            if(objs.get(newPos).is_o2o()){
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.VISIBLE);
             }else{
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.GONE);
             }
-            ((ProductViewHolder) holder).productName.setText(objs.get(position-1)
+            ((ProductViewHolder) holder).productName.setText(objs.get(newPos)
                     .getName());
             try {
-                if (objs.get(position-1).getDiscounted_price() != 0) {
+                if (objs.get(newPos).getDiscounted_price() != 0) {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + objs.get(position-1).getDiscounted_price());
+                                    + objs.get(newPos).getDiscounted_price());
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.VISIBLE);
                     ((ProductViewHolder) holder).productPrice.setText(mContext
                             .getString(R.string.Rs)
                             + " "
-                            + objs.get(position-1).getPrice());
+                            + objs.get(newPos).getPrice());
                     ((ProductViewHolder) holder).productPrice
                             .setPaintFlags(((ProductViewHolder) holder).productPrice
                                     .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.VISIBLE);
-                    ((ProductViewHolder) holder).productDiscountFactor.setText("( " + objs.get(position-1).getDiscountFactor() + " % )");
+                    ((ProductViewHolder) holder).productDiscountFactor.setText("( " + objs.get(newPos).getDiscountFactor() + " % )");
                 } else {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + objs.get(position-1).getPrice());
+                                    + objs.get(newPos).getPrice());
 
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
@@ -180,8 +198,8 @@ public class BookedStoreProductListAdapter extends
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ProductDetailsActivity.class);
-                    intent.putExtra("slug", objs.get(position-1).getSlug());
-                    intent.putExtra("id", objs.get(position-1).getId());
+                    intent.putExtra("slug", objs.get(newPos).getSlug());
+                    intent.putExtra("id", objs.get(newPos).getId());
                     mContext.startActivity(intent);
                 }
             });

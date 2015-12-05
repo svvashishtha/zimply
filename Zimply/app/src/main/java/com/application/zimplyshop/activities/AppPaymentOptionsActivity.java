@@ -82,9 +82,9 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         ((CustomTextView)findViewById(R.id.pay_online)).setOnClickListener(this);
         LinearLayout buyLayout = (LinearLayout)findViewById(R.id.payment_layout);
         buyLayout.setVisibility(View.VISIBLE);
-        ((CustomTextViewBold)findViewById(R.id.total_amount)).setText("Total " + getResources().getString(R.string.rs_text) + " " + totalPrice);
-        ((CustomTextView)findViewById(R.id.buy_btn)).setText("Place Order");
-        ((CustomTextView)findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
+        ((CustomTextViewBold)findViewById(R.id.total_amount)).setText("Total : " + getResources().getString(R.string.rs_text) + " " + totalPrice);
+        ((CustomTextViewBold)findViewById(R.id.buy_btn)).setText("Place Order");
+        ((CustomTextViewBold)findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makePaymentRequest();

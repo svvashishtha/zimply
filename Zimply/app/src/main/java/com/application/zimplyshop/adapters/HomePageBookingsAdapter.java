@@ -2,8 +2,14 @@ package com.application.zimplyshop.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +20,11 @@ import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BookingStoreProductListingActivity;
-import com.application.zimplyshop.activities.MapPage;
+import com.application.zimplyshop.activities.HomeActivity;
+import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.extras.AppConstants;
-import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.managers.ImageLoaderManager;
 
 import java.util.ArrayList;
 
@@ -54,11 +61,21 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width,height);
         ((BookingHolder) holder).bookCard.setLayoutParams(lp);
-        ((BookingHolder)holder).ziStoreName.setText("Zi Store");
+        ((BookingHolder)holder).ziStoreName.setText("Zimply Store");
         ((BookingHolder)holder).cancelBooking.setVisibility(View.GONE);
         ((BookingHolder)holder).storeName.setText(objs.get(position).getVendor().getCompany_name());
-        ((BookingHolder) holder).storeImg.setImageBitmap(CommonLib.getBitmap(mContext, R.drawable.ic_home_store, mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size)));
-        ((BookingHolder) holder).storeAddress.setText(objs.get(position).getVendor().getReg_add().getLine1());
+        new ImageLoaderManager((HomeActivity)mContext).setImageFromUrl(objs.get(position).getProduct().getImage(),
+                ((BookingHolder) holder).storeImg,"users",
+                mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size),
+                mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size),false,false);
+        //((BookingHolder) holder).storeImg.setImageBitmap(CommonLib.getBitmap(mContext, R.drawable.ic_home_store, mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size)));
+
+        SpannableString string = new SpannableString("Store Address "+objs.get(position).getVendor().getReg_add().getLine1());
+        string.setSpan(new RelativeSizeSpan(1.1f),0,14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        string.setSpan(new StyleSpan(Typeface.BOLD),0,14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        string.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        ((BookingHolder) holder).storeAddress.setText(string);
         ((BookingHolder)holder).callCustomerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,10 +87,16 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
         ((BookingHolder)holder).getDirectionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MapPage.class);
+               /* Intent intent = new Intent(mContext, MapPage.class);
                 intent.putExtra("lat",objs.get(position).getVendor().getReg_add().getLocation().getLatitude());
                 intent.putExtra("lon", objs.get(position).getVendor().getReg_add().getLocation().getLongitude());
                 intent.putExtra("name", objs.get(position).getVendor().getCompany_name());
+                mContext.startActivity(intent);*/
+                /*AppApplication.getInstance().zll.forced = true;
+                AppApplication.getInstance().zll.addCallback(mContext);
+                AppApplication.getInstance().startLocationCheck();*/
+                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon +"?q=" + objs.get(position).getVendor().getReg_add().getLocation().getLatitude()+ "," + objs.get(position).getVendor().getReg_add().getLocation().getLongitude() + "(" + objs.get(position).getVendor().getCompany_name()+")");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 mContext.startActivity(intent);
             }
         });

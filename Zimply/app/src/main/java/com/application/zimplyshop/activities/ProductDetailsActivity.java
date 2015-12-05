@@ -868,6 +868,7 @@ public class ProductDetailsActivity extends ActionBarActivity
 */
 
         //Umesh
+        ((LinearLayout)findViewById(R.id.more_from_seller)).setOnClickListener(this);
         ((ImageView) findViewById(R.id.product_fav)).setSelected(product.is_favourite());
         RecyclerView thumbList = (RecyclerView) findViewById(R.id.product_thumb_icons);
         if(product.is_o2o()){
@@ -1135,11 +1136,14 @@ public class ProductDetailsActivity extends ActionBarActivity
         ((LinearLayout)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MapPage.class);
+                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon +"?q=" + product.getVendor().getReg_add().getLocation().getLatitude()+ "," + product.getVendor().getReg_add().getLocation().getLongitude() + "(" + product.getVendor().getCompany_name()+")");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                /*Intent intent = new Intent(mContext, MapPage.class);
                 intent.putExtra("lat", product.getVendor().getReg_add().getLocation().getLatitude());
                 intent.putExtra("lon", product.getVendor().getReg_add().getLocation().getLongitude());
                 intent.putExtra("name", product.getVendor().getReg_add().getLocation().getName());
-                mContext.startActivity(intent);
+                mContext.startActivity(intent);*/
             }
         });
 
@@ -1342,6 +1346,14 @@ public class ProductDetailsActivity extends ActionBarActivity
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.more_from_seller:
+                Intent bookIntent = new Intent(mContext, BookingStoreProductListingActivity.class);
+                bookIntent.putExtra("hide_filter",true);
+                bookIntent.putExtra("vendor_id", product.getVendor().getVendor_id());
+                bookIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
+                bookIntent.putExtra("vendor_name", product.getVendor().getCompany_name());
+                startActivity(bookIntent);
+                break;
             case R.id.product_fav:
                 if (!isLoading) {
                     if (AppPreferences.isUserLogIn(this)) {

@@ -32,7 +32,6 @@ import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.widgets.CartSpaceItemDecoration;
-import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.payu.sdk.PayU;
 
@@ -472,9 +471,9 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             }
         });
         mListView.setAdapter(mAdapter);
-        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total " + getResources().getString(R.string.rs_text) + " " + cartObject.getCart().getTotal_price());
-        ((CustomTextView)view.findViewById(R.id.buy_btn)).setText("Proceed to Pay");
-        ((CustomTextView)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
+        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total : " + getResources().getString(R.string.rs_text) + " " + cartObject.getCart().getTotal_price());
+        ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setText("Proceed to Pay");
+        ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendOrderPlaceRequest();

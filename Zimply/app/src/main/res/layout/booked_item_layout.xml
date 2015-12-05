@@ -43,13 +43,13 @@
 
         <ImageView
             android:id="@+id/store_img"
-            android:layout_width="@dimen/pro_image_size"
-            android:layout_height="@dimen/pro_image_size"
+            android:layout_width="@dimen/showcase_radius_inner_large"
+            android:layout_height="@dimen/showcase_radius_inner_large"
             android:src="@drawable/ic_launcher_icon_full"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_marginLeft="@dimen/margin_small"
             android:layout_marginRight="@dimen/margin_small"
-            android:scaleType="center"/>
+            android:scaleType="centerInside"/>
         <com.application.zimplyshop.widgets.CustomTextViewBold
             android:id="@+id/zi_store_name"
             android:layout_width="match_parent"
@@ -73,40 +73,23 @@
             android:layout_marginRight="@dimen/margin_small"
             android:textSize="@dimen/font_medium"
             android:textColor="@color/text_color1"/>
-        <LinearLayout
-            android:id="@+id/address_layout"
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/store_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/margin_small"
-            android:paddingRight="@dimen/margin_small"
-            android:layout_below="@+id/store_img"
-            android:orientation="vertical"
-            >
-            <com.application.zimplyshop.widgets.CustomTextViewBold
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Address"
-                android:textStyle="bold"
-                android:textSize="@dimen/font_large"
-                android:textColor="@color/heading_text_color"/>
-            <com.application.zimplyshop.widgets.CustomTextView
-                android:id="@+id/store_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/font_small"
-                android:text="Booking Done"
-                android:textColor="@color/heading_text_color"/>
-
-        </LinearLayout>
-
-
+            android:layout_toRightOf="@+id/store_img"
+            android:layout_marginTop="@dimen/margin_mini"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_below="@id/store_name"
+            android:textSize="@dimen/font_small"
+            android:text="Booking Done"
+            android:textColor="@color/heading_text_color"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
-            android:layout_below="@id/address_layout"
+            android:layout_below="@id/store_address"
             android:orientation="horizontal">
 
             <LinearLayout

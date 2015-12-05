@@ -263,6 +263,7 @@
                 android:textSize="@dimen/font_medium" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/more_from_seller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
