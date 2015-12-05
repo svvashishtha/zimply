@@ -520,7 +520,7 @@ public class ProductDetailsActivity extends ActionBarActivity
 
             final ProgressBar bookVisitProgress = (ProgressBar) findViewById(R.id.progressBar);
 
-            final ImageView crossImg = (ImageView) findViewById(R.id.cross_img);
+            final TextView crossImg = (TextView) findViewById(R.id.cross_img);
 
             final Timer timer = new Timer();
 
@@ -679,13 +679,13 @@ public class ProductDetailsActivity extends ActionBarActivity
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag != null && requestTag.equals(RequestTags.GET_USER_DATA) && !destroyed) {
+        if (requestTag != null && requestTag.equals(RequestTags.GET_USER_DATA) && !isDestroyed) {
             userLoading = true;
             restPageContent.findViewById(R.id.product_page_content).setVisibility(View.GONE);
             restPageContent.findViewById(R.id.product_overlay).setVisibility(View.GONE);
             restPageContent.findViewById(R.id.dropdown_container).setVisibility(View.GONE);
             showLoadingView();
-        } else if (requestTag != null && requestTag.equals(PRODUCT_DETAIL_REQUEST_TAG) && !destroyed) {
+        } else if (requestTag != null && requestTag.equals(PRODUCT_DETAIL_REQUEST_TAG) && !isDestroyed) {
             restPageContent.findViewById(R.id.product_page_content).setVisibility(View.GONE);
             restPageContent.findViewById(R.id.product_overlay).setVisibility(View.GONE);
             restPageContent.findViewById(R.id.dropdown_container).setVisibility(View.GONE);
@@ -693,7 +693,7 @@ public class ProductDetailsActivity extends ActionBarActivity
 
             isLoading = true;
             showLoadingView();
-        } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) && !destroyed) {
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) && !isDestroyed) {
         }
     }
 
@@ -701,14 +701,14 @@ public class ProductDetailsActivity extends ActionBarActivity
     public void onRequestCompleted(String requestTag, Object obj) {
 
         isRequestFailed = false;
-        if (requestTag != null && requestTag.equals(RequestTags.GET_USER_DATA) && !destroyed) {
+        if (requestTag != null && requestTag.equals(RequestTags.GET_USER_DATA) && !isDestroyed) {
 
             userLoading = false;
             loadData();
             checkCartCount();
             isLoading = false;
         }
-        if (requestTag != null && requestTag.equals(PRODUCT_DETAIL_REQUEST_TAG) && !destroyed) {
+        if (requestTag != null && requestTag.equals(PRODUCT_DETAIL_REQUEST_TAG) && !isDestroyed) {
             //set the product views
             if (obj instanceof HomeProductObj) {
                 product = (HomeProductObj) obj;
@@ -725,7 +725,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 showNullCaseView("No Info Available");
             }
             isLoading = false;
-        } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) && !destroyed) {
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) ) {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
@@ -747,7 +747,7 @@ public class ProductDetailsActivity extends ActionBarActivity
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
 
-        if (requestTag != null && requestTag.equals(RequestTags.GET_USER_DATA) && !destroyed) {
+        if (requestTag != null && requestTag.equals(RequestTags.GET_USER_DATA) && !isDestroyed) {
             showNetworkErrorView();
             if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
                 // Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
@@ -758,7 +758,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             }
             isLoading = false;
         }
-        if (requestTag != null && requestTag.equals(PRODUCT_DETAIL_REQUEST_TAG) && !destroyed) {
+        if (requestTag != null && requestTag.equals(PRODUCT_DETAIL_REQUEST_TAG) && !isDestroyed) {
             // findViewById(R.id.progress_container).setVisibility(View.GONE);
             showNetworkErrorView();
             if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
@@ -771,7 +771,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             }
             isLoading = false;
         }
-        if (requestTag != null && requestTag.equals(CHECKPINCODEREQUESTTAG) && !destroyed) {
+        if (requestTag != null && requestTag.equals(CHECKPINCODEREQUESTTAG) && !isDestroyed) {
             if (CommonLib.isNetworkAvailable(ProductDetailsActivity.this)) {
                 showToast("Something went wrong. Please try again");
                 //   Toast.makeText(ProductDetailsActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
@@ -1010,7 +1010,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         if (progressDialog != null)
             progressDialog.dismiss();
 
-        if (requestType == ADD_TO_CART_PRODUCT_DETAIL && status && !destroyed) {
+        if (requestType == ADD_TO_CART_PRODUCT_DETAIL && status && !isDestroyed) {
             isLoading = false;
             String message = "An error occurred. Please try again...";
             if (progressDialog != null) {
@@ -1047,7 +1047,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (requestType == BUY_NOW && status && !destroyed) {
+        } else if (requestType == BUY_NOW && status && !isDestroyed) {
             isLoading = false;
             if (progressDialog != null)
                 progressDialog.dismiss();
@@ -1178,9 +1178,10 @@ public class ProductDetailsActivity extends ActionBarActivity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                slideViewsRightToLeft(findViewById(R.id.congrats_layout), findViewById(R.id.booking_confirm_card), BOOK_PROCESS_COMPLETE);
+                if(!isDestroyed)
+                    slideViewsRightToLeft(findViewById(R.id.congrats_layout), findViewById(R.id.booking_confirm_card), BOOK_PROCESS_COMPLETE);
             }
-        },3000);
+        },1000);
     }
     public void showVisitBookedInitialCard(final VendorObj obj){
         View view = findViewById(R.id.booking_confirm_card);
@@ -1237,7 +1238,7 @@ public class ProductDetailsActivity extends ActionBarActivity
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
 
-        if ((requestType == ADD_TO_CART_PRODUCT_DETAIL || requestType == BUY_NOW) && !destroyed) {
+        if ((requestType == ADD_TO_CART_PRODUCT_DETAIL || requestType == BUY_NOW) && !isDestroyed) {
             progressDialog = ProgressDialog.show(this, null, "Adding to cart. Please wait");
             // isLoading = true;
         } else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {

@@ -173,6 +173,7 @@ public class CheckPhoneVerificationFragment extends BaseFragment implements Uplo
 
             if(!destroyed) {
                 if(status) {
+                    AppPreferences.setUserPhoneNumber(getActivity(),mobile);
                     showToast("Verified");
                     CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
                     getActivity().finish();

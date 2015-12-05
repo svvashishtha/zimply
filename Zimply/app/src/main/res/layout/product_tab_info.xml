@@ -74,12 +74,23 @@
             android:layout_height="@dimen/z_item_height_48"
             android:background="@drawable/round_book_btn_bg"/>
 
-        <FrameLayout android:layout_width="wrap_content"
+        <FrameLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:id="@+id/loading_layout"
                      android:visibility="gone"
                      android:layout_gravity="center">
             <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size50"
+                android:minHeight="@dimen/size50"
+                android:maxHeight="@dimen/size50"
+                android:layout_gravity="center"
+                android:padding="@dimen/margin_mini"
+                android:progressDrawable="@drawable/progressbar_horizontal_drawable"
+                android:max="100"/>
+            <!--<ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="@dimen/size50"
@@ -91,13 +102,16 @@
                 android:rotation="-90"
 
                 android:progressDrawable="@drawable/circle_progress_background" />
-
-            <ImageView
+-->
+            <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/cross_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_cross"
-
+                android:drawableLeft="@drawable/ic_cross_red"
+                android:textColor="@color/red_text_color"
+                android:text="Tap To Cancel"
+                android:gravity="center"
+                android:textAllCaps="true"
                 android:scaleType="centerInside"
                 android:layout_gravity="center"/>
         </FrameLayout >
@@ -105,25 +119,27 @@
             android:id="@+id/congrats_layout"
             android:layout_width="match_parent"
             android:visibility="gone"
-            android:background="@drawable/dropshadowcard"
+            android:background="@drawable/book_btn_bg"
             android:gravity="center"
             android:padding="@dimen/margin_small"
+
             android:layout_height="wrap_content">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:layout_gravity="center_horizontal"
                       android:textSize="@dimen/font_xxxlarge"
-                      android:drawableTop="@drawable/ic_acceptbig"
+                      android:drawableTop="@drawable/ic_tag_faces_white"
                       android:text="Congratulations"
                       android:drawablePadding="@dimen/margin_small"
-                      android:textColor="@color/heading_text_color"/>
+                      android:textColor="@color/white"/>
         </LinearLayout>
         <ProgressBar
             android:id="@+id/book_progress"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:progressDrawable="@drawable/progressbar_layerlist" />
+            android:progressDrawable="@drawable/circle_progress_background" />
         <include layout="@layout/product_detail_booking_confirm_card"
                  android:layout_width="wrap_content"
                  android:id="@+id/booking_confirm_card"

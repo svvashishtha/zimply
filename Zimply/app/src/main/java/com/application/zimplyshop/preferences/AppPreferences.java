@@ -32,6 +32,7 @@ public class AppPreferences {
 	private static final String USER_PINCODE = "user_pincode";
     private static final String IS_PINCODE_SAVED = "is_pincode_saved";
 	private static final String NOTIF_MOD_DATE_TIME = "notif_mod_date_tim";
+	private static final String USER_PHONE_NUMBER = "userphone_number";
 
 
 
@@ -335,5 +336,15 @@ public class AppPreferences {
 	public static long getNotifModDateTime(Context context) {
 		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
 		return savedSession.getLong(NOTIF_MOD_DATE_TIME, 0);
+	}
+	public static void setUserPhoneNumber(Context context, String phoneNmber) {
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+		editor.putString(USER_PHONE_NUMBER, phoneNmber);
+		editor.commit();
+	}
+
+	public static String getUserPhoneNumber(Context context) {
+		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
+		return savedSession.getString(USER_PHONE_NUMBER, "");
 	}
 }

@@ -746,6 +746,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             }
             ((TextView)navView.findViewById(R.id.drawer_user_email)).setVisibility(View.VISIBLE);
             ((TextView)navView.findViewById(R.id.drawer_user_email)).setText(AppPreferences.getUserEmail(this));
+            ((TextView)navView.findViewById(R.id.drawer_user_phone)).setVisibility(View.VISIBLE);
+            ((TextView)navView.findViewById(R.id.drawer_user_phone)).setText(AppPreferences.getUserPhoneNumber(this));
+
             userName.setText(AppPreferences.getUserName(this));
         } else {
             SpannableString spannablecontent = new SpannableString("Hello! Login/Signup ?");

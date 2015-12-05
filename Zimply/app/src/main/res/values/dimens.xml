@@ -61,6 +61,7 @@
     <dimen name="pro_card_height">200dp</dimen>
     <dimen name="pager_indicator_radius">6dp</dimen>
     <dimen name="padding_top_56">56dp</dimen>
+    <dimen name="height164">164dp</dimen>
 
     <dimen name="padding_top_112">112dp</dimen>
     <dimen name="padding_top_168">168dp</dimen>
