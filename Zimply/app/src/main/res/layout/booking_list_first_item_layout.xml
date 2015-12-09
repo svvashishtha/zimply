@@ -61,7 +61,7 @@
         android:gravity="center_vertical"
         android:padding="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_medium"
-        android:text="Other products from this store"
+        android:text="More products from this store"
         android:textColor="@color/heading_text_color"
         android:textSize="@dimen/font_medium"
         android:textStyle="bold" />

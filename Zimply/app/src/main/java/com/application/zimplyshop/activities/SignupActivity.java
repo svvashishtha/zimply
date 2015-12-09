@@ -333,7 +333,7 @@ public class SignupActivity extends BaseActivity
 				AppPreferences.setUserName(this, ((SignupObject) respose).getName());
 				AppPreferences.setUserPhoto(this, ((SignupObject) respose).getPhoto());
 
-				if(fromInside ||isLoggedOut) {
+				if(isLoggedOut) {
 					this.finish();
 				}
 				else {

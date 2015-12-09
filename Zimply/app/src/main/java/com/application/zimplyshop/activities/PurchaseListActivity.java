@@ -106,7 +106,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
                 logoutDialog = new AlertDialog.Builder(PurchaseListActivity.this)
                         .setTitle(getResources().getString(R.string.cancel_order))
                         .setMessage(getResources().getString(R.string.cancel_order_cofirm))
-                        .setPositiveButton(getResources().getString(R.string.okay_text),
+                        .setPositiveButton("Yes",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -116,7 +116,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
                                         sendServerRequest(AppConstants.CANCEL_ORDER, orderId);
                                         ;
                                     }
-                                }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
+                                }).setNegativeButton("No",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -222,7 +222,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
                 dialog.dismiss();
             if(status){
                 adapter.changeStatus(clickedOrder,orderItemId,this.status);
-                Toast.makeText(this,"Status successfully updated",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Order successfully cancelled",Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(this,"Could not process request.Please try again",Toast.LENGTH_SHORT).show();
             }

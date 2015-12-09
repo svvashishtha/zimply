@@ -378,7 +378,11 @@ public class ParserClass implements ObjectTypes {
                         newObj.setStatus(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(array, i), "status"));
                         newObj.setId(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(array, i), "id"));
                         newObj.setVendor_id(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(array, i), "vendor_id"));
-                        newObj.setVendorTimeObj(new Gson().fromJson(JSONUtils.getJSONObject(array, i).toString(), ProductVendorTimeObj.class));
+
+                        newObj.setBook_product_id(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(array, i), "book_product_id"));
+
+                        newObj.setObj(new Gson().fromJson(JSONUtils.getJSONObject(array, i).toString(), HomeProductObj.class));
+                        // newObj.setVendorTimeObj(new Gson().fromJson(JSONUtils.getJSONObject(array, i).toString(), ProductVendorTimeObj.class));
                         bookedObj.add(newObj);
                     }
                     return bookedObj;

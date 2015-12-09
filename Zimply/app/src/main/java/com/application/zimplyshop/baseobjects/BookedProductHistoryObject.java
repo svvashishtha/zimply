@@ -23,6 +23,26 @@ public class BookedProductHistoryObject implements Serializable{
 
     int vendor_id;
 
+    HomeProductObj obj;
+
+    int book_product_id;
+
+    public int getBook_product_id() {
+        return book_product_id;
+    }
+
+    public void setBook_product_id(int book_product_id) {
+        this.book_product_id = book_product_id;
+    }
+
+    public HomeProductObj getObj() {
+        return obj;
+    }
+
+    public void setObj(HomeProductObj obj) {
+        this.obj = obj;
+    }
+
     public String getLine1() {
         return line1;
     }
@@ -101,7 +121,7 @@ public class BookedProductHistoryObject implements Serializable{
         this.price = price;
     }
 
-    ProductVendorTimeObj vendorTimeObj;
+    //  ProductVendorTimeObj vendorTimeObj;
 
     public String getProductImg() {
         return productImg;
@@ -119,11 +139,11 @@ public class BookedProductHistoryObject implements Serializable{
         this.name = name;
     }
 
-    public ProductVendorTimeObj getVendorTimeObj() {
+    /*public ProductVendorTimeObj getVendorTimeObj() {
         return vendorTimeObj;
     }
 
     public void setVendorTimeObj(ProductVendorTimeObj vendorTimeObj) {
         this.vendorTimeObj = vendorTimeObj;
-    }
+    }*/
 }

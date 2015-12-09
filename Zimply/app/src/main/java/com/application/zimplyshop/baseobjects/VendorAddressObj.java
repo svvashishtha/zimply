@@ -3,11 +3,33 @@ package com.application.zimplyshop.baseobjects;
 import java.io.Serializable;
 
 public class VendorAddressObj implements Serializable{
-    String phone;
+
 
     int id;
 
     String line1;
+
+    String city;
+
+    String pincode;
+
+    String phone;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
 
     VendorLocationObj location;
 

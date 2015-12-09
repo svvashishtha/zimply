@@ -52,14 +52,14 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/z_item_height_48"
             android:layout_gravity="bottom"
             android:orientation="horizontal">
             <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/add_to_cart"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="@dimen/z_item_height_48"
+                android:layout_height="match_parent"
                 android:background="@drawable/gray_btn_bg"
                 android:gravity="center"
                 android:textAllCaps="true"
@@ -70,7 +70,7 @@
             <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/buy_now"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/z_item_height_48"
+                android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:background="@drawable/orange_btn_bg"
                 android:gravity="center"

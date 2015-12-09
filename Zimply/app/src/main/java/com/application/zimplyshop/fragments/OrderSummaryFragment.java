@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -282,7 +283,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 if(!AppPreferences.isUserLogIn(getActivity()))
                     GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), null, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 setAdapterData();
-                AllProducts.getInstance().setCartCount(getCartQuantity());
+                // AllProducts.getInstance().setCartCount(getCartQuantity());
             }else{
                 showNullCaseView("No Items");
                 changeViewVisiblity(mListView, View.GONE);
@@ -313,7 +314,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                     cartObject.getCart().setTotal_price( totalPrice+"");
 
                     AllProducts.getInstance().removeCartItem(Integer.parseInt(cartObject.getCart().getDetail().get(quantityUpdatePosition).getProduct_id()));
-                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartObjs().size());
+                    //  AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartObjs().size());
 
                     if(cartObject.getCart().getDetail().size()>1) {
                         cartObject.getCart().getDetail().remove(quantityUpdatePosition);
@@ -471,7 +472,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             }
         });
         mListView.setAdapter(mAdapter);
-        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total : " + getResources().getString(R.string.rs_text) + " " + cartObject.getCart().getTotal_price());
+        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " + "<font color=#0093b8>"+getResources().getString(R.string.rs_text) + " " + Math.round(Double.parseDouble(cartObject.getCart().getTotal_price()))+"</font>"));
         ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setText("Proceed to Pay");
         ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override

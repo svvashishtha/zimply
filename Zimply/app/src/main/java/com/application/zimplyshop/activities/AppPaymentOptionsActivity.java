@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,7 +83,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         ((CustomTextView)findViewById(R.id.pay_online)).setOnClickListener(this);
         LinearLayout buyLayout = (LinearLayout)findViewById(R.id.payment_layout);
         buyLayout.setVisibility(View.VISIBLE);
-        ((CustomTextViewBold)findViewById(R.id.total_amount)).setText("Total : " + getResources().getString(R.string.rs_text) + " " + totalPrice);
+        ((CustomTextViewBold)findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " + "<font color=#0093b8>"+getResources().getString(R.string.rs_text) + " " + Math.round(totalPrice)+"</font>"));
         ((CustomTextViewBold)findViewById(R.id.buy_btn)).setText("Place Order");
         ((CustomTextViewBold)findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override

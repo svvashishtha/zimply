@@ -18,6 +18,7 @@ public class CartObject implements Serializable {
         String price, total_price, total_shipping;
         List<ProdctDetail> detail;
 
+
         public String getPrice() {
             return price;
         }
@@ -55,6 +56,15 @@ public class CartObject implements Serializable {
         String product_id, price, cart_item_id, quantity, image, name, available_quantity, slug;
         float shipping_charge, total_price, shipping_charges;
         boolean is_o2o;
+        public boolean isShowingPaymentDesc;
+
+        public boolean isShowingPaymentDesc() {
+            return isShowingPaymentDesc;
+        }
+
+        public void setIsShowingPaymentDesc(boolean isShowingPaymentDesc) {
+            this.isShowingPaymentDesc = isShowingPaymentDesc;
+        }
 
         public boolean is_o2o() {
             return is_o2o;

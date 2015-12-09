@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/dropshadowcard"
               android:orientation="vertical">
 
     <com.application.zimplyshop.widgets.CustomTextViewBold
@@ -90,7 +89,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:text="6.99"
-            android:textColor="@color/text_color1"
+            android:textColor="@color/blue_button"
             android:textSize="@dimen/font_medium" />
     </LinearLayout>
 

@@ -128,8 +128,8 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
     public void onRequestStarted(String requestTag) {
         if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !destroyed) {
             //view.findViewById(R.id.progress_container).setVisibility(View.VISIBLE);
-            changeViewVisiblity(view.findViewById(R.id.add_new_address_view), View.GONE);
-            changeViewVisiblity(view.findViewById(R.id.listview_container), View.GONE);
+          //  changeViewVisiblity(view.findViewById(R.id.add_new_address_view), View.GONE);
+         //   changeViewVisiblity(view.findViewById(R.id.listview_container), View.GONE);
             showLoadingView();
         }
     }
@@ -141,10 +141,10 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
             if (addressObjectArrayList.size() > 0) {
                 AddressAdapter mAdapter = new AddressAdapter(mActivity, R.layout.address_snippet, addressObjectArrayList);
                 mListView.setAdapter(mAdapter);
-                // view.findViewById(R.id.progress_container).setVisibility(View.GONE);
+               //  view.findViewById(R.id.progress_container).setVisibility(View.GONE);
                 showView();
-                changeViewVisiblity(view.findViewById(R.id.listview_container), View.VISIBLE);
-                changeViewVisiblity(view.findViewById(R.id.add_new_address_view), View.VISIBLE);
+//                changeViewVisiblity(view.findViewById(R.id.listview_container), View.VISIBLE);
+                //  changeViewVisiblity(view.findViewById(R.id.add_new_address_view), View.VISIBLE);
             } else {
                 addressSelected = true;
                 nextFragmentAddressEdit(null);
@@ -218,7 +218,6 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
                 viewHolder.address = (TextView) v.findViewById(R.id.address);
                 viewHolder.phone = (TextView) v.findViewById(R.id.phone);
                 viewHolder.edit = (ImageView) v.findViewById(R.id.edit);
-                viewHolder.delete = (ImageView) v.findViewById(R.id.delete);
                 viewHolder.useThisAddress = (TextView) v.findViewById(R.id.use_this_address);
                 v.setTag(viewHolder);
             }

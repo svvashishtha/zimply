@@ -15,12 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.activities.BookedForReviewActivity;
+import com.application.zimplyshop.activities.BookingStoreProductListingActivity;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
-import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.extras.AppConstants;
+import com.application.zimplyshop.managers.ImageLoaderManager;
 
 import java.util.ArrayList;
 
@@ -46,14 +50,17 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        //new ImageLoaderManager((BookedForReviewActivity)mContext).setImageFromUrl(objs.get(position).getProductImg(), ((OrderItemHolder) holder).storePic, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
-        ((OrderItemHolder) holder).storePic.setImageBitmap(CommonLib.getBitmap(mContext, R.drawable.ic_home_store, mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size)));
-        SpannableString string = new SpannableString("Store Address "+objs.get(position).getVendorTimeObj().getLine1()+" "+objs.get(position).getVendorTimeObj().getPincode()+" Pincode-"+objs.get(position).getVendorTimeObj().getCity());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,mContext.getResources().getDimensionPixelSize(R.dimen.booking_card_height));
+        ((OrderItemHolder) holder).bookCard.setLayoutParams(lp);
+
+        new ImageLoaderManager((BookedForReviewActivity)mContext).setImageFromUrl(objs.get(position).getProductImg(), ((OrderItemHolder) holder).storePic, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
+        //((OrderItemHolder) holder).storePic.setImageBitmap(CommonLib.getBitmap(mContext, R.drawable.ic_home_store, mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size)));
+        SpannableString string = new SpannableString("Store Address "+objs.get(position).getObj().getVendor().getReg_add().getLine1()+" "+objs.get(position).getObj().getVendor().getReg_add().getCity()+" Pincode-"+objs.get(position).getObj().getVendor().getReg_add().getPincode());
         string.setSpan(new RelativeSizeSpan(1.1f),0,14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         string.setSpan(new StyleSpan(Typeface.BOLD),0,14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         string.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         ((OrderItemHolder)holder).storeAddress.setText(string);
-        ((OrderItemHolder)holder).storeName.setText(objs.get(position).getVendorTimeObj().getVendor());
+        ((OrderItemHolder)holder).storeName.setText(objs.get(position).getObj().getVendor().getCompany_name());
 
 
        /* ColorFilter filter = new LightingColorFilter(
@@ -77,7 +84,7 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onCancelClick(position, objs.get(position).getVendorTimeObj().getBook_product_id());
+                        mListener.onCancelClick(position, objs.get(position).getBook_product_id());
                     }
                 }
             });
@@ -87,7 +94,7 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + objs.get(position).getVendorTimeObj().getPhone()));
+                callIntent.setData(Uri.parse("tel:" + objs.get(position).getObj().getVendor().getReg_add().getPhone()));
                 mContext.startActivity(callIntent);
             }
         });
@@ -95,7 +102,7 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
         ((OrderItemHolder) holder).getDirections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + objs.get(position).getVendorTimeObj().getLatitude()+ "," + objs.get(position).getVendorTimeObj().getLongitude() + "(" + objs.get(position).getVendorTimeObj().getVendor() + ")");
+                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + objs.get(position).getObj().getVendor().getReg_add().getLocation().getLatitude()+ "," + objs.get(position).getObj().getVendor().getReg_add().getLocation().getLongitude() + "(" + objs.get(position).getObj().getVendor().getCompany_name() + ")");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 mContext.startActivity(intent);
                 /*Intent intent = new Intent(mContext, MapPage.class);
@@ -106,7 +113,18 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
         });
 
-
+        ((OrderItemHolder) holder).bookCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, BookingStoreProductListingActivity.class);
+                intent.putExtra("booked_obj",objs.get(position).getObj());
+                intent.putExtra("hide_filter",true);
+                intent.putExtra("vendor_id",objs.get(position).getObj().getVendor().getVendor_id());
+                intent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
+                intent.putExtra("vendor_name",objs.get(position).getObj().getVendor().getCompany_name());
+                mContext.startActivity(intent);
+            }
+        });
         /*ColorFilter filter = new LightingColorFilter(
                 objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green),
                 objs.get(position).getStatus().equalsIgnoreCase("CANCEL") ?mContext.getResources().getColor(R.color.red_text_color) : mContext.getResources().getColor(R.color.button_green));
@@ -141,6 +159,7 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView  storeName,storeAddress,cancelBooking,bookingStatus;
         ImageView storePic;
         LinearLayout btnLayout,callCustomer,getDirections;
+        RelativeLayout bookCard;
         public OrderItemHolder(View itemView) {
             super(itemView);
             storeName = (TextView)itemView.findViewById(R.id.store_name);
@@ -150,6 +169,7 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
             cancelBooking = (TextView)itemView.findViewById(R.id.cancel_booking);
             callCustomer = (LinearLayout)itemView.findViewById(R.id.call_layout);
             getDirections = (LinearLayout)itemView.findViewById(R.id.direction_layout);
+            bookCard = (RelativeLayout)itemView.findViewById(R.id.item_info_parent);
         }
     }
 

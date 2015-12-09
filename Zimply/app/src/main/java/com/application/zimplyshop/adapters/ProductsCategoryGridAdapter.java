@@ -68,14 +68,13 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
         if (viewType == TYPE_CATEGORY) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_item_layout, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_item_layout, parent,false);
             holder = new ProductsCategoryViewHolder(view);
         }else if(viewType == TYPE_HEADER){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bookings_recyclerview_layout
-                    , null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bookings_recyclerview_layout,parent,false);
             holder = new HeaderViewHolder(view);
         }else{
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_title_layout,null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_title_layout,parent,false);
             holder = new TitleViewHolder(view);
         }
         return holder;
@@ -101,7 +100,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         } else if(getItemViewType(position) == TYPE_HEADER){
             ((HeaderViewHolder)holder).recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
            // ((HeaderViewHolder)holder).recyclerView.addItemDecoration(new SpaceItemDecoration(mContext.getResources().getDimensionPixelSize(R.dimen.margin_small)));
-            HomePageBookingsAdapter adapter = new HomePageBookingsAdapter(mContext,displayWidth,displayWidth);
+            HomePageBookingsAdapter adapter = new HomePageBookingsAdapter(mContext,displayWidth,mContext.getResources().getDimensionPixelSize(R.dimen.booking_card_height));
             adapter.addData(obj.getLatest_bookings());
            /* LinearLayout.LayoutParams lp =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(int)mContext.getResources().getDimension(R.dimen.booking_card_height));
             ((HeaderViewHolder)holder).recyclerView.setLayoutParams(lp);*/

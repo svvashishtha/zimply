@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:padding="@dimen/margin_small"
+              android:background="@drawable/dropshadowcard"
+              android:layout_height="wrap_content">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical">
+        <com.application.zimplyshop.widgets.CustomRadioButton
+            android:id="@+id/use_this_address"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/edit"
+            android:padding="@dimen/size10"
+            android:text="@string/use_this_address"
+            android:textColor="@color/blue_button" />
 
+
+        <ImageView
+            android:id="@+id/edit"
+            android:layout_width="@dimen/size_30"
+            android:layout_height="@dimen/size_30"
+            android:layout_centerVertical="true"
+
+            android:src="@drawable/edit" />
+
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+          android:background="@color/separator_color"></View>
     <RelativeLayout
         android:id="@+id/address_snippet_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_medium"
-        android:layout_marginRight="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_medium">
+        >
 
-        <ImageView
-            android:id="@+id/location_img"
-            android:layout_width="@dimen/size_30"
-            android:layout_height="@dimen/size_30"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginTop="@dimen/size10"
-            android:src="@drawable/location" />
 
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/address"
@@ -28,72 +45,22 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginRight="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/size10"
-            android:layout_toRightOf="@id/location_img"
-            android:padding="@dimen/size10" />
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/location"
+            />
 
-        <ImageView
-            android:id="@+id/phone_img"
-            android:layout_width="@dimen/size_30"
-            android:layout_height="@dimen/size_30"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/address"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginTop="@dimen/size10"
-            android:src="@drawable/phone" />
 
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/phone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/address"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/margin_small"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginTop="@dimen/size10"
-            android:layout_toRightOf="@id/phone_img"
-            android:padding="@dimen/size10" />
-
-        <ImageView
-            android:id="@+id/delete"
-            android:layout_width="@dimen/size_30"
-            android:layout_height="@dimen/size_30"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/phone"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginRight="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/size10"
-            android:visibility="invisible"
-            android:src="@drawable/delete" />
-
-        <com.application.zimplyshop.widgets.CustomTextView
-            android:id="@+id/use_this_address"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/phone"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginTop="@dimen/size10"
-            android:layout_toLeftOf="@+id/edit"
-            android:padding="@dimen/size10"
-            android:text="@string/use_this_address"
-            android:textColor="@color/green_text_color" />
-
-
-        <ImageView
-            android:id="@+id/edit"
-            android:layout_width="@dimen/size_30"
-            android:layout_height="@dimen/size_30"
-            android:layout_below="@id/phone"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size10"
-            android:layout_marginTop="@dimen/size10"
-            android:layout_toLeftOf="@id/delete"
-            android:src="@drawable/edit" />
+            android:drawableLeft="@drawable/phone"
+            />
 
 
     </RelativeLayout>

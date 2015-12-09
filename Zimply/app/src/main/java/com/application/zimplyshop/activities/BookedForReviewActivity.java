@@ -66,7 +66,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
 
     public void addToolbarView(Toolbar toolbar){
         View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar,false);
-        ((TextView) view.findViewById(R.id.title_textview)).setText("Booked Products");
+        ((TextView) view.findViewById(R.id.title_textview)).setText("My Bookings");
         toolbar.addView(view);
     }
     public void loadData(){

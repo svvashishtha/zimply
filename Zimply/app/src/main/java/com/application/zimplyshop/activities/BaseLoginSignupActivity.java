@@ -393,7 +393,7 @@ public class BaseLoginSignupActivity extends BaseActivity
 			return 5;
 		}
 
-		@Override
+        @Override
 		public boolean isViewFromObject(View view, Object object) {
 			return view == object;
 		}
@@ -406,7 +406,8 @@ public class BaseLoginSignupActivity extends BaseActivity
 			img.setImageBitmap(
 					CommonLib.getBitmap(BaseLoginSignupActivity.this, resId[position], width, (4 * height) / 5));
 			TextView text = (TextView) v.findViewById(R.id.text1);
-			text.setText(texts[position]);
+			text.setVisibility(View.GONE);
+			//text.setText(texts[position]);
 			container.addView(v, 0);
 			return v;
 		}

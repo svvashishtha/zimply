@@ -930,7 +930,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         ((TextView) findViewById(R.id.product_title)).setText(product.getName());
         ((TextView) findViewById(R.id.product_price)).setText(getString(R.string.rs_text) + " " + Math.round(product.getPrice()) + "");
         ((TextView) findViewById(R.id.delivery)).setText(product.getMinShippingDays() + "-" + product.getMaxShippingDays() + " Days");
-        ((TextView) findViewById(R.id.shipping_charges)).setText(getString(R.string.rs_text) + " " + product.getShippingCharges());
+        ((TextView) findViewById(R.id.shipping_charges)).setText((product.getShippingCharges()==0)?"Free":getString(R.string.rs_text) + " " + Math.round(product.getShippingCharges()));
         ((TextView) findViewById(R.id.sold_by)).setText(product.getVendor().getCompany_name());
 
         ((TextView) mActionBarCustomView.findViewById(R.id.title)).setText(product.getName());
@@ -1203,10 +1203,13 @@ public class ProductDetailsActivity extends ActionBarActivity
         ((LinearLayout)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MapPage.class);
+               /* Intent intent = new Intent(mContext, MapPage.class);
                 intent.putExtra("lat",product.getVendor().getReg_add().getLocation().getLatitude());
                 intent.putExtra("lon", product.getVendor().getReg_add().getLocation().getLongitude());
                 intent.putExtra("name", product.getVendor().getReg_add().getLocation().getName());
+                mContext.startActivity(intent);*/
+                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon +"?q=" + product.getVendor().getReg_add().getLocation().getLatitude()+ "," + product.getVendor().getReg_add().getLocation().getLongitude() + "(" + product.getVendor().getCompany_name()+")");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 mContext.startActivity(intent);
             }
         });

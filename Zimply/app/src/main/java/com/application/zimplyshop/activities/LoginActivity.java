@@ -50,6 +50,7 @@ public class LoginActivity extends BaseActivity
 
 	private boolean fromInside = false;
 	private boolean isLoggedOut=false;
+	boolean isDestroyed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -317,7 +318,7 @@ public class LoginActivity extends BaseActivity
 	public void uploadFinished(int requestType, String objectId, Object data, Object respose, boolean status,
 			int parserId) {
 
-		if (requestType == SIGNUP_REQUEST_TAG_LOGIN) {
+		if (!isDestroyed && requestType == SIGNUP_REQUEST_TAG_LOGIN) {
 			if (status) {
 				System.out.println("Signup response" + respose);
 				z_ProgressDialog.dismiss();
@@ -328,7 +329,7 @@ public class LoginActivity extends BaseActivity
 				AppPreferences.setUserName(this, ((SignupObject) respose).getName());
 				AppPreferences.setUserPhoto(this, ((SignupObject) respose).getPhoto());
 
-				if(fromInside||isLoggedOut) {
+				if(isLoggedOut) {
                     this.finish();
                 }
 				else {if(AppPreferences.isLocationSaved(this)) {
@@ -383,6 +384,7 @@ public class LoginActivity extends BaseActivity
 	@Override
 	protected void onDestroy() {
 		UploadManager.getInstance().removeCallback(this);
+		isDestroyed = true;
 		super.onDestroy();
 	}
 }

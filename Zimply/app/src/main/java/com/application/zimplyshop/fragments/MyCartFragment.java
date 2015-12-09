@@ -1,13 +1,16 @@
 package com.application.zimplyshop.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +57,8 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
     private ProgressDialog zProgressDialog;
 
     LinearLayout buyLayout;
+
+    boolean isMoveToWishlist;
 
     public static MyCartFragment newInstance(Bundle bundle) {
         MyCartFragment fragment = new MyCartFragment();
@@ -148,7 +153,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
         if(objs!=null){
             url+="&ids="+getProductIdStrings(objs)+"&quantity="+getProductQuantityString(objs)+"&buying_channels="+getProductBuyingChannels(objs);
         }
-        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.GET_CART_DETAILS , OBJECT_TYPE_CART);
+        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.GET_CART_DETAILS, OBJECT_TYPE_CART);
 
     }
 
@@ -202,7 +207,12 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
         } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART)) {
             JSONObject jsonObject = (JSONObject) obj;
             try {
-                String message = jsonObject.getString("success");
+                String message;
+                if(isMoveToWishlist){
+                    message = "Successfully added to wishlist";
+                }else {
+                    message = jsonObject.getString("success");
+                }
 
                 Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
                 // loadData();
@@ -240,7 +250,18 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
             }
         }
     }
-
+    /**
+     * Request for marking favourite
+     */
+    public void makeLikeRequest(String id) {
+        String url = AppApplication.getInstance().getBaseUrl() + MARK_FAVOURITE_URL;
+        List<NameValuePair> list = new ArrayList<NameValuePair>();
+        list.add(new BasicNameValuePair("item_type", ITEM_TYPE_PRODUCT + ""));
+        list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
+        list.add(new BasicNameValuePair("item_id", id+ ""));
+        UploadManager.getInstance().makeAyncRequest(url, MARK_FAVOURITE_REQUEST_TAG, id + "",
+                OBJECT_TYPE_MARKED_FAV, null, list, null);
+    }
     public int getCartQuantity(){
         return cartObject.getCart().getDetail().size();
     }
@@ -318,46 +339,54 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
             }
 
             @Override
-            public void itemDeleted(int position) {
-                if (!AppPreferences.isUserLogIn(getActivity())) {
-                    // cartObject.getCart().getDetail().remove(position);
-                    //AllProducts.getInstance().setCartCount(getCartQuantity());
-                    ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(getActivity()), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
-                    if (objs != null) {
-                        for (int i = 0; i < objs.size(); i++) {
+            public void itemDeleted(final int position) {
+                isMoveToWishlist = false;
+                final AlertDialog logoutDialog;
+                logoutDialog = new AlertDialog.Builder(getActivity())
+                        .setTitle("Remove Item")
+                        .setMessage("Do you wish to remove item from the cart?")
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        removeFromCart(position);
+                                    }
+                                }).setNegativeButton("No",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+                logoutDialog.show();
 
-                            if (objs.get(i).getProductId().equalsIgnoreCase(cartObject.getCart().getDetail().get(position).getProduct_id())) {
-                                objs.remove(i);
-                            }
-                        }
-                        if (objs.size() == 0) {
-                            objs = null;
-
-                        }
-                        GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), objs, OBJECT_TYPE_NONLOGGED_IN_CART, GetRequestManager.CONSTANT);
-                        AllProducts.getInstance().setCartCount(loadLocalCount());
-
-                    }
-                    loadCartComputation();
-
-                    //cartObject.getCart().getDetail().remove(position);
-                    // setAdapterData(cartObject);
-                } else {
-                    zProgressDialog = ProgressDialog.show(mActivity, null, "Removing Item. Please wait...");
-                    String url = AppApplication.getInstance().getBaseUrl() +
-                            "ecommerce/remove-cart/" + cartObject.getCart().getDetail().get(position).getCart_item_id() + "/";
-                    quantityUpdatePosition = position;
-                    GetRequestManager.getInstance().makeAyncRequest(url, REMOVE_FROM_CART, OBJECT_TYPE_ITEM_REMOVED);
-                }
             }
 
             @Override
             public void changeAddress() {
 
             }
+
+            @Override
+            public void itemMovedToWishlist(int position) {
+                if (!AppPreferences.isUserLogIn(getActivity())) {
+
+                    Intent loginIntent = new Intent(getActivity(), BaseLoginSignupActivity.class);
+                    loginIntent.putExtra("inside", true);
+                    startActivity(loginIntent);
+                } else {
+                    isMoveToWishlist = true;
+                    zProgressDialog = ProgressDialog.show(mActivity, null, "Adding to wishlist. Please wait...");
+                    String url = AppApplication.getInstance().getBaseUrl() +
+                            "ecommerce/remove-cart/" + cartObject.getCart().getDetail().get(position).getCart_item_id() + "/";
+                    quantityUpdatePosition = position;
+                    GetRequestManager.getInstance().makeAyncRequest(url, REMOVE_FROM_CART, OBJECT_TYPE_ITEM_REMOVED);
+                    makeLikeRequest(cartObject.getCart().getDetail().get(position).getProduct_id());
+                }
+            }
         });
 
-        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText("Total : " + getResources().getString(R.string.rs_text) + " " + obj.getCart().getTotal_price());
+        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " +"<font color=#0093b8>"+ getResources().getString(R.string.rs_text) + " " + Math.round(Double.parseDouble(obj.getCart().getTotal_price()))+"</font>"));
         ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setText("Checkout");
         ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -374,7 +403,38 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
             }
         });
     }
+    public void removeFromCart(int position){
+        if (!AppPreferences.isUserLogIn(getActivity())) {
+            // cartObject.getCart().getDetail().remove(position);
+            //AllProducts.getInstance().setCartCount(getCartQuantity());
+            ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(getActivity()), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+            if (objs != null) {
+                for (int i = 0; i < objs.size(); i++) {
 
+                    if (objs.get(i).getProductId().equalsIgnoreCase(cartObject.getCart().getDetail().get(position).getProduct_id())) {
+                        objs.remove(i);
+                    }
+                }
+                if (objs.size() == 0) {
+                    objs = null;
+
+                }
+                GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), objs, OBJECT_TYPE_NONLOGGED_IN_CART, GetRequestManager.CONSTANT);
+                AllProducts.getInstance().setCartCount(loadLocalCount());
+
+            }
+            loadCartComputation();
+
+            //cartObject.getCart().getDetail().remove(position);
+            // setAdapterData(cartObject);
+        } else {
+            zProgressDialog = ProgressDialog.show(mActivity, null, "Removing Item. Please wait...");
+            String url = AppApplication.getInstance().getBaseUrl() +
+                    "ecommerce/remove-cart/" + cartObject.getCart().getDetail().get(position).getCart_item_id() + "/";
+            quantityUpdatePosition = position;
+            GetRequestManager.getInstance().makeAyncRequest(url, REMOVE_FROM_CART, OBJECT_TYPE_ITEM_REMOVED);
+        }
+    }
     public int loadLocalCount(){
         int count=0;
         ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>)GetRequestManager.Request(AppPreferences.getDeviceID(getActivity()),RequestTags.NON_LOGGED_IN_CART_CACHE,GetRequestManager.CONSTANT);
@@ -452,7 +512,8 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
-        if (isAdded() && mActivity != null)
+        if (isAdded() && mActivity != null && requestType == QUANTITY_UPDATE) {
             zProgressDialog = ProgressDialog.show(mActivity, null, "Loading...");
+        }
     }
 }

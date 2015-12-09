@@ -801,6 +801,12 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             reloadUserInfo = false;
         }
 
+        if(AppPreferences.isUserLogIn(this)){
+            if(((TextView)navView.findViewById(R.id.drawer_user_phone)).getText()!=null &&((TextView)navView.findViewById(R.id.drawer_user_phone)).getText().length()==0){
+                ((TextView)navView.findViewById(R.id.drawer_user_phone)).setText(AppPreferences.getUserPhoneNumber(this));
+            }
+        }
+
         super.onResume();
     }
 

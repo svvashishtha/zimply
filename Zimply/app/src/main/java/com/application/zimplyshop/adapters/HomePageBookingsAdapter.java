@@ -59,7 +59,7 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width,height);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width,LinearLayout.LayoutParams.WRAP_CONTENT);
         ((BookingHolder) holder).bookCard.setLayoutParams(lp);
         ((BookingHolder)holder).ziStoreName.setText("Zimply Store");
         ((BookingHolder)holder).cancelBooking.setVisibility(View.GONE);

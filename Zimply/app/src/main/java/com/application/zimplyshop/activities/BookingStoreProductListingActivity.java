@@ -79,7 +79,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         productList.setLayoutManager(new GridLayoutManager(this, 2));
         productList.addItemDecoration(new SpaceGridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini)));
+                (int) getResources().getDimension(R.dimen.margin_mini),true));
 
         // setProductsGrid();
         obj = (HomeProductObj)getIntent().getSerializableExtra("booked_obj");
