@@ -27,6 +27,7 @@ import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.objects.AllProducts;
+import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.JSONUtils;
@@ -69,9 +70,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     String productIds,quantity;
 
     public static OrderSummaryFragment newInstance(Bundle bundle) {
-        if(fragment == null) {
-            fragment = new OrderSummaryFragment();
-        }
+        OrderSummaryFragment fragment = new OrderSummaryFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -170,7 +169,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     }
 
     private void loadCartData() {
-        String url = AppApplication.getInstance().getBaseUrl() + GET_ORDER_SUMMARY_URL+"?ids="+productIds+"&quantity="+quantity;
+        String url = AppApplication.getInstance().getBaseUrl() + GET_ORDER_SUMMARY_URL+"?src=mob&ids="+productIds+"&quantity="+quantity;
 
         GetRequestManager.getInstance().makeAyncRequest(url, GET_ORDER_SUMMARY, OBJECT_TYPE_CART);
     }
@@ -348,6 +347,14 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+
+        }
+    }
+
+    @Override
     public void onResume() {
         if (getActivity() != null) {
             ((ProductCheckoutActivity) getActivity()).setTitleText("Order Summary");
@@ -384,6 +391,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             intent.putExtra("buying_channel",buyingChannel);
             intent.putExtra("is_coc",isCoc());
             intent.putExtra("is_all_online",isAllOnline());
+            intent.putExtra("cart_obj",cartObject);
             startActivity(intent);
 
 
@@ -407,10 +415,17 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         return true;
     }
 
+    public void updateAddress(){
+        if(AllUsers.getInstance().getObjs()!=null &&AllUsers.getInstance().getObjs().size()>0 && mAdapter!=null){
+            mAdapter.changeShippingBillingAddress(AllUsers.getInstance().getObjs().get(0));
+        }
+    }
+
     private void nextFragmentWithoutStack() {
         if (mActivity != null) {
             Bundle bundle = new Bundle();
-            bundle.putBoolean("stack", false);
+            //bundle.putBoolean("stack", false);
+            bundle.putBoolean("adding_first_fragment",true);
             ((ProductCheckoutActivity) mActivity).setEditAddressSelectionFragmentWithoutStack(bundle);
             // ((ProductCheckoutActivity) mActivity).setEditAddressFragmentWithBackstack(bundle);
         }
@@ -455,6 +470,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 shipping = false;
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("cartObject", cartObject);
+                bundle.putSerializable("user_address",addressObjectArrayList);
                 bundle.putSerializable("shippingAddress", shippingAddress);
                 bundle.putBoolean("isBilling", true);
                 ((ProductCheckoutActivity) mActivity).setAddressSelectionFragmentWithBackstack(bundle);
@@ -466,6 +482,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 billing = false;
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("cartObject", cartObject);
+                bundle.putSerializable("user_address",addressObjectArrayList);
                 bundle.putSerializable("billingAddress", billingAddress);
                 bundle.putBoolean("isBilling", false);
                 ((ProductCheckoutActivity) mActivity).setAddressSelectionFragmentWithBackstack(bundle);

@@ -4,7 +4,7 @@
              android:layout_width="match_parent"
              android:id="@+id/parent"
              android:layout_height="match_parent"
-             android:background="@color/white_card_selected_color"
+             android:background="@color/pager_bg"
              android:orientation="vertical" >
 
     <android.support.v7.widget.RecyclerView

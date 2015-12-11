@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@color/pager_bg"
+              android:layout_height="match_parent">
+    <com.application.zimplyshop.widgets.CustomTextViewBold
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawableTop="@drawable/ic_acceptbig"
+        android:drawablePadding="@dimen/margin_medium"
+        android:textColor="@color/accept_green_color"
+        android:textSize="@dimen/font_xlarge"
+        android:text="Congratulations"/>
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/heading_text_color"
+        android:text="@string/order_placed_success"/>
+    <com.application.zimplyshop.widgets.CustomTextViewBold
+        android:id="@+id/order_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_medium"
+        android:layout_marginTop="@dimen/margin_small"
+        android:textColor="@color/heading_text_color"
+        android:text="Order Id - 267236276"/>
+</LinearLayout>

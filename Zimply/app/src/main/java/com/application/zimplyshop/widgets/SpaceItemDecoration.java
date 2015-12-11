@@ -8,13 +8,15 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 	private int space;
 	private boolean removeSpaceFirstItem;
 
+
 	public SpaceItemDecoration(int space ) {
 		this.space = space;
 	}
     public SpaceItemDecoration(int space ,boolean removeSpaceFirstItem) {
         this.space = space;
         this.removeSpaceFirstItem = removeSpaceFirstItem;
-    }
+	}
+
 
 
 	@Override

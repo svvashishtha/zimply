@@ -30,7 +30,7 @@ import com.application.zimplyshop.utils.CommonLib;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressSelectionFragment extends ZFragment implements GetRequestListener, View.OnClickListener {
+public class AddressSelectionFragment extends BaseFragment implements GetRequestListener, View.OnClickListener {
 
     private static AddressSelectionFragment fragment;
     boolean addressSelected = false;
@@ -42,9 +42,7 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
     private boolean destroyed;
 
     public static AddressSelectionFragment newInstance(Bundle bundle) {
-        if(fragment == null) {
-            fragment = new AddressSelectionFragment();
-        }
+        AddressSelectionFragment fragment = new AddressSelectionFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -82,7 +80,7 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
         }
         destroyed = false;
 
-        mListView = (ListView) view.findViewById(R.id.address_listview);
+        // mListView = (ListView) view.findViewById(R.id.address_listview);
         mListView.setDivider(null);
         view.findViewById(R.id.add_new_address).setOnClickListener(this);
         GetRequestManager.getInstance().addCallbacks(this);
@@ -93,7 +91,6 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -107,16 +104,6 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
-    @Override
-    public boolean onFragmentResult(Bundle bundle) {
-        return false;
-    }
-
     private void refreshView() {
         //Get the list of addresses
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_ADDRESSES + "?userid=" + AppPreferences.getUserID(mActivity);
@@ -128,8 +115,8 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
     public void onRequestStarted(String requestTag) {
         if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !destroyed) {
             //view.findViewById(R.id.progress_container).setVisibility(View.VISIBLE);
-          //  changeViewVisiblity(view.findViewById(R.id.add_new_address_view), View.GONE);
-         //   changeViewVisiblity(view.findViewById(R.id.listview_container), View.GONE);
+            //  changeViewVisiblity(view.findViewById(R.id.add_new_address_view), View.GONE);
+            //   changeViewVisiblity(view.findViewById(R.id.listview_container), View.GONE);
             showLoadingView();
         }
     }
@@ -141,7 +128,7 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
             if (addressObjectArrayList.size() > 0) {
                 AddressAdapter mAdapter = new AddressAdapter(mActivity, R.layout.address_snippet, addressObjectArrayList);
                 mListView.setAdapter(mAdapter);
-               //  view.findViewById(R.id.progress_container).setVisibility(View.GONE);
+                //  view.findViewById(R.id.progress_container).setVisibility(View.GONE);
                 showView();
 //                changeViewVisiblity(view.findViewById(R.id.listview_container), View.VISIBLE);
                 //  changeViewVisiblity(view.findViewById(R.id.add_new_address_view), View.VISIBLE);
@@ -178,6 +165,7 @@ public class AddressSelectionFragment extends ZFragment implements GetRequestLis
         if (getActivity() != null) {
             ((ProductCheckoutActivity) getActivity()).setTitleText("Address Selection");
         }
+
         super.onResume();
     }
 

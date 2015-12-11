@@ -50,6 +50,11 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
         this.shippingAddress = shippingAddress;
     }
 
+    public void changeShippingBillingAddress(AddressObject obj){
+        this.billingAddress = obj;
+        this.shippingAddress = obj;
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemViewType(int position) {
         if (position == 0 )//|| position == 1)
@@ -168,7 +173,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
 
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
                     intent.putExtra("slug", cartObject.getCart().getDetail().get(position-1).getSlug());
-                    intent.putExtra("id", Long.parseLong(cartObject.getCart().getDetail().get(position).getProduct_id()));
+                    intent.putExtra("id", Long.parseLong(cartObject.getCart().getDetail().get(position-1).getProduct_id()));
                     context.startActivity(intent);
 
                 }

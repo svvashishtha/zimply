@@ -263,7 +263,9 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                 OBJECT_TYPE_MARKED_FAV, null, list, null);
     }
     public int getCartQuantity(){
-        return cartObject.getCart().getDetail().size();
+        if(cartObject!=null &&cartObject.getCart()!=null &&cartObject.getCart().getDetail()!=null)
+            return cartObject.getCart().getDetail().size();
+        return 0;
     }
 
     @Override
@@ -316,7 +318,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
                     bundle.putString("productids", getProductIdStringsFromCart());
                     bundle.putString("quantity", getProductQuantityStringsFromCart());
-                    ((ProductCheckoutActivity) getActivity()).setOrderSummaryFragmentWithBackstack(bundle);
+                    ((ProductCheckoutActivity) getActivity()).newOrderSummaryFragmentWithBackStack(bundle);
                 } else {
                     Intent intent = new Intent(getActivity(), BaseLoginSignupActivity.class);
                     intent.putExtra("inside", true);

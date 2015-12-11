@@ -15,9 +15,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            style="@style/RadioButtonStyle"
             android:layout_toLeftOf="@+id/edit"
             android:padding="@dimen/size10"
-            android:text="@string/use_this_address"
+            android:text="Deliver to this address"
             android:textColor="@color/blue_button" />
 
 

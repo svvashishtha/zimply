@@ -222,6 +222,10 @@
             android:name="com.application.zimplyshop.activities.ProductDemoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.application.zimplyshop.activities.CashOnCounterOrderCompletionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name="com.application.zimplyshop.activities.UrlRouter"

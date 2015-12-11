@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AddressObject;
+import com.application.zimplyshop.baseobjects.CartObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.objects.AllProducts;
@@ -47,12 +48,15 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     int PAYMENT_TYPE_CASH=4;
     int PAYMENT_TYPE_CARD = 2;
+//    int PAYMENT_TYPE_COD = 2;
 
 
 
     int buyingChannel;
 
     boolean isCoc,isAllOnline;
+
+    CartObject cartObj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             isCoc = getIntent().getBooleanExtra("is_coc", false);
 
             isAllOnline =  getIntent().getBooleanExtra("is_all_online",false);
+            cartObj = (CartObject)getIntent().getSerializableExtra("cart_obj");
         }
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         addToolbarView(toolbar);
@@ -259,13 +264,15 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                 if (JSONUtils.getIntegerfromJSON(((JSONObject) response), "payment_status") == 1) {
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() - JSONUtils.getIntegerfromJSON(((JSONObject) response), "cart_count"));
                     Toast.makeText(this, "Order placed successfully", Toast.LENGTH_LONG).show();
-                    Intent postPaymentIntent = new Intent(this, PostPaymentThankYouActivity.class);
-                    postPaymentIntent.putExtra("address", addressObj);
-                    //todo confirm price here
-                    postPaymentIntent.putExtra("billing_amount", totalPrice+"");
-                    postPaymentIntent.putExtra("payment_type", paymentType);
-                    finish();
-                    startActivity(postPaymentIntent);
+
+
+                    Intent intent = new Intent(this ,CashOnCounterOrderCompletionActivity.class);
+                    intent.putExtra("cart_obj",cartObj);
+                    intent.putExtra("order_id",orderId);
+                    intent.putExtra("address_obj",addressObj);
+                    intent.putExtra("is_coc",(paymentType == PAYMENT_TYPE_CASH));
+                    startActivity(intent);
+
 
                 }else{
                     Toast.makeText(this, "Could not place order. Try again", Toast.LENGTH_SHORT).show();

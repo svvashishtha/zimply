@@ -25,6 +25,7 @@ import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
+import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
@@ -50,10 +51,14 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
     String titletext;
     private boolean destroyed = false;
 
+    boolean isEditAddress;
+
+    int editPosition=-1;
+
+    boolean isAddNewAddress;
+
     public static EditAddressFragment newInstance(Bundle bundle) {
-        if (fragment == null) {
-            fragment = new EditAddressFragment();
-        }
+        EditAddressFragment fragment = new EditAddressFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -82,7 +87,7 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
                 return true;
             }
         });
-        titletext = ((ProductCheckoutActivity) getActivity()).getTitleText().getText().toString();
+       // titletext = ((ProductCheckoutActivity) getActivity()).getTitleText().getText().toString();
         return view;
     }
 
@@ -90,6 +95,11 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
     public void onDestroyView() {
         if (zProgressDialog != null) {
             zProgressDialog.dismiss();
+        }
+        if(isEditAddress){
+            ((ProductCheckoutActivity)getActivity()).setTitleText("Choose Address");
+        }else{
+            ((ProductCheckoutActivity)getActivity()).setTitleText("Order Summary");
         }
         destroyed = true;
         GetRequestManager.getInstance().removeCallbacks(this);
@@ -125,11 +135,21 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
 
         if (getArguments() != null) {
             //get the arguments and set the value
+            isAddNewAddress = getArguments().getBoolean("adding_first_fragment");
+            editPosition = getArguments().getInt("edit_position",-1);
+            isEditAddress = getArguments().getBoolean("is_edit_address");
             finishActivity = getArguments().getBoolean("stack");
             try {
                 addressObject = (AddressObject) getArguments().getSerializable("addressObject");
-                if (addressObject != null)
+
+                if (addressObject != null) {
+                    ((ProductCheckoutActivity)getActivity()).setTitleText("Edit Address");
                     setData();
+                }else{
+
+                    ((ProductCheckoutActivity)getActivity()).setTitleText("Add Address");
+
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 addressObject = null;
@@ -288,9 +308,21 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         }
         if (requestType == RequestTags.SAVE_ADDRESS && status && !destroyed) {
             addressObject = (AddressObject) response;
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("address", addressObject);
-            ((ProductCheckoutActivity) mActivity).setOrderSummaryFragment(bundle);
+            if(isEditAddress){
+                AllUsers.getInstance().getObjs().set(editPosition,addressObject);
+            }else{
+                AllUsers.getInstance().getObjs().add(0, addressObject);
+            }
+           /* Bundle bundle = new Bundle();
+            bundle.putSerializable("address", addressObject);*/
+            if(isEditAddress) {
+                ((ProductCheckoutActivity) mActivity).popFromBackStack(ProductCheckoutActivity.EDIT_ADDRESS_FRAGMENT);
+            }else if(isAddNewAddress){
+                ((ProductCheckoutActivity) mActivity).popFromBackStack(ProductCheckoutActivity.ADD_FIRST_ADDRESS_FRAGMENT);
+            }else{
+                ((ProductCheckoutActivity) mActivity).popFromBackStack(ProductCheckoutActivity.NEW_EDIT_ADDRESS_FRAGMENT);
+            }
+            //((ProductCheckoutActivity) mActivity).setOrderSummaryFragment(bundle);
         } else {
             showToast("An error occurred.");
         }
@@ -355,9 +387,9 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
 
     @Override
     public void onResume() {
-        if (getActivity() != null && titletext != null) {
+       /* if (getActivity() != null && titletext != null) {
             ((ProductCheckoutActivity) getActivity()).setTitleText(titletext);
-        }
+        }*/
         super.onResume();
     }
 

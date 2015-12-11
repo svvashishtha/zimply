@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pager_bg"
-    android:padding="@dimen/margin_medium"
     android:orientation="vertical">
 
     <com.application.zimplyshop.widgets.CustomTextView
@@ -14,6 +13,8 @@
         android:background="@drawable/z_rate_blue_btn_bg"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/margin_medium"
+        android:paddingRight="@dimen/margin_medium"
+        android:drawableRight="@drawable/ic_plus_icon"
         android:text="Add new address"
         android:textColor="@color/white"
         android:textSize="@dimen/font_medium" />
@@ -22,8 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginBottom="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_small"
         android:text="Choose address to deliver"
         android:textColor="@color/heading_text_color"
         android:textSize="@dimen/font_medium" />

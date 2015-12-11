@@ -423,6 +423,8 @@ public class ParserClass implements ObjectTypes {
                                 address.setId(addressObjectJson.getInt("id"));
                             addresses.add(address);
                         }
+
+                        AllUsers.getInstance().setObjs(addresses);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

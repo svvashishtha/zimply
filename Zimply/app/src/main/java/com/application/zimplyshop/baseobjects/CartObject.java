@@ -57,6 +57,15 @@ public class CartObject implements Serializable {
         float shipping_charge, total_price, shipping_charges;
         boolean is_o2o;
         public boolean isShowingPaymentDesc;
+        public VendorObj vendor;
+
+        public VendorObj getVendor() {
+            return vendor;
+        }
+
+        public void setVendor(VendorObj vendor) {
+            this.vendor = vendor;
+        }
 
         public boolean isShowingPaymentDesc() {
             return isShowingPaymentDesc;
