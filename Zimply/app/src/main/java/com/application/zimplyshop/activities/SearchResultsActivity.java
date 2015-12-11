@@ -49,6 +49,8 @@ public class SearchResultsActivity extends BaseActivity implements
 
     int sortId = 1, priceLte = 0, priceHigh = 50000;
 
+    private boolean isO2o, isFilterApplied;
+
     boolean isRefreshData;
     ArrayList<HomeProductObj> homeProductObjs;
     private String query;
@@ -56,12 +58,14 @@ public class SearchResultsActivity extends BaseActivity implements
     private int type = -1;
     private int pageNo = 1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
         GetRequestManager.getInstance().addCallbacks(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        query = getIntent().getStringExtra("query");
         addToolbarView(toolbar);
         findViewById(R.id.cart_item_true).setVisibility(View.GONE);
         setSupportActionBar(toolbar);
@@ -77,7 +81,6 @@ public class SearchResultsActivity extends BaseActivity implements
 
         // setProductsGrid();
         url = getIntent().getStringExtra("url");
-        query = getIntent().getStringExtra("query");
         if(getIntent().getExtras().containsKey("name"))
             value = getIntent().getStringExtra("name");
         if(getIntent().getExtras().containsKey("type"))
@@ -114,15 +117,27 @@ public class SearchResultsActivity extends BaseActivity implements
 
     private void loadData() {
         String finalUrl;
-        String queryUrl = "&query=" + query;
-        String field = (type == -1)? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
-        String valueQuery = (value == "") ? "" : "&value="+value;
-        finalUrl = AppApplication.getInstance().getBaseUrl() + url
-                + "?width=" + ((width / 2) - (width / 15))
-                + field
-                + queryUrl
-                + valueQuery
-                + "&page=" + pageNo;
+        if(nextUrl == null) {
+            String queryUrl = "&query=" + query;
+            String field = (type == -1) ? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
+            String valueQuery = (value == "") ? "" : "&value=" + value;
+            finalUrl = AppApplication.getInstance().getBaseUrl() + url
+                    + "?width=" + ((width / 2) - (width / 15))
+                    + field
+                    + queryUrl
+                    + valueQuery
+                    + "&page=" + pageNo;
+        } else {
+            String queryUrl = "&query=" + query;
+            String field = (type == -1) ? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
+            String valueQuery = (value == "") ? "" : "&value=" + value;
+            finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl
+                    + "&width=" + ((width / 2) - (width / 15))
+                    + field
+                    + queryUrl
+                    + valueQuery
+                    + "&page=" + pageNo;
+        }
 
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,
                 PRODUCT_LIST_REQUEST_TAG,
@@ -193,9 +208,9 @@ public class SearchResultsActivity extends BaseActivity implements
                 R.layout.common_toolbar_text_layout, null);
         TextView titleText = (TextView) view.findViewById(R.id.title_textview);
         if (getIntent().getStringExtra("category_name") != null) {
-            titleText.setText("Showing products in " + getIntent().getStringExtra("category_name"));
+            titleText.setText("Products in " + getIntent().getStringExtra("category_name"));
         } else {
-            titleText.setText("Products");
+            titleText.setText("Results for "+ query);
         }
         view.findViewById(R.id.search_frame).setVisibility(View.GONE);
         toolbar.addView(view);
@@ -205,7 +220,7 @@ public class SearchResultsActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
-        menu.findItem(R.id.cart).setVisible(false);
+        menu.findItem(R.id.cart).setVisible(true);
         menu.findItem(R.id.search).setVisible(false);
         menu.findItem(R.id.filter).setVisible(true);
         return true;
@@ -219,6 +234,12 @@ public class SearchResultsActivity extends BaseActivity implements
                 break;
             case R.id.filter:
                 showFilterContent();
+                break;
+            case R.id.cart:
+                Intent intent = new Intent(this, ProductCheckoutActivity.class);
+                intent.putExtra("OrderSummaryFragment", false);
+                intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -234,24 +255,34 @@ public class SearchResultsActivity extends BaseActivity implements
         } else {
             Bundle bundle = new Bundle();
             bundle.putBoolean("is_products", true);
+//            bundle.putInt("selected_pos", categoryId);
             bundle.putInt("sort_id", sortId);
             bundle.putInt("price_high", priceHigh);
             bundle.putInt("price_low", priceLte);
+            bundle.putBoolean("is_o2o", isO2o);
             AllFilterClassActivity dialogFragment = AllFilterClassActivity.newInstance(bundle);
-            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.HJCustomDialogTheme);
+            dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.HJFullScreenDialogTheme);
             dialogFragment.setOnApplyClickListener(new AllFilterClassActivity.OnApplyClickListener() {
                 @Override
                 public void onApplyClick(Bundle bundle) {
 
+//                    categoryId = bundle.getInt("selected_pos");
                     sortId = bundle.getInt("sort_id");
                     priceLte = bundle.getInt("from_price");
                     priceHigh = bundle.getInt("to_price");
-                    nextUrl = url + "?filter=0"
-                            + ("&low_to_high=" + sortId) + ("&price__lte=" + priceLte) + ("&price__gte=" + priceHigh)
+                    isO2o = bundle.getBoolean("is_o2o");
+                    boolean isResetClicked = bundle.getBoolean("is_reset");
+                    nextUrl = url + "?filter=0" +( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                             + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
-                            ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "");
+                            ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "")
+                            +(isO2o?"&is_o2o="+1:"");
 
                     isRefreshData = true;
+                    if(sortId==-1 && priceHigh == 100000 && priceLte == 1 && !isO2o){
+                        isFilterApplied = false;
+                    }else {
+                        isFilterApplied = true;
+                    }
                     loadData();
                 }
             });
@@ -344,6 +375,14 @@ public class SearchResultsActivity extends BaseActivity implements
 
             isLoading = false;
         }
+        if (isFilterApplied) {
+            if(!isDestroyed)
+                findViewById(R.id.filter_applied).setVisibility(View.VISIBLE);
+        } else {
+            if(!isDestroyed)
+                findViewById(R.id.filter_applied).setVisibility(View.GONE);
+        }
+
 
     }
 
