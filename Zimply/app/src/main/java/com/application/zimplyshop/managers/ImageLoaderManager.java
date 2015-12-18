@@ -108,6 +108,45 @@ public class ImageLoaderManager {
 
     }
 
+    public void setImageFromUrlNew(final String url, final ImageView imageView, final String type, final int width,
+                                final int height, final boolean toBeRounded, boolean isFastBlurr,ImageLoaderCallback callback) {
+
+        if(callback!=null){
+            this.mCallback = callback;
+        }
+
+        if (cancelPotentialWork(url, imageView)) {
+            Bitmap bitmap = null;
+            if (zapp.cache.get(imageUtils.getImprovisedUrl(url, type)) != null) {
+                bitmap = zapp.cache.get(imageUtils.getImprovisedUrl(url, type));
+//				imageView.setBackgroundResource(R.drawable.ic_pro_placeholder);
+
+            }
+
+            GetImage task = new GetImage(url, imageView, width, height, true, toBeRounded, isFastBlurr, type, zapp,
+                    ImageLoaderManager.this);
+            AsyncDrawable asyncDrawable = new AsyncDrawable(zapp.getResources(), bitmap, task);
+
+            imageView.setImageDrawable(asyncDrawable);
+
+            try {
+                task.executeOnExecutor(CommonLib.THREAD_POOL_EXECUTOR_IMAGE);
+            } catch (Exception e) {
+                CommonLib.sPoolWorkQueueImage.clear();
+            }
+            if (getImageArray.size() == 20) {
+                getImageArray.remove(0);
+            }
+            getImageArray.add(task);
+
+        } else if (((BitmapDrawable) imageView.getDrawable()).getBitmap() != null) {
+            imageView.setBackgroundResource(0);
+        }
+
+    }
+
+
+
     public void setScrollState(final int scrollState) {
 
         if (activity != null) {

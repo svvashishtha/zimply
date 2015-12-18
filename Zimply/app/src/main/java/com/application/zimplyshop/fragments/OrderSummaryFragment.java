@@ -152,7 +152,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     private void loadAddressData() {
         address = true;
-        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_ADDRESSES + "?src=mob&userid=" + AppPreferences.getUserID(mActivity)+"&buying_channel="+buyingChannel;
+        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_ADDRESSES + "?src=mob&userid=" + AppPreferences.getUserID(mActivity);
         GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.GET_ADDRESS_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_GET_ADDRESSES);
 
     }

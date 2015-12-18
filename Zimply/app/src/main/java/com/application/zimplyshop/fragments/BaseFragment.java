@@ -38,9 +38,9 @@ public class BaseFragment extends Fragment {
     public void showToast(String message){
         if(toast == null && getActivity() != null){
             toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
-            toast.setText(message);
-            toast.show();
         }
+        toast.setText(message);
+        toast.show();
     }
 
     /**

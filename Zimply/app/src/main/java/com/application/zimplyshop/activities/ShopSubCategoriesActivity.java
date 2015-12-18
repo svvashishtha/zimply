@@ -1,20 +1,5 @@
 package com.application.zimplyshop.activities;
 
-import java.util.ArrayList;
-
-import com.application.zimplyshop.R;
-import com.application.zimplyshop.adapters.ShopSubCategoriesAdapter;
-import com.application.zimplyshop.application.AppApplication;
-import com.application.zimplyshop.baseobjects.ShopSubCategoryObj;
-import com.application.zimplyshop.baseobjects.ShopSubCategoryObjectList;
-import com.application.zimplyshop.extras.AppConstants;
-import com.application.zimplyshop.extras.ObjectTypes;
-import com.application.zimplyshop.managers.GetRequestListener;
-import com.application.zimplyshop.managers.GetRequestManager;
-import com.application.zimplyshop.serverapis.RequestTags;
-import com.application.zimplyshop.utils.UiUtils;
-import com.application.zimplyshop.widgets.SpaceItemDecoration;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +13,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+
+import com.application.zimplyshop.R;
+import com.application.zimplyshop.adapters.ShopSubCategoriesAdapter;
+import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.ShopSubCategoryObj;
+import com.application.zimplyshop.baseobjects.ShopSubCategoryObjectList;
+import com.application.zimplyshop.extras.AppConstants;
+import com.application.zimplyshop.extras.ObjectTypes;
+import com.application.zimplyshop.managers.GetRequestListener;
+import com.application.zimplyshop.managers.GetRequestManager;
+import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.widgets.SpaceItemDecoration;
+
+import java.util.ArrayList;
 
 public class ShopSubCategoriesActivity extends BaseActivity implements
 		OnClickListener, GetRequestListener, RequestTags {
@@ -111,13 +110,13 @@ public class ShopSubCategoriesActivity extends BaseActivity implements
 			public void onItemClicked(int pos) {
 				Intent intent = new Intent(ShopSubCategoriesActivity.this,
 						ProductListingActivity.class);
-				intent.putExtra(
+			/*	intent.putExtra(
 						"url",
 						AppConstants.SUB_CATEGORY_PRODUCT_LIST_URL
 								+ UiUtils
 										.getId(((ShopSubCategoriesAdapter) productList
 												.getAdapter()).getItem(pos)
-												.getSlug()) + "/");
+												.getSlug()) + "/");*/
 				startActivity(intent);
 			}
 		});

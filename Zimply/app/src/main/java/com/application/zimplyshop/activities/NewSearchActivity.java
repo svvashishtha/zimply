@@ -331,7 +331,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
     }
 
     public void moveToProductDetail(long productId , String slug){
-        Intent intent = new Intent(this, ProductDetailsActivity.class);
+        Intent intent = new Intent(this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
         intent.putExtra("is_scanned",true);

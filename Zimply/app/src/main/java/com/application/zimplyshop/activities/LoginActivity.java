@@ -130,7 +130,7 @@ public class LoginActivity extends BaseActivity
             public void onClick(View widget) {
                 Intent intent = new Intent(LoginActivity.this, ZWebView.class);
                 intent.putExtra("title", getResources().getString(R.string.about_us_terms_of_use));
-                intent.putExtra("url", "http://www.zimply.in/terms");
+                intent.putExtra("url", "http://www.zimply.co/terms");
                 startActivity(intent);
             }
         },37,54,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -141,7 +141,7 @@ public class LoginActivity extends BaseActivity
             public void onClick(View widget) {
                 Intent intent = new Intent(LoginActivity.this, ZWebView.class);
                 intent.putExtra("title", getResources().getString(R.string.privacy_policy));
-                intent.putExtra("url", "http://www.zimply.in/privacy-policy");
+                intent.putExtra("url", "http://www.zimply.co/privacy-policy");
                 startActivity(intent);
             }
         },58,string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

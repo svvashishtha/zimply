@@ -115,6 +115,7 @@ public interface AppConstants {
     int ITEM_TYPE_EXPERT = 4;
     int ITEM_TYPE_ARTICLE = 3;
     int ITEM_TYPE_PRODUCT = 2;
+    int ITEM_APP_SHARE = 5;
     int REQUEST_PHOTO_DETAILS_REQUEST_CODE = 0x01;
     int REQUEST_ARTICLE_DETAILS_REQUEST_CODE = 0x02;
 

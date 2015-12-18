@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:id="@+id/parent"
+             android:layout_height="match_parent"
+             android:background="@color/pager_bg"
+             android:orientation="vertical" >
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/categories_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/padding_top_56"
+        android:paddingBottom="@dimen/padding_top_56">
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/bottom_action_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/z_item_height_48"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/add_to_cart"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/gray_btn_bg"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:text="@string/add_to_cart"
+                android:textSize="@dimen/font_small"
+                android:textColor="@color/heading_text_color" />
+
+            <com.application.zimplyshop.widgets.CustomTextViewBold
+                android:id="@+id/buy_now"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:background="@drawable/orange_btn_bg"
+                android:gravity="center"
+                android:text="@string/buy_now"
+                android:textSize="@dimen/font_medium"
+                android:textAllCaps="true"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+    <include layout="@layout/progress_layout" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@drawable/actionbar_bg"
+        app:theme="@style/Toolbar_Theme" />
+
+    <LinearLayout
+        android:id="@+id/dim_layout"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View android:layout_width="match_parent"
+              android:layout_height="@dimen/action_bar_offset"
+              android:background="@color/translucent_dark2">
+        </View>
+        <View
+            android:id="@+id/transparentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"></View>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:clickable="true"
+                      android:gravity="center"
+                      android:padding="@dimen/margin_xxlarge"
+                      android:orientation="vertical"
+                      android:background="@color/translucent_dark2">
+            <com.application.zimplyshop.widgets.CustomTextViewBold
+                android:id="@+id/view_text"
+                android:layout_width="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/font_large"
+                android:text="Visit the store at our convinience to touch and feel the product"
+                android:layout_height="wrap_content"/>
+            <com.application.zimplyshop.widgets.CustomTextViewBold
+                android:id="@+id/got_it"
+                android:layout_width="wrap_content"
+                android:background="@drawable/dropshadowcard"
+                android:text="Got It"
+                android:paddingLeft="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_large"
+                android:paddingRight="@dimen/margin_large"
+                android:textSize="@dimen/font_medium"
+                android:gravity="center"
+                android:textColor="@color/blue_button"
+                android:layout_height="@dimen/z_item_height_48"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/booking_tut"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@color/booking_confirmed_background_color">
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_large"
+            android:textColor="@color/white"
+            android:padding="@dimen/font_large"
+            android:gravity="center"
+            android:text="Congratulations!"/>
+
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_large"
+            android:textColor="@color/white"
+            android:paddingBottom="@dimen/font_large"
+            android:gravity="center"
+            android:text="You have booked a store visit."/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_weight="1"
+                      android:layout_height="0dp">
+            <android.support.v4.view.ViewPager
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:layout_width="match_parent"
+                android:id="@+id/booking_confirm_tut">
+            </android.support.v4.view.ViewPager>
+        </LinearLayout>
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:id="@+id/next_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_large"
+            android:textColor="@color/white"
+            android:layout_marginBottom="96dp"
+            android:padding="@dimen/font_large"
+            android:gravity="center"
+            android:text="NEXT"/>
+
+
+    </LinearLayout>
+</FrameLayout>

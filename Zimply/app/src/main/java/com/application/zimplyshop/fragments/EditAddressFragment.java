@@ -87,7 +87,7 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
                 return true;
             }
         });
-       // titletext = ((ProductCheckoutActivity) getActivity()).getTitleText().getText().toString();
+        // titletext = ((ProductCheckoutActivity) getActivity()).getTitleText().getText().toString();
         return view;
     }
 
@@ -96,7 +96,8 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         if (zProgressDialog != null) {
             zProgressDialog.dismiss();
         }
-        if(isEditAddress){
+
+        if(isEditAddress ||  ((ProductCheckoutActivity)getActivity()).isBackPressed()){
             ((ProductCheckoutActivity)getActivity()).setTitleText("Choose Address");
         }else{
             ((ProductCheckoutActivity)getActivity()).setTitleText("Order Summary");
@@ -116,6 +117,7 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
 
 
         phone = (EditText) view.findViewById(R.id.phone);
+        phone.setText(AppPreferences.getUserPhoneNumber(getActivity()));
         emailEdittext = (EditText) view.findViewById(R.id.email);
         emailEdittext.setText(AppPreferences.getUserEmail(getActivity()));
         //cancel = (TextView) view.findViewById(R.id.cancel);
@@ -129,7 +131,6 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         city.setText(AppPreferences.getSavedCity(getActivity()));
         state = (EditText) view.findViewById(R.id.state);
         pinCode = (EditText) view.findViewById(R.id.pincode);
-
         setLoadingVariables();
         showView();
 
@@ -183,31 +184,45 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         return false;
     }
 
+    private boolean checkEmailFormat(CharSequence target) {
+
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+
+        }
+    }
+
     public boolean checkValues() {
         if (((TextView) view.findViewById(R.id.name)).getText().toString().length() > 0) {
             if (((TextView) view.findViewById(R.id.email)).getText().toString().length() > 0) {
-                if (((TextView) view.findViewById(R.id.phone)).getText().toString().length() >= 10) {
-                    if (((TextView) view.findViewById(R.id.address_line1)).getText().toString().length() > 0) {
-                        if (((TextView) view.findViewById(R.id.state)).getText().toString().length() > 0) {
-                            if (((TextView) view.findViewById(R.id.pincode)).getText().toString().length() > 0) {
-                                return true;
+                if (checkEmailFormat(((TextView) view.findViewById(R.id.email)).getText().toString())) {
+                    if (((TextView) view.findViewById(R.id.phone)).getText().toString().length() >= 10) {
+                        if (((TextView) view.findViewById(R.id.address_line1)).getText().toString().length() > 0) {
+                            if (((TextView) view.findViewById(R.id.state)).getText().toString().length() > 0) {
+                                if (((TextView) view.findViewById(R.id.pincode)).getText().toString().length() > 0) {
+                                    return true;
+                                } else {
+                                    showToast("Please enter Pincode");
+                                    return false;
+                                }
                             } else {
-                                showToast("Please enter Pincode");
+                                showToast("Please enter State");
                                 return false;
                             }
                         } else {
-                            showToast("Please enter State");
+                            showToast("Please enter Address Line 1");
                             return false;
                         }
                     } else {
-                        showToast("Please enter Address Line 1");
+                        showToast("Invalid Phone Number ( Phone number should be 10 digits )");
                         return false;
                     }
-                } else {
-                    showToast("Invalid Phone Number ( Phone number should be 10 digits )");
+                }else {
+                    showToast("Not a valid email address");
                     return false;
                 }
-
             } else {
                 showToast("Please enter Email");
                 return false;

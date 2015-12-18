@@ -25,6 +25,11 @@
     <style name="RadioButtonStyle" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:button">@drawable/apptheme_btn_radio_holo_light</item>
     </style>
+
+    <style name="CheckBoxStyle" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/apptheme_btn_check_holo_light</item>
+    </style>
+
     <style name="Toolbar_Theme">
         <item name="colorControlNormal">@color/drawericon_color</item>
     </style>

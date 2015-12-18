@@ -1,7 +1,7 @@
 package com.application.zimplyshop.activities;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,7 +19,7 @@ import com.application.zimplyshop.widgets.TouchImageView;
  * Created by Umesh Lohani on 11/4/2015.
  */
 public class ProductPhotoZoomActivity extends BaseActivity{
-    TouchImageView zoomImage;
+    TouchImageView zoomImage,zoomImageNew;
     HomeProductObj product;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +38,23 @@ public class ProductPhotoZoomActivity extends BaseActivity{
             final int width = getDisplayMetrics().widthPixels;
             final int height = getDisplayMetrics().heightPixels;
             zoomImage = (TouchImageView) findViewById(R.id.zoom_imageview);
+            zoomImageNew = (TouchImageView) findViewById(R.id.zoom_imageview_new);
             new ImageLoaderManager(this).setImageFromUrl(product.getThumbs().get(position), zoomImage, "users", width / 2, height / 20, false,
                     false);
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (!destroyed)
-                        new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrl(product.getImageUrls().get(position), zoomImage, "photo_details", width / 2, height / 20, false,
-                                false);
-                }
-            }, 200);
+            new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrlNew(product.getImageUrls().get(position), zoomImageNew, "photo_details", width / 2, height / 20, false,
+                    false, new ImageLoaderManager.ImageLoaderCallback() {
+                        @Override
+                        public void loadingStarted() {
+
+                        }
+
+                        @Override
+                        public void loadingFinished(Bitmap bitmap) {
+                            zoomImage.setVisibility(View.GONE);
+                        }
+                    });
+
             RecyclerView thumbList = (RecyclerView) findViewById(R.id.product_thumb_icons);
             thumbList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             thumbList.addItemDecoration(new ProductThumbListItemDecorator(getResources().getDimensionPixelSize(R.dimen.margin_small)));
@@ -59,19 +65,25 @@ public class ProductPhotoZoomActivity extends BaseActivity{
                 @Override
                 public void onItemClick(final int pos) {
                     adapter.setSelectedPos(pos);
+                    zoomImage.setVisibility(View.VISIBLE);
                     zoomImage.resetZoom();
+                    zoomImageNew.resetZoom();
                     new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrl(product.getThumbs().get(pos), zoomImage, "users", width / 2, height / 20, false,
                             false);
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!destroyed)
-                                new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrl(product.getImageUrls().get(pos), zoomImage, "photo_details", width / 2, height / 20, false,
-                                        false);
+                    new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrlNew(product.getImageUrls().get(pos), zoomImageNew, "photo_details", width / 2, height / 20, false,
+                            false, new ImageLoaderManager.ImageLoaderCallback() {
+                                @Override
+                                public void loadingStarted() {
 
-                        }
-                    }, 200);
+                                }
+
+                                @Override
+                                public void loadingFinished(Bitmap bitmap) {
+                                    zoomImage.setVisibility(View.GONE);
+                                }
+                            });
+
 
                 }
             });

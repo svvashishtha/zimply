@@ -27,7 +27,7 @@
             android:layout_width="@dimen/size_30"
             android:layout_height="@dimen/size_30"
             android:layout_centerVertical="true"
-
+            android:background="@drawable/action_bar_item_bg"
             android:src="@drawable/edit" />
 
     </LinearLayout>
@@ -44,11 +44,10 @@
             android:id="@+id/address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/margin_small"
+            android:padding="@dimen/margin_small"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/location"
+            android:drawablePadding="@dimen/margin_small"
             />
 
 
@@ -58,11 +57,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/address"
             android:gravity="center_vertical"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_centerVertical="true"
+            android:drawablePadding="@dimen/margin_small"
+            android:padding="@dimen/margin_small"
             android:drawableLeft="@drawable/phone"
             />
-
 
     </RelativeLayout>
 </LinearLayout>

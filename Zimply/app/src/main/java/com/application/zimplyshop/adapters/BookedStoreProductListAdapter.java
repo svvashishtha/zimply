@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
+import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
@@ -197,9 +197,10 @@ public class BookedStoreProductListAdapter extends
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, ProductDetailsActivity.class);
+                    Intent intent = new Intent(mContext, NewProductDetailActivity.class);
                     intent.putExtra("slug", objs.get(newPos).getSlug());
                     intent.putExtra("id", objs.get(newPos).getId());
+                    intent.putExtra("title",objs.get(newPos).getName());
                     mContext.startActivity(intent);
                 }
             });
@@ -209,9 +210,10 @@ public class BookedStoreProductListAdapter extends
             ((HeaderViewHolder)holder).productLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, ProductDetailsActivity.class);
+                    Intent intent = new Intent(mContext, NewProductDetailActivity.class);
                     intent.putExtra("slug", obj.getSlug());
                     intent.putExtra("id", obj.getId());
+                    intent.putExtra("title",obj.getName());
                     mContext.startActivity(intent);
                 }
             });

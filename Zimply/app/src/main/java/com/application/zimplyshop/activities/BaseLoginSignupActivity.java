@@ -324,7 +324,7 @@ public class BaseLoginSignupActivity extends BaseActivity
 				AppPreferences.setUserEmail(this, ((SignupObject) respose).getEmail());
 				AppPreferences.setUserName(this, ((SignupObject) respose).getName());
 				AppPreferences.setUserPhoto(this, ((SignupObject) respose).getPhoto());
-                if(fromInside ||isLoggedOut) {
+				if(fromInside ||isLoggedOut) {
 					loadUserData();
 				}
 				else {
@@ -374,10 +374,19 @@ public class BaseLoginSignupActivity extends BaseActivity
 	public void userDataReceived() {
 
         if(isLoggedOut){
-            Intent intent = new Intent(this, HomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            this.finish();
-            startActivity(intent);
+			if(AppPreferences.isLocationSaved(this)) {
+				Intent intent = new Intent(this, HomeActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				this.finish();
+				startActivity(intent);
+			}else{
+				Intent intent = new Intent(this, SelectCity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				intent.putExtra("show_back", false);
+				intent.putExtra("fetch_location",true);
+				this.finish();
+				startActivity(intent);
+			}
         }else {
             this.finish();
         }

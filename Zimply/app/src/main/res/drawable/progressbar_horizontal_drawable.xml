@@ -14,11 +14,14 @@
         <clip>
             <shape>
 
-                <solid android:color="@color/book_btn_color_normal" />
+                <gradient
+                    android:startColor="@color/z_rate_btn_blue_color"
+                    android:endColor="@color/z_rate_btn_blue_color"
+                    android:angle="0" />
             </shape>
         </clip>
 
-        <color android:color="@color/book_btn_color_normal" />
+        <!--<color android:color="@color/book_btn_color_normal" />-->
     </item>
 
 </layer-list>

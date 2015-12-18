@@ -7,6 +7,16 @@ public class ProductListObject {
 
 	private ArrayList<HomeProductObj> products;
 
+	private ArrayList<ShopSubCategoryObj> subcategory;
+
+	public ArrayList<ShopSubCategoryObj> getSubcategory() {
+		return subcategory;
+	}
+
+	public void setSubcategory(ArrayList<ShopSubCategoryObj> subcategory) {
+		this.subcategory = subcategory;
+	}
+
 	public String getNext_url() {
 		return next_url;
 	}

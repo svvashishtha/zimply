@@ -2,44 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:background="@drawable/dropshadowcard"
               android:layout_height="match_parent">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_small">
-        <ImageView
-            android:id="@+id/close_card"
-            android:layout_width="@dimen/z_item_height_48"
-            android:layout_height="@dimen/z_item_height_48"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:scaleType="center"
-            android:background="@drawable/action_bar_item_bg"
-            android:src="@drawable/ic_cross"
-            />
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/margin_small">
+
         <com.application.zimplyshop.widgets.CustomTextViewBold
             android:id="@+id/product_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_large"
-            android:text="Address"
-            android:layout_toLeftOf="@id/close_card"
+            android:gravity="center"
+            android:drawableLeft="@drawable/ic_green_tick"
+            android:text="Booking Confirmed"
+            android:drawablePadding="@dimen/margin_small"
             android:layout_marginLeft="@dimen/margin_small"
             android:layout_toRightOf="@+id/product_img_src"/>
-        <com.application.zimplyshop.widgets.CustomTextView
-            android:id="@+id/address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/close_card"
-            android:textSize="@dimen/font_large"
-            android:text="Rs 300"
-            android:layout_below="@id/product_name"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginLeft="@dimen/margin_small"
-            android:layout_toRightOf="@+id/product_img_src"/>
+
     </RelativeLayout>
 
 

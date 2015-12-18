@@ -9,6 +9,7 @@ import com.application.zimplyshop.baseobjects.MyWishListObject;
 import com.application.zimplyshop.baseobjects.OrderList;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.baseobjects.ProductListObject;
+import com.application.zimplyshop.baseobjects.ShopSubCategoryObj;
 import com.application.zimplyshop.baseobjects.VendorAddressObj;
 import com.application.zimplyshop.baseobjects.VendorLocationObj;
 import com.application.zimplyshop.baseobjects.VendorObj;
@@ -447,7 +448,16 @@ public class AllProducts {
                         homeProductObjArrayList.add(product);
                     }
                     listObject.setProducts(homeProductObjArrayList);
-
+                    ArrayList<ShopSubCategoryObj> objs = new ArrayList<>();
+                    if(responseJson.has("subcategory")){
+                        JSONArray subCatArray = JSONUtils.getJSONArray(responseJson,"subcategory");
+                        if(subCatArray!=null){
+                            for(int i=0;i<subCatArray.length();i++){
+                                objs.add(new Gson().fromJson(JSONUtils.getJSONObject(subCatArray,i).toString(),ShopSubCategoryObj.class));
+                            }
+                            listObject.setSubcategory(objs);
+                        }
+                    }
                     if( responseJson.has("next_url") ) {
                         listObject.setNext_url(String.valueOf(responseJson.get("next_url")));
                     }
@@ -500,7 +510,174 @@ public class AllProducts {
     }
 
     public Object parseWishlistData(String responseString){
-        return new Gson().fromJson(responseString , MyWishListObject.class);
+        MyWishListObject obj = new MyWishListObject();
+        JSONArray jsonArray = JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString),"favourite");
+        if(jsonArray!=null){
+            for(int k=0;k<jsonArray.length();k++){
+
+                    HomeProductObj product = new HomeProductObj();
+                    try {
+                        JSONObject productObjectJson = JSONUtils.getJSONObject(jsonArray, k);
+                        if (productObjectJson.has("sku"))
+                            product.setSku(String.valueOf(productObjectJson.get("sku")));
+                        if (productObjectJson.has("min_shipping_days") && productObjectJson.get("min_shipping_days") instanceof Integer)
+                            product.setMinShippingDays(productObjectJson.getInt("min_shipping_days"));
+                        if (productObjectJson.has("slug")) {
+                            product.setSlug(String.valueOf(productObjectJson.get("slug")));
+                        }
+                        if (productObjectJson.has("shipping_charges"))
+                            product.setShippingCharges(productObjectJson.getInt("shipping_charges"));
+                        if (productObjectJson.has("name")) {
+                            product.setName(String.valueOf(productObjectJson.get("name")));
+                        }
+
+                        if (productObjectJson.has("is_o2o") && productObjectJson.get("is_o2o") instanceof Boolean)
+                            product.setIs_o2o(productObjectJson.getBoolean("is_o2o"));
+                        if (productObjectJson.has("is_cod") && productObjectJson.get("is_cod") instanceof Boolean)
+                            product.setIsCod(productObjectJson.getBoolean("is_cod"));
+                        if (productObjectJson.has("price") && productObjectJson.get("price") instanceof Double)
+                            product.setPrice(productObjectJson.getDouble("price"));
+                        if (productObjectJson.has("tax") && productObjectJson.get("tax") instanceof Double)
+                            product.setTax(productObjectJson.getDouble("tax"));
+                        if (productObjectJson.has("qty") && productObjectJson.get("qty") instanceof Integer)
+                            product.setQuantity(productObjectJson.getInt("qty"));
+                        if (productObjectJson.has("max_shipping_days") && productObjectJson.get("max_shipping_days") instanceof Integer)
+                            product.setMaxShippingDays(productObjectJson.getInt("max_shipping_days"));
+                        if (productObjectJson.has("score") && productObjectJson.get("score") instanceof Integer)
+                            product.setScore(productObjectJson.getInt("score"));
+                        if (productObjectJson.has("vpc"))
+                            product.setVpc(String.valueOf(productObjectJson.get("vpc")));
+                        if (productObjectJson.has("active") && productObjectJson.get("active") instanceof Boolean)
+                            product.setIsActive(productObjectJson.getBoolean("active"));
+                        //parse the vendor
+                        if (productObjectJson.has("vendor") && productObjectJson.get("vendor") instanceof JSONObject) {
+
+                            JSONObject vendorJson = productObjectJson.getJSONObject("vendor");
+
+                            VendorObj vendor = new VendorObj();
+
+                            if (vendorJson.has("company_name"))
+                                vendor.setCompany_name(String.valueOf(vendorJson.get("company_name")));
+
+                            if (vendorJson.has("book_product_id") && vendorJson.get("book_product_id") instanceof Integer)
+                                vendor.setBook_product_id(vendorJson.getInt("book_product_id"));
+
+                            if (vendorJson.has("vendor_id") && vendorJson.get("vendor_id") instanceof Integer)
+                                vendor.setVendor_id(vendorJson.getInt("vendor_id"));
+
+                            if (vendorJson.has("map") && vendorJson.get("map") instanceof String)
+                                vendor.setMap(vendorJson.getString("map"));
+                            if (vendorJson.has("reg_add") && vendorJson.get("reg_add") instanceof JSONObject) {
+                                VendorAddressObj addressObj = new VendorAddressObj();
+                                JSONObject addressJson = vendorJson.getJSONObject("reg_add");
+
+                                if (addressJson.has("id") && addressJson.get("id") instanceof Integer)
+                                    addressObj.setId(addressJson.getInt("id"));
+
+                                if (addressJson.has("line1"))
+                                    addressObj.setLine1(String.valueOf(addressJson.get("line1")));
+
+                                if (addressJson.has("phone"))
+                                    addressObj.setPhone(String.valueOf(addressJson.get("phone")));
+                                if (addressJson.has("city"))
+                                    addressObj.setCity(String.valueOf(addressJson.get("city")));
+                                if (addressJson.has("pincode"))
+                                    addressObj.setPincode(String.valueOf(addressJson.get("pincode")));
+                                if (addressJson.has("location") && addressJson.get("location") instanceof JSONObject) {
+                                    JSONObject locationJson = addressJson.getJSONObject("location");
+
+                                    VendorLocationObj locationObj = new VendorLocationObj();
+                                    if (locationJson.has("latitude") && locationJson.get("latitude") instanceof Double) {
+                                        locationObj.setLatitude(locationJson.getDouble("latitude"));
+                                    } else if (locationJson.has("latitude") && locationJson.get("latitude") instanceof Integer) {
+                                        locationObj.setLatitude(locationJson.getInt("latitude") + 0.0);
+                                    }
+
+                                    if (locationJson.has("longitude") && locationJson.get("longitude") instanceof Double) {
+                                        locationObj.setLongitude(locationJson.getDouble("longitude"));
+                                    } else if (locationJson.has("longitude") && locationJson.get("longitude") instanceof Integer) {
+                                        locationObj.setLongitude(locationJson.getInt("longitude") + 0.0);
+                                    }
+
+                                    if (locationJson.has("serve") && locationJson.get("serve") instanceof Boolean) {
+                                        locationObj.setServe(locationJson.getBoolean("serve"));
+                                    }
+
+                                    if (locationJson.has("id") && locationJson.get("id") instanceof Integer) {
+                                        locationObj.setId(locationJson.getInt("id"));
+                                    }
+
+                                    if (locationJson.has("name")) {
+                                        locationObj.setName(String.valueOf(locationJson.get("name")));
+                                    }
+
+                                    addressObj.setLocation(locationObj);
+                                }
+                                vendor.setReg_add(addressObj);
+                            }
+                            product.setVendor(vendor);
+                        }
+                        if (productObjectJson.has("category"))
+                            product.setCategory(String.valueOf(productObjectJson.get("category")));
+                        if (productObjectJson.has("id") && productObjectJson.get("id") instanceof Integer)
+                            product.setId(productObjectJson.getInt("id"));
+                        if (productObjectJson.has("description"))
+                            product.setDescription(String.valueOf(productObjectJson.get("description")));
+                        if (productObjectJson.has("return"))
+                            product.setReturnPolicy(String.valueOf(productObjectJson.get("return")));
+                        if (productObjectJson.has("faq"))
+                            product.setFaq(String.valueOf(productObjectJson.get("faq")));
+                        if (productObjectJson.has("care"))
+                            product.setCare(String.valueOf(productObjectJson.get("care")));
+
+                        if (productObjectJson.has("is_favourite"))
+                            product.setIs_favourite(productObjectJson.getBoolean("is_favourite"));
+
+                        if (productObjectJson.has("favourite_item_id"))
+                            product.setFavourite_item_id(String.valueOf(productObjectJson.get("favourite_item_id")));
+
+                        if (productObjectJson.has("attribute") && productObjectJson.get("attribute") instanceof JSONArray) {
+
+                            ArrayList<ProductAttribute> attributes = new ArrayList<ProductAttribute>();
+                            JSONArray attributeArr = productObjectJson.getJSONArray("attribute");
+                            for (int i = 0; i < attributeArr.length(); i++) {
+                                JSONObject attributeJson = attributeArr.getJSONObject(i);
+                                ProductAttribute attrs = new ProductAttribute();
+                                attrs.setKey(JSONUtils.getStringfromJSON(attributeJson, "key"));
+                                attrs.setUnit(JSONUtils.getStringfromJSON(attributeJson, "unit"));
+                                attrs.setValue(JSONUtils.getStringfromJSON(attributeJson, "value"));
+                                attributes.add(attrs);
+                            }
+                            product.setAttributes(attributes);
+                        }
+
+                        if (productObjectJson.has("images") && productObjectJson.get("images") instanceof JSONArray) {
+                            ArrayList<String> images = new ArrayList<String>();
+                            JSONArray imagesArr = productObjectJson.getJSONArray("images");
+                            for (int i = 0; i < imagesArr.length(); i++) {
+                                String image = String.valueOf(imagesArr.get(i));
+                                images.add(image);
+                            }
+                            product.setImageUrls(images);
+                        }
+
+                        if (productObjectJson.has("thumbs") && productObjectJson.get("thumbs") instanceof JSONArray) {
+                            ArrayList<String> images = new ArrayList<String>();
+                            JSONArray imagesArr = productObjectJson.getJSONArray("thumbs");
+                            for (int i = 0; i < imagesArr.length(); i++) {
+                                String image = String.valueOf(imagesArr.get(i));
+                                images.add(image);
+                            }
+                            product.setThumbs(images);
+                        }
+                    }catch(Exception e){
+
+                    }
+                obj.getFavourite().add(product);
+            }
+        }
+        obj.setNext_url(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(responseString),"next_url"));
+        return obj;
     }
 
     public boolean bookedProductsContains(int productId){

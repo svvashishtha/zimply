@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_small"
+            android:text="@string/deliver_seller_info"
+            android:textColor="@color/heading_text_color"
+            android:textSize="@dimen/font_large"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.application.zimplyshop.widgets.CustomEdittext
+                android:id="@+id/pincode"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/header_item_size"
+                android:layout_marginRight="@dimen/margin_small"
+                android:layout_weight="1"
+                style="@style/EditTextAppTheme"
+                android:gravity="center_vertical"
+                android:hint="@string/pin_code_et_hint"
+                android:inputType="number"
+                android:maxLength="6"
+                android:padding="@dimen/margin_small"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_small" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/pincode_check"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/header_item_size"
+                android:background="@drawable/white_card_rectangle"
+                android:gravity="center"
+                android:paddingLeft="@dimen/margin_medium"
+                android:paddingRight="@dimen/margin_medium"
+                android:text="@string/check"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/is_available_pincode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_medium"
+            android:paddingRight="@dimen/margin_medium"
+            android:textColor="@color/red_text_color"
+            android:textSize="@dimen/font_small"
+            android:visibility="gone" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small">
+            <ImageView android:layout_width="@dimen/toolbar_padding"
+                       android:layout_height="@dimen/toolbar_padding"
+                       android:src="@drawable/ic_delivered_in"
+                       android:layout_marginRight="@dimen/margin_small"
+                       android:scaleType="center"/>
+            <com.application.zimplyshop.widgets.CustomTextView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/delivered_in"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/delivery"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/text_color1"
+
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small">
+            <ImageView android:layout_width="@dimen/toolbar_padding"
+                       android:layout_height="@dimen/toolbar_padding"
+                       android:src="@drawable/ic_delivery_charge"
+                       android:layout_marginRight="@dimen/margin_small"
+                       android:scaleType="center"/>
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/shipping_charge"
+
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/shipping_charges"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/text_color1"
+
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/more_from_seller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small">
+            <ImageView android:layout_width="@dimen/toolbar_padding"
+                       android:layout_height="@dimen/toolbar_padding"
+                       android:src="@drawable/ic_sold_by"
+                       android:layout_marginRight="@dimen/margin_small"
+                       android:scaleType="center"/>
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sold By"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/sold_by"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/z_rate_btn_blue_color"
+                android:textSize="@dimen/font_small" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small">
+            <ImageView android:layout_width="@dimen/toolbar_padding"
+                       android:layout_height="@dimen/toolbar_padding"
+                       android:src="@drawable/ic_coc"
+                       android:layout_marginRight="@dimen/margin_small"
+                       android:scaleType="center"/>
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cash_at_counter"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/coc_avaiable"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/text_color1"
+
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small">
+            <com.application.zimplyshop.widgets.CustomTextView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/online_payment"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/online_payment_available"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/text_color1"
+
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+    </LinearLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/separator_color"></View>
+
+</LinearLayout>

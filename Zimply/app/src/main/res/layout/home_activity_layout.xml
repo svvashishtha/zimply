@@ -118,7 +118,13 @@
             android:alpha="0"
             android:background="@color/black_trans_seventy"
             android:clickable="false" />
-
+        <View
+            android:id="@+id/hint_fab"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="gone"
+            android:background="@color/black_trans_seventy"
+            android:clickable="true" />
         <include layout="@layout/fab" />
     </FrameLayout>
 

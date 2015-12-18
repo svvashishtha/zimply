@@ -25,7 +25,7 @@ public class ProductCheckoutActivity extends BaseActivity {
 
 
 
-    public static int MY_CART_FRAGMENT = 1,ORDER_SUMMARY_FRAGMENT = 2,ADDRESS_SELECTION_FRAGMENT=3,EDIT_ADDRESS_FRAGMENT=4,NEW_EDIT_ADDRESS_FRAGMENT=5,ADD_FIRST_ADDRESS_FRAGMENT=5;
+    public static int MY_CART_FRAGMENT = 1,ORDER_SUMMARY_FRAGMENT = 2,ADDRESS_SELECTION_FRAGMENT=3,EDIT_ADDRESS_FRAGMENT=4,NEW_EDIT_ADDRESS_FRAGMENT=5,ADD_FIRST_ADDRESS_FRAGMENT=6;
     @Override
     protected void onCreate(Bundle onSaveInstanceState) {
         super.onCreate(onSaveInstanceState);
@@ -110,11 +110,27 @@ public class ProductCheckoutActivity extends BaseActivity {
         this.titleText.setText(text);
     }
 
+
+    boolean isBackPressed;
+
+    public boolean isBackPressed() {
+        boolean isResult = isBackPressed;
+        if(isBackPressed){
+            isBackPressed = false;
+        }
+        return isResult;
+    }
+
     @Override
     public void onBackPressed() {
-
-        super.onBackPressed();
-
+        isBackPressed = true;
+        if(isAddingFirstAddress){
+            getSupportFragmentManager().popBackStack();
+            getSupportFragmentManager().popBackStack();
+            isAddingFirstAddress=false;
+        }else {
+            super.onBackPressed();
+        }
       /*  ZFragment zf = (ZFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (zf != null) {
             boolean consumed = zf.onBackPressed();
@@ -220,9 +236,11 @@ public class ProductCheckoutActivity extends BaseActivity {
     }
 
 
+    boolean isAddingFirstAddress;
 
     public void setEditAddressSelectionFragmentWithoutStack(Bundle savedInstanceState) {
         editAddressFragment = EditAddressFragment.newInstance(savedInstanceState);
+        isAddingFirstAddress = savedInstanceState.getBoolean("adding_first_fragment");
         // titleText.setText("Address Selection");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, editAddressFragment, EDIT_ADDRESS).addToBackStack(null).commit();
     }
@@ -291,6 +309,7 @@ public class ProductCheckoutActivity extends BaseActivity {
             getSupportFragmentManager().popBackStack();
             ((OrderSummaryFragment)orderSummaryFrag).updateAddress();
         }else if(comingFragment == EDIT_ADDRESS_FRAGMENT){
+
             getSupportFragmentManager().popBackStack();
             ((NewAddressSelectionFragment)addressSelectionFrag).updateAddress();
         }else if(comingFragment == NEW_EDIT_ADDRESS_FRAGMENT){
@@ -298,6 +317,7 @@ public class ProductCheckoutActivity extends BaseActivity {
             getSupportFragmentManager().popBackStack();
             ((OrderSummaryFragment)orderSummaryFrag).updateAddress();
         }else if(comingFragment == ADD_FIRST_ADDRESS_FRAGMENT){
+            isAddingFirstAddress=false;
             getSupportFragmentManager().popBackStack();
             ((OrderSummaryFragment)orderSummaryFrag).updateAddress();
         }

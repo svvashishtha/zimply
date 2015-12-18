@@ -185,6 +185,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
         }else {
 
             Intent intent = new Intent(this, BaseLoginSignupActivity.class);
+            intent.putExtra("is_logout",true);
             startActivity(intent);
             this.finish();
         }

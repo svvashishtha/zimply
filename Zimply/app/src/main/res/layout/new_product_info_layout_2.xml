@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:id="@+id/map_parent"
+              android:background="@color/white"
+              android:paddingTop="@dimen/margin_mini"
+              android:layout_height="match_parent">
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/map_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"/>
+        <ImageView
+            android:id="@+id/close_card"
+            android:layout_width="@dimen/z_item_height_48"
+            android:layout_height="@dimen/z_item_height_48"
+            android:layout_gravity="right"
+            android:scaleType="center"
+            android:background="@drawable/action_bar_item_bg"
+            android:src="@drawable/ic_cross"
+            />
+    </FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="top"
+        android:padding="@dimen/margin_small">
+        <ImageView
+            android:id="@+id/loc_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/location"/>
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/get_address"
+            android:layout_width="wrap_content"
+            android:text="@string/direction"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:textColor="@color/z_rate_btn_blue_color"
+            android:drawableTop="@drawable/ic_direction"
+            android:textSize="@dimen/font_medium"
+            />
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/store_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/loc_icon"
+            android:layout_toLeftOf="@id/get_address"
+            android:paddingLeft="@dimen/margin_small"
+            android:layout_weight="1"
+            android:textSize="@dimen/font_medium"
+            />
+
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
+        >
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/book_store_visit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/z_item_height_48"
+            android:text="Book Store Visit"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_medium"
+            android:background="@drawable/z_rate_blue_btn_bg"/>
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/empty_btn"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="@dimen/z_item_height_48"
+            android:background="@drawable/round_book_btn_bg"/>
+
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/loading_layout"
+                     android:visibility="gone"
+                     android:layout_gravity="center">
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size50"
+                android:minHeight="@dimen/size50"
+                android:maxHeight="@dimen/size50"
+                android:layout_gravity="center"
+                android:padding="@dimen/margin_mini"
+                android:progressDrawable="@drawable/progressbar_horizontal_drawable"
+                android:max="100"/>
+            <!--<ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="@dimen/size50"
+                android:layout_height="@dimen/size50"
+                android:layout_gravity="center"
+                android:padding="@dimen/margin_mini"
+                android:max="100"
+                android:progress="0"
+                android:rotation="-90"
+
+                android:progressDrawable="@drawable/circle_progress_background" />
+-->
+            <com.application.zimplyshop.widgets.CustomTextViewBold
+                android:id="@+id/cross_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_cross_red"
+                android:textColor="@color/red_text_color"
+                android:text="Tap To Cancel"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:scaleType="centerInside"
+                android:layout_gravity="center"/>
+        </FrameLayout >
+        <LinearLayout
+            android:id="@+id/congrats_layout"
+            android:layout_width="match_parent"
+            android:background="@drawable/book_btn_bg"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:padding="@dimen/margin_small"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginBottom="@dimen/margin_small"
+                       android:src="@drawable/ic_tag_faces_white"/>
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_xxxlarge"
+                android:text="Congratulations!"
+                android:textColor="@color/white"/>
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:textSize="@dimen/font_large"
+                android:text="Your booking has been confirmed"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+        <FrameLayout
+            android:id="@+id/request_loader_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+            <ProgressBar
+                android:id="@+id/book_progress"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:padding="@dimen/margin_mini"
+                android:background="@drawable/loader_circle_bg"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:progressDrawable="@drawable/circle_progress_background" />
+        </FrameLayout>
+        <include layout="@layout/product_detail_booking_confirm_card"
+                 android:layout_width="match_parent"
+                 android:id="@+id/booking_confirm_card"
+                 android:layout_height="wrap_content"
+                 android:visibility="gone"/>
+    </FrameLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/margin_small"
+          android:background="@color/separator_color">
+    </View>
+</LinearLayout>

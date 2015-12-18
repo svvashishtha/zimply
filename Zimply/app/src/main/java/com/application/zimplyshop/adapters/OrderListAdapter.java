@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
+import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.activities.PurchaseListActivity;
 import com.application.zimplyshop.baseobjects.IndividualOrderItemObj;
 import com.application.zimplyshop.baseobjects.OrderItemObj;
@@ -108,9 +108,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 ((RelativeLayout)view.findViewById(R.id.item_info_parent)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext, ProductDetailsActivity.class);
+                        Intent intent = new Intent(mContext, NewProductDetailActivity.class);
                         intent.putExtra("slug",obj.getSlug());
                         intent.putExtra("id", (long)obj.getId());
+                        intent.putExtra("title",obj.getName());
                         mContext.startActivity(intent);
                     }
                 });

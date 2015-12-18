@@ -29,7 +29,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
 
     int FROM_PRICE = 1;
 
-    int TO_PRICE=100000;
+    int TO_PRICE=500000;
 
     public static ProductPriceFilterFragment newInstance(Bundle bundle) {
         ProductPriceFilterFragment fragment = new ProductPriceFilterFragment();

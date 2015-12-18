@@ -1,5 +1,8 @@
 package com.application.zimplyshop.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -7,12 +10,18 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
@@ -21,6 +30,7 @@ import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.extras.AppConstants;
+import com.application.zimplyshop.extras.InputFilterMinMax;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
@@ -30,6 +40,9 @@ import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.widgets.CustomCheckBox;
+import com.application.zimplyshop.widgets.CustomRadioButton;
+import com.application.zimplyshop.widgets.RangeSeekBar;
 import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
 
 import java.util.ArrayList;
@@ -47,7 +60,7 @@ public class SearchResultsActivity extends BaseActivity implements
 
     int width;
 
-    int sortId = 1, priceLte = 0, priceHigh = 50000;
+    int sortId = -1;
 
     private boolean isO2o, isFilterApplied;
 
@@ -57,6 +70,11 @@ public class SearchResultsActivity extends BaseActivity implements
     private String value = "";
     private int type = -1;
     private int pageNo = 1;
+
+    long priceLte = 1, priceHigh = 500000;
+
+    long FROM_VALUE = 1;
+    long TO_VALUE = 500000;
 
 
     @Override
@@ -89,13 +107,25 @@ public class SearchResultsActivity extends BaseActivity implements
 
         setStatusBarColor();
         setLoadingVariables();
-        setFilterVariables();
-        setFiltersClick();
+        // setFilterVariables();
+        // setFiltersClick();
         retryLayout.setOnClickListener(this);
         width = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
                 .getDimension(R.dimen.font_small))) / 2;
         homeProductObjs = new ArrayList<>();
         loadData();
+    }
+
+    ArrayList<Integer> subCategoryId;
+
+    public String getSubCategoryString(){
+        String subCategory="";
+        for(int i=0;i<subCategoryId.size();i++){
+            subCategory+=subCategoryId.get(i);
+            if(i!=subCategoryId.size()-1)
+                subCategory+=".";
+        }
+        return subCategory;
     }
 
     public int getSelectedCatgeoryId(int categoryId) {
@@ -126,7 +156,11 @@ public class SearchResultsActivity extends BaseActivity implements
                     + field
                     + queryUrl
                     + valueQuery
-                    + "&page=" + pageNo;
+                    + "&page=" + pageNo+
+                    ( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
+                    + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
+                    ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "")
+                    +(isO2o?"&is_o2o="+1:"");
         } else {
             String queryUrl = "&query=" + query;
             String field = (type == -1) ? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
@@ -136,7 +170,11 @@ public class SearchResultsActivity extends BaseActivity implements
                     + field
                     + queryUrl
                     + valueQuery
-                    + "&page=" + pageNo;
+                    + "&page=" + pageNo+
+                    ( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
+                    + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
+                    ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "")
+                    +(isO2o?"&is_o2o="+1:"");
         }
 
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,
@@ -170,7 +208,7 @@ public class SearchResultsActivity extends BaseActivity implements
                                 loadData();
                                 isRefreshData = true;
                             }
-                            scrollToolbarAndHeaderBy(-dy);
+             //               scrollToolbarAndHeaderBy(-dy);
 
                         }
 
@@ -210,7 +248,7 @@ public class SearchResultsActivity extends BaseActivity implements
         if (getIntent().getStringExtra("category_name") != null) {
             titleText.setText("Products in " + getIntent().getStringExtra("category_name"));
         } else {
-            titleText.setText("Results for "+ query);
+            titleText.setText("Results for " + query);
         }
         view.findViewById(R.id.search_frame).setVisibility(View.GONE);
         toolbar.addView(view);
@@ -233,7 +271,13 @@ public class SearchResultsActivity extends BaseActivity implements
                 this.finish();
                 break;
             case R.id.filter:
-                showFilterContent();
+                if (!isLoading) {
+                    //  showFilterContent();
+                    showFilterSlideIn();
+                } else {
+                    Toast.makeText(this, "Please wait while loading..", Toast.LENGTH_SHORT).show();
+                }
+                //showFilterContent();
                 break;
             case R.id.cart:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
@@ -244,6 +288,77 @@ public class SearchResultsActivity extends BaseActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void showFilterSlideIn(){
+        View view = findViewById(R.id.filter_layout);
+        view.findViewById(R.id.close_filter).setOnClickListener(this);
+        findViewById(R.id.reset_btn).setOnClickListener(this);
+        animateViewRightIn(view);
+    }
+
+    boolean isFiltersShown;
+
+    public void animateViewRightIn(final View view){
+        isFiltersShown = true;
+        view.setVisibility(View.VISIBLE);
+        View transparentView = findViewById(R.id.transparent_view);
+
+        transparentView.setVisibility(View.VISIBLE);
+        transparentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animateViewRightOut(view);
+            }
+        });
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(view , View.TRANSLATION_X,getDisplayMetrics().widthPixels,0);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(transparentView,View.ALPHA,0,1);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(anim1,anim2);
+        set.setInterpolator(new AccelerateDecelerateInterpolator());
+        set.setDuration(200);
+
+        set.start();
+        manageFiltersData();
+
+    }
+
+    public void animateViewRightOut(final View view){
+
+        final View transparentView = findViewById(R.id.transparent_view);
+
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(view , View.TRANSLATION_X,0,getDisplayMetrics().widthPixels);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(transparentView,View.ALPHA,1,0);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(anim1,anim2);
+        set.setInterpolator(new AccelerateDecelerateInterpolator());
+        set.setDuration(200);
+        set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.GONE);
+                transparentView.setVisibility(View.GONE);
+                isFiltersShown = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        set.start();
+
+    }
+
 
     public void showFilterContent() {
         if (AllCategories.getInstance().getPhotoCateogryObjs() == null) {
@@ -257,8 +372,8 @@ public class SearchResultsActivity extends BaseActivity implements
             bundle.putBoolean("is_products", true);
 //            bundle.putInt("selected_pos", categoryId);
             bundle.putInt("sort_id", sortId);
-            bundle.putInt("price_high", priceHigh);
-            bundle.putInt("price_low", priceLte);
+            bundle.putLong("price_high", priceHigh);
+            bundle.putLong("price_low", priceLte);
             bundle.putBoolean("is_o2o", isO2o);
             AllFilterClassActivity dialogFragment = AllFilterClassActivity.newInstance(bundle);
             dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.HJFullScreenDialogTheme);
@@ -271,6 +386,7 @@ public class SearchResultsActivity extends BaseActivity implements
                     priceLte = bundle.getInt("from_price");
                     priceHigh = bundle.getInt("to_price");
                     isO2o = bundle.getBoolean("is_o2o");
+
                     boolean isResetClicked = bundle.getBoolean("is_reset");
                     nextUrl = url + "?filter=0" +( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                             + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
@@ -278,7 +394,7 @@ public class SearchResultsActivity extends BaseActivity implements
                             +(isO2o?"&is_o2o="+1:"");
 
                     isRefreshData = true;
-                    if(sortId==-1 && priceHigh == 100000 && priceLte == 1 && !isO2o){
+                    if(sortId==-1 && priceHigh == 500000 && priceLte == 1 && !isO2o){
                         isFilterApplied = false;
                     }else {
                         isFilterApplied = true;
@@ -294,6 +410,12 @@ public class SearchResultsActivity extends BaseActivity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.reset_btn:
+                resetFilterValues();
+                break;
+            case R.id.close_filter:
+                animateViewRightOut(findViewById(R.id.filter_layout));
+                break;
             case R.id.filter_filter_layout:
                 Intent intent = new Intent(this, FilterFiltersLayout.class);
                 startActivity(intent);
@@ -340,7 +462,7 @@ public class SearchResultsActivity extends BaseActivity implements
 
             if (isRefreshData) {
                 homeProductObjs = null;
-                homeProductObjs = new ArrayList<>((ArrayList<HomeProductObj>) obj);
+                homeProductObjs = new ArrayList<>();
             }
             homeProductObjs.addAll((ArrayList<HomeProductObj>) obj);
             if (homeProductObjs.size() == 0) {
@@ -358,6 +480,7 @@ public class SearchResultsActivity extends BaseActivity implements
                 // so that products are not repeated.
                 setAdapterData(homeProductObjs);
                 // nextUrl = ((ProductListObject) obj).getNext_url();
+                //subCategories =((ProductListObject) obj).getSubcategory();
                 showView();
                 pageNo++;
                 changeViewVisiblity(productList, View.VISIBLE);
@@ -421,6 +544,144 @@ public class SearchResultsActivity extends BaseActivity implements
         GetRequestManager.getInstance().removeCallbacks(this);
         super.onDestroy();
     }
+    public void manageFiltersData(){
 
+        if(sortId != -1){
+            if(sortId == 1){
+                ((CustomRadioButton)findViewById(R.id.high_to_low)).setChecked(false);
+                ((CustomRadioButton)findViewById(R.id.low_to_high)).setChecked(true);
+            }else{
+                ((CustomRadioButton)findViewById(R.id.high_to_low)).setChecked(true);
+                ((CustomRadioButton)findViewById(R.id.low_to_high)).setChecked(false);
+            }
+
+        }
+        if(isO2o){
+            ((CheckBox)findViewById(R.id.zi_experience_tag)).setChecked(true);
+        }
+        ((CheckBox)findViewById(R.id.zi_experience_tag)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((CheckBox)findViewById(R.id.zi_experience_tag)).isChecked()){
+                    isFilterApplied = true;
+                }else{
+                    isFilterApplied = false;
+                }
+            }
+        });
+        ((CustomRadioButton)findViewById(R.id.high_to_low)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortId = 2;
+                ((CustomRadioButton) findViewById(R.id.low_to_high)).setChecked(false);
+                isFilterApplied = true;
+            }
+        });
+        /*((CheckBox)findViewById(R.id.high_to_low)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sortId = 1;
+                ((CheckBox) findViewById(R.id.low_to_high)).setChecked(false);
+            }
+        });*/
+        ((CustomRadioButton)findViewById(R.id.low_to_high)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortId = 1;
+                ((CustomRadioButton) findViewById(R.id.high_to_low)).setChecked(false);
+                isFilterApplied = true;
+            }
+        });
+        /*((CheckBox)findViewById(R.id.low_to_high)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sortId = -1;
+                ((CheckBox) findViewById(R.id.high_to_low)).setChecked(false);
+            }
+        });*/
+        //Add Logic for price
+        ((EditText) findViewById(R.id.from_price)).setText(priceLte + "");
+        ((EditText) findViewById(R.id.to_price)).setText(priceHigh + "");
+
+        RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
+        seekBar.setNotifyWhileDragging(true);
+        seekBar.setSelectedMaxValue(priceHigh);
+        seekBar.setSelectedMinValue(priceLte);
+        seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
+                ((EditText) findViewById(R.id.from_price)).setText(minValue + "");
+                ((EditText) findViewById(R.id.to_price)).setText(maxValue + "");
+                isFilterApplied = true;
+            }
+        });
+        ((EditText) findViewById(R.id.from_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                addMinInputFilter();
+                if (!hasFocus) {
+                    if (((EditText) findViewById(R.id.from_price)).getText().length() == 0) {
+                        ((EditText) findViewById(R.id.from_price)).setText(FROM_VALUE + "");
+                    }
+                    isFilterApplied = true;
+                }
+            }
+        });
+
+        ((EditText) findViewById(R.id.to_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                //addMaxInputFilter();
+                if (!hasFocus) {
+                    if (((EditText) findViewById(R.id.to_price)).getText().length() == 0) {
+                        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
+                    } else if (Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString()) < Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString())) {
+                        ((EditText) findViewById(R.id.to_price)).setText(((EditText) findViewById(R.id.from_price)).getText().toString());
+                    } else if (Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString()) > TO_VALUE) {
+                        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
+                    }
+                }
+                isFilterApplied = true;
+            }
+        });
+
+        ((ListView)findViewById(R.id.subcategory_list)).setVisibility(View.GONE);
+        (findViewById(R.id.sub_categories_header)).setVisibility(View.GONE);
+        findViewById(R.id.apply_filter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageNo = 1;
+                isO2o = ((CheckBox)findViewById(R.id.zi_experience_tag)).isChecked();
+                priceLte = Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString());
+                priceHigh = Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString());
+                nextUrl = null;
+                isRefreshData=true;
+                animateViewRightOut(findViewById(R.id.filter_layout));
+                loadData();
+            }
+        });
+    }
+    public void addMaxInputFilter(){
+        //((EditText)findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax( Long.parseLong((((EditText) findViewById(R.id.from_price)).getText()).toString()) + "",(TO_VALUE) + "")});
+    }
+    public void addMinInputFilter(){
+        ((EditText)findViewById(R.id.from_price)).setFilters(new InputFilter[]{new InputFilterMinMax(( FROM_VALUE) + "", (((EditText) findViewById(R.id.to_price)).getText()).toString().length()>0?Long.parseLong((((EditText) findViewById(R.id.to_price)).getText()).toString()) + "":TO_VALUE+"")});
+    }
+
+    public void resetFilterValues(){
+        sortId = -1;
+        isFilterApplied = false;
+        ((CustomCheckBox)findViewById(R.id.zi_experience_tag)).setChecked(false);
+        ((CustomRadioButton) findViewById(R.id.high_to_low)).setChecked(false);
+        ((CustomRadioButton) findViewById(R.id.low_to_high)).setChecked(false);
+        RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
+        seekBar.setNotifyWhileDragging(true);
+        seekBar.setSelectedMaxValue(TO_VALUE);
+        seekBar.setSelectedMinValue(FROM_VALUE);
+
+        ((EditText) findViewById(R.id.from_price)).setText(FROM_VALUE + "");
+        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
+
+    }
 
 }

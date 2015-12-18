@@ -262,6 +262,8 @@ public class ParserClass implements ObjectTypes {
                             if (vendorJson.has("vendor_id") && vendorJson.get("vendor_id") instanceof Integer)
                                 vendor.setVendor_id(vendorJson.getInt("vendor_id"));
 
+                            if (vendorJson.has("map") && vendorJson.get("map") instanceof String)
+                                vendor.setMap(vendorJson.getString("map"));
                             if (vendorJson.has("reg_add") && vendorJson.get("reg_add") instanceof JSONObject) {
                                 VendorAddressObj addressObj = new VendorAddressObj();
                                 JSONObject addressJson = vendorJson.getJSONObject("reg_add");
@@ -274,7 +276,10 @@ public class ParserClass implements ObjectTypes {
 
                                 if (addressJson.has("phone"))
                                     addressObj.setPhone(String.valueOf(addressJson.get("phone")));
-
+                                if(addressJson.has("city"))
+                                    addressObj.setCity(String.valueOf(addressJson.get("city")));
+                                if(addressJson.has("pincode"))
+                                    addressObj.setPincode(String.valueOf(addressJson.get("pincode")));
                                 if (addressJson.has("location") && addressJson.get("location") instanceof JSONObject) {
                                     JSONObject locationJson = addressJson.getJSONObject("location");
 
@@ -315,8 +320,12 @@ public class ParserClass implements ObjectTypes {
                             product.setId(productObjectJson.getInt("id"));
                         if (productObjectJson.has("description"))
                             product.setDescription(String.valueOf(productObjectJson.get("description")));
-                        if (productObjectJson.has("return_policy"))
-                            product.setReturnPolicy(String.valueOf(productObjectJson.get("return_policy")));
+                        if (productObjectJson.has("return"))
+                            product.setReturnPolicy(String.valueOf(productObjectJson.get("return")));
+                        if (productObjectJson.has("faq"))
+                            product.setFaq(String.valueOf(productObjectJson.get("faq")));
+                        if (productObjectJson.has("care"))
+                            product.setCare(String.valueOf(productObjectJson.get("care")));
 
                         if (productObjectJson.has("is_favourite"))
                             product.setIs_favourite(productObjectJson.getBoolean("is_favourite"));
@@ -415,6 +424,8 @@ public class ParserClass implements ObjectTypes {
                                 address.setPincode(String.valueOf(addressObjectJson.get("pincode")));
                             if (addressObjectJson.has("phone"))
                                 address.setPhone(String.valueOf(addressObjectJson.get("phone")));
+                            if (addressObjectJson.has("email"))
+                                address.setEmail(String.valueOf(addressObjectJson.get("email")));
                             if (addressObjectJson.has("state"))
                                 address.setState(String.valueOf(addressObjectJson.get("state")));
                             if (addressObjectJson.has("location") && addressObjectJson.get("location") instanceof Integer)
@@ -1031,6 +1042,11 @@ public class ParserClass implements ObjectTypes {
 
                                         if(addressJson.has("phone"))
                                             addressObj.setPhone(String.valueOf(addressJson.get("phone")));
+
+                                        if(addressJson.has("city"))
+                                            addressObj.setCity(String.valueOf(addressJson.get("city")));
+                                        if(addressJson.has("pincode"))
+                                            addressObj.setPincode(String.valueOf(addressJson.get("pincode")));
 
                                         if(addressJson.has("location") && addressJson.get("location") instanceof JSONObject) {
                                             JSONObject locationJson = addressJson.getJSONObject("location");

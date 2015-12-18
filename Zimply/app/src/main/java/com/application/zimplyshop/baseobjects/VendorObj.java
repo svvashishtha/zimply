@@ -15,6 +15,16 @@ public class VendorObj implements Serializable{
 
     private int book_product_id;
 
+    String map;
+
+    public String getMap() {
+        return map;
+    }
+
+    public void setMap(String map) {
+        this.map = map;
+    }
+
     public int getBook_product_id() {
         return book_product_id;
     }

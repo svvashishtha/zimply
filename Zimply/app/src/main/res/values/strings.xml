@@ -166,7 +166,7 @@
     <string name="products_title">Products</string>
     <string name="experts_title">Experts</string>
 
-    <string name="cash_on_counter_text">Pay Cash-at-Counter</string>
+    <string name="cash_on_counter_text">Pay at Counter</string>
     <string name="pay_online_text">Pay Online</string>
     <string name="congrats_txt">Congratulations!!</string>
     <string name="continue_shop_text">Continue Shopping</string>
@@ -196,4 +196,5 @@
     <string name="online_payment">Online Payment</string>
     <string name="cash_at_counter">Cash-at-Counter</string>
     <string name="order_placed_success">Order placed successfully</string>
+    <string name="direction">Direction</string>
 </resources>

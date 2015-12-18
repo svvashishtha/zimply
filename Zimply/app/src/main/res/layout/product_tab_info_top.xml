@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/res_info_top_container"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+                android:id="@+id/res_info_top_container"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/white"
                 android:clickable="true"
-    android:orientation="vertical" >
+                android:orientation="vertical" >
 
     <!--<android.support.v4.view.ViewPager
         android:id="@+id/photos_viewpager"
@@ -17,10 +18,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"/>-->
+    <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                 android:id="@+id/image_layout">
+        <ImageView
+            android:id="@+id/product_new_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/product_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
 
-    <ImageView
-        android:id="@+id/product_img"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/product_thumb_icons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitCenter" />
+        android:layout_height="@dimen/z_item_height_48"
+        android:layout_below="@id/image_layout"
+        android:layout_marginTop="@dimen/margin_small"
+        android:clipToPadding="false"
+        ></android.support.v7.widget.RecyclerView>
 </RelativeLayout>

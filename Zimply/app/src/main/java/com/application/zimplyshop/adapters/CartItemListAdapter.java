@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
+import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.baseobjects.CartObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
@@ -123,18 +123,18 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             new ImageLoaderManager((Activity) context).setImageFromUrl(cartObject.getCart().getDetail().get(position - 1).getImage()
                     , holder.product_image, "", (int) px, (int) px, false, false);
             holder.price.setText(context.getResources().getString(R.string.Rs) + " " + Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice())));
-
+            holder.itemCount.setText("#Item "+(position));
             holder.quantity.setText(cartObject.getCart().getDetail().get(position - 1).getQuantity());
-            holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " + Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice())));
+            holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " +(Integer.parseInt(cartObject.getCart().getDetail().get(position - 1).getQuantity())* Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice()))));
             holder.shippingPrice.setText(cartObject.getCart().getDetail().get(position - 1).getShipping_charges()==0?"Free":
                     context.getString(R.string.rs_text)+" "+Math.round(cartObject.getCart().getDetail().get(position - 1).getShipping_charges()));
-            holder.totalPrice.setText(context.getResources().getString(R.string.Rs)+" "+(cartObject.getCart().getDetail().get(position - 1).getShipping_charges()==0?
-                    (Integer.parseInt(cartObject.getCart().getDetail().get(position-1).getQuantity())
-                            *Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice()))):
-                    ((Integer.parseInt(cartObject.getCart().getDetail().get(position - 1).getQuantity())*Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice())))+Math.round(cartObject.getCart().getDetail().get(position - 1).getShipping_charges()))));
-            holder.isOnlineText.setText(Html.fromHtml("<b>Online Payment"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
+            holder.totalPrice.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position - 1).getShipping_charges() == 0 ?
+                    (Integer.parseInt(cartObject.getCart().getDetail().get(position - 1).getQuantity())
+                            * Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice()))) :
+                    ((Integer.parseInt(cartObject.getCart().getDetail().get(position - 1).getQuantity()) * Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice()))) + Math.round(cartObject.getCart().getDetail().get(position - 1).getShipping_charges()))));
+            /*holder.isOnlineText.setText(Html.fromHtml("<b>Online Payment"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
             changeDrawableLeft(holder.isOnlineText, R.drawable.ic_tick);
-            if(cartObject.getCart().getDetail().get(position-1).is_o2o()){
+            */if(cartObject.getCart().getDetail().get(position-1).is_o2o()){
                 holder.isCocText.setVisibility(View.VISIBLE);
                 holder.isCocText.setText(Html.fromHtml("<b>Cash-at-Counter"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_tick);
@@ -171,9 +171,10 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(context, ProductDetailsActivity.class);
+                    Intent intent = new Intent(context, NewProductDetailActivity.class);
                     intent.putExtra("slug", cartObject.getCart().getDetail().get(position-1).getSlug());
-                    intent.putExtra("id", Long.parseLong(cartObject.getCart().getDetail().get(position-1).getProduct_id()));
+                    intent.putExtra("id", Long.parseLong(cartObject.getCart().getDetail().get(position - 1).getProduct_id()));
+                    intent.putExtra("title", cartObject.getCart().getDetail().get(position-1).getName());
                     context.startActivity(intent);
 
                 }
@@ -313,10 +314,10 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
     }
 
     public class CartItemHolder extends RecyclerView.ViewHolder {
-        TextView price, name, delivery_date, quantity,shortTotal,hideDetails,viewDetails;
+        TextView price, name, delivery_date, quantity,shortTotal,hideDetails,viewDetails,itemCount;
 
         ImageView product_image, cancelCartItem,buyOfflineTag;
-        CustomTextView subTotal,shippingPrice,totalPrice,isCocText,isOnlineText;
+        CustomTextView subTotal,shippingPrice,totalPrice,isCocText;
         //ImageButton positive, negative;
         View quantityView,separator;
 
@@ -339,7 +340,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             totalPrice = (CustomTextView)itemView.findViewById(R.id.total_payment);
             isCocText = (CustomTextView)itemView.findViewById(R.id.is_coc_text);
             buyOfflineTag = (ImageView)itemView.findViewById(R.id.buy_offline_tag);
-            isOnlineText = (CustomTextView)itemView.findViewById(R.id.is_online_text);
+
             shortSubTotalLayout = (LinearLayout)itemView.findViewById(R.id.short_payment_desc_layout);
             shortTotal = (CustomTextView)itemView.findViewById(R.id.short_subtotal);
             priceDescLayout = (LinearLayout)itemView.findViewById(R.id.price_desc_layout);
@@ -350,6 +351,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             productCard = (LinearLayout)itemView.findViewById(R.id.product_card);
             separator = itemView.findViewById(R.id.btn_separator);
             separator.setVisibility(View.GONE);
+            itemCount = (TextView)itemView.findViewById(R.id.item_count);
         }
     }
 

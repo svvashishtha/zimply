@@ -47,8 +47,8 @@
 
     <!-- <color name="blue_button">#1ca4c9</color>
      <color name="blue_button_pressed">#1286a3</color>-->
-    <color name="blue_button">@color/z_blue_color</color>
-    <color name="blue_button_pressed">#0084a5</color>
+    <color name="blue_button">@color/z_rate_btn_blue_color</color>
+    <color name="blue_button_pressed">@color/z_rate_btn_blue_pressed_color</color>
     <color name="orange_button">#f29129</color>
     <color name="orange_button_pressed">#ba6c18</color>
     <color name="zhl_dark">#e4e4e4</color>
@@ -104,8 +104,8 @@
     <color name="z_actionbar_grad_start_color">#E0E0E0</color>
     <color name="z_rate_btn_color_border">#5f5f5f</color>
     <color name="z_rate_btn_color_grey_filled">#bbbbbb</color>
-    <color name="z_rate_btn_blue_color">#00B6E6</color>
-    <color name="z_rate_btn_blue_pressed_color">#00a3ce</color>
+    <color name="z_rate_btn_blue_color">#00AFFF</color>
+    <color name="z_rate_btn_blue_pressed_color">#00a2f0</color>
     <color name="z_background_tab_pressed">#6633B5E5</color>
     <color name="pager_bg">#F4F4F4</color>
     <color name="pager_tab_normal_color">#707D7D7D</color>
@@ -150,8 +150,11 @@
     <color name="viewfinder_border">#ffafed44</color>
     <color name="viewfinder_laser">#ffcc0000</color>
     <color name="viewfinder_mask">#60000000</color>
-    <color name="light_grey">#f5f5f5</color>
+    <color name="light_grey">#fafafa</color>
     <color name="accept_green_color">#6DB70C</color>
     <color name="payment_pending_red_color">#FB605C</color>
+    <color name="booking_confirmed_background_color">#EE415556</color>
+    <color name="blue_header_normal">#00A5FB</color>
+    <color name="blue_header_pressed">#0397e5</color>
 
 </resources>

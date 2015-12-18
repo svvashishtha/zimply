@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
 
     <com.application.zimplyshop.utils.fab.FABUnit
@@ -21,7 +21,22 @@
         fab:fab_icon="@drawable/ic_barcodescanner"
         fab:fab_size="normal" />
 
-<!--
+    <com.application.zimplyshop.widgets.CustomTextView android:layout_width="wrap_content"
+                                                       android:id="@+id/fab_tutorial"
+                                                       android:background="@drawable/z_rate_blue_btn_bg"
+                                                       android:layout_height="wrap_content"
+                                                       android:textColor="@color/white"
+                                                       android:layout_alignParentBottom="true"
+                                                       android:layout_toLeftOf="@id/fab_post_request"
+                                                       android:padding="@dimen/margin_medium"
+                                                       android:layout_marginLeft="@dimen/margin_medium"
+                                                       android:layout_marginRight="@dimen/margin_medium"
+                                                       android:layout_marginBottom="@dimen/margin_large"
+                                                       android:visibility="gone"
+                                                       android:textSize="@dimen/font_small"
+                                                       android:text="When at a Zimply Store, scan the QR Code on the products to view details"
+        />
+    <!--
     <FABControl
         android:id="@+id/multiple_actions"
         android:layout_width="wrap_content"

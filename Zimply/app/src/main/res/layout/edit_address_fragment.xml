@@ -67,7 +67,8 @@
                     android:padding="@dimen/size12"
                     android:maxLength="10"
                     android:singleLine="true"
-                    android:textColor="@color/zhl_darkest"
+                    android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -85,7 +86,8 @@
                     android:maxLines="1"
                     android:padding="@dimen/size12"
                     android:singleLine="true"
-                    android:textColor="@color/zhl_darkest"
+                    android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -103,7 +105,8 @@
                     android:maxLines="1"
                     android:padding="@dimen/size12"
                     android:singleLine="true"
-                    android:textColor="@color/zhl_darkest"
+                    android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -120,7 +123,8 @@
                     android:inputType="textPostalAddress|textAutoCorrect"
                     android:lines="2"
                     android:padding="@dimen/size12"
-                    android:textColor="@color/zhl_darkest"
+                    android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -137,7 +141,8 @@
                     android:inputType="textPostalAddress|textAutoCorrect"
                     android:lines="2"
                     android:padding="@dimen/size12"
-                    android:textColor="@color/zhl_darkest"
+                    android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -159,7 +164,8 @@
                         android:maxLines="1"
                         android:padding="@dimen/size12"
                         android:singleLine="true"
-                        android:textColor="@color/zhl_darkest"
+                        android:textColorHint="@color/zhl_darkest"
+                        android:textColor="@color/text_color1"
                         android:textSize="@dimen/font_medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -183,7 +189,8 @@
                     android:maxLines="1"
                     android:padding="@dimen/size12"
                     android:singleLine="true"
-                    android:textColor="@color/zhl_darkest"
+                    android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -201,7 +208,8 @@
                     android:maxLength="6"
                     android:padding="@dimen/size12"
                     android:singleLine="true"
-                    android:textColor="@color/zhl_darkest"
+                    android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -221,6 +229,5 @@
 
     </ScrollView>
 
-    <include layout="@layout/progress_layout"
-        />
+    <include layout="@layout/progress_layout"/>
 </RelativeLayout>

@@ -88,8 +88,8 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         setStatusBarColor();
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
-        setFilterVariables();
-        setFiltersClick();
+        // setFilterVariables();
+        // setFiltersClick();
         width = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
                 .getDimension(R.dimen.font_small))) / 2;
         loadData();
@@ -200,8 +200,10 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         View view = LayoutInflater.from(this).inflate(
                 R.layout.common_toolbar_text_layout, null);
         titleText = (TextView) view.findViewById(R.id.title_textview);
+       /* titleText.setLines(2);
+        titleText.setTextSize(14);*/
         if (getIntent().getStringExtra("vendor_name") != null) {
-            titleText.setText(getIntent().getStringExtra("vendor_name"));
+            titleText.setText("More products from "+ getIntent().getStringExtra("vendor_name"));
         } else {
             titleText.setText("Products");
         }

@@ -15,6 +15,7 @@
         android:paddingTop="@dimen/margin_small"
         android:paddingBottom="@dimen/margin_small"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/z_item_height_48"
         android:paddingRight="@dimen/margin_small"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -27,7 +28,7 @@
             android:paddingLeft="@dimen/margin_small"
             android:textColor="@color/text_color1"
             android:paddingRight="@dimen/margin_small"
-            android:text="Checkout some items from our latest designed shop for you.Checkout some items from our latest designed shop for you."/>
+            android:text="Checkout some items "/>
 
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/notif_date"

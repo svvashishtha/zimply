@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
+import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
@@ -168,9 +168,10 @@ public class ProductsRecyclerViewGridAdapter extends
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, ProductDetailsActivity.class);
+                    Intent intent = new Intent(mContext, NewProductDetailActivity.class);
                     intent.putExtra("slug", objs.get(position).getSlug());
                     intent.putExtra("id", objs.get(position).getId());
+                    intent.putExtra("title", objs.get(position).getName());
                     mContext.startActivity(intent);
                 }
             });

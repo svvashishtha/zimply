@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
+import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.activities.ProductPhotoZoomActivity;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 
@@ -66,8 +66,8 @@ public class ProductThumbAdapters extends RecyclerView.Adapter<RecyclerView.View
         } else {
             ((ViewHolder) holder).container.setBackgroundResource(R.drawable.white_card_rectangle);
         }
-        if(mContext instanceof ProductDetailsActivity) {
-            new ImageLoaderManager((ProductDetailsActivity) mContext).setImageFromUrl(imageUrls.get(position), ((ViewHolder) holder).productImg, "user", width, height, false, false);
+        if(mContext instanceof NewProductDetailActivity) {
+            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrl(imageUrls.get(position), ((ViewHolder) holder).productImg, "user", width, height, false, false);
         }else{
             new ImageLoaderManager((ProductPhotoZoomActivity) mContext).setImageFromUrl(imageUrls.get(position), ((ViewHolder) holder).productImg, "user", width, height, false, false);
         }

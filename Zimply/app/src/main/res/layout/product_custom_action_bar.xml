@@ -12,7 +12,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:onClick="actionBarSelected">
+        >
 
         <ImageView
             android:id="@+id/cart_icon"
@@ -40,20 +40,6 @@
 
 
     <ImageView
-        android:id="@+id/back_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/toolbar_height_product"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:clickable="true"
-        android:gravity="center"
-        android:onClick="actionBarSelected"
-        android:src="@drawable/ic_back"
-        android:textColor="@color/white"
-        android:textSize="@dimen/size18" />
-
-    <ImageView
         android:id="@+id/share_product"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -65,12 +51,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_toLeftOf="@id/share_product"
-        android:layout_toRightOf="@id/back_icon"
         android:clickable="false"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:onClick="actionBarSelected"
         android:paddingLeft="@dimen/height2"
         android:paddingRight="@dimen/height2"
         android:textColor="@color/font_color"

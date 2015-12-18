@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/z_item_height_48"
             android:paddingLeft="@dimen/margin_small"
-            android:textColor="@color/filter_item_text_selector"
+            android:textColor="@color/payment_options_text_color_selector"
             android:gravity="center_vertical"
             android:background="@drawable/filter_item_blue_selected_bg"
             android:textSize="@dimen/font_medium"
@@ -35,7 +35,7 @@
             android:paddingLeft="@dimen/margin_small"
             android:background="@drawable/filter_item_blue_selected_bg"
             android:gravity="center_vertical"
-            android:textColor="@color/filter_item_text_selector"
+            android:textColor="@color/payment_options_text_color_selector"
             android:textSize="@dimen/font_medium"
             android:text="@string/cash_on_counter_text"/>
 

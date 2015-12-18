@@ -33,7 +33,10 @@ public class AppPreferences {
     private static final String IS_PINCODE_SAVED = "is_pincode_saved";
 	private static final String NOTIF_MOD_DATE_TIME = "notif_mod_date_tim";
 	private static final String USER_PHONE_NUMBER = "userphone_number";
-
+	private static final String IS_BOOK_TUTORIAL_SHOWN="isbooktutorialshown";
+	private static final String IS_BARCODE_TUTORIAL_SHOWN="isbarcodetutorialshown";
+	private static final String IS_PLP_TUTORIAL_SHOWN="isplptutorialshown";
+	private static final String IS_FIRST_BOOKING_DONE="isfirstbookingdone";
 
 
 
@@ -347,4 +350,52 @@ public class AppPreferences {
 		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
 		return savedSession.getString(USER_PHONE_NUMBER, "");
 	}
+
+	public static void setIsBookTutorialShown(Context context, boolean isUserSignUp) {
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+		editor.putBoolean(IS_BOOK_TUTORIAL_SHOWN, isUserSignUp);
+		editor.commit();
+	}
+
+	public static boolean isBookTutorialShown(Context context) {
+
+		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
+		return savedSession.getBoolean(IS_BOOK_TUTORIAL_SHOWN, false);
+	}
+
+	public static void setIsBarcodeTutorialShown(Context context, boolean isUserSignUp) {
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+		editor.putBoolean(IS_BARCODE_TUTORIAL_SHOWN, isUserSignUp);
+		editor.commit();
+	}
+
+	public static boolean isBarcodeTutorialShown(Context context) {
+
+		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
+		return savedSession.getBoolean(IS_BARCODE_TUTORIAL_SHOWN, false);
+	}
+
+	public static void setIsPlpTutorialShown(Context context, boolean isPlpTutorialShown) {
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+		editor.putBoolean(IS_PLP_TUTORIAL_SHOWN, isPlpTutorialShown);
+		editor.commit();
+	}
+
+	public static boolean isPlpTutorialShown(Context context) {
+
+		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
+		return savedSession.getBoolean(IS_PLP_TUTORIAL_SHOWN, false);
+	}
+	public static void setIsFirstBookingDone(Context context, boolean isFirstBookingDone) {
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+		editor.putBoolean(IS_FIRST_BOOKING_DONE, isFirstBookingDone);
+		editor.commit();
+	}
+
+	public static boolean isFirstBookingDone(Context context) {
+
+		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
+		return savedSession.getBoolean(IS_FIRST_BOOKING_DONE, false);
+	}
+
 }

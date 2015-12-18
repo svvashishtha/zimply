@@ -804,8 +804,8 @@ public class ProductDetailsActivity extends ActionBarActivity
         //  View actionbarRestContainer = mActionBarCustomView.findViewById(R.id.actionbar_product_container);
         //  actionbarRestContainer.setPadding(toolbarHeight, 0, toolbarHeight, 0);
         actionBar.setCustomView(mActionBarCustomView);
-        mActionBarCustomView.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
-        mActionBarCustomView.findViewById(R.id.back_icon).setOnClickListener(this);
+       // mActionBarCustomView.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
+        // mActionBarCustomView.findViewById(R.id.back_icon).setOnClickListener(this);
         // mActionBarCustomView.findViewById(R.id.actionbar_call_icon).setPadding(width / 20, 0, width / 20, 0);
         mActionBarCustomView.findViewById(R.id.share_product).setOnClickListener(this);
         // mActionBarCustomView.findViewById(R.id.fav_product).setOnClickListener(this);
@@ -842,9 +842,9 @@ public class ProductDetailsActivity extends ActionBarActivity
 
         switch (view.getId()) {
 
-            case R.id.back_icon:
+           /* case R.id.back_icon:
                 onBackPressed();
-                break;
+                break;*/
 
             case android.R.id.home:
                 onBackPressed();
@@ -1084,6 +1084,9 @@ public class ProductDetailsActivity extends ActionBarActivity
                 startActivity(intent);*/
                 AllProducts.getInstance().getVendorIds().add(((ProductVendorTimeObj) response).getVendor_id());
                 showVisitBookedCard(((ProductVendorTimeObj) response));
+                if(!AppPreferences.isFirstBookingDone(this)){
+                    AppPreferences.setIsFirstBookingDone(this,true);
+                }
             }else{
                 Toast.makeText(this,((ErrorObject)response).getErrorMessage(),Toast.LENGTH_SHORT).show();
             }
@@ -1402,9 +1405,9 @@ public class ProductDetailsActivity extends ActionBarActivity
                 intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
                 startActivity(intent);
                 break;
-            case R.id.back_icon:
+          /*  case R.id.back_icon:
                 onBackPressed();
-                break;
+                break;*/
             case R.id.retry_layout:
                 if (isRequestFailed)
                     if (userLoading)

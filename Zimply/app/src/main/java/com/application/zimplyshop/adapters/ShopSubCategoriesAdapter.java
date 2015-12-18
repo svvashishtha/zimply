@@ -1,12 +1,5 @@
 package com.application.zimplyshop.adapters;
 
-import java.util.ArrayList;
-
-import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.ShopSubCategoriesActivity;
-import com.application.zimplyshop.baseobjects.ShopSubCategoryObj;
-import com.application.zimplyshop.managers.ImageLoaderManager;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +8,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.application.zimplyshop.R;
+import com.application.zimplyshop.baseobjects.ShopSubCategoryObj;
+
+import java.util.ArrayList;
 
 public class ShopSubCategoriesAdapter extends RecyclerView.Adapter<ShopSubCategoriesAdapter.SubCategoriesHolder> {
 
@@ -34,19 +32,20 @@ public class ShopSubCategoriesAdapter extends RecyclerView.Adapter<ShopSubCatego
 		return objs.size();
 	}
 
+
 	public ShopSubCategoryObj getItem(int pos) {
 		return objs.get(pos);
 	}
 
 	@Override
 	public void onBindViewHolder(SubCategoriesHolder holder, int position) {
-		if (holder.img.getTag() == null
+		/*if (holder.img.getTag() == null
 				|| !((String) holder.img.getTag()).equalsIgnoreCase(objs.get(position).getSlug())) {
 			new ImageLoaderManager((ShopSubCategoriesActivity) mContext).setImageFromUrl(objs.get(position).getName(),
 					holder.img, "users", holder.img.getWidth(), holder.img.getHeight(), true, false);
 
 			holder.img.setTag(objs.get(position).getSlug());
-		}
+		}*/
 		holder.name.setText(objs.get(position).getName());
 	}
 

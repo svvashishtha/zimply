@@ -99,7 +99,7 @@ public class AboutUsPage extends BaseActivity {
 
 				Intent intent = new Intent(AboutUsPage.this, ZWebView.class);
 				intent.putExtra("title", getResources().getString(R.string.about_us_faq));
-				intent.putExtra("url", "http://www.zimply.in/contact");
+				intent.putExtra("url", "http://www.zimply.co/faq");
 				startActivity(intent);
 
 			}
@@ -111,7 +111,7 @@ public class AboutUsPage extends BaseActivity {
 
 				Intent intent = new Intent(AboutUsPage.this, ZWebView.class);
 				intent.putExtra("title", getResources().getString(R.string.about_us_terms_of_use));
-				intent.putExtra("url", "http://www.zimply.in/terms");
+				intent.putExtra("url", "http://www.zimply.co/terms");
 				startActivity(intent);
 
 			}
@@ -123,7 +123,7 @@ public class AboutUsPage extends BaseActivity {
 
 				Intent intent = new Intent(AboutUsPage.this, ZWebView.class);
 				intent.putExtra("title", getResources().getString(R.string.privacy_policy));
-				intent.putExtra("url", "http://www.zimply.in/privacy-policy");
+				intent.putExtra("url", "http://www.zimply.co/privacy-policy");
 				startActivity(intent);
 
 			}

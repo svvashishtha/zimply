@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/address_snippet_root"
@@ -32,6 +32,7 @@
             android:drawableLeft="@drawable/location"
             android:drawablePadding="@dimen/margin_small"
             android:gravity="center_vertical"
+            android:padding="@dimen/margin_small"
             android:layout_marginTop="@dimen/margin_medium"
             android:text="fbskgbsdf" />
 
@@ -39,13 +40,16 @@
             android:id="@+id/phone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small"
+            android:paddingBottom="@dimen/margin_small"
             android:layout_below="@id/address"
             android:layout_centerVertical="true"
             android:drawablePadding="@dimen/margin_small"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/phone"
-             />
+            />
 
 
         <com.application.zimplyshop.widgets.CustomTextView

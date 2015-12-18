@@ -191,14 +191,33 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 .beginTransaction()
                 .add(R.id.container, fragment)
                 .commit();
+
+
+
+        if(!AppPreferences.isBarcodeTutorialShown(this) && AppPreferences.isFirstBookingDone(this)){
+            AppPreferences.setIsBarcodeTutorialShown(this,true);
+            findViewById(R.id.fab_tutorial).setVisibility(View.VISIBLE);
+            findViewById(R.id.hint_fab).setVisibility(View.VISIBLE);
+            findViewById(R.id.hint_fab).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    closeFabTutorial();
+
+                }
+            });
+        }
     }
 
+    public void closeFabTutorial(){
+        findViewById(R.id.fab_tutorial).setVisibility(View.GONE);
+        findViewById(R.id.hint_fab).setVisibility(View.GONE);
+    }
 
     public void getUserNotificationCount(){
 
         CommonLib.ZLog("Notification Date Time", TimeUtils.getFormatedDate(AppPreferences.getNotifModDateTime(this)));
         String url = AppApplication.getInstance().getBaseUrl()+AppConstants.NOTIFICATION_COUNT+"?created_on="+ TimeUtils.getFormatedDate(AppPreferences.getNotifModDateTime(this));
-        GetRequestManager.getInstance().makeAyncRequest(url,LATEST_NOTIFICATION_COUNT_TAG,ObjectTypes.OBJECT_TYPE_NOTIFICATION_COUNT);
+        GetRequestManager.getInstance().makeAyncRequest(url, LATEST_NOTIFICATION_COUNT_TAG, ObjectTypes.OBJECT_TYPE_NOTIFICATION_COUNT);
     }
 
     public void toggleFilterVisibility(boolean visibility) {
@@ -337,7 +356,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     public void fabSelected(View view) {
-
+        closeFabTutorial();
         Intent intent = new Intent(HomeActivity.this,BarcodeScannerActivity.class);
         startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
         /*switch (view.getId()) {
@@ -492,13 +511,21 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         }
                         break;
                     case 5:
-                    {
+
                         Intent settingsIntent = new Intent(HomeActivity.this, SettingsPage.class);
                         startActivity(settingsIntent);
                         break;
-                    }
 
                     case 6:
+                        mDrawer.closeDrawers();
+                        Intent shareIntent = new Intent(HomeActivity.this, SharingOptionsActivity.class);
+                        shareIntent.putExtra("title", "Download Zimply App by clicking on link");
+                        shareIntent.putExtra("type_name", AppConstants.ITEM_APP_SHARE);
+                        shareIntent.putExtra("product_url", "/shop-product/");
+                        shareIntent.putExtra("short_url", "https://play.google.com/store/apps/details?id=com.application.zimplyshop");
+                        startActivity(shareIntent);
+                        break;
+                    case 7:
                         intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("application/octet-stream");
                         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"care@zimply.in"});
@@ -534,7 +561,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         }
                         break;
 
-                    case 7:
+                    case 8:
                         try {
                             intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
                             startActivity(intent);
@@ -544,13 +571,13 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                             Crashlytics.logException(e);
                         }
                         break;
-                    case 8:
+                    case 9:
                         intent = new Intent(HomeActivity.this, AboutUsPage.class);
                         mDrawer.closeDrawers();
                         startActivity(intent);
 
                         break;
-                    case 9:
+                    case 10:
                         ZTracker.logGAEvent(HomeActivity.this, "Home", "Logout", "");
                         final AlertDialog logoutDialog;
                         logoutDialog = new AlertDialog.Builder(HomeActivity.this)
@@ -565,6 +592,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                                                 AllProducts.getInstance().setCartCount(0);
                                                 AllProducts.getInstance().setCartObjs(null);
                                                 AllUsers.getInstance().setObjs(null);
+                                                AllProducts.getInstance().setHomeProCatNBookingObj(null);
                                                 AllProducts.getInstance().getVendorIds().clear();
                                                 Intent loginIntent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
                                                 loginIntent.putExtra("is_logout", true);
@@ -607,7 +635,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 productId=(long) JSONUtils.getIntegerfromJSON(obj, "id");
                 slug = JSONUtils.getStringfromJSON(obj, "slug");
                 moveToProductDetail(productId,slug);
-               // addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
+                // addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
                 // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
                 // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
                 // startActivity(workintent );
@@ -656,7 +684,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     public void moveToProductDetail(long productId , String slug){
-        Intent intent = new Intent(this, ProductDetailsActivity.class);
+        Intent intent = new Intent(this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
         intent.putExtra("is_scanned", true);
@@ -807,6 +835,19 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             if(((TextView)navView.findViewById(R.id.drawer_user_phone)).getText()!=null &&((TextView)navView.findViewById(R.id.drawer_user_phone)).getText().length()==0){
                 ((TextView)navView.findViewById(R.id.drawer_user_phone)).setText(AppPreferences.getUserPhoneNumber(this));
             }
+        }
+
+        if(!AppPreferences.isBarcodeTutorialShown(this) && AppPreferences.isFirstBookingDone(this)){
+            AppPreferences.setIsBarcodeTutorialShown(this,true);
+            findViewById(R.id.fab_tutorial).setVisibility(View.VISIBLE);
+            findViewById(R.id.hint_fab).setVisibility(View.VISIBLE);
+            findViewById(R.id.hint_fab).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    closeFabTutorial();
+
+                }
+            });
         }
 
         super.onResume();

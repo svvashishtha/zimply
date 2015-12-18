@@ -134,8 +134,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             params.put(PayU.FIRSTNAME,name);
             params.put(PayU.EMAIL, email);
 
-//Double.parseDouble(cartObject.getCart().getTotal_price())
-            PayU.getInstance(this).startPaymentProcess(1
+//
+            PayU.getInstance(this).startPaymentProcess(Double.parseDouble(cartObj.getCart().getTotal_price())
                     , params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
                     PayU.PaymentMode.NB, PayU.PaymentMode.DC,
                     PayU.PaymentMode.EMI,
@@ -260,12 +260,10 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             if(zProgressDialog!=null){
                 zProgressDialog.dismiss();
             }
-            if ( status) {
+            if (status) {
                 if (JSONUtils.getIntegerfromJSON(((JSONObject) response), "payment_status") == 1) {
-                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() - JSONUtils.getIntegerfromJSON(((JSONObject) response), "cart_count"));
                     Toast.makeText(this, "Order placed successfully", Toast.LENGTH_LONG).show();
-
-
+                    AllProducts.getInstance().setCartCount(JSONUtils.getIntegerfromJSON(((JSONObject) response), "cart_count"));
                     Intent intent = new Intent(this ,CashOnCounterOrderCompletionActivity.class);
                     intent.putExtra("cart_obj",cartObj);
                     intent.putExtra("order_id",orderId);
@@ -280,7 +278,6 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             } else {
                 Toast.makeText(this, "Could not place order. Try again", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
     ProgressDialog zProgressDialog;

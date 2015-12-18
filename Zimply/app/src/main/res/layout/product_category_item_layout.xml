@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:id="@+id/parent_layout"
-    android:foreground="@drawable/photo_feedback"
-    android:layout_height="match_parent">
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:id="@+id/parent_layout"
+             android:background="@drawable/bg_dropshadow"
+             android:foreground="@drawable/photo_feedback"
+             android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/category_img"

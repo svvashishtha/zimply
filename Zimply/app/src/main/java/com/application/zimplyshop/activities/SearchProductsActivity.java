@@ -320,7 +320,7 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 //Toast.makeText(this , "FORMAT:"+format,Toast.LENGTH_SHORT).show();
                 JSONObject obj = JSONUtils.getJSONObject(contents);
-                Intent workintent = new Intent(this, ProductDetailsActivity.class);
+                Intent workintent = new Intent(this, NewProductDetailActivity.class);
                 intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
                 workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
                 startActivity(workintent );

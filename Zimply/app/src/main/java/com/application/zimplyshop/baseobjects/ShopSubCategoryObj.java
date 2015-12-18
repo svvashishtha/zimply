@@ -4,7 +4,16 @@ public class ShopSubCategoryObj {
 
 	private String name;
 
-	private String slug;
+	private int id;
+
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -14,11 +23,4 @@ public class ShopSubCategoryObj {
 		this.name = name;
 	}
 
-	public String getSlug() {
-		return slug;
-	}
-
-	public void setSlug(String slug) {
-		this.slug = slug;
-	}
 }

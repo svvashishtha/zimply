@@ -12,6 +12,8 @@ public class MyWishListObject {
     private String next_url;
 
     public ArrayList<HomeProductObj> getFavourite() {
+        if(favourite == null)
+            favourite = new ArrayList<>();
         return favourite;
     }
 

@@ -35,7 +35,27 @@ public class HomeProductObj implements Serializable{
 
 	private boolean is_o2o;
 
+	private String faq;
+
+	private String care;
+
 	private VendorObj vendor;
+
+	public String getFaq() {
+		return faq;
+	}
+
+	public void setFaq(String faq) {
+		this.faq = faq;
+	}
+
+	public String getCare() {
+		return care;
+	}
+
+	public void setCare(String care) {
+		this.care = care;
+	}
 
 	public VendorObj getVendor() {
 		return vendor;
