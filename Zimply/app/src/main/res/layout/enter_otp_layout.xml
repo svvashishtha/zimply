@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_midsmall">
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/change_phone_number" />
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/cancel_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:textAllCaps="true"
+            android:textColor="@color/red_text_color"
+            android:textSize="@dimen/font_large" />
+    </LinearLayout>
+
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/message_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_midsmall"
+        android:lines="2"
+        android:text="We have sent an OTP to the number ,seygksfdg. Please enter it below to verify." />
+
+    <com.application.zimplyshop.widgets.CustomEdittext
+        android:id="@+id/otp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/z_item_height_48"
+        android:layout_marginLeft="@dimen/margin_midsmall"
+        android:layout_marginRight="@dimen/margin_midsmall"
+        android:background="@drawable/square_border_dark"
+        android:hint="@string/enter_otp"
+        android:paddingLeft="@dimen/margin_midsmall"
+        android:paddingRight="@dimen/margin_midsmall"
+        android:paddingTop="@dimen/margin_medium"
+        android:text=""
+        android:textColor="@color/z_grey_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+        <com.application.zimplyshop.widgets.CustomButton
+            android:id="@+id/resend_code"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/z_item_height_48"
+            android:layout_margin="@dimen/margin_midsmall"
+            android:layout_weight="1"
+            android:background="@drawable/z_blue_btn_without_rad_bg"
+            android:text="@string/retry_in"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_xlarge" />
+
+        <com.application.zimplyshop.widgets.CustomButton
+            android:id="@+id/edit_number"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/z_item_height_48"
+            android:layout_margin="@dimen/margin_midsmall"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/gray_btn_bg"
+            android:text="@string/edit_number"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_xlarge" />
+    </LinearLayout>
+</LinearLayout>

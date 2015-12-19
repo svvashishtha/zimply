@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_midsmall">
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/change_phone_number" />
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancel_verify"
+            android:text="@string/cancel"
+            android:textAllCaps="true"
+            android:textColor="@color/apptheme_color"
+            android:textSize="@dimen/font_large" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_midsmall">
+
+            <com.application.zimplyshop.widgets.CustomEdittext
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/z_item_height_48"
+                android:background="@drawable/square_border_dark"
+                android:paddingLeft="@dimen/margin_midsmall"
+                android:textColor="@color/z_grey_color"
+                android:paddingRight="@dimen/margin_midsmall"
+                android:paddingTop="@dimen/margin_medium"
+                android:text="+91" />
+
+
+            <com.application.zimplyshop.widgets.CustomEdittext
+                android:layout_width="match_parent"
+                android:id="@+id/phone_number"
+                android:layout_height="@dimen/z_item_height_48"
+                android:textColor="@color/z_grey_color"
+                android:inputType="number"
+                android:layout_marginLeft="@dimen/margin_midsmall"
+                android:layout_marginRight="@dimen/margin_midsmall"
+                android:background="@drawable/square_border_dark"
+                android:paddingLeft="@dimen/margin_midsmall"
+                android:paddingRight="@dimen/margin_midsmall"
+                android:paddingTop="@dimen/margin_medium"
+                android:text="" />
+        </LinearLayout>
+
+        <com.application.zimplyshop.widgets.CustomButton
+            android:layout_width="match_parent"
+            android:id="@+id/verify_button"
+            android:layout_height="@dimen/z_item_height_48"
+            android:layout_margin="@dimen/margin_midsmall"
+            android:background="@drawable/z_blue_btn_without_rad_bg"
+            android:text="@string/verify"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_xlarge" />
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/margin_midsmall"
+            android:text="@string/verify_phone_sms"/>
+    </LinearLayout>
+</LinearLayout>
