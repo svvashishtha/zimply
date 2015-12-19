@@ -168,6 +168,7 @@
 
     <string name="cash_on_counter_text">Pay at Counter</string>
     <string name="pay_online_text">Pay Online</string>
+    <string name="cash_on_del_text">Cash-on-Delivery</string>
     <string name="congrats_txt">Congratulations!!</string>
     <string name="continue_shop_text">Continue Shopping</string>
     <string name="request_for_demo_regisered">Your request for the demo of the product has been registered. Kindly visit the store to get the feel.</string>
@@ -197,4 +198,5 @@
     <string name="cash_at_counter">Cash-at-Counter</string>
     <string name="order_placed_success">Order placed successfully</string>
     <string name="direction">Direction</string>
+    <string name="cod_not_avail">* You may only place Cash-on-Delivery orders up to \u20B9 20000</string>
 </resources>

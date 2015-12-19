@@ -171,12 +171,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/cash_at_counter"
+                android:text="@string/cash_on_del_text"
                 android:textColor="@color/heading_text_color"
                 android:textSize="@dimen/font_medium" />
 
             <com.application.zimplyshop.widgets.CustomTextView
-                android:id="@+id/coc_avaiable"
+                android:id="@+id/cod_avaiable"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

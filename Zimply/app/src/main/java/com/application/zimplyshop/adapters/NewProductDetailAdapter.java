@@ -325,28 +325,10 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 }
             });
-            /*((ProductInfoHolder3) holder).pincode.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    String input = s.toString();
-                    if (input.length() == 6) {
-                        mListener.onCheckPincodeClicked(true, ((ProductInfoHolder3) holder).pincode.getText().toString());
-                    }
-                }
-            });*/
             ((ProductInfoHolder3) holder).delivery.setText(obj.getMinShippingDays() + "-" + obj.getMaxShippingDays() + " Days");
             ((ProductInfoHolder3) holder).shipping_charges.setText((obj.getShippingCharges()==0)?"Free":mContext.getString(R.string.rs_text) + " " + Math.round(obj.getShippingCharges()));
-            ((ProductInfoHolder3) holder).coc_avaiable.setText((obj.is_o2o()) ? "Available" : "Not Available");
+            ((ProductInfoHolder3) holder).cod_avaiable.setText((obj.isCod()) ? "Available" : "Not Available");
             SpannableString string = new SpannableString(obj.getVendor().getCompany_name());
             string.setSpan(new UnderlineSpan(), 0, obj.getVendor().getCompany_name().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             string.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.z_rate_btn_blue_color)), 0, obj.getVendor().getCompany_name().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -876,7 +858,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public class ProductInfoHolder3 extends RecyclerView.ViewHolder{
-        TextView pincode,checkPincode,delivery,shipping_charges,sold_by,coc_avaiable,isAvailableText;
+        TextView pincode,checkPincode,delivery,shipping_charges,sold_by, cod_avaiable,isAvailableText;
         LinearLayout moreFromSeller;
         public ProductInfoHolder3(View itemView) {
             super(itemView);
@@ -885,7 +867,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             delivery = (TextView)itemView.findViewById(R.id.delivery);
             shipping_charges = (TextView)itemView.findViewById(R.id.shipping_charges);
             sold_by = (TextView)itemView.findViewById(R.id.sold_by);
-            coc_avaiable = (TextView)itemView.findViewById(R.id.coc_avaiable);
+            cod_avaiable = (TextView)itemView.findViewById(R.id.cod_avaiable);
             moreFromSeller = (LinearLayout)itemView.findViewById(R.id.more_from_seller);
             isAvailableText = (TextView)itemView.findViewById(R.id.is_available_pincode);
 

@@ -2,9 +2,13 @@ package com.application.zimplyshop.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,7 +88,21 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         }else{
             ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
         }*/
-        ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
+
+        if(totalPrice >20000){
+            SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
+            string.setSpan(new RelativeSizeSpan(0.8f),18,string.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setText(string);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(false);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
+        }else{
+            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.GONE);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(true);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setOnClickListener(this);
+        }
+
         ((CustomTextView)findViewById(R.id.pay_online)).setOnClickListener(this);
         LinearLayout buyLayout = (LinearLayout)findViewById(R.id.payment_layout);
         buyLayout.setVisibility(View.VISIBLE);
@@ -100,10 +118,10 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
         paymentType = PAYMENT_TYPE_CARD;
         findViewById(R.id.pay_online).setSelected(true);
-        findViewById(R.id.pay_cash_counter).setSelected(false);
-        if( isAllOnline ){
+        //findViewById(R.id.pay_cash_counter).setSelected(false);
+        /*if( isAllOnline ){
             ((CustomTextView)findViewById(R.id.pay_cash_counter)).setVisibility(View.GONE);
-        }
+        }*/
     }
 
     public void addToolbarView(Toolbar toolbar){
@@ -157,12 +175,12 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             case R.id.pay_online:
                 paymentType = PAYMENT_TYPE_CARD;
                 findViewById(R.id.pay_online).setSelected(true);
-                findViewById(R.id.pay_cash_counter).setSelected(false);
+                findViewById(R.id.cash_on_delivery).setSelected(false);
                 break;
-            case R.id.pay_cash_counter:
+            case R.id.cash_on_delivery:
                 paymentType = PAYMENT_TYPE_CASH;
                 findViewById(R.id.pay_online).setSelected(false);
-                findViewById(R.id.pay_cash_counter).setSelected(true);
+                findViewById(R.id.cash_on_delivery).setSelected(true);
                 break;
         }
     }

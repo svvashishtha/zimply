@@ -951,7 +951,8 @@ public class ParserClass implements ObjectTypes {
                                     product.setPrice(bookingJson.getDouble("price"));
                                 if (bookingJson.has("tax") && bookingJson.get("tax") instanceof Double)
                                     product.setTax(bookingJson.getDouble("tax"));
-                                if (bookingJson.has("qty") && bookingJson.get("qty") instanceof Integer)
+                                if (bookingJson.has("qty") &&
+                                        bookingJson.get("qty") instanceof Integer)
                                     product.setQuantity(bookingJson.getInt("qty"));
                                 if (bookingJson.has("max_shipping_days") && bookingJson.get("max_shipping_days") instanceof Integer)
                                     product.setMaxShippingDays(bookingJson.getInt("max_shipping_days"));
