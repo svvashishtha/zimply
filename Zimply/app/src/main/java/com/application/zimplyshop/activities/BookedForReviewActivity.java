@@ -17,10 +17,13 @@ import com.application.zimplyshop.adapters.BookedHistoryAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
+import com.application.zimplyshop.baseobjects.ErrorObject;
+import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
+import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
@@ -45,6 +48,13 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
     boolean isDestroyed;
 
     int addToCartId;
+
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
+
+    boolean isLoading,isRequestAllowed;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +79,18 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
         ((TextView) view.findViewById(R.id.title_textview)).setText("My Bookings");
         toolbar.addView(view);
     }
+
+    String nextUrl;
+
     public void loadData(){
-        String url = AppApplication.getInstance().getBaseUrl()+ AppConstants.BOOKED_PRODUCTS_URL+"?userid="+ AppPreferences.getUserID(this);
-        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.BOOKED_HISTORY_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_ALL_BOOKED_PRODUCTS);
+        String finalUrl;
+        if (nextUrl == null) {
+            finalUrl = AppApplication.getInstance().getBaseUrl()+ AppConstants.BOOKED_PRODUCTS_URL+"?userid="+ AppPreferences.getUserID(this);
+
+        } else {
+            finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
+        }
+        GetRequestManager.getInstance().makeAyncRequest(finalUrl, RequestTags.BOOKED_HISTORY_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_ALL_BOOKED_PRODUCTS);
     }
 
     @Override
@@ -92,7 +111,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        AllProducts.getInstance().getVendorIds().remove((Integer) ((BookedProductHistoryObject) adapter.getItem(clickedPos)).getVendor_id());
+                                        AllProducts.getInstance().getVendorIds().remove((Integer) ((LatestBookingObject) adapter.getItem(clickedPos)).getVendor().getId());
                                         adapter.removePos(clickedPos);
 
                                     }
@@ -128,54 +147,119 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
     @Override
     public void onRequestStarted(String requestTag) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)){
-            showLoadingView();
-            changeViewVisiblity(orderList , View.GONE);
+
+            if (orderList.getAdapter() == null
+                    || orderList.getAdapter().getItemCount() == 0) {
+                showLoadingView();
+                changeViewVisiblity(orderList, View.GONE);
+
+            } else {
+
+            }
+            isLoading = true;
+
         }
+
     }
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)){
-            if(((ArrayList<BookedProductHistoryObject>)obj).size() == 0){
-                showNullCaseView("Looks like you haven't booked anything yet.");
-                changeViewVisiblity(orderList, View.GONE);
-            }else{
-                setAdapterData(((ArrayList<BookedProductHistoryObject>) obj));
+
+            if (((BookedProductHistoryObject)obj).getBooks().size()  == 0) {
+                if (orderList.getAdapter() == null
+                        || orderList.getAdapter().getItemCount() == 1) {
+                    showNullCaseView("No Bookings");
+
+                } else {
+                    showToast("No more Bookings");
+                    ((BookedHistoryAdapter) orderList.getAdapter())
+                            .removeItem();
+                }
+                isRequestAllowed = false;
+            } else {
+                setAdapterData(((BookedProductHistoryObject)obj).getBooks());
+
+                nextUrl = ((BookedProductHistoryObject) obj).getNext_url();
+
                 showView();
                 changeViewVisiblity(orderList, View.VISIBLE);
+                if (((BookedProductHistoryObject)obj).getBooks().size() < 10) {
+                    isRequestAllowed = false;
+                    ((BookedHistoryAdapter) orderList.getAdapter())
+                            .removeItem();
+                } else {
+                    isRequestAllowed = true;
+                }
             }
+
+            isLoading = false;
         }
+
     }
 
     BookedHistoryAdapter adapter;
 
     int clickedPos;
 
-    public void setAdapterData(ArrayList<BookedProductHistoryObject> obj){
-        adapter = new BookedHistoryAdapter(this,obj);
-        orderList.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BookedHistoryAdapter.OnItemClickListener() {
-            @Override
-            public void onCancelClick(int pos, int bookProductId) {
-                clickedPos = pos;
-                removeBookedItem(bookProductId);
-            }
+    public void setAdapterData(ArrayList<LatestBookingObject> objs){
+        if(adapter==null) {
+            adapter = new BookedHistoryAdapter(this);
+            orderList.setAdapter(adapter);
+            adapter.setOnItemClickListener(new BookedHistoryAdapter.OnItemClickListener() {
+                @Override
+                public void onCancelClick(int pos, int bookProductId) {
+                    clickedPos = pos;
+                    removeBookedItem(bookProductId);
+                }
 
-            @Override
-            public void addToCartClick(int pos , int id) {
-                addToCartId = id;
-                addToCart(id);
-            }
+                @Override
+                public void addToCartClick(int pos, int id) {
+                    addToCartId = id;
+                    addToCart(id);
+                }
 
-            @Override
-            public void moveToCartActivity() {
-                Intent intent = new Intent(BookedForReviewActivity.this , ProductCheckoutActivity.class);
-                intent.putExtra("buying_channel",BUYING_CHANNEL_OFFLINE);
-                intent.putExtra("OrderSummaryFragment", false);
-                startActivity(intent);
-            }
-        });
+                @Override
+                public void moveToCartActivity() {
+                    Intent intent = new Intent(BookedForReviewActivity.this, ProductCheckoutActivity.class);
+                    intent.putExtra("buying_channel", BUYING_CHANNEL_OFFLINE);
+                    intent.putExtra("OrderSummaryFragment", false);
+                    startActivity(intent);
+                }
+            });
+            orderList
+                    .addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(RecyclerView recyclerView,
+                                               int dx, int dy) {
 
+                            visibleItemCount = orderList.getLayoutManager()
+                                    .getChildCount();
+                            totalItemCount = orderList.getLayoutManager()
+                                    .getItemCount();
+                            pastVisiblesItems = ((LinearLayoutManager) orderList
+                                    .getLayoutManager())
+                                    .findFirstVisibleItemPosition();
+
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
+                                    && !isLoading && isRequestAllowed) {
+                                loadData();
+                            }
+                            //scrollToolbarAndHeaderBy(-dy);
+
+                        }
+
+                        @Override
+                        public void onScrollStateChanged(
+                                RecyclerView recyclerView, int newState) {
+                            new ImageLoaderManager(BookedForReviewActivity.this)
+                                    .setScrollState(newState);
+                            super.onScrollStateChanged(recyclerView, newState);
+                        }
+                    });
+
+        }
+        adapter.addData(objs);
     }
 
     public void addToCart(int id){
@@ -202,7 +286,25 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)) {
-            showNetworkErrorView();
+
+            if (orderList.getAdapter() == null
+                    || orderList.getAdapter().getItemCount() == 1) {
+                showNetworkErrorView();
+                changeViewVisiblity(orderList, View.GONE);
+
+            } else {
+                if (((ErrorObject) obj).getErrorCode() == 500) {
+                    showToast("Could not load more data");
+
+                } else {
+                    showToast(((ErrorObject) obj).getErrorMessage());
+
+                }
+
+                ((BookedHistoryAdapter) orderList.getAdapter()).removeItem();
+                isRequestAllowed = false;
+            }
+            isLoading = false;
         }
     }
 

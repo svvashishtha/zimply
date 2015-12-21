@@ -5,34 +5,33 @@ package com.application.zimplyshop.baseobjects;
  */
 public class LatestBookingObject {
 
-    private HomeProductObj product;
+    private BaseProductListObject product;
 
-    private VendorObj vendor;
+    private NewVendorObject vendor;
 
-    private String visit_date;
+    private NewBookObject book;
 
-
-    public String getVisit_date() {
-        return visit_date;
+    public NewBookObject getBook() {
+        return book;
     }
 
-    public void setVisit_date(String visit_date) {
-        this.visit_date = visit_date;
+    public void setBook(NewBookObject book) {
+        this.book = book;
     }
 
-    public HomeProductObj getProduct() {
+    public BaseProductListObject getProduct() {
         return product;
     }
 
-    public void setProduct(HomeProductObj product) {
+    public void setProduct(BaseProductListObject product) {
         this.product = product;
     }
 
-    public VendorObj getVendor() {
+    public NewVendorObject getVendor() {
         return vendor;
     }
 
-    public void setVendor(VendorObj vendor) {
+    public void setVendor(NewVendorObject vendor) {
         this.vendor = vendor;
     }
 }

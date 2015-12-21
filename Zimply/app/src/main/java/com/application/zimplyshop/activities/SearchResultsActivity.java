@@ -26,9 +26,10 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.baseobjects.ProductListObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.InputFilterMinMax;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -65,7 +66,7 @@ public class SearchResultsActivity extends BaseActivity implements
     private boolean isO2o, isFilterApplied;
 
     boolean isRefreshData;
-    ArrayList<HomeProductObj> homeProductObjs;
+    ArrayList<BaseProductListObject> homeProductObjs;
     private String query;
     private String value = "";
     private int type = -1;
@@ -155,18 +156,17 @@ public class SearchResultsActivity extends BaseActivity implements
                     + "?width=" + ((width / 2) - (width / 15))
                     + field
                     + queryUrl
-                    + valueQuery
-                    + "&page=" + pageNo+
+                    + valueQuery +
                     ( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                     + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
                     ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "")
                     +(isO2o?"&is_o2o="+1:"");
         } else {
-            String queryUrl = "&query=" + query;
+           /* String queryUrl = "&query=" + query;
             String field = (type == -1) ? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
-            String valueQuery = (value == "") ? "" : "&value=" + value;
-            finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl
-                    + "&width=" + ((width / 2) - (width / 15))
+            String valueQuery = (value == "") ? "" : "&value=" + value;*/
+            finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
+                    /*+ "&width=" + ((width / 2) - (width / 15))
                     + field
                     + queryUrl
                     + valueQuery
@@ -174,7 +174,7 @@ public class SearchResultsActivity extends BaseActivity implements
                     ( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                     + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
                     ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "")
-                    +(isO2o?"&is_o2o="+1:"");
+                    +(isO2o?"&is_o2o="+1:"");*/
         }
 
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,
@@ -182,7 +182,7 @@ public class SearchResultsActivity extends BaseActivity implements
                 ObjectTypes.OBJECT_TYPE_PRODUCT_SEARCH_RESULT);
     }
 
-    private void setAdapterData(ArrayList<HomeProductObj> objs) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
@@ -464,7 +464,8 @@ public class SearchResultsActivity extends BaseActivity implements
                 homeProductObjs = null;
                 homeProductObjs = new ArrayList<>();
             }
-            homeProductObjs.addAll((ArrayList<HomeProductObj>) obj);
+            homeProductObjs.addAll(((ProductListObject) obj).getProducts());
+
             if (homeProductObjs.size() == 0) {
                 if (productList.getAdapter() == null
                         || productList.getAdapter().getItemCount() == 1) {
@@ -472,17 +473,18 @@ public class SearchResultsActivity extends BaseActivity implements
 
                 } else {
                     showToast("No more Products");
+                    ((ProductsRecyclerViewGridAdapter)productList.getAdapter()).removeItem();
 
                 }
                 isRequestAllowed = false;
             } else {
+                nextUrl = ((ProductListObject) obj).getNext_url();
                 //homeProductObjs.addAll();
                 // so that products are not repeated.
                 setAdapterData(homeProductObjs);
                 // nextUrl = ((ProductListObject) obj).getNext_url();
                 //subCategories =((ProductListObject) obj).getSubcategory();
                 showView();
-                pageNo++;
                 changeViewVisiblity(productList, View.VISIBLE);
                 if (homeProductObjs.size() < 10) {
                     isRequestAllowed = false;

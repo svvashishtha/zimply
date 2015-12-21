@@ -7,17 +7,17 @@ import java.util.ArrayList;
  */
 public class MyWishListObject {
 
-    private ArrayList<HomeProductObj> favourite;
+    private ArrayList<FavouriteObject> favourite;
 
     private String next_url;
 
-    public ArrayList<HomeProductObj> getFavourite() {
+    public ArrayList<FavouriteObject> getFavourite() {
         if(favourite == null)
             favourite = new ArrayList<>();
         return favourite;
     }
 
-    public void setFavourite(ArrayList<HomeProductObj> favourite) {
+    public void setFavourite(ArrayList<FavouriteObject> favourite) {
         this.favourite = favourite;
     }
 

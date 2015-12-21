@@ -3,7 +3,6 @@ package com.application.zimplyshop.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
@@ -26,7 +26,7 @@ public class ProductsRecyclerViewGridAdapter extends
     public int TYPE_DATA = 0;
     public int TYPE_LOADER = 1;
 
-    ArrayList<HomeProductObj> objs;
+    ArrayList<BaseProductListObject> objs;
 
     Context mContext;
 
@@ -39,13 +39,13 @@ public class ProductsRecyclerViewGridAdapter extends
     public ProductsRecyclerViewGridAdapter(Activity activity, Context context,
                                            int height) {
         this.mContext = context;
-        this.objs = new ArrayList<HomeProductObj>();
+        this.objs = new ArrayList<BaseProductListObject>();
         this.height = height;
         this.activity = activity;
     }
 
-    public void addData(ArrayList<HomeProductObj> objs) {
-        ArrayList<HomeProductObj> newObjs = new ArrayList<HomeProductObj>(objs);
+    public void addData(ArrayList<BaseProductListObject> objs) {
+        ArrayList<BaseProductListObject> newObjs = new ArrayList<BaseProductListObject>(objs);
         this.objs.addAll(this.objs.size(), newObjs);
         notifyDataSetChanged();
     }
@@ -63,7 +63,7 @@ public class ProductsRecyclerViewGridAdapter extends
             boolean found = false;
             int prodIdToRemove = -1;
             for(int i=0; i< objs.size(); i++) {
-                HomeProductObj product = objs.get(i);
+                BaseProductListObject product = objs.get(i);
                 if(product.getId() == objId) {
                     found = true;
                     prodIdToRemove = i;
@@ -76,7 +76,7 @@ public class ProductsRecyclerViewGridAdapter extends
             notifyDataSetChanged();
         } else if(type == RequestTags.MARK_FAVOURITE_REQUEST_TAG) {
             if(objectId instanceof HomeProductObj) {
-                objs.add((HomeProductObj) objectId);
+                objs.add((BaseProductListObject) objectId);
                 notifyDataSetChanged();
             }
         }
@@ -137,7 +137,13 @@ public class ProductsRecyclerViewGridAdapter extends
             }
             ((ProductViewHolder) holder).productName.setText(objs.get(position)
                     .getName());
-            try {
+            ((ProductViewHolder) holder).productDiscountedPrice
+                    .setText(mContext.getString(R.string.Rs) + " "
+                            + Math.round(objs.get(position).getPrice()));
+
+            ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
+            ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+            /*try {
                 if (objs.get(position).getDiscounted_price() != 0) {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
@@ -163,7 +169,7 @@ public class ProductsRecyclerViewGridAdapter extends
             } catch (NumberFormatException e) {
 
             }
-
+                */
 
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override

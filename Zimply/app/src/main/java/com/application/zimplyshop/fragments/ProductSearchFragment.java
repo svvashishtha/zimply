@@ -325,14 +325,14 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
 
             final String name = ((TextView)((NewSearchActivity)activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
             viewHolder.text.setTypeface(null, Typeface.BOLD);
-            viewHolder.text.setText(product.getName());
+            viewHolder.text.setText(product.getProduct().getName());
 
             viewHolder.text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ProductDetailsActivity.class);
-                    intent.putExtra("slug", product.getSlug());
-                    intent.putExtra("id", product.getId());
+                    intent.putExtra("slug", product.getProduct().getSlug());
+                    intent.putExtra("id", product.getProduct().getId());
                     startActivity(intent);
                 }
             });

@@ -70,27 +70,27 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
             boolean exists = false;
 
             for(HomeProductObj product: users) {
-                if(product.getId() == user.getId())
+                if(product.getProduct().getId() == user.getProduct().getId())
                     exists = true;
             }
 
 
             if(exists) {
-                result = (int) db.update(CACHE_TABLE_NAME, values, TYPE + "=?", new String[] {user.getId()+""});
+                result = (int) db.update(CACHE_TABLE_NAME, values, TYPE + "=?", new String[] {user.getProduct().getId()+""});
 
-                CommonLib.ZLog("zuser addusers if ", userId + " : " +  user.getId() +"=?");
+                CommonLib.ZLog("zuser addusers if ", userId + " : " +  user.getProduct().getId() +"=?");
 
             } else {
 
                 byte[] bundle = GetRequestManager.Serialize_Object(user);
 
                 values.put(USERID, userId);
-                values.put(TYPE, user.getId());
+                values.put(TYPE, user.getProduct().getId());
                 values.put(BUNDLE, bundle);
 
                 // 	Inserting Row
                 result = (int) db.insert(CACHE_TABLE_NAME, null, values);
-                CommonLib.ZLog("zuser addusers else ", userId + " . " +  user.getId());
+                CommonLib.ZLog("zuser addusers else ", userId + " . " +  user.getProduct().getId());
             }
 
             db.close();

@@ -1,91 +1,10 @@
 package com.application.zimplyshop.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.Html;
-import android.text.TextWatcher;
-import android.util.TypedValue;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.application.zimplyshop.R;
-import com.application.zimplyshop.adapters.ProductThumbAdapters;
-import com.application.zimplyshop.application.AppApplication;
-import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
-import com.application.zimplyshop.baseobjects.ErrorObject;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
-import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
-import com.application.zimplyshop.baseobjects.ProductAttribute;
-import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
-import com.application.zimplyshop.baseobjects.VendorObj;
-import com.application.zimplyshop.db.RecentProductsDBWrapper;
-import com.application.zimplyshop.extras.AppConstants;
-import com.application.zimplyshop.extras.ObjectTypes;
-import com.application.zimplyshop.managers.GetRequestListener;
-import com.application.zimplyshop.managers.GetRequestManager;
-import com.application.zimplyshop.managers.ImageLoaderManager;
-import com.application.zimplyshop.objects.AllProducts;
-import com.application.zimplyshop.preferences.AppPreferences;
-import com.application.zimplyshop.serverapis.RequestTags;
-import com.application.zimplyshop.utils.CommonLib;
-import com.application.zimplyshop.utils.JSONUtils;
-import com.application.zimplyshop.utils.UiUtils;
-import com.application.zimplyshop.utils.UploadManager;
-import com.application.zimplyshop.utils.UploadManagerCallback;
-import com.application.zimplyshop.utils.fadingActionBar.FadingActionBarHelper;
-import com.application.zimplyshop.widgets.CustomTextView;
-import com.application.zimplyshop.widgets.ProductThumbListItemDecorator;
-import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+public class ProductDetailsActivity extends ActionBarActivity {
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class ProductDetailsActivity extends ActionBarActivity
-        implements GetRequestListener, AppConstants, RequestTags, ObjectTypes, UploadManagerCallback, View.OnClickListener {
-
-    public int IMAGE_WIDTH = 0;
+    /*public int IMAGE_WIDTH = 0;
     public int IMAGE_HEIGHT = 0;
     // Views
     int width, height;
@@ -233,10 +152,10 @@ public class ProductDetailsActivity extends ActionBarActivity
         ImageView productImg = (ImageView) findViewById(R.id.product_img);
         productImg.getLayoutParams().width = width;
         productImg.getLayoutParams().height = (height )/ 2;
-        /*pager = (ViewPager) findViewById(R.id.photos_viewpager);
+        *//*pager = (ViewPager) findViewById(R.id.photos_viewpager);
         pager.getLayoutParams().width = width;
         pager.getLayoutParams().height = height / 2;
-        */
+        *//*
         fixSizes();
 
         // handling touch on the overlay when the dropdown is visible
@@ -287,7 +206,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                                 nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(mContext)));
 
-                                UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, product.getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+                       //         UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, product.getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
 
                             } else {
                                 Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckoutActivity.class);
@@ -365,7 +284,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 }
             }
         });
-       /* findViewById(R.id.buy_now).setOnClickListener(new View.OnClickListener() {
+       *//* findViewById(R.id.buy_now).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isLoading) {
@@ -397,7 +316,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                     }
                 }
             }
-        });*/
+        });*//*
 
         toggleButtonsState(true);
         findViewById(R.id.relativeParent).setBackgroundColor(getResources().getColor(R.color.white));
@@ -588,9 +507,9 @@ public class ProductDetailsActivity extends ActionBarActivity
         }
     }
 
-    /**
+    *//**
      * Show Loading for all activities
-     */
+     *//*
     public void setLoadingVariables() {
         progress = (ProgressBar) findViewById(R.id.progress);
         nullcaseText = (TextView) findViewById(R.id.nullcase_text);
@@ -604,9 +523,9 @@ public class ProductDetailsActivity extends ActionBarActivity
         width = display.getWidth();
         height = display.getHeight();
 
-        /*final int buttonHeight = 3 * width / 20;
+        *//*final int buttonHeight = 3 * width / 20;
         findViewById(R.id.bottom_action_container).getLayoutParams().height = buttonHeight;
-*/
+*//*
         //  ((LinearLayout.LayoutParams) findViewById(R.id.return_value).getLayoutParams()).setMargins(0, 0, 0, buttonHeight);
         // ((LinearLayout.LayoutParams) findViewById(R.id.return_container).getLayoutParams()).setMargins(0, 0, 0, buttonHeight + width / 20);
 
@@ -821,7 +740,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-    /*@Override
+    *//*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -835,16 +754,16 @@ public class ProductDetailsActivity extends ActionBarActivity
 
         }
     }
-*/
+*//*
 
 
     public void actionBarSelected(View view) {
 
         switch (view.getId()) {
 
-           /* case R.id.back_icon:
+           *//* case R.id.back_icon:
                 onBackPressed();
-                break;*/
+                break;*//*
 
             case android.R.id.home:
                 onBackPressed();
@@ -859,13 +778,13 @@ public class ProductDetailsActivity extends ActionBarActivity
             return;
 //        findViewById(R.id.obp_gradient).setVisibility(View.GONE);
 
-       /* mAdapter = new PhotoPagerAdapter(product.getImageUrls());
+       *//* mAdapter = new PhotoPagerAdapter(product.getImageUrls());
         pager.setAdapter(mAdapter);
         pager.getParent().requestDisallowInterceptTouchEvent(true);
         pager.setOffscreenPageLimit(1);
         pager.setCurrentItem(0);
         pager.setPageTransformer(false, new ParallaxPageTransformer((float) .5, (float) .5, R.id.photo_imageview));
-*/
+*//*
 
         //Umesh
         ((LinearLayout)findViewById(R.id.more_from_seller)).setOnClickListener(this);
@@ -972,7 +891,7 @@ public class ProductDetailsActivity extends ActionBarActivity
                 logoutDialog.show();
             }
         });
-        /*LinearLayout specificationsLayout = (LinearLayout) findViewById(R.id.specifications);
+        *//*LinearLayout specificationsLayout = (LinearLayout) findViewById(R.id.specifications);
         for (ProductAttribute attribute : product.getAttributes()) {
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -987,7 +906,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             unit.setText(attribute.getKey() + " : " + attribute.getValue() + " " + attribute.getUnit());
             layout.addView(unit);
             specificationsLayout.addView(layout);
-        }*/
+        }*//*
         toggleButtonsState(true);
         if(AllProducts.getInstance().vendorIdsContains(product.getVendor().getVendor_id())){
             bookAVisitBtn.setVisibility(View.GONE);
@@ -1078,10 +997,10 @@ public class ProductDetailsActivity extends ActionBarActivity
             //bookAVisitBtn.setVisibility(View.GONE);
             if(status) {
 
-               /* AllProducts.getInstance().getBookedObjs().add(new BaseCartProdutQtyObj((int)product.getId(),1));
+               *//* AllProducts.getInstance().getBookedObjs().add(new BaseCartProdutQtyObj((int)product.getId(),1));
                 Intent intent = new Intent(this, ProductDemoActivity.class);
                 intent.putExtra("product_vendor_time", ((ProductVendorTimeObj) response));
-                startActivity(intent);*/
+                startActivity(intent);*//*
                 AllProducts.getInstance().getVendorIds().add(((ProductVendorTimeObj) response).getVendor_id());
                 showVisitBookedCard(((ProductVendorTimeObj) response));
                 if(!AppPreferences.isFirstBookingDone(this)){
@@ -1142,11 +1061,11 @@ public class ProductDetailsActivity extends ActionBarActivity
                 Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon +"?q=" + product.getVendor().getReg_add().getLocation().getLatitude()+ "," + product.getVendor().getReg_add().getLocation().getLongitude() + "(" + product.getVendor().getCompany_name()+")");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
-                /*Intent intent = new Intent(mContext, MapPage.class);
+                *//*Intent intent = new Intent(mContext, MapPage.class);
                 intent.putExtra("lat", product.getVendor().getReg_add().getLocation().getLatitude());
                 intent.putExtra("lon", product.getVendor().getReg_add().getLocation().getLongitude());
                 intent.putExtra("name", product.getVendor().getReg_add().getLocation().getName());
-                mContext.startActivity(intent);*/
+                mContext.startActivity(intent);*//*
             }
         });
 
@@ -1206,11 +1125,11 @@ public class ProductDetailsActivity extends ActionBarActivity
         ((LinearLayout)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* Intent intent = new Intent(mContext, MapPage.class);
+               *//* Intent intent = new Intent(mContext, MapPage.class);
                 intent.putExtra("lat",product.getVendor().getReg_add().getLocation().getLatitude());
                 intent.putExtra("lon", product.getVendor().getReg_add().getLocation().getLongitude());
                 intent.putExtra("name", product.getVendor().getReg_add().getLocation().getName());
-                mContext.startActivity(intent);*/
+                mContext.startActivity(intent);*//*
                 Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon +"?q=" + product.getVendor().getReg_add().getLocation().getLatitude()+ "," + product.getVendor().getReg_add().getLocation().getLongitude() + "(" + product.getVendor().getCompany_name()+")");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 mContext.startActivity(intent);
@@ -1261,10 +1180,10 @@ public class ProductDetailsActivity extends ActionBarActivity
         }
     }
 
-    /**
+    *//**
      * Method shows the listview as soon as the data is successfully received
      * from the server and loaded into the adapter
-     */
+     *//*
     public void showView() {
         progress.setVisibility(View.GONE);
         nullcaseText.setVisibility(View.GONE);
@@ -1273,9 +1192,9 @@ public class ProductDetailsActivity extends ActionBarActivity
 
     }
 
-    /**
+    *//**
      * Method shows loading view when a server request is generated
-     */
+     *//*
     public void showLoadingView() {
         progress.setVisibility(View.VISIBLE);
         nullcaseText.setVisibility(View.GONE);
@@ -1285,10 +1204,10 @@ public class ProductDetailsActivity extends ActionBarActivity
         retryLayout.setVisibility(View.GONE);
     }
 
-    /**
+    *//**
      * Method shows the Error view when the server request could not be
      * completed
-     */
+     *//*
     public void showNetworkErrorView() {
         isRequestFailed = true;
         nullcaseText.setVisibility(View.VISIBLE);
@@ -1309,11 +1228,11 @@ public class ProductDetailsActivity extends ActionBarActivity
         retryLayout.setVisibility(View.VISIBLE);
     }
 
-    /**
+    *//**
      * Method to change the Left drawbale of the nullcase text view
      *
      * @param drawable
-     */
+     *//*
     public void changeLeftDrawable(int drawable) {
         if (drawable != 0) {
             Drawable drawableTop = getResources().getDrawable(drawable);
@@ -1336,9 +1255,9 @@ public class ProductDetailsActivity extends ActionBarActivity
                 OBJECT_TYPE_MARKED_UNFAV, product, list, null);
     }
 
-    /**
+    *//**
      * Request for marking favourite
-     */
+     *//*
     public void makeLikeRequest() {
         String url = AppApplication.getInstance().getBaseUrl() + MARK_FAVOURITE_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
@@ -1405,9 +1324,9 @@ public class ProductDetailsActivity extends ActionBarActivity
                 intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
                 startActivity(intent);
                 break;
-          /*  case R.id.back_icon:
+          *//*  case R.id.back_icon:
                 onBackPressed();
-                break;*/
+                break;*//*
             case R.id.retry_layout:
                 if (isRequestFailed)
                     if (userLoading)
@@ -1452,7 +1371,7 @@ public class ProductDetailsActivity extends ActionBarActivity
 
         // Call end() and disconnect the client
 
-      /* final Uri APP_URI = Uri.parse(baseAppUri + slug); */
+      *//* final Uri APP_URI = Uri.parse(baseAppUri + slug); *//*
         try {
             if (product != null) {
                 Action viewAction = Action.newAction(Action.TYPE_VIEW, product.getName(), APP_URI);
@@ -1518,7 +1437,7 @@ public class ProductDetailsActivity extends ActionBarActivity
         checkCartCount();
     }
 
-    /*public class PhotoPagerAdapter extends BaseAdapter {
+    *//*public class PhotoPagerAdapter extends BaseAdapter {
 
         ArrayList<String> photoUrls;
 
@@ -1586,7 +1505,7 @@ public class ProductDetailsActivity extends ActionBarActivity
             view = null;
         }
 
-    }*/
+    }*//*
 
     public class AddProductToCache extends AsyncTask<Void, Void, Object> {
 
@@ -1684,4 +1603,4 @@ public class ProductDetailsActivity extends ActionBarActivity
         //toast.setDuration(Toast.LENGTH_SHORT);
         toast.show();
     }
-}
+*/}

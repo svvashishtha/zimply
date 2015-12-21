@@ -3,11 +3,12 @@ package com.application.zimplyshop.baseobjects;
 import java.util.ArrayList;
 
 public class ProductListObject {
+
 	private String next_url;
 
-	private ArrayList<HomeProductObj> products;
+	private ArrayList<BaseProductListObject> products;
 
-	private ArrayList<ShopSubCategoryObj> subcategory;
+    private ArrayList<ShopSubCategoryObj> subcategory;
 
 	public ArrayList<ShopSubCategoryObj> getSubcategory() {
 		return subcategory;
@@ -25,11 +26,11 @@ public class ProductListObject {
 		this.next_url = next_url;
 	}
 
-	public ArrayList<HomeProductObj> getProducts() {
+	public ArrayList<BaseProductListObject> getProducts() {
 		return products;
 	}
 
-	public void setProducts(ArrayList<HomeProductObj> products) {
+	public void setProducts(ArrayList<BaseProductListObject> products) {
 		this.products = products;
 	}
 	
