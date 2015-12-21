@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
+import com.application.zimplyshop.adapters.FavouritesRecyclerViewGridAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.ErrorObject;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.baseobjects.FavouriteObject;
 import com.application.zimplyshop.baseobjects.MyWishListObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -102,7 +102,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                 showLoadingView();
                 changeViewVisiblity(productList, View.GONE);
                 if (productList.getAdapter() != null)
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter()).removePreviousData();
+                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter()).removePreviousData();
             } else {
 
             }
@@ -131,7 +131,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
 
                 } else {
                     showToast("No more Products");
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                 }
                 isRequestAllowed = false;
@@ -142,7 +142,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                 changeViewVisiblity(productList, View.VISIBLE);
                 if (((MyWishListObject) obj).getFavourite().size() < 10) {
                     isRequestAllowed = false;
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                 } else {
                     isRequestAllowed = true;
@@ -166,7 +166,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                     } else {
                         showToast(((ErrorObject) obj).getErrorMessage());
                     }
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                     isRequestAllowed = false;
                 }
@@ -186,11 +186,11 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
         }
     }
 
-    private void setAdapterData(ArrayList<HomeProductObj> objs) {
+    private void setAdapterData(ArrayList<FavouriteObject> objs) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
+            FavouritesRecyclerViewGridAdapter adapter = new FavouritesRecyclerViewGridAdapter(
                     this, this, height);
             productList.setAdapter(adapter);
             productList
@@ -240,7 +240,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                     });
 
         }
-        ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+        ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                 .addData(objs);
     }
 
@@ -248,7 +248,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
         if(requestType == RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG) {
             if(!isDestroyed && status) {
-                ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                         .updateList(objectId, RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG);
 
                 if(productList.getAdapter().getItemCount()==0){
@@ -257,7 +257,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
             }
         } else if(requestType == RequestTags.MARK_FAVOURITE_REQUEST_TAG) {
             if(!isDestroyed && status) {
-                ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                         .updateList(data,  RequestTags.MARK_FAVOURITE_REQUEST_TAG);
             }
         }

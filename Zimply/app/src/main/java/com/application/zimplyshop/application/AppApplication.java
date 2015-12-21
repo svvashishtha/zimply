@@ -114,7 +114,7 @@ public class AppApplication extends Application {
             firstLaunch = prefs.getBoolean("firstLaunch", true);
         }
 
-     //   new ThirdPartyInitAsync().execute();
+//        new ThirdPartyInitAsync().execute();
 
         // run the cache cleaner service
         try {

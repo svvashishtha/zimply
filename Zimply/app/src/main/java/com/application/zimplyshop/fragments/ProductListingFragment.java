@@ -16,8 +16,8 @@ import com.application.zimplyshop.activities.FilterFiltersLayout;
 import com.application.zimplyshop.activities.FilterLayoutActivity;
 import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ProductListObject;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -91,7 +91,7 @@ public class ProductListingFragment extends BaseFragment implements View.OnClick
                 ObjectTypes.OBJECT_TYPE_PRODUCT_LIST_OBJECT);
     }
 
-    private void setAdapterData(ArrayList<HomeProductObj> objs) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;

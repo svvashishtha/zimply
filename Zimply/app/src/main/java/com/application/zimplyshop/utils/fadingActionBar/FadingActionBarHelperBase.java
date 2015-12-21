@@ -1,9 +1,6 @@
 package com.application.zimplyshop.utils.fadingActionBar;
 
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -18,8 +15,10 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
 import com.application.zimplyshop.utils.CommonLib;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @SuppressWarnings("unchecked")
 public abstract class FadingActionBarHelperBase {
@@ -96,8 +95,8 @@ public abstract class FadingActionBarHelperBase {
     int HEADER_WIDTH = 0;
 
     public final View createView(ActionBarActivity context) {
-        HEADER_HEIGHT = ((ProductDetailsActivity)context).IMAGE_HEIGHT;
-        HEADER_WIDTH = ((ProductDetailsActivity)context).IMAGE_HEIGHT;
+        //HEADER_HEIGHT = ((ProductDetailsActivity)context).IMAGE_HEIGHT;
+        //HEADER_WIDTH = ((ProductDetailsActivity)context).IMAGE_HEIGHT;
         return createView(LayoutInflater.from(context));
     }
 
