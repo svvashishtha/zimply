@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,7 +57,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Displays simple splash screen while GTM container is loading. Once the container is loaded,
  * launches the {@link HomeActivity}.
  */
-public class SplashActivity extends BaseActivity implements RequestTags,GetRequestListener, ContainerHolder.ContainerAvailableListener {
+public class SplashActivity extends BaseActivity implements RequestTags, GetRequestListener, ContainerHolder.ContainerAvailableListener {
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     boolean isDestroyed;
@@ -123,6 +125,51 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
                 SplashActivity.pushOpenScreenEvent(SplashActivity.this, "splash");
             }
         }, 2, TimeUnit.SECONDS);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+            CommonLib.writeRequestData("Session begins with WiFi");
+        } else {
+            CommonLib.writeRequestData("Session begins with Mobile Network");
+            try {
+                int subtype = cm.getActiveNetworkInfo().getSubtype();
+                switch (subtype) {
+                    case TelephonyManager.NETWORK_TYPE_1xRTT:
+                        CommonLib.writeRequestData("2g Network"); // ~ 50-100 kbps
+                        Log.i("network", "NETWORK_TYPE_1xRTT");
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_CDMA:
+                        CommonLib.writeRequestData("2g Network"); // ~ 14-64 kbps
+                        Log.i("network", "NETWORK_TYPE_CDMA");
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_EDGE:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                    case TelephonyManager.NETWORK_TYPE_GPRS:
+                    case TelephonyManager.NETWORK_TYPE_HSDPA:
+                    case TelephonyManager.NETWORK_TYPE_HSPA:
+                    case TelephonyManager.NETWORK_TYPE_HSUPA:
+                    case TelephonyManager.NETWORK_TYPE_UMTS:
+            /*
+             * Above API level 7, make sure to set android:targetSdkVersion
+             * to appropriate level to use these
+             */
+                    case TelephonyManager.NETWORK_TYPE_EHRPD: // API level 11
+                    case TelephonyManager.NETWORK_TYPE_EVDO_B: // API level 9
+                        CommonLib.writeRequestData("2g Network");
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_HSPAP: // API level 13
+                    case TelephonyManager.NETWORK_TYPE_IDEN: // API level 8
+                    case TelephonyManager.NETWORK_TYPE_LTE: // API level 11
+                        CommonLib.writeRequestData("3g Network"); // ~ 10+ Mbps
+                        Log.i("network", "NETWORK_TYPE_LTE");
+                        break;// ~ 50-100 kbps
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         startMainActivity();
     }
 
@@ -161,6 +208,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
         super.onResume();
         windowHasFocus = true;
     }
+
     @Override
     protected void onDestroy() {
         GetRequestManager.getInstance().removeCallbacks(this);
@@ -171,21 +219,21 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
 
     private void moveToHomePage() {
         if (AppPreferences.isUserLogIn(this) || AppPreferences.isLoginSkipped(this)) {
-            if(AppPreferences.isLocationSaved(this)) {
+            if (AppPreferences.isLocationSaved(this)) {
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
                 this.finish();
-            }else{
+            } else {
                 Intent intent = new Intent(this, SelectCity.class);
                 intent.putExtra("show_back", false);
                 intent.putExtra("fetch_location", true);
                 startActivity(intent);
                 this.finish();
             }
-        }else {
+        } else {
 
             Intent intent = new Intent(this, BaseLoginSignupActivity.class);
-            intent.putExtra("is_logout",true);
+            intent.putExtra("is_logout", true);
             startActivity(intent);
             this.finish();
         }
@@ -278,7 +326,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
      * If result is empty, the app needs to register.
      *
      * @return registration ID, or empty string if there is no existing
-     *         registration ID.
+     * registration ID.
      */
     private String getRegistrationId(Context context) {
 
@@ -314,7 +362,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
 
                     regId = gcm.register(CommonLib.GCM_SENDER_ID);
                     msg = "Device registered, registration ID=" + regId;
-                    Log.i("SplashActivity",msg);
+                    Log.i("SplashActivity", msg);
                     storeRegistrationId(SplashActivity.this, regId);
 
                     if (AppPreferences.isUserLogIn(SplashActivity.this) && !regId.equals(""))
@@ -343,7 +391,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
     }
 
     private void sendRegistrationIdToBackend() {
-        String deviceId = getIMEI() ;
+        String deviceId = getIMEI();
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GCM_REGISTRATIONS
                 + "?reg_id=" + regId + "&device_id=" + deviceId;
         CommonLib.ZLog("url", url);
@@ -353,11 +401,11 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
 
     //IMEISV
     private String getIMEI() {
-        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         String imeisv = telephonyManager.getDeviceId();
         CommonLib.ZLog("Device Id", imeisv);
-        if(imeisv==null)
-            imeisv="Unknown";
+        if (imeisv == null)
+            imeisv = "Unknown";
         AppPreferences.setDeviceID(this, imeisv);
         return imeisv;
     }
@@ -372,16 +420,16 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
         if (!isDestroyed && requestTag.equalsIgnoreCase(APP_CONFIG)) {
             AppConfig appConfig = (AppConfig) obj;
             //set all the values here.
-            if(appConfig != null ) {
+            if (appConfig != null) {
                 AllCategories.getInstance().getPhotoCateogryObjs().setArticle_category(appConfig.getPhotoCateogryObjs().getArticle_category());
                 AllCategories.getInstance().getPhotoCateogryObjs().setPhoto_category(appConfig.getPhotoCateogryObjs().getPhoto_category());
                 AllCategories.getInstance().getPhotoCateogryObjs().setExpert_category(appConfig.getPhotoCateogryObjs().getExpert_category());
                 AllCategories.getInstance().getPhotoCateogryObjs().setExpert_base_category(appConfig.getPhotoCateogryObjs().getExpert_base_category());
                 AllProducts.getInstance().setCategory_tree(appConfig.getCategoryTree());
-               //AllCategories.getInstance().setCities(appConfig.getCities());
+                //AllCategories.getInstance().setCities(appConfig.getCities());
                 AllCities.getInsance().setCities(appConfig.getCities());
             }
-            if (appConfig != null && appConfig.isUpdateRequired() ){ //response[0] != null && (Boolean) ((Object[]) (response[0]))[0]) {
+            if (appConfig != null && appConfig.isUpdateRequired()) { //response[0] != null && (Boolean) ((Object[]) (response[0]))[0]) {
                 new AlertDialog.Builder(mContext).setMessage(appConfig.getMessage())
                         .setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
@@ -393,7 +441,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
                                     if (objs != null) {
                                         int count = 0;
                                         for (NonLoggedInCartObj cObj : objs) {
-                                            AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()),cObj.getQuantity()));
+                                            AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()), cObj.getQuantity()));
                                         }
                                         AllProducts.getInstance().setCartCount(objs.size());
                                     }
@@ -425,7 +473,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
                     if (objs != null) {
                         int count = 0;
                         for (NonLoggedInCartObj cObj : objs) {
-                            AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()),cObj.getQuantity()));
+                            AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()), cObj.getQuantity()));
                         }
                         AllProducts.getInstance().setCartCount(objs.size());
                     }
@@ -443,7 +491,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
                 if (objs != null) {
                     int count = 0;
                     for (NonLoggedInCartObj cObj : objs) {
-                        AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()),cObj.getQuantity()));
+                        AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()), cObj.getQuantity()));
                     }
                     AllProducts.getInstance().setCartCount(objs.size());
                 }
@@ -465,7 +513,7 @@ public class SplashActivity extends BaseActivity implements RequestTags,GetReque
 
     private void appConfig() {
         String finalUrl = AppApplication.getInstance().getBaseUrl() + AppConstants.APP_CONFIG
-                + "?userid="+AppPreferences.getUserID(this)
+                + "?userid=" + AppPreferences.getUserID(this)
                 + "&reg_id=" + regId + "&device_id=" + getIMEI();
         GetRequestManager.getInstance().requestCacheThenHTTP(finalUrl,
                 RequestTags.APP_CONFIG,

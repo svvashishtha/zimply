@@ -154,7 +154,12 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
         if (requestType == RequestTags.PHONE_VERIFICATION_INPUT_NUMBER) {
-            mAdapter.setCounter(3);
+            if (status)
+                mAdapter.setCounter(3);
+            else {
+                mAdapter.setCounter(2);
+                showToast("Something went wrong in the phone verification. Please try after some time.");
+            }
 //            mAdapter.notifyDataSetChanged();
         }
         if (requestType == RequestTags.PHONE_VERIFICATION_OTP) {

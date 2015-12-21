@@ -49,6 +49,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
     int width, height;
     LayoutInflater vi;
 
+    double requestTime;
     private ListView recentSearchesListView;
     private RecentProductListAdapter recentSearchesAdapter;
 
@@ -119,6 +120,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 builder += (pam + "+");
             }
             if(builder.length()>0) {
+                requestTime = System.currentTimeMillis();
                 builder = builder.substring(0, builder.length() - 1);
                 String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_SEARCHED_PRODUCTS_LIST + "?q=" + builder;
                 mAsyncRunning = GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.SEARCHED_PRODUCTS_REQUEST_TAG,
@@ -159,6 +161,8 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
         if (requestTag.equals(RequestTags.SEARCHED_PRODUCTS_REQUEST_TAG)) {
             mAsyncRunning = null;
             if (!destroyed && obj != null && obj instanceof ParentCategory) {
+                CommonLib.ZLog("Request Time", "Product search(Suggestion) Request :" + (System.currentTimeMillis() - requestTime) + " mS");
+                CommonLib.writeRequestData("Product search(Suggestion) Request :" + (System.currentTimeMillis() - requestTime) + " mS");
                 products = ((ParentCategory)obj).getSubCategories();
                 products.addAll(((ParentCategory) obj).getCategories());
 

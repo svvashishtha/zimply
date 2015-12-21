@@ -51,7 +51,7 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 12/11/2015.
  */
-public class NewProductDetailActivity extends BaseActivity implements AppConstants,RequestTags,GetRequestListener,ObjectTypes,UploadManagerCallback,View.OnClickListener{
+public class NewProductDetailActivity extends BaseActivity implements AppConstants, RequestTags, GetRequestListener, ObjectTypes, UploadManagerCallback, View.OnClickListener {
 
     RecyclerView productDetailList;
 
@@ -61,37 +61,38 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     boolean isScannedProduct;
 
-    int width,height;
-
+    int width, height;
+    double requestTime;
     int spaceHeight;
-    TextView addToCart,buyNow;
+    TextView addToCart, buyNow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_product_detail_activity);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         spaceHeight = (getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)
-                +getResources().getDimensionPixelSize(R.dimen.action_bar_offset)-(2*getStatusBarHeight()));
+                + getResources().getDimensionPixelSize(R.dimen.action_bar_offset) - (2 * getStatusBarHeight()));
         String[] type = {""};
         if (getIntent().getExtras().containsKey("slug"))
             productSlug = String.valueOf(getIntent().getExtras().get("slug"));
-        if (getIntent().getExtras().containsKey("id") )
+        if (getIntent().getExtras().containsKey("id"))
             productId = getIntent().getExtras().getInt("id");
-        if(getIntent().getExtras().getBoolean("is_scanned")){
+        if (getIntent().getExtras().getBoolean("is_scanned")) {
             isScannedProduct = getIntent().getExtras().getBoolean("is_scanned");
         }
         width = getDisplayMetrics().widthPixels;
         height = getDisplayMetrics().heightPixels;
-        productDetailList = (RecyclerView)findViewById(R.id.categories_list);
+        productDetailList = (RecyclerView) findViewById(R.id.categories_list);
         productDetailList.setLayoutManager(new ScrollCustomizedLayoutManager(this));
         productDetailList.setBackgroundColor(getResources().getColor(R.color.pager_bg));
 
-        addToCart = (TextView)findViewById(R.id.add_to_cart);
+        addToCart = (TextView) findViewById(R.id.add_to_cart);
         addToCart.setOnClickListener(this);
-        buyNow = (TextView)findViewById(R.id.buy_now);
+        buyNow = (TextView) findViewById(R.id.buy_now);
         buyNow.setOnClickListener(this);
         setLoadingVariables();
 
@@ -99,6 +100,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         UploadManager.getInstance().addCallback(this);
         loadData();
     }
+
     TextView toolbarTitle;
 
     TextView cartCount;
@@ -106,16 +108,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     @Override
     protected void onResume() {
         super.onResume();
-        if(AllProducts.getInstance().getCartCount() == 0){
+        if (AllProducts.getInstance().getCartCount() == 0) {
             cartCount.setVisibility(View.GONE);
-        }else{
+        } else {
             cartCount.setVisibility(View.VISIBLE);
-            cartCount.setText(AllProducts.getInstance().getCartCount()+"");
+            cartCount.setText(AllProducts.getInstance().getCartCount() + "");
         }
 
-        if(adapter!=null && adapter.getObj()!=null && AllProducts.getInstance().cartContains((int)adapter.getObj().getProduct().getId())){
+        if (adapter != null && adapter.getObj() != null && AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
-        }else{
+        } else {
             addToCart.setText("Add to cart");
         }
     }
@@ -128,19 +130,21 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         }
         return result;
     }
-    public void addToolbarView(Toolbar toolbar){
+
+    public void addToolbarView(Toolbar toolbar) {
         View view = LayoutInflater.from(this).inflate(R.layout.product_custom_action_bar, toolbar, false);
         toolbarTitle = (TextView) view.findViewById(R.id.title);
-        if(getIntent()!=null && getIntent().getStringExtra("title")!=null){
+        if (getIntent() != null && getIntent().getStringExtra("title") != null) {
             toolbarTitle.setText(getIntent().getStringExtra("title"));
         }
-        ((ImageView)view.findViewById(R.id.cart_icon)).setOnClickListener(this);
-        ((ImageView)view.findViewById(R.id.share_product)).setOnClickListener(this);
-        cartCount = (TextView)view.findViewById(R.id.cart_item_true);
+        ((ImageView) view.findViewById(R.id.cart_icon)).setOnClickListener(this);
+        ((ImageView) view.findViewById(R.id.share_product)).setOnClickListener(this);
+        cartCount = (TextView) view.findViewById(R.id.cart_item_true);
         toolbar.addView(view);
     }
 
-    public void loadData(){
+    public void loadData() {
+        requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_REQUETS_URL + "?id=" + productId
                 + "&width=" + width / 2 + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
         GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_REQUEST_TAG,
@@ -149,7 +153,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)) {
             showLoadingView();
             (findViewById(R.id.bottom_action_container)).setVisibility(View.GONE);
             changeViewVisiblity(productDetailList, View.GONE);
@@ -159,21 +163,23 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)) {
+            CommonLib.ZLog("Request Time","Product Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
+            CommonLib.writeRequestData("Product Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
             if (obj instanceof HomeProductObj) {
-                HomeProductObj  product = (HomeProductObj) obj;
+                HomeProductObj product = (HomeProductObj) obj;
                 addAdapterData(product);
                 showView();
                 changeViewVisiblity(productDetailList, View.VISIBLE);
             } else {
                 showNullCaseView("No Info Available");
             }
-        }else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) ) {
-            if (progressDialog != null ) {
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG)) {
+            if (progressDialog != null) {
                 progressDialog.dismiss();
             }
             if (((boolean) obj)) {
-                if(adapter!=null){
+                if (adapter != null) {
                     adapter.setIsAvailableAtPincode(true);
                 }
             } else {
@@ -185,10 +191,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             CommonLib.hideKeyBoard(this, findViewById(R.id.pincode));
         }
     }
+
     NewProductDetailAdapter adapter;
-    public void addAdapterData(HomeProductObj obj){
+
+    public void addAdapterData(HomeProductObj obj) {
         toolbarTitle.setText(obj.getProduct().getName());
-        adapter =new NewProductDetailAdapter(this,width,height,obj);
+        adapter = new NewProductDetailAdapter(this, width, height, obj);
         productDetailList.setAdapter(adapter);
         adapter.setOnViewsClickedListener(new NewProductDetailAdapter.OnViewsClickedListener() {
             @Override
@@ -236,7 +244,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 makeUnLikeRequest();
             }
         });
-        ((ScrollCustomizedLayoutManager)productDetailList.getLayoutManager()).setScrollEnabled(true);
+        ((ScrollCustomizedLayoutManager) productDetailList.getLayoutManager()).setScrollEnabled(true);
         productDetailList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -255,7 +263,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     System.out.println("Scroll Position::" + adapter.getRefernceHolder().mapParent.getTop());
                     if (!AppPreferences.isBookTutorialShown(NewProductDetailActivity.this) && adapter.getRefernceHolder().mapParent.getTop() < spaceHeight && !isViewShown) {
                         ((ScrollCustomizedLayoutManager) productDetailList.getLayoutManager()).setScrollEnabled(false);
-                        AppPreferences.setIsBookTutorialShown(NewProductDetailActivity.this,true);
+                        AppPreferences.setIsBookTutorialShown(NewProductDetailActivity.this, true);
                         showTransparentView();
                     } else {
                         super.onScrolled(recyclerView, dx, dy);
@@ -270,14 +278,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         });
 
         (findViewById(R.id.bottom_action_container)).setVisibility(View.VISIBLE);
-        if(AllProducts.getInstance().cartContains((int)adapter.getObj().getProduct().getId())){
+        if (AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
-        }else{
+        } else {
             addToCart.setText("Add to cart");
         }
-        if(AllProducts.getInstance().vendorIdsContains(adapter.getObj().getVendor().getId())){
+        if (AllProducts.getInstance().vendorIdsContains(adapter.getObj().getVendor().getId())) {
             adapter.setIsCancelBookingShown(true);
-        }else{
+        } else {
             adapter.setIsCancelBookingShown(false);
         }
 
@@ -291,18 +299,18 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     boolean isViewShown;
 
-    public void showTransparentView(){
-        if(adapter!=null && adapter.getRefernceHolder()!=null) {
+    public void showTransparentView() {
+        if (adapter != null && adapter.getRefernceHolder() != null) {
             isViewShown = true;
-            final LinearLayout layout = (LinearLayout)findViewById(R.id.dim_layout);
+            final LinearLayout layout = (LinearLayout) findViewById(R.id.dim_layout);
             layout.setVisibility(View.VISIBLE);
             View view = findViewById(R.id.transparentView);
             NewProductDetailAdapter.ProductInfoHolder2 holder = adapter.getRefernceHolder();
 
-            int viewHeight =holder.mapParent.getHeight();
+            int viewHeight = holder.mapParent.getHeight();
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, viewHeight);
             view.setLayoutParams(lp);
-            ((TextView)findViewById(R.id.got_it)).setOnClickListener(new View.OnClickListener() {
+            ((TextView) findViewById(R.id.got_it)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     animateLayoutViewOut(layout);
@@ -312,8 +320,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         }
     }
 
-    public void animateLayoutViewIn(View view){
-        ObjectAnimator anim = ObjectAnimator.ofFloat(view,View.ALPHA,0,1);
+    public void animateLayoutViewIn(View view) {
+        ObjectAnimator anim = ObjectAnimator.ofFloat(view, View.ALPHA, 0, 1);
         anim.setDuration(200);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         anim.addListener(new Animator.AnimatorListener() {
@@ -339,8 +347,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         });
         anim.start();
     }
-    public void animateLayoutViewOut(final View view){
-        ObjectAnimator anim = ObjectAnimator.ofFloat(view,View.ALPHA,1,0);
+
+    public void animateLayoutViewOut(final View view) {
+        ObjectAnimator anim = ObjectAnimator.ofFloat(view, View.ALPHA, 1, 0);
         anim.setDuration(200);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         anim.addListener(new Animator.AnimatorListener() {
@@ -352,7 +361,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             @Override
             public void onAnimationEnd(Animator animation) {
                 view.setVisibility(View.GONE);
-                ((ScrollCustomizedLayoutManager)productDetailList.getLayoutManager()).setScrollEnabled(true);
+                ((ScrollCustomizedLayoutManager) productDetailList.getLayoutManager()).setScrollEnabled(true);
             }
 
             @Override
@@ -370,10 +379,10 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     NewProductDetailAdapter.ProductInfoHolder2 holder;
 
-    public void makeProductPreviewRequest(){
+    public void makeProductPreviewRequest() {
         String url = AppApplication.getInstance().getBaseUrl() + MARK_PRODUCT_REVIEW_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
-        list.add(new BasicNameValuePair("product_id", adapter.getObj().getProduct().getId()+""));
+        list.add(new BasicNameValuePair("product_id", adapter.getObj().getProduct().getId() + ""));
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
         UploadManager.getInstance().makeAyncRequest(url, MARK_PRODUCT_REVIEW_TAG, adapter.getObj().getProduct().getId() + "",
                 OBJECT_TYPE_MARK_PRODUCT_REVIEW, adapter.getObj(), list, null);
@@ -382,14 +391,13 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)) {
             showNetworkErrorView();
             showToast("Something went wrong. Please try again");
-        } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) ) {
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG)) {
             if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
                 showToast("Something went wrong. Please try again");
-            }
-            else {
+            } else {
                 showToast("Internet not available. Please try again");
             }
 
@@ -398,10 +406,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             }
         }
     }
-    ProgressDialog  progressDialog;
+
+    ProgressDialog progressDialog;
+
     public void checkPincodeAvailability(boolean showProgress, String text) {
         if (CommonLib.isNetworkAvailable(this)) {
-            if(showProgress)
+            if (showProgress)
                 progressDialog = ProgressDialog.show(this, null, "Checking availability.Please Wait..");
             AppPreferences.setSavedPincode(this, text);
             AppPreferences.setIsPincodeSaved(this, true);
@@ -415,6 +425,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
 
     boolean isDestroyed;
+
     @Override
     protected void onDestroy() {
         isDestroyed = true;
@@ -425,7 +436,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -433,7 +444,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
-        if ( !isDestroyed && requestType == MARK_PRODUCT_REVIEW_TAG) {
+        if (!isDestroyed && requestType == MARK_PRODUCT_REVIEW_TAG) {
             if (status) {
 
                 AllProducts.getInstance().getVendorIds().add(((ProductVendorTimeObj) response).getVendor_id());
@@ -467,7 +478,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
                     message = jsonObject.getString("success");
                 if (message != null) {
-                    ((CustomTextView)findViewById(R.id.add_to_cart)).setText("Go To Cart");
+                    ((CustomTextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
                     AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) adapter.getObj().getProduct().getId(), 1));
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                     cartCount.setVisibility(View.VISIBLE);
@@ -482,7 +493,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
+        } else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
             /*if (requestType == MARK_FAVOURITE_REQUEST_TAG) {
                 if (status) {
                     adapter.getObj().setIs_favourite(true);
@@ -500,7 +511,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
         String url = AppApplication.getInstance().getBaseUrl() + MARK_UNFAVOURITE_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
-        list.add(new BasicNameValuePair("favourite_item_id", adapter.getObj().getProduct().getFavourite_item_id()+""));
+        list.add(new BasicNameValuePair("favourite_item_id", adapter.getObj().getProduct().getFavourite_item_id() + ""));
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
         UploadManager.getInstance().makeAyncRequest(url, MARK_UN_FAVOURITE_REQUEST_TAG, adapter.getObj().getProduct().getId() + "",
                 OBJECT_TYPE_MARKED_UNFAV, adapter.getObj(), list, null);
@@ -522,17 +533,18 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     private void newVisitBookedCard() {
         adapter.setIsCancelBookingShown(true);
         adapter.onBookComplete(holder);
-        if(!AppPreferences.isFirstBookingDone(this)){
+        if (!AppPreferences.isFirstBookingDone(this)) {
             addBookingConfirmTutorial();
-            AppPreferences.setIsFirstBookingDone(this,true);
+            AppPreferences.setIsFirstBookingDone(this, true);
         }
 
 
     }
-    public void addBookingConfirmTutorial(){
+
+    public void addBookingConfirmTutorial() {
         findViewById(R.id.booking_tut).setVisibility(View.VISIBLE);
         findViewById(R.id.booking_tut).setClickable(true);
-        final ViewPager pager = (ViewPager)findViewById(R.id.booking_confirm_tut);
+        final ViewPager pager = (ViewPager) findViewById(R.id.booking_confirm_tut);
 
         // pager.setPageMargin(-(getResources().getDimensionPixelOffset(R.dimen.margin_large)));
         final MyPagerAdapter adapter = new MyPagerAdapter();
@@ -575,21 +587,22 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         });
         animateLayoutViewIn(findViewById(R.id.booking_tut));
     }
+
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
         if (!isDestroyed && requestType == CANCEL_PRODUCT_REVIEW_TAG) {
-            progressDialog = ProgressDialog.show(this,null,"Booking. Please wait...");
-        }else if ((requestType == ADD_TO_CART_PRODUCT_DETAIL || requestType == BUY_NOW) && !isDestroyed) {
+            progressDialog = ProgressDialog.show(this, null, "Booking. Please wait...");
+        } else if ((requestType == ADD_TO_CART_PRODUCT_DETAIL || requestType == BUY_NOW) && !isDestroyed) {
             progressDialog = ProgressDialog.show(this, null, "Adding to cart. Please wait");
             // isLoading = true;
         }
     }
 
-    public void showVisitBookedCard(final ProductVendorTimeObj obj){
+    public void showVisitBookedCard(final ProductVendorTimeObj obj) {
         View view = findViewById(R.id.booking_confirm_card);
         //view.setVisibility(View.VISIBLE);
-        ((CustomTextView)view.findViewById(R.id.address)).setText(obj.getLine1() + "\n" + obj.getCity());
-        ((LinearLayout)view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
+        ((CustomTextView) view.findViewById(R.id.address)).setText(obj.getLine1() + "\n" + obj.getCity());
+        ((LinearLayout) view.findViewById(R.id.call_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -598,7 +611,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             }
         });
 
-        ((LinearLayout)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
+        ((LinearLayout) view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + adapter.getObj().getVendor().getAddress().getLatitude() + "," + adapter.getObj().getVendor().getAddress().getLongitude() + "(" + adapter.getObj().getVendor().getName() + ")");
@@ -642,7 +655,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
 
     }
-    public void cancelBooking(int bookingID){
+
+    public void cancelBooking(int bookingID) {
         String url = AppApplication.getInstance().getBaseUrl() + REMOVE_PRODUCT_REVIEW_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
 
@@ -653,9 +667,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.retry_layout:
-                if(isRequestFailed){
+                if (isRequestFailed) {
                     loadData();
                 }
                 break;
@@ -667,7 +681,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         if (!(addToCart.getText().toString().equalsIgnoreCase("Go To Cart"))) {
                             String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
                             List<NameValuePair> nameValuePair = new ArrayList<>();
-                            nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE+""));
+                            nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE + ""));
                             nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
                             nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                             nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
@@ -677,7 +691,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         } else {
                             Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                             intent.putExtra("OrderSummaryFragment", false);
-                            intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
+                            intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
                             startActivity(intent);
                         }
 
@@ -688,7 +702,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                             if (oldObj == null) {
                                 oldObj = new ArrayList<NonLoggedInCartObj>();
                             }
-                            NonLoggedInCartObj item = new NonLoggedInCartObj(productId + "", 1,BUYING_CHANNEL_ONLINE);
+                            NonLoggedInCartObj item = new NonLoggedInCartObj(productId + "", 1, BUYING_CHANNEL_ONLINE);
                             if (oldObj.contains(item)) {
                                 showToast("Already added to cart");
                                 //Toast.makeText(mContext, "Already added to cart", Toast.LENGTH_SHORT).show();
@@ -696,7 +710,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                             } else {
                                 AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                                 checkCartCount();
-                                ((CustomTextView)findViewById(R.id.add_to_cart)).setText("Go To Cart");
+                                ((CustomTextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
                                 oldObj.add(item);
                                 GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                                 showToast("Successfully added to cart");
@@ -719,13 +733,13 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
                 if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
 
-                    if(AppPreferences.isUserLogIn(NewProductDetailActivity.this)){
-                        Intent intent =new Intent(NewProductDetailActivity.this,ProductCheckoutActivity.class);
+                    if (AppPreferences.isUserLogIn(NewProductDetailActivity.this)) {
+                        Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                         intent.putExtra("OrderSummaryFragment", true);
-                        intent.putExtra("productids",adapter.getObj().getProduct().getId()+"");
-                        intent.putExtra("quantity","1");
+                        intent.putExtra("productids", adapter.getObj().getProduct().getId() + "");
+                        intent.putExtra("quantity", "1");
                         startActivity(intent);
-                    }else{
+                    } else {
                         Intent intent = new Intent(NewProductDetailActivity.this, BaseLoginSignupActivity.class);
                         intent.putExtra("inside", true);
                         startActivity(intent);
@@ -737,7 +751,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 }
                 break;
             case R.id.share_product:
-                if (adapter!=null && adapter.getObj()!=null) {
+                if (adapter != null && adapter.getObj() != null) {
                     Intent shareIntent = new Intent(this, SharingOptionsActivity.class);
                     shareIntent.putExtra("title", "Checkout this awesome product ");
                     shareIntent.putExtra("slug", productSlug);
@@ -767,9 +781,10 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             cartCount.setVisibility(View.GONE);
         }
     }
+
     public class MyPagerAdapter extends PagerAdapter {
 
-        int[] resId = {R.drawable.book_tut1,R.drawable.book_tut2, R.drawable.book_tut3};
+        int[] resId = {R.drawable.book_tut1, R.drawable.book_tut2, R.drawable.book_tut3};
 
         @Override
         public int getCount() {
