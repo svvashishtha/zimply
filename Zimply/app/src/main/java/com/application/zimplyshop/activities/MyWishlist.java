@@ -155,7 +155,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)){
-            {
+
                 if (productList.getAdapter() == null
                         || productList.getAdapter().getItemCount() == 1) {
                     showNetworkErrorView();
@@ -171,7 +171,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                     isRequestAllowed = false;
                 }
                 isLoading = false;
-            }
+
         }
     }
 

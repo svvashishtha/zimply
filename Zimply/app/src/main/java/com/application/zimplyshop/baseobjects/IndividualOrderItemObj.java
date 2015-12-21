@@ -7,21 +7,15 @@ import java.io.Serializable;
  */
 public class IndividualOrderItemObj implements Serializable{
 
-    private int id;
+    private BaseProductListObject product;
 
     private String status;
-
-    private String slug;
-
-    private String name;
 
     private int qty;
 
     private int item_price;
 
     private int total_orderitem_price;
-
-    private String image;
 
     private boolean cancel_orderitem;
 
@@ -33,20 +27,13 @@ public class IndividualOrderItemObj implements Serializable{
 
     private String estimated_delivery;
 
-    public String getSlug() {
-        return slug;
+
+    public BaseProductListObject getProduct() {
+        return product;
     }
 
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setProduct(BaseProductListObject product) {
+        this.product = product;
     }
 
     public String getEstimated_delivery() {
@@ -89,13 +76,6 @@ public class IndividualOrderItemObj implements Serializable{
         this.track = track;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getStatus() {
         return status;
@@ -103,14 +83,6 @@ public class IndividualOrderItemObj implements Serializable{
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getQty() {

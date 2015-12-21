@@ -18,7 +18,6 @@ public class NewVendorObject implements Serializable{
 
     private NewVendorAddressObject address;
 
-
     public int getId() {
         return id;
     }

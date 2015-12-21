@@ -4,7 +4,6 @@
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:id="@+id/parent_layout"
-             android:background="@drawable/bg_dropshadow"
              android:foreground="@drawable/photo_feedback"
              android:layout_height="match_parent">
 
@@ -13,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:riv_border_color="@android:color/transparent"
-        app:riv_corner_radius="5dp"
+        app:riv_corner_radius="0dp"
         android:scaleType="centerCrop"/>
     <View
         android:layout_width="match_parent"

@@ -289,14 +289,14 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 changeViewVisiblity(buyLayout,View.GONE);
             }
 
-        } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART)) {
+        } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART)) {/*
             JSONObject jsonObject = (JSONObject) obj;
             try {
                 String message = jsonObject.getString("success");
                 if (message != null) {
 
                     Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
-                    cartObject.getCart().setPrice(Float.parseFloat(cartObject.getCart().getPrice()) -
+                    cartObject.getCart().setPrice(cartObject.getCart().getPrice() -
                             (Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getPrice())
                                     * Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQuantity())) + "");
                     float shippingPrice = cartObject.getCart().getTotal_shipping().equalsIgnoreCase("Free")?0:Float.parseFloat(cartObject.getCart().getTotal_shipping()) -
@@ -338,7 +338,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(mActivity, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
-            }
+            }*/
         }
     }
 
@@ -400,7 +400,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     public boolean isCoc(){
         for(int i = 0;i<cartObject.getCart().getDetail().size();i++){
-            if(!cartObject.getCart().getDetail().get(i).is_o2o()){
+            if(!cartObject.getCart().getDetail().get(i).getProduct().is_o2o()){
                 return false;
             }
         }
@@ -408,7 +408,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     }
     public boolean isAllOnline(){
         for(int i = 0;i<cartObject.getCart().getDetail().size();i++){
-            if(cartObject.getCart().getDetail().get(i).is_o2o()){
+            if(cartObject.getCart().getDetail().get(i).getProduct().is_o2o()){
                 return false;
             }
         }
@@ -443,12 +443,12 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             public void itemQuantityChanged(int position, int quantity) {
                 String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
                 List<NameValuePair> nameValuePair = new ArrayList<>();
-                nameValuePair.add(new BasicNameValuePair("product_id", cartObject.getCart().getDetail().get(position).getProduct_id() + ""));
+                nameValuePair.add(new BasicNameValuePair("product_id", cartObject.getCart().getDetail().get(position).getProduct().getId() + ""));
                 nameValuePair.add(new BasicNameValuePair("quantity", quantity + ""));
                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(mActivity)));
                 quantityUpdatePosition = position;
                 updatedQuantity = quantity;
-                UploadManager.getInstance().makeAyncRequest(url, QUANTITY_UPDATE, cartObject.getCart().getDetail().get(position).getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+                UploadManager.getInstance().makeAyncRequest(url, QUANTITY_UPDATE, cartObject.getCart().getDetail().get(position).getProduct().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
 
                 //mAdapter.notifyDataSetChanged();
             }
@@ -460,7 +460,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 String url = AppApplication.getInstance().getBaseUrl() +
                         "ecommerce/remove-cart/" + cartObject.getCart().getDetail().get(position).getCart_item_id() + "/";
                 GetRequestManager.getInstance().makeAyncRequest(url, REMOVE_FROM_CART, OBJECT_TYPE_ITEM_REMOVED);
-                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() - Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity()));
+                AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() - cartObject.getCart().getDetail().get(position).getQty());
 
             }
 
@@ -489,7 +489,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             }
         });
         mListView.setAdapter(mAdapter);
-        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " + "<font color=#0093b8>"+getResources().getString(R.string.rs_text) + " " + Math.round(Double.parseDouble(cartObject.getCart().getTotal_price()))+"</font>"));
+        ((CustomTextViewBold)view.findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " + "<font color=#0093b8>"+getResources().getString(R.string.rs_text) + " " + cartObject.getCart().getTotal_price()+"</font>"));
         ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setText("Proceed to Pay");
         ((CustomTextViewBold)view.findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -523,26 +523,22 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
                     JSONObject jsonObject = (JSONObject) response;
                     try {
-                        long price = jsonObject.getInt("price");
+                        int price = jsonObject.getInt("price");
                         if (price != -1) {
-                            cartObject.getCart().setPrice(Float.parseFloat(cartObject.getCart().getPrice()) + price -
-                                    (Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getPrice())
-                                            * Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQuantity())) + "");
-                            cartObject.getCart().setTotal_shipping(Float.parseFloat(cartObject.getCart().getTotal_shipping()) +
-                                    (updatedQuantity - Integer.parseInt(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQuantity())) *
-                                            cartObject.getCart().getDetail().get(quantityUpdatePosition).getIndividualShipping_charge() + "");
-                        /*cartObject.getCart().setTotal_price((Float.parseFloat(cartObject.getCart().getTotal_price()) -
-                                cartObject.getCart().getDetail().get(quantityUpdatePosition).getIndividualTotal_price()) +
-                                ((updatedQuantity *
-                                        cartObject.getCart().getDetail().get(quantityUpdatePosition).getIndividualShipping_charge())
-                                        + price) + "");*/
-                            cartObject.getCart().setTotal_price(Float.parseFloat(cartObject.getCart().getPrice()) +
-                                    Float.parseFloat(cartObject.getCart().getTotal_shipping()) + "");
+                            cartObject.getCart().setPrice(cartObject.getCart().getPrice() + price -
+                                    (cartObject.getCart().getDetail().get(quantityUpdatePosition).getProduct().getPrice()
+                                            * cartObject.getCart().getDetail().get(quantityUpdatePosition).getQty()));
+                            cartObject.getCart().setTotal_shipping(cartObject.getCart().getTotal_shipping() +
+                                    (updatedQuantity - cartObject.getCart().getDetail().get(quantityUpdatePosition).getQty()) *
+                                            cartObject.getCart().getDetail().get(quantityUpdatePosition).getShipping_charge());
 
-                            cartObject.getCart().getDetail().get(quantityUpdatePosition).setQuantity(updatedQuantity + "");
-                            cartObject.getCart().getDetail().get(quantityUpdatePosition).setIndividualTotal_price(
+                            cartObject.getCart().setTotal_price(cartObject.getCart().getPrice() +
+                                    cartObject.getCart().getTotal_shipping());
+
+                            cartObject.getCart().getDetail().get(quantityUpdatePosition).setQty(updatedQuantity);
+                            /*cartObject.getCart().getDetail().get(quantityUpdatePosition).set(
                                     Float.parseFloat(cartObject.getCart().getDetail().get(quantityUpdatePosition).getPrice())
-                                            * updatedQuantity);
+                                            * updatedQuantity);*/
                             setAdapterData();
                             quantityUpdatePosition = -1;
                             updatedQuantity = -1;
@@ -652,7 +648,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PLACE_ORDER_SUCCESS_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
-        list.add(new BasicNameValuePair("total_price",cartObject.getCart().getTotal_price()));
+        list.add(new BasicNameValuePair("total_price",cartObject.getCart().getTotal_price()+""));
         list.add(new BasicNameValuePair("order_id",orderId));
         list.add(new BasicNameValuePair("transaction_id",transactionId));
         list.add(new BasicNameValuePair("payment_status",((paymentSuccess)?1:3)+"" ));

@@ -33,11 +33,11 @@ public class ProductObject implements Serializable{
 
     private int width;
 
-    private double shipping_charges;
+    private int shipping_charges;
 
     private String description;
 
-    private double price;
+    private int price;
 
     private String faq;
 
@@ -179,11 +179,11 @@ public class ProductObject implements Serializable{
         this.width = width;
     }
 
-    public double getShipping_charges() {
+    public int getShipping_charges() {
         return shipping_charges;
     }
 
-    public void setShipping_charges(double shipping_charges) {
+    public void setShipping_charges(int shipping_charges) {
         this.shipping_charges = shipping_charges;
     }
 
@@ -195,11 +195,11 @@ public class ProductObject implements Serializable{
         this.description = description;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
