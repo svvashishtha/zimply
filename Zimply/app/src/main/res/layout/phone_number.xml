@@ -12,17 +12,15 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="@dimen/size20"
-            android:layout_weight="1">
+            android:padding="@dimen/size20">
 
             <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/zhllightbuttonfeedback"
                 android:clickable="true"
-
                 android:text="@string/change_phone_number"
                 android:textColor="@color/zdhl3"
                 android:textSize="@dimen/size15" />
@@ -30,10 +28,10 @@
             <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/number"
                 android:layout_width="match_parent"
-                android:paddingTop="@dimen/margin_mini"
                 android:layout_height="wrap_content"
-                android:background="@drawable/zhllightbuttonfeedback"
                 android:clickable="true"
+
+                android:paddingTop="@dimen/margin_mini"
                 android:text="@string/change_phone_number"
                 android:textColor="@color/zdhl3"
                 android:textSize="@dimen/size15" />

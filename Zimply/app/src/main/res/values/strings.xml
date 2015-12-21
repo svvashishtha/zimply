@@ -204,4 +204,5 @@
     <string name="direction">Direction</string>
     <string name="cod_not_avail">* You may only place Cash-on-Delivery orders up to \u20B9 20000</string>
     <string name="save">SAVE</string>
+    <string name="otp_name">Enter OTP</string>
 </resources>

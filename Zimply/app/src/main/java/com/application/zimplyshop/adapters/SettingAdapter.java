@@ -3,13 +3,17 @@ package com.application.zimplyshop.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.preferences.AppPreferences;
+import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.widgets.CustomButton;
 import com.application.zimplyshop.widgets.CustomEdittext;
 import com.application.zimplyshop.widgets.CustomTextView;
@@ -27,6 +31,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
     int counter = 1;
     ClickListeners mListener;
     private Timer timer;
+    String otp;
 
     public SettingAdapter(Context context) {
         this.context = context;
@@ -34,6 +39,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     public void setCounter(int counter) {
         this.counter = counter;
+        notifyDataSetChanged();
     }
 
     public void setClickListener(ClickListeners mListener) {
@@ -77,6 +83,10 @@ public class SettingAdapter extends RecyclerView.Adapter {
         return new ItemHolderCase1(LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_number, parent, false));
     }
 
+    public void setOTP(String otp) {
+        this.otp = otp;
+        notifyDataSetChanged();
+    }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -94,13 +104,28 @@ public class SettingAdapter extends RecyclerView.Adapter {
             ItemHolderCase1 holderCase1 = (ItemHolderCase1) holder;
             holderCase1.title.setText("Password");
             holderCase1.subTitle.setText("***********");
+            holderCase1.editImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setCounter(4);
+                }
+            });
         } else if (position == 0 && getItemViewType(position) == 2) {
             final ItemHolderCase2 holderCase2 = (ItemHolderCase2) holder;
             holderCase2.phoneNumber.setText(AppPreferences.getUserPhoneNumber(context));
+            holderCase2.verifyProgressBar.setVisibility(View.GONE);
+            holderCase2.buttonVerify.setVisibility(View.VISIBLE);
             holderCase2.buttonVerify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mListener.onPhoneNumberVerify(holderCase2.phoneNumber.getText().toString());
+                    try {
+                        CommonLib.hideKeyBoard((Activity) context, holderCase2.phoneNumber);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    holderCase2.verifyProgressBar.setVisibility(View.VISIBLE);
+                    holderCase2.buttonVerify.setVisibility(View.GONE);
                 }
             });
             holderCase2.cancel.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +135,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 }
             });
         } else if (position == 0 && getItemViewType(position) == 3) {
-            ItemHolderCase3 holderCase3 = (ItemHolderCase3) holder;
+            final ItemHolderCase3 holderCase3 = (ItemHolderCase3) holder;
             startTimer(holderCase3);
             holderCase3.cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -130,7 +155,31 @@ public class SettingAdapter extends RecyclerView.Adapter {
                     mListener.resendOtp();
                 }
             });
+            holderCase3.otp.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().trim().length() == 6) {
+                        try {
+                            //((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mVerificationCodeEditText.getRootView().getWindowToken(), 0);
+                            CommonLib.hideKeyBoard((Activity) context, holderCase3.otp);
+                        } catch (Exception e) {
+                        }
+                        //CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
+                        mListener.verifyOtp(s.toString());
+                    }
+                }
+            });
+            if (otp != null && otp.length() > 0) {
+                holderCase3.otp.setText(otp);
+            }
         } else if (position == 1 && getItemViewType(position) == 4) {
             ItemHolderCase4 holderCase4 = (ItemHolderCase4) holder;
             holderCase4.cancelVerifyOtp.setOnClickListener(new View.OnClickListener() {
@@ -171,12 +220,16 @@ public class SettingAdapter extends RecyclerView.Adapter {
         CustomTextView cancel;
         CustomEdittext phoneNumber;
         CustomButton buttonVerify;
+        ProgressBar verifyProgressBar;
 
         public ItemHolderCase2(View itemView) {
             super(itemView);
             cancel = (CustomTextView) itemView.findViewById(R.id.cancel_verify);
             buttonVerify = (CustomButton) itemView.findViewById(R.id.verify_button);
+            buttonVerify.setVisibility(View.VISIBLE);
             phoneNumber = (CustomEdittext) itemView.findViewById(R.id.phone_number);
+            verifyProgressBar = (ProgressBar) itemView.findViewById(R.id.verify_number_progress);
+            verifyProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -225,6 +278,8 @@ public class SettingAdapter extends RecyclerView.Adapter {
         void resendOtp();
 
         void sendPasswordRequest();
+
+        void verifyOtp(String otp);
     }
 
     int seconds = 60;

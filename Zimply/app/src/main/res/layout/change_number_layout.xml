@@ -17,9 +17,9 @@
             android:text="@string/change_phone_number" />
 
         <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/cancel_verify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cancel_verify"
             android:text="@string/cancel"
             android:textAllCaps="true"
             android:textColor="@color/apptheme_color"
@@ -40,42 +40,59 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/z_item_height_48"
                 android:background="@drawable/square_border_dark"
+                android:gravity="center"
                 android:paddingLeft="@dimen/margin_midsmall"
-                android:textColor="@color/z_grey_color"
                 android:paddingRight="@dimen/margin_midsmall"
                 android:paddingTop="@dimen/margin_medium"
-                android:text="+91" />
+                android:text="+91"
+                android:textColor="@color/z_grey_color" />
 
 
             <com.application.zimplyshop.widgets.CustomEdittext
-                android:layout_width="match_parent"
                 android:id="@+id/phone_number"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/z_item_height_48"
-                android:textColor="@color/z_grey_color"
-                android:inputType="number"
                 android:layout_marginLeft="@dimen/margin_midsmall"
                 android:layout_marginRight="@dimen/margin_midsmall"
                 android:background="@drawable/square_border_dark"
+                android:inputType="number"
                 android:paddingLeft="@dimen/margin_midsmall"
                 android:paddingRight="@dimen/margin_midsmall"
                 android:paddingTop="@dimen/margin_medium"
-                android:text="" />
+                android:text=""
+                android:textColor="@color/z_grey_color" />
         </LinearLayout>
 
-        <com.application.zimplyshop.widgets.CustomButton
+        <LinearLayout
             android:layout_width="match_parent"
-            android:id="@+id/verify_button"
             android:layout_height="@dimen/z_item_height_48"
             android:layout_margin="@dimen/margin_midsmall"
             android:background="@drawable/z_blue_btn_without_rad_bg"
-            android:text="@string/verify"
-            android:textColor="@color/white"
-            android:textSize="@dimen/font_xlarge" />
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.application.zimplyshop.widgets.CustomButton
+                android:id="@+id/verify_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/z_item_height_48"
+                android:background="@drawable/z_blue_btn_without_rad_bg"
+                android:text="@string/verify"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_xlarge" />
+
+            <ProgressBar
+                android:id="@+id/verify_number_progress"
+                style="?android:attr/progressBarStyleSmallInverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <com.application.zimplyshop.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/margin_midsmall"
-            android:text="@string/verify_phone_sms"/>
+            android:text="@string/verify_phone_sms" />
     </LinearLayout>
 </LinearLayout>
