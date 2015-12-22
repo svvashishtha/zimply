@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -32,6 +33,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
     ClickListeners mListener;
     private Timer timer;
     String otp;
+    private boolean refreshView = false;
 
     public SettingAdapter(Context context) {
         this.context = context;
@@ -48,7 +50,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (counter == 1) {
+      /*  if (counter == 1) {
             return 1;
         } else if (counter == 2) {
             if (position == 0) {
@@ -65,12 +67,15 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 return 4;
             else return 1;
         }
-        return 1;
+        return 1;*/
+        if (position == 0)
+            return 0;
+        else return 1;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
+        /*switch (viewType) {
             case 1:
                 return new ItemHolderCase1(LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_number, parent, false));
             case 2:
@@ -80,17 +85,26 @@ public class SettingAdapter extends RecyclerView.Adapter {
             case 4:
                 return new ItemHolderCase4(LayoutInflater.from(parent.getContext()).inflate(R.layout.password_change_layout, parent, false));
         }
-        return new ItemHolderCase1(LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_number, parent, false));
+        return new ItemHolderCase1(LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_number, parent, false));*/
+        if (viewType == 0)
+            return new ItemHolderPhone(LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_row, parent, false));
+        else
+            return new ItemHolderPassword(LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_row_password, parent, false));
     }
 
     public void setOTP(String otp) {
         this.otp = otp;
+
         notifyDataSetChanged();
+    }
+
+    public void resetTimer(boolean flag) {
+        refreshView = flag;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position == 0 && getItemViewType(position) == 1) {
+        /*if (position == 0 && getItemViewType(position) == 1) {
             ItemHolderCase1 holderCase1 = (ItemHolderCase1) holder;
             holderCase1.title.setText("Phone Number");
             holderCase1.subTitle.setText(AppPreferences.getUserPhoneNumber(context));
@@ -111,6 +125,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 }
             });
         } else if (position == 0 && getItemViewType(position) == 2) {
+
             final ItemHolderCase2 holderCase2 = (ItemHolderCase2) holder;
             holderCase2.phoneNumber.setText(AppPreferences.getUserPhoneNumber(context));
             holderCase2.verifyProgressBar.setVisibility(View.GONE);
@@ -136,7 +151,11 @@ public class SettingAdapter extends RecyclerView.Adapter {
             });
         } else if (position == 0 && getItemViewType(position) == 3) {
             final ItemHolderCase3 holderCase3 = (ItemHolderCase3) holder;
-            startTimer(holderCase3);
+            holderCase3.otp.setText("");
+            if (refreshView) {
+                seconds = 60;
+                startTimer(holderCase3);
+            }
             holderCase3.cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -194,7 +213,130 @@ public class SettingAdapter extends RecyclerView.Adapter {
                     mListener.sendPasswordRequest();
                 }
             });
+        }*/
+
+        if (position == 0) {
+            final ItemHolderPhone itemHolder = (ItemHolderPhone) holder;
+            if (counter == 1 || counter == 4) {
+                itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
+                itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
+                itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.GONE);
+                ((CustomTextViewBold) itemHolder.container.findViewById(R.id.title)).setText("Phone Number");
+                ((CustomTextViewBold) itemHolder.container.findViewById(R.id.number)).setText(AppPreferences.getUserPhoneNumber(context));
+                ((ImageView) itemHolder.container.findViewById(R.id.edit_image)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.editNumber();
+                    }
+                });
+            } else if (counter == 2) {
+                itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.VISIBLE);
+                itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
+                itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.GONE);
+                ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)).setText(AppPreferences.getUserPhoneNumber(context));
+                itemHolder.container.findViewById(R.id.verify_number_progress).setVisibility(View.GONE);
+                itemHolder.container.findViewById(R.id.verify_button).setVisibility(View.VISIBLE);
+                itemHolder.container.findViewById(R.id.verify_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onPhoneNumberVerify(((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number))
+                                .getText().toString());
+                        try {
+                            CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        itemHolder.container.findViewById(R.id.verify_number_progress).setVisibility(View.VISIBLE);
+                        itemHolder.container.findViewById(R.id.verify_button).setVisibility(View.GONE);
+                    }
+                });
+                itemHolder.container.findViewById(R.id.cancel_verify).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onPhoneNumberCancel();
+                    }
+                });
+
+            } else if (counter == 3) {
+                itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
+                itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
+                itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.VISIBLE);
+               /* holderCase3.otp.setText("");*/
+
+                seconds = 60;
+                startTimer((CustomButton) itemHolder.container.findViewById(R.id.resend_code));
+
+                itemHolder.container.findViewById(R.id.cancel_otp).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onOtpVerifyCancel();
+                    }
+                });
+                itemHolder.container.findViewById(R.id.edit_number).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.editNumber();
+                    }
+                });
+                itemHolder.container.findViewById(R.id.resend_code).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.resendOtp();
+                    }
+                });
+                ((CustomEdittext) itemHolder.container.findViewById(R.id.otp)).addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (s.toString().trim().length() == 6) {
+                            try {
+                                //((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mVerificationCodeEditText.getRootView().getWindowToken(), 0);
+                                CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolder.container.findViewById(R.id.otp)));
+                            } catch (Exception e) {
+                            }
+                            //CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
+                            mListener.verifyOtp(s.toString());
+                        }
+                    }
+                });
+                if (otp != null && otp.length() > 0) {
+                    ((CustomEdittext) itemHolder.container.findViewById(R.id.otp)).setText(otp);
+                    otp = "";
+                }
+            }
+
+        } else if (position == 1) {
+            ItemHolderPassword itemHolderPassword = (ItemHolderPassword) holder;
+            if (counter == 1 || counter == 2 || counter == 3) {
+                itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
+                itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.GONE);
+                itemHolderPassword.container.findViewById(R.id.edit_image).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setCounter(4);
+                    }
+                });
+
+            } else if (counter == 4) {
+                itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
+                itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.VISIBLE);
+                itemHolderPassword.container.findViewById(R.id.cancel_verify).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setCounter(1);
+                    }
+                });
+            }
         }
+
+
     }
 
     @Override
@@ -265,6 +407,24 @@ public class SettingAdapter extends RecyclerView.Adapter {
         }
     }
 
+    class ItemHolderPhone extends RecyclerView.ViewHolder {
+        FrameLayout container;
+
+        public ItemHolderPhone(View itemView) {
+            super(itemView);
+            container = (FrameLayout) itemView.findViewById(R.id.frame_container);
+        }
+    }
+
+    class ItemHolderPassword extends RecyclerView.ViewHolder {
+        FrameLayout container;
+
+        public ItemHolderPassword(View itemView) {
+            super(itemView);
+            container = (FrameLayout) itemView.findViewById(R.id.container);
+        }
+    }
+
     public interface ClickListeners {
         //send otp to this number
         void onPhoneNumberVerify(String number);
@@ -284,14 +444,14 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     int seconds = 60;
 
-    private void startTimer(final ItemHolderCase3 holderCase3) {
-        if (holderCase3 == null)
+    private void startTimer(final CustomButton resend) {
+        if (resend == null)
             return;
 
-        holderCase3.resend.setBackgroundResource(R.drawable.round_corner_borders_zhl);
-        holderCase3.resend.setClickable(false);
-        holderCase3.resend.setTextColor(context.getResources().getColor(R.color.zhl_darker));
-        holderCase3.resend.setText(context.getResources().getString(R.string.retry_in, seconds));
+        resend.setBackgroundResource(R.drawable.round_corner_borders_zhl);
+        resend.setClickable(false);
+        resend.setTextColor(context.getResources().getColor(R.color.zhl_darker));
+        resend.setText(context.getResources().getString(R.string.retry_in, seconds));
         timer = new Timer();
 
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -305,13 +465,13 @@ public class SettingAdapter extends RecyclerView.Adapter {
                             seconds -= 1;
                             if (seconds <= 0) {
                                 seconds = 60;
-                                holderCase3.resend.setText(context.getResources().getString(R.string.resend_code));
-                                holderCase3.resend.setBackgroundResource(R.drawable.z_blue_btn_without_rad_bg);
-                                holderCase3.resend.setClickable(true);
-                                holderCase3.resend.setTextColor(context.getResources().getColor(R.color.white));
+                                resend.setText(context.getResources().getString(R.string.resend_code));
+                                resend.setBackgroundResource(R.drawable.z_blue_btn_without_rad_bg);
+                                resend.setClickable(true);
+                                resend.setTextColor(context.getResources().getColor(R.color.white));
                                 timer.cancel();
                             } else {
-                                holderCase3.resend.setText(context.getResources().getString(R.string.retry_in, seconds));
+                                resend.setText(context.getResources().getString(R.string.retry_in, seconds));
                             }
 
 
