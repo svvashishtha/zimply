@@ -40,13 +40,12 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public OrderListAdapter(Context context){
         this.mContext = context;
         objs = new ArrayList<>();
-        isFooterRemoved = true;
     }
 
 
     public void changeStatus(int position,int orderId,int status){
         for(IndividualOrderItemObj obj :objs.get(position).getOrderitem()){
-            if(obj.getId() == orderId){
+            if(obj.getProduct().getId() == orderId){
                 if(status == AppConstants.CANCEL_ORDER){
                     obj.setStatus("Cancelled");
                     obj.setCancel_orderitem(false);
@@ -98,8 +97,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((OrderItemHolder) holder).orderItemContainer.removeAllViews();
             for (final IndividualOrderItemObj obj : objs.get(position).getOrderitem()) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.order_list_order_item_layout, null);
-                new ImageLoaderManager((PurchaseListActivity) mContext).setImageFromUrl(obj.getImage(), ((ImageView) view.findViewById(R.id.product_img)), "", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
-                ((TextView) view.findViewById(R.id.product_name)).setText(obj.getName());
+                new ImageLoaderManager((PurchaseListActivity) mContext).setImageFromUrl(obj.getProduct().getImage(), ((ImageView) view.findViewById(R.id.product_img)), "", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
+                ((TextView) view.findViewById(R.id.product_name)).setText(obj.getProduct().getName());
                 ((TextView) view.findViewById(R.id.product_price)).setText(mContext.getString(R.string.rs_text) + " " +obj.getItem_price());
                 ((TextView) view.findViewById(R.id.product_qty)).setText(Html.fromHtml("Qty: " + "<font color=#76b082>" + obj.getQty() + "</font>"));
                 ((TextView) view.findViewById(R.id.product_status)).setText(obj.getStatus());
@@ -109,9 +108,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, NewProductDetailActivity.class);
-                        intent.putExtra("slug",obj.getSlug());
-                        intent.putExtra("id", (long)obj.getId());
-                        intent.putExtra("title",obj.getName());
+                        intent.putExtra("slug",obj.getProduct().getSlug());
+                        intent.putExtra("id", obj.getProduct().getId());
+                        intent.putExtra("title",obj.getProduct().getName());
                         mContext.startActivity(intent);
                     }
                 });
@@ -135,9 +134,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     @Override
                     public void onClick(View v) {
                         if (obj.isCancel_orderitem()) {
-                            mListener.onCancelClick(position, obj.getId());
+                            mListener.onCancelClick(position, obj.getProduct().getId());
                         } else if (obj.isReturn_orderitem()) {
-                            mListener.onReturnClick(position, obj.getId());
+                            mListener.onReturnClick(position, obj.getProduct().getId());
                         } else {
 
                         }

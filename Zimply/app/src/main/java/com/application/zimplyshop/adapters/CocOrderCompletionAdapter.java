@@ -1,9 +1,7 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.CashOnCounterOrderCompletionActivity;
-import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.baseobjects.CartObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
@@ -68,54 +65,35 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder,final int position) {
         if(getItemViewType(position) ==TYPE_DATA){
-            ((ProductViewHolder)holder).productName.setText(cartObj.getCart().getDetail().get(position-1).getName());
-            ((ProductViewHolder)holder).productPrice.setText(mContext.getString(R.string.rs_text) + " " + cartObj.getCart().getDetail().get(position - 1).getPrice());
-            ((ProductViewHolder)holder).productQty.setText("Qty: " + cartObj.getCart().getDetail().get(position - 1).getQuantity());
-            SpannableString string = new SpannableString("Store Address "+cartObj.getCart().getDetail().get(position - 1).getVendor().getReg_add().getLine1()
-                    +", "+(cartObj.getCart().getDetail().get(position - 1).getVendor().getReg_add().getCity()!=null?cartObj.getCart().getDetail().get(position - 1).getVendor().getReg_add().getCity():"")
-                    +"\nPincode:"+cartObj.getCart().getDetail().get(position - 1).getVendor().getReg_add().getPincode());
-            string.setSpan(new RelativeSizeSpan(1.1f), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            string.setSpan(new StyleSpan(Typeface.BOLD), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            string.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ((ProductViewHolder) holder).storeAddress.setText(string);
-            new ImageLoaderManager((CashOnCounterOrderCompletionActivity)mContext).setImageFromUrl(cartObj.getCart().getDetail().get(position - 1).getImage(),
+            ((ProductViewHolder)holder).productName.setText(cartObj.getCart().getDetail().get(position-1).getProduct().getName());
+            ((ProductViewHolder)holder).productPrice.setText(mContext.getString(R.string.rs_text) + " " + cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice());
+            ((ProductViewHolder)holder).productQty.setText("Qty: " + cartObj.getCart().getDetail().get(position - 1).getQty());
+
+            new ImageLoaderManager((CashOnCounterOrderCompletionActivity)mContext).setImageFromUrl(cartObj.getCart().getDetail().get(position - 1).getProduct().getImage(),
                     ((ProductViewHolder) holder).productImage, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_cover_img_height),
                     mContext.getResources().getDimensionPixelSize(R.dimen.pro_cover_img_height), false, false);
-            ((ProductViewHolder) holder).payAmount.setText(mContext.getString(R.string.rs_text)+" "+Math.round((Integer.parseInt(cartObj.getCart().getDetail().get(position - 1).getQuantity()) * Double.parseDouble(cartObj.getCart().getDetail().get(position - 1).getPrice()))));
+            ((ProductViewHolder) holder).payAmount.setText(mContext.getString(R.string.rs_text)+" "+Math.round((cartObj.getCart().getDetail().get(position - 1).getQty() * cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice())));
             if(isCoc){
-                ((ProductViewHolder) holder).deliveryAddressLayout.setVisibility(View.GONE);
-                ((ProductViewHolder) holder).btnLayout.setVisibility(View.VISIBLE);
-                ((ProductViewHolder) holder).callLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        callIntent.setData(Uri.parse("tel:" + cartObj.getCart().getDetail().get(position - 1).getVendor().getReg_add().getPhone()));
-                        mContext.startActivity(callIntent);
-                    }
-                });
-                ((ProductViewHolder)holder).directionLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + cartObj.getCart().getDetail().get(position - 1).getVendor().getReg_add().getLocation().getLatitude() + "," + cartObj.getCart().getDetail().get(position - 1).getVendor().getReg_add().getLocation().getLongitude() + "(" + cartObj.getCart().getDetail().get(position - 1).getVendor().getCompany_name() + ")");
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        mContext.startActivity(intent);
-                    }
-                });
-                ((ProductViewHolder) holder).toPay.setText("To Pay");
-                ((ProductViewHolder) holder).payAtStore.setVisibility(View.VISIBLE);
-            }else{
-                ((ProductViewHolder) holder).toPay.setText("You have paid");
-                ((ProductViewHolder) holder).payAtStore.setVisibility(View.GONE);
-                SpannableString address = new SpannableString("Delivery Address :"+addressObj.getLine1()+", "+(addressObj.getLine2()!=null?addressObj.getLine2()+", ":"")+addressObj.getCity()+addressObj.getState()+","+"\nPincode "+addressObj.getPincode());
-                address.setSpan(new RelativeSizeSpan(1.1f), 0, 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                address.setSpan(new StyleSpan(Typeface.BOLD), 0, 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                address.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)), 0, 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ((ProductViewHolder) holder).paymentStatus.setVisibility(View.VISIBLE);
+                ((ProductViewHolder) holder).paymentStatus.setText("Cash-on-Delivery");
                 ((ProductViewHolder) holder).deliveryAddressLayout.setVisibility(View.VISIBLE);
                 ((ProductViewHolder) holder).btnLayout.setVisibility(View.GONE);
-                ((ProductViewHolder) holder).deliveryAddress.setText(address);
-                ((ProductViewHolder) holder).deliverTime.setText("The approximate time of delivery is 4-7 days");
+
+                ((ProductViewHolder) holder).toPay.setText("To Pay");
+                ((ProductViewHolder) holder).payAtStore.setVisibility(View.GONE);
+            }else{
+                ((ProductViewHolder) holder).paymentStatus.setVisibility(View.GONE);
+                ((ProductViewHolder) holder).toPay.setText("You have paid");
+                ((ProductViewHolder) holder).payAtStore.setVisibility(View.GONE);
+                ((ProductViewHolder) holder).btnLayout.setVisibility(View.GONE);
             }
+            ((ProductViewHolder) holder).deliverTime.setText("The approximate time of delivery is 4-7 days");
+            SpannableString address = new SpannableString("Delivery Address :"+addressObj.getLine1()+", "+(addressObj.getLine2()!=null?addressObj.getLine2()+", ":"")+addressObj.getCity()+addressObj.getState()+","+"\nPincode "+addressObj.getPincode());
+            address.setSpan(new RelativeSizeSpan(1.1f), 0, 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            address.setSpan(new StyleSpan(Typeface.BOLD), 0, 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            address.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)), 0, 16, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ((ProductViewHolder) holder).deliveryAddressLayout.setVisibility(View.VISIBLE);
+            ((ProductViewHolder) holder).deliveryAddress.setText(address);
         }else{
             ((HeaderViewHolder) holder).orderId.setText("Order id- "+orderId);
         }
@@ -140,7 +118,7 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder{
-        TextView productName,productPrice,productQty,itemNum,storeAddress,payAmount,paymentStatus,deliveryAddress,deliverTime,payAtStore,toPay;
+        TextView productName,productPrice,productQty,itemNum,payAmount,paymentStatus,deliveryAddress,deliverTime,payAtStore,toPay;
         ImageView productImage;
         LinearLayout callLayout,directionLayout,deliveryAddressLayout,btnLayout;
 
@@ -150,7 +128,7 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
             productName = (TextView)itemView.findViewById(R.id.product_name);
             productPrice = (TextView)itemView.findViewById(R.id.product_price);
             productQty = (TextView)itemView.findViewById(R.id.product_qty);
-            storeAddress = (TextView)itemView.findViewById(R.id.store_address);
+
             payAmount = (TextView)itemView.findViewById(R.id.pay_amount);
             paymentStatus =(TextView)itemView.findViewById(R.id.payment_status);
             productImage = (ImageView)itemView.findViewById(R.id.product_img);

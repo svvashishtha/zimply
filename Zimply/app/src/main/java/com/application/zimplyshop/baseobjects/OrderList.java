@@ -9,6 +9,16 @@ public class OrderList {
 
     private ArrayList<OrderItemObj> orders;
 
+    private String next_url;
+
+    public String getNext_url() {
+        return next_url;
+    }
+
+    public void setNext_url(String next_url) {
+        this.next_url = next_url;
+    }
+
     public ArrayList<OrderItemObj> getOrders() {
         return orders;
     }
