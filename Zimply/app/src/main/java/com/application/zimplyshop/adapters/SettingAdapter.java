@@ -10,14 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.widgets.CustomButton;
 import com.application.zimplyshop.widgets.CustomEdittext;
-import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 
 import java.util.Timer;
@@ -29,7 +27,7 @@ import java.util.TimerTask;
 public class SettingAdapter extends RecyclerView.Adapter {
 
     Context context;
-    int counter = 1;
+    int counter = 1, prevCounter = 1;
     ClickListeners mListener;
     private Timer timer;
     String otp;
@@ -40,8 +38,9 @@ public class SettingAdapter extends RecyclerView.Adapter {
     }
 
     public void setCounter(int counter) {
+        prevCounter = this.counter;
         this.counter = counter;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
     public void setClickListener(ClickListeners mListener) {
@@ -50,24 +49,6 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-      /*  if (counter == 1) {
-            return 1;
-        } else if (counter == 2) {
-            if (position == 0) {
-                return 2;
-            } else if (position == 1)
-                return 1;
-        } else if (counter == 3) {
-            if (position == 0) {
-                return 3;
-            } else return 1;
-        }
-        if (counter == 4) {
-            if (position == 1)
-                return 4;
-            else return 1;
-        }
-        return 1;*/
         if (position == 0)
             return 0;
         else return 1;
@@ -75,17 +56,6 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        /*switch (viewType) {
-            case 1:
-                return new ItemHolderCase1(LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_number, parent, false));
-            case 2:
-                return new ItemHolderCase2(LayoutInflater.from(parent.getContext()).inflate(R.layout.change_number_layout, parent, false));
-            case 3:
-                return new ItemHolderCase3(LayoutInflater.from(parent.getContext()).inflate(R.layout.enter_otp_layout, parent, false));
-            case 4:
-                return new ItemHolderCase4(LayoutInflater.from(parent.getContext()).inflate(R.layout.password_change_layout, parent, false));
-        }
-        return new ItemHolderCase1(LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_number, parent, false));*/
         if (viewType == 0)
             return new ItemHolderPhone(LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_row, parent, false));
         else
@@ -94,7 +64,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     public void setOTP(String otp) {
         this.otp = otp;
-
+        refreshView = false;
         notifyDataSetChanged();
     }
 
@@ -104,120 +74,10 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        /*if (position == 0 && getItemViewType(position) == 1) {
-            ItemHolderCase1 holderCase1 = (ItemHolderCase1) holder;
-            holderCase1.title.setText("Phone Number");
-            holderCase1.subTitle.setText(AppPreferences.getUserPhoneNumber(context));
-            holderCase1.editImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.editNumber();
-                }
-            });
-        } else if (position == 1 && getItemViewType(position) == 1) {
-            ItemHolderCase1 holderCase1 = (ItemHolderCase1) holder;
-            holderCase1.title.setText("Password");
-            holderCase1.subTitle.setText("***********");
-            holderCase1.editImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setCounter(4);
-                }
-            });
-        } else if (position == 0 && getItemViewType(position) == 2) {
-
-            final ItemHolderCase2 holderCase2 = (ItemHolderCase2) holder;
-            holderCase2.phoneNumber.setText(AppPreferences.getUserPhoneNumber(context));
-            holderCase2.verifyProgressBar.setVisibility(View.GONE);
-            holderCase2.buttonVerify.setVisibility(View.VISIBLE);
-            holderCase2.buttonVerify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onPhoneNumberVerify(holderCase2.phoneNumber.getText().toString());
-                    try {
-                        CommonLib.hideKeyBoard((Activity) context, holderCase2.phoneNumber);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    holderCase2.verifyProgressBar.setVisibility(View.VISIBLE);
-                    holderCase2.buttonVerify.setVisibility(View.GONE);
-                }
-            });
-            holderCase2.cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onPhoneNumberCancel();
-                }
-            });
-        } else if (position == 0 && getItemViewType(position) == 3) {
-            final ItemHolderCase3 holderCase3 = (ItemHolderCase3) holder;
-            holderCase3.otp.setText("");
-            if (refreshView) {
-                seconds = 60;
-                startTimer(holderCase3);
-            }
-            holderCase3.cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onOtpVerifyCancel();
-                }
-            });
-            holderCase3.editNumber.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.editNumber();
-                }
-            });
-            holderCase3.resend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.resendOtp();
-                }
-            });
-            holderCase3.otp.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (s.toString().trim().length() == 6) {
-                        try {
-                            //((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mVerificationCodeEditText.getRootView().getWindowToken(), 0);
-                            CommonLib.hideKeyBoard((Activity) context, holderCase3.otp);
-                        } catch (Exception e) {
-                        }
-                        //CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
-                        mListener.verifyOtp(s.toString());
-                    }
-                }
-            });
-            if (otp != null && otp.length() > 0) {
-                holderCase3.otp.setText(otp);
-            }
-        } else if (position == 1 && getItemViewType(position) == 4) {
-            ItemHolderCase4 holderCase4 = (ItemHolderCase4) holder;
-            holderCase4.cancelVerifyOtp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onOtpVerifyCancel();
-                }
-            });
-            holderCase4.sendRequest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.sendPasswordRequest();
-                }
-            });
-        }*/
-
         if (position == 0) {
             final ItemHolderPhone itemHolder = (ItemHolderPhone) holder;
             if (counter == 1 || counter == 4) {
+                prevCounter = 1;
                 itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
                 itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.GONE);
@@ -261,11 +121,11 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.VISIBLE);
-               /* holderCase3.otp.setText("");*/
-
-                seconds = 60;
-                startTimer((CustomButton) itemHolder.container.findViewById(R.id.resend_code));
-
+                ((CustomEdittext) itemHolder.container.findViewById(R.id.otp)).setText("");
+                if (refreshView) {
+                    seconds = 60;
+                    startTimer((CustomButton) itemHolder.container.findViewById(R.id.resend_code));
+                }
                 itemHolder.container.findViewById(R.id.cancel_otp).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -321,6 +181,8 @@ public class SettingAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View v) {
                         setCounter(4);
+                        notifyItemChanged(1);
+                        notifyItemChanged(0);
                     }
                 });
 
@@ -331,6 +193,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View v) {
                         setCounter(1);
+                        notifyItemChanged(1);
                     }
                 });
             }
@@ -342,69 +205,6 @@ public class SettingAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return 2;
-    }
-
-    //case 1: with both views minimised
-    class ItemHolderCase1 extends RecyclerView.ViewHolder {
-        CustomTextViewBold title, subTitle;
-        ImageView editImage;
-
-        public ItemHolderCase1(View itemView) {
-            super(itemView);
-            title = (CustomTextViewBold) itemView.findViewById(R.id.title);
-            subTitle = (CustomTextViewBold) itemView.findViewById(R.id.number);
-            editImage = (ImageView) itemView.findViewById(R.id.edit_image);
-        }
-    }
-
-    //case 2 : enter phone number to verify. password minimised
-    class ItemHolderCase2 extends RecyclerView.ViewHolder {
-        CustomTextView cancel;
-        CustomEdittext phoneNumber;
-        CustomButton buttonVerify;
-        ProgressBar verifyProgressBar;
-
-        public ItemHolderCase2(View itemView) {
-            super(itemView);
-            cancel = (CustomTextView) itemView.findViewById(R.id.cancel_verify);
-            buttonVerify = (CustomButton) itemView.findViewById(R.id.verify_button);
-            buttonVerify.setVisibility(View.VISIBLE);
-            phoneNumber = (CustomEdittext) itemView.findViewById(R.id.phone_number);
-            verifyProgressBar = (ProgressBar) itemView.findViewById(R.id.verify_number_progress);
-            verifyProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    // case 3: verify otp. password minimised
-    class ItemHolderCase3 extends RecyclerView.ViewHolder {
-        CustomEdittext otp;
-        CustomTextView messageNumber, cancel;
-        CustomButton resend, editNumber;
-
-        public ItemHolderCase3(View itemView) {
-            super(itemView);
-            otp = (CustomEdittext) itemView.findViewById(R.id.otp);
-            cancel = (CustomTextView) itemView.findViewById(R.id.cancel_otp);
-            messageNumber = (CustomTextView) itemView.findViewById(R.id.message_text);
-            resend = (CustomButton) itemView.findViewById(R.id.resend_code);
-            editNumber = (CustomButton) itemView.findViewById(R.id.edit_number);
-        }
-    }
-
-    //case 4 : change password. phone number verify.
-    class ItemHolderCase4 extends RecyclerView.ViewHolder {
-        CustomTextView cancelVerifyOtp;
-        CustomButton sendRequest;
-        CustomEdittext oldPassword, newPassword, confirmPassword;
-
-        public ItemHolderCase4(View itemView) {
-            super(itemView);
-            sendRequest = (CustomButton) itemView.findViewById(R.id.change_password);
-            cancelVerifyOtp = (CustomTextView) itemView.findViewById(R.id.cancel_verify);
-            oldPassword = (CustomEdittext) itemView.findViewById(R.id.old_password);
-            newPassword = (CustomEdittext) itemView.findViewById(R.id.new_password);
-            confirmPassword = (CustomEdittext) itemView.findViewById(R.id.confirm_password);
-        }
     }
 
     class ItemHolderPhone extends RecyclerView.ViewHolder {

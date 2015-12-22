@@ -3,6 +3,7 @@
     android:id="@+id/frame_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
 
     <LinearLayout
@@ -54,16 +55,16 @@
 
         <View
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="1dp"
             android:background="@color/zhl_dark" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/case2layout"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,8 +91,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -128,7 +128,8 @@
                 android:layout_margin="@dimen/margin_midsmall"
                 android:background="@drawable/z_blue_btn_without_rad_bg"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <com.application.zimplyshop.widgets.CustomButton
                     android:id="@+id/verify_button"
@@ -151,9 +152,15 @@
             <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_midsmall"
                 android:paddingLeft="@dimen/margin_midsmall"
                 android:text="@string/verify_phone_sms" />
         </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/zhl_dark" />
     </LinearLayout>
 
     <LinearLayout
@@ -161,7 +168,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        >
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -243,7 +250,7 @@
 
         <View
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="1dp"
             android:background="@color/zhl_dark" />
     </LinearLayout>
 </FrameLayout>

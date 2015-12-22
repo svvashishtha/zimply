@@ -13,11 +13,11 @@
         android:background="@drawable/actionbar_bg"
         app:theme="@style/Toolbar_Theme" />
 
-    <View
+    <!--<View
         android:layout_width="fill_parent"
         android:layout_height=".5dp"
         android:layout_marginTop="@dimen/size10"
-        android:background="@color/zhl_dark" />
+        android:background="@color/zhl_dark" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/setting_list"

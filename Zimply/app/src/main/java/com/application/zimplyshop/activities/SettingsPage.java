@@ -40,7 +40,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
     RecyclerView settingList;
     LinearLayoutManager linearLayoutManager;
     SettingAdapter mAdapter;
-    String number;
+    String number, prevOtp = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
         mAdapter = new SettingAdapter(this);
         mAdapter.setCounter(1);
         settingList.setAdapter(mAdapter);
+
         //register receviers
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mNotificationReceived, new IntentFilter(CommonLib.LOCAL_SMS_BROADCAST));
 
@@ -88,16 +89,22 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
             @Override
             public void onPhoneNumberCancel() {
                 mAdapter.setCounter(1);
+                mAdapter.notifyItemChanged(0);
+                mAdapter.notifyItemChanged(1);
             }
 
             @Override
             public void onOtpVerifyCancel() {
                 mAdapter.setCounter(1);
+                mAdapter.notifyItemChanged(0);
+                mAdapter.notifyItemChanged(1);
             }
 
             @Override
             public void editNumber() {
                 mAdapter.setCounter(2);
+                mAdapter.notifyItemChanged(0);
+                mAdapter.notifyItemChanged(1);
             }
 
             @Override
@@ -112,12 +119,15 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
 
             @Override
             public void verifyOtp(String otp) {
-                String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION;
-                List<NameValuePair> nameValuePair = new ArrayList<>();
-                nameValuePair.add(new BasicNameValuePair("otp", otp));
-                nameValuePair.add(new BasicNameValuePair("mobile", number));
-                nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(SettingsPage.this)));
-                UploadManager.getInstance().makeAyncRequest(url, RequestTags.PHONE_VERIFICATION_OTP, "", ObjectTypes.OBJECT_TYPE_PHONE_VERIFICATION_OTP, null, nameValuePair, null);
+                if (!prevOtp.equalsIgnoreCase(otp)) {
+                    prevOtp = otp;
+                    String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION;
+                    List<NameValuePair> nameValuePair = new ArrayList<>();
+                    nameValuePair.add(new BasicNameValuePair("otp", otp));
+                    nameValuePair.add(new BasicNameValuePair("mobile", number));
+                    nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(SettingsPage.this)));
+                    UploadManager.getInstance().makeAyncRequest(url, RequestTags.PHONE_VERIFICATION_OTP, "", ObjectTypes.OBJECT_TYPE_PHONE_VERIFICATION_OTP, null, nameValuePair, null);
+                }
             }
         });
       /*  findViewById(R.id.change_number).setOnClickListener(new View.OnClickListener() {
@@ -154,14 +164,15 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
         if (requestType == RequestTags.PHONE_VERIFICATION_INPUT_NUMBER) {
-            if (status)
-            {
+            if (status) {
                 mAdapter.setCounter(3);
+                mAdapter.notifyItemChanged(0);
+                mAdapter.notifyItemChanged(1);
                 mAdapter.resetTimer(true);
-            }
-
-            else {
+            } else {
                 mAdapter.setCounter(2);
+                mAdapter.notifyItemChanged(0);
+                mAdapter.notifyItemChanged(1);
                 showToast("Something went wrong in the phone verification. Please try after some time.");
             }
 //            mAdapter.notifyDataSetChanged();
