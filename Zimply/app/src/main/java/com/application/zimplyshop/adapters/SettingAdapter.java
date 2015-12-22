@@ -96,6 +96,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)).setText(AppPreferences.getUserPhoneNumber(context));
                 itemHolder.container.findViewById(R.id.verify_number_progress).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.verify_button).setVisibility(View.VISIBLE);
+
                 itemHolder.container.findViewById(R.id.verify_button).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -110,19 +111,26 @@ public class SettingAdapter extends RecyclerView.Adapter {
                         itemHolder.container.findViewById(R.id.verify_button).setVisibility(View.GONE);
                     }
                 });
+
                 itemHolder.container.findViewById(R.id.cancel_verify).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        try {
+                            CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         mListener.onPhoneNumberCancel();
                     }
                 });
-
+               // ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)).requestFocus();
             } else if (counter == 3) {
                 itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.VISIBLE);
                 ((CustomEdittext) itemHolder.container.findViewById(R.id.otp)).setText("");
                 if (refreshView) {
+                    CommonLib.ZLog("SettingAdapter","timer started");
                     seconds = 60;
                     startTimer((CustomButton) itemHolder.container.findViewById(R.id.resend_code));
                 }
@@ -196,7 +204,15 @@ public class SettingAdapter extends RecyclerView.Adapter {
                         notifyItemChanged(1);
                     }
                 });
+                itemHolderPassword.container.findViewById(R.id.change_password).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
             }
+
         }
 
 

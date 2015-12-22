@@ -125,50 +125,55 @@ public class SplashActivity extends BaseActivity implements RequestTags, GetRequ
                 SplashActivity.pushOpenScreenEvent(SplashActivity.this, "splash");
             }
         }, 2, TimeUnit.SECONDS);
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-            CommonLib.writeRequestData("Session begins with WiFi");
-        } else {
-            CommonLib.writeRequestData("Session begins with Mobile Network");
-            try {
-                int subtype = cm.getActiveNetworkInfo().getSubtype();
-                switch (subtype) {
-                    case TelephonyManager.NETWORK_TYPE_1xRTT:
-                        CommonLib.writeRequestData("2g Network"); // ~ 50-100 kbps
-                        Log.i("network", "NETWORK_TYPE_1xRTT");
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_CDMA:
-                        CommonLib.writeRequestData("2g Network"); // ~ 14-64 kbps
-                        Log.i("network", "NETWORK_TYPE_CDMA");
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_EDGE:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                    case TelephonyManager.NETWORK_TYPE_GPRS:
-                    case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    case TelephonyManager.NETWORK_TYPE_HSPA:
-                    case TelephonyManager.NETWORK_TYPE_HSUPA:
-                    case TelephonyManager.NETWORK_TYPE_UMTS:
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                CommonLib.writeRequestData("Session begins with WiFi");
+            } else {
+                CommonLib.writeRequestData("Session begins with Mobile Network");
+                try {
+                    int subtype = cm.getActiveNetworkInfo().getSubtype();
+                    switch (subtype) {
+                        case TelephonyManager.NETWORK_TYPE_1xRTT:
+                            CommonLib.writeRequestData("2g Network"); // ~ 50-100 kbps
+                            Log.i("network", "NETWORK_TYPE_1xRTT");
+                            break;
+                        case TelephonyManager.NETWORK_TYPE_CDMA:
+                            CommonLib.writeRequestData("2g Network"); // ~ 14-64 kbps
+                            Log.i("network", "NETWORK_TYPE_CDMA");
+                            break;
+                        case TelephonyManager.NETWORK_TYPE_EDGE:
+                        case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                        case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                        case TelephonyManager.NETWORK_TYPE_GPRS:
+                        case TelephonyManager.NETWORK_TYPE_HSDPA:
+                        case TelephonyManager.NETWORK_TYPE_HSPA:
+                        case TelephonyManager.NETWORK_TYPE_HSUPA:
+                        case TelephonyManager.NETWORK_TYPE_UMTS:
             /*
              * Above API level 7, make sure to set android:targetSdkVersion
              * to appropriate level to use these
              */
-                    case TelephonyManager.NETWORK_TYPE_EHRPD: // API level 11
-                    case TelephonyManager.NETWORK_TYPE_EVDO_B: // API level 9
-                        CommonLib.writeRequestData("2g Network");
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_HSPAP: // API level 13
-                    case TelephonyManager.NETWORK_TYPE_IDEN: // API level 8
-                    case TelephonyManager.NETWORK_TYPE_LTE: // API level 11
-                        CommonLib.writeRequestData("3g Network"); // ~ 10+ Mbps
-                        Log.i("network", "NETWORK_TYPE_LTE");
-                        break;// ~ 50-100 kbps
+                        case TelephonyManager.NETWORK_TYPE_EHRPD: // API level 11
+                        case TelephonyManager.NETWORK_TYPE_EVDO_B: // API level 9
+                            CommonLib.writeRequestData("2g Network");
+                            break;
+                        case TelephonyManager.NETWORK_TYPE_HSPAP: // API level 13
+                        case TelephonyManager.NETWORK_TYPE_IDEN: // API level 8
+                        case TelephonyManager.NETWORK_TYPE_LTE: // API level 11
+                            CommonLib.writeRequestData("3g Network"); // ~ 10+ Mbps
+                            Log.i("network", "NETWORK_TYPE_LTE");
+                            break;// ~ 50-100 kbps
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
         startMainActivity();
     }

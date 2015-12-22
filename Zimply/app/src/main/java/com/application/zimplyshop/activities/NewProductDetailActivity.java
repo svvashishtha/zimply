@@ -772,7 +772,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     }
     public class MyPagerAdapter extends PagerAdapter {
 
-        int[] resId = {R.drawable.book_tut1,R.drawable.book_tut2, R.drawable.book_tut3};
+        int[] resId = {R.drawable.book_tut2,R.drawable.book_tut1,R.drawable.book_tut3};
 
         @Override
         public int getCount() {

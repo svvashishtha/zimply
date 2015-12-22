@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/cancel"
                 android:textAllCaps="true"
-                android:textColor="@color/apptheme_color"
+                android:textColor="@color/red_text_color"
                 android:textSize="@dimen/font_large" />
         </LinearLayout>
 
@@ -115,7 +115,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_midsmall"
                     android:layout_marginRight="@dimen/margin_midsmall"
-                    android:background="@drawable/square_border_dark"
+                    android:background="@drawable/blue_border_card_bg"
                     android:inputType="number"
                     android:paddingLeft="@dimen/margin_midsmall"
                     android:paddingRight="@dimen/margin_midsmall"

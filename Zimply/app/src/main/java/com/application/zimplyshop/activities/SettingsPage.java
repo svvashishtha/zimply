@@ -41,6 +41,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
     LinearLayoutManager linearLayoutManager;
     SettingAdapter mAdapter;
     String number, prevOtp = "";
+    boolean cancelled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
             @Override
             public void onPhoneNumberVerify(String number) {
 
-
+                cancelled = false;
                 if (number == null || number.length() < 10 || number.length() > 10) {
                     showToast("Invalid phone number");
                     return;
@@ -89,12 +90,14 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
             @Override
             public void onPhoneNumberCancel() {
                 mAdapter.setCounter(1);
+                cancelled = true;
                 mAdapter.notifyItemChanged(0);
                 mAdapter.notifyItemChanged(1);
             }
 
             @Override
             public void onOtpVerifyCancel() {
+                cancelled = true;
                 mAdapter.setCounter(1);
                 mAdapter.notifyItemChanged(0);
                 mAdapter.notifyItemChanged(1);
@@ -121,6 +124,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
             public void verifyOtp(String otp) {
                 if (!prevOtp.equalsIgnoreCase(otp)) {
                     prevOtp = otp;
+                    cancelled = false;
                     String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION;
                     List<NameValuePair> nameValuePair = new ArrayList<>();
                     nameValuePair.add(new BasicNameValuePair("otp", otp));
@@ -165,15 +169,20 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
         if (requestType == RequestTags.PHONE_VERIFICATION_INPUT_NUMBER) {
             if (status) {
-                mAdapter.setCounter(3);
-                mAdapter.notifyItemChanged(0);
-                mAdapter.notifyItemChanged(1);
-                mAdapter.resetTimer(true);
+                if (!cancelled) {
+                    mAdapter.setCounter(3);
+                    mAdapter.notifyItemChanged(0);
+                    mAdapter.notifyItemChanged(1);
+                    mAdapter.resetTimer(true);
+
+                }
             } else {
-                mAdapter.setCounter(2);
-                mAdapter.notifyItemChanged(0);
-                mAdapter.notifyItemChanged(1);
-                showToast("Something went wrong in the phone verification. Please try after some time.");
+                if (!cancelled) {
+                    mAdapter.setCounter(2);
+                    mAdapter.notifyItemChanged(0);
+                    mAdapter.notifyItemChanged(1);
+                    showToast("Something went wrong in the phone verification. Please try after some time.");
+                }
             }
 //            mAdapter.notifyDataSetChanged();
         }
@@ -181,13 +190,18 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
 
             if (!destroyed) {
                 if (status) {
-                    AppPreferences.setUserPhoneNumber(SettingsPage.this, number);
-                    showToast("Verified");
-                    // CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
-                    //getActivity().finish();
-                    mAdapter.setCounter(1);
+                    if (!cancelled) {
+                        AppPreferences.setUserPhoneNumber(SettingsPage.this, number);
+                        showToast("Verified");
+                        // CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
+                        //getActivity().finish();
+                        mAdapter.setCounter(1);
+                        mAdapter.notifyItemChanged(0);
+                    }
                 } else {
-                    showToast("Something went wrong in the phone verification. Please try after some time.");
+                    if (!cancelled) {
+                        showToast("Something went wrong in the phone verification. Please try after some time.");
+                    }
                 }
             }
 
@@ -232,6 +246,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
                     nameValuePair.add(new BasicNameValuePair("otp", otp));
                     nameValuePair.add(new BasicNameValuePair("mobile", number));
                     nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(SettingsPage.this)));
+                    cancelled = false;
                     UploadManager.getInstance().makeAyncRequest(url, RequestTags.PHONE_VERIFICATION_OTP, "", ObjectTypes.OBJECT_TYPE_PHONE_VERIFICATION_OTP, null, nameValuePair, null);
                 }
 

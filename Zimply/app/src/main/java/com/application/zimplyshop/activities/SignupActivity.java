@@ -43,6 +43,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class SignupActivity extends BaseActivity
 		implements OnClickListener, UploadManagerCallback, RequestTags, AppConstants {
@@ -74,6 +75,27 @@ public class SignupActivity extends BaseActivity
 
 		mShouldResolve = false;
 		name = (EditText) findViewById(R.id.name);
+		name.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				String text = s.toString();
+				int length = text.length();
+
+				if(!Pattern.matches("^[a-zA-Z\\s]*$", text) && length > 0) {
+					s.delete(length - 1, length);
+				}
+			}
+		});
 		email = (EditText) findViewById(R.id.email);
 		password = (EditText) findViewById(R.id.password);
 		password.addTextChangedListener(new TextWatcher() {
