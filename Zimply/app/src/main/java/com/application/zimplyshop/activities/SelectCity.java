@@ -39,7 +39,7 @@ public class SelectCity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Bundle bundle  = new Bundle();
+        Bundle bundle = new Bundle();
 
         try {
             if (getIntent().getExtras() != null) {
@@ -48,7 +48,7 @@ public class SelectCity extends BaseActivity {
 
                 }
 
-                bundle.putBoolean("fetch_location",getIntent().getExtras().getBoolean("fetch_location"));
+                bundle.putBoolean("fetch_location", getIntent().getExtras().getBoolean("fetch_location"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +69,9 @@ public class SelectCity extends BaseActivity {
             }
 
             @Override
-            public void onCityReceivedFromServer() {
+            public void onCityReceivedFromServer(double requestTime) {
+                CommonLib.ZLog("Request Time","Location to main Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
+                CommonLib.writeRequestData("Location to main Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
                 startHomeActivity();
             }
         });
@@ -161,10 +163,11 @@ public class SelectCity extends BaseActivity {
         closeKeyboard();
         super.onBackPressed();
     }
-public void closeKeyboard(){
-    if(searchEditText!=null)
-        CommonLib.hideKeyBoard(this,searchEditText);
-}
+
+    public void closeKeyboard() {
+        if (searchEditText != null)
+            CommonLib.hideKeyBoard(this, searchEditText);
+    }
 
  /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -178,10 +181,9 @@ public void closeKeyboard(){
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (citiesListFragment!=null && requestCode == CitiesListFragment.REQUEST_LOCATION){
+        if (citiesListFragment != null && requestCode == CitiesListFragment.REQUEST_LOCATION) {
             citiesListFragment.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }

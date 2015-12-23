@@ -62,7 +62,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     boolean isScannedProduct;
 
     int width,height;
-
+    double requestTime;
     int spaceHeight;
     TextView addToCart,buyNow;
     @Override
@@ -141,6 +141,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     }
 
     public void loadData(){
+        requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_REQUETS_URL + "?id=" + productId
                 + "&width=" + width / 2 + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
         GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_REQUEST_TAG,
@@ -160,6 +161,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)){
+            CommonLib.ZLog("Request Time","Product Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
+            CommonLib.writeRequestData("Product Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
             if (obj instanceof HomeProductObj) {
                 HomeProductObj  product = (HomeProductObj) obj;
                 addAdapterData(product);
@@ -669,7 +672,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         if (!(addToCart.getText().toString().equalsIgnoreCase("Go To Cart"))) {
                             String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
                             List<NameValuePair> nameValuePair = new ArrayList<>();
-                            // nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE+""));
+                            nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE+""));
                             nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
                             nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                             nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
@@ -771,7 +774,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     }
     public class MyPagerAdapter extends PagerAdapter {
 
-        int[] resId = {R.drawable.book_tut1,R.drawable.book_tut2, R.drawable.book_tut3};
+        int[] resId = {R.drawable.book_tut2,R.drawable.book_tut1,R.drawable.book_tut3};
 
         @Override
         public int getCount() {

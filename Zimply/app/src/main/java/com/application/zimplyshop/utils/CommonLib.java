@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -40,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Hashtable;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -120,11 +122,11 @@ public class CommonLib {
 	/**
 	 * Version string
 	 */
-	public static final String VERSION_STRING = "1.0.1";
+	public static final String VERSION_STRING = "1.0.9";
 	/**
 	 * Crashlytics version string
 	 */
-    public static final String CRASHLYTICS_VERSION_STRING = "1.0.1 Live";
+	public static final String CRASHLYTICS_VERSION_STRING = "1.0.9 Live";
 	/**
 	 * Log control
 	 */
@@ -577,5 +579,32 @@ public class CommonLib {
 		APPLICATION_TRACKER
 	}
 
-
+	public static void writeRequestData(String log) {
+		if (ZimplyLog) {
+			FileOutputStream fos;
+//            byte[] data = log.getBytes();
+			File zimplyFolder = new File(Environment.getExternalStorageDirectory(), "Zimply");
+			if (!zimplyFolder.exists())
+				zimplyFolder.mkdir();
+			File logfile = new File(zimplyFolder, "RequestLog" + ".txt");
+			try {
+				if (!logfile.exists())
+					logfile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				fos = new FileOutputStream(logfile, true);
+				OutputStreamWriter osw = new OutputStreamWriter(fos);
+				osw.append(log + "\r\n");
+				osw.flush();
+				osw.close();
+				fos.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

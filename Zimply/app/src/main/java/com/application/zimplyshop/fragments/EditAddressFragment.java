@@ -37,6 +37,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class EditAddressFragment extends ZFragment implements UploadManagerCallback, View.OnClickListener, GetRequestListener {
 
@@ -124,6 +125,27 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         // cancel.setOnClickListener(this);
 
         name = (EditText) view.findViewById(R.id.name);
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString();
+                int length = text.length();
+
+                if(!Pattern.matches("^[a-zA-Z\\s]*$", text) && length > 0) {
+                    s.delete(length - 1, length);
+                }
+            }
+        });
         name.setText(AppPreferences.getUserName(getActivity()));
         addLine1 = (EditText) view.findViewById(R.id.address_line1);
         addLine2 = (EditText) view.findViewById(R.id.address_line2);
