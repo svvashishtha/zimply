@@ -192,7 +192,7 @@
     <string name="change_password">Change Password</string>
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
-    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password">Confirm new password</string>
 
     <string name="load_error">Error occured in Google tag manager. Please try again later.</string>
 

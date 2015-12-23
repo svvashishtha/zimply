@@ -211,9 +211,9 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                 public void onCancelClick(final int pos, final int bookProductId) {
                     final AlertDialog cancelBooking;
                     cancelBooking = new AlertDialog.Builder(BookedForReviewActivity.this)
-                            .setTitle("Success")
                             .setCancelable(false)
-                            .setMessage("Booking cancelled successfully")
+                            .setTitle("Confirm")
+                            .setMessage("Do you want to cancel the booking?")
                             .setPositiveButton("Yes",
                                     new DialogInterface.OnClickListener() {
                                         @Override

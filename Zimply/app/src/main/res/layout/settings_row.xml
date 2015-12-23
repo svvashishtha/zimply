@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+       >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,6 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+
                     android:text="@string/change_phone_number"
                     android:textColor="@color/zdhl5"
                     android:textSize="@dimen/size15" />
@@ -63,8 +64,8 @@
         android:id="@+id/case2layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:visibility="gone"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,15 +99,17 @@
                 android:layout_height="@dimen/z_item_height_48"
                 android:layout_margin="@dimen/margin_midsmall">
 
-                <com.application.zimplyshop.widgets.CustomEdittext
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@drawable/square_border_dark"
-
+                    android:background="@drawable/square_border_light"
+                    android:clickable="false"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/margin_midsmall"
                     android:paddingRight="@dimen/margin_midsmall"
                     android:text="+91"
-                    android:textColor="@color/z_grey_color" />
+                    android:textColor="@color/z_grey_color"
+                    android:textSize="@dimen/font_xlarge" />
 
 
                 <com.application.zimplyshop.widgets.CustomEdittext
@@ -119,6 +122,8 @@
                     android:inputType="number"
                     android:paddingLeft="@dimen/margin_midsmall"
                     android:paddingRight="@dimen/margin_midsmall"
+                    android:maxLength="10"
+                    android:textSize="@dimen/font_xlarge"
                     android:textColor="@color/z_grey_color" />
             </LinearLayout>
 
@@ -128,8 +133,7 @@
                 android:layout_margin="@dimen/margin_midsmall"
                 android:background="@drawable/z_blue_btn_without_rad_bg"
                 android:gravity="center"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <com.application.zimplyshop.widgets.CustomButton
                     android:id="@+id/verify_button"
