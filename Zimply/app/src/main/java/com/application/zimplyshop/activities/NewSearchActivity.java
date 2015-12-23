@@ -188,7 +188,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    performSearch(v.getText().toString());
+                    performSearch(v.getText().toString().trim());
                     return true;
                 }
                 return false;

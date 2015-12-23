@@ -246,6 +246,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     if (AppPreferences.isUserLogIn(mContext)) {
+
                         showtransition(((ProductInfoHolder2) holder));
 
                     } else {
@@ -688,8 +689,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         view.setCompoundDrawables(null,null,drawable,null);
     }
 
+    boolean isBookingRequestStarted;
+
     public void showtransition(ProductInfoHolder2 holder){
-        slideViewsRightToLeft(holder, holder.bookStoreVisit, holder.loadingLayout, BOOK_BTN_CLICK);
+        if(!isBookingRequestStarted) {
+            isBookingRequestStarted = true;
+            slideViewsRightToLeft(holder, holder.bookStoreVisit, holder.loadingLayout, BOOK_BTN_CLICK);
+        }
     }
     public void setIsDescShown(boolean isDescShown) {
         this.isDescShown = isDescShown;
@@ -905,7 +911,6 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             timer.cancel();
                             // emptyBtn.setVisibility(View.GONE);
                             slideViewsRightToLeft(holder,holder.loadingLayout, holder.bookProgress,PROGRESS_TIME_COMPLETE);
-
                             //makeProductPreviewRequest();
 
                         } else {
@@ -920,11 +925,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         holder.crossText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 timer.cancel();
                 seconds = 30;
                 holder.loadingBar.setProgress(0);
                 slideViewsLeftToRight(holder.loadingLayout, holder.bookStoreVisit, BOOK_BTN_CLICK);
                 //scaleView(emptyBtn, 0.15f, 1f, false);
+                isBookingRequestStarted = false;
             }
         });
     }

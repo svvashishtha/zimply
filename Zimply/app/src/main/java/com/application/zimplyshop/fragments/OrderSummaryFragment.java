@@ -21,6 +21,7 @@ import com.application.zimplyshop.adapters.CartItemListAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.baseobjects.CartObject;
+import com.application.zimplyshop.baseobjects.CartProductDetail;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -202,6 +203,28 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         return s.toString();
     }
 
+    public String getProductQuantityStringLoginUser(ArrayList<CartProductDetail> objs) {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < objs.size(); i++) {
+            s.append(objs.get(i).getQty() + "");
+            if (i != objs.size() - 1) {
+                s.append(".");
+            }
+        }
+        return s.toString();
+    }
+
+    public String getProductIdStringsLoginUser(ArrayList<CartProductDetail> objs) {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < objs.size(); i++) {
+            s.append(objs.get(i).getProduct().getId() + "");
+            if (i != objs.size() - 1) {
+                s.append(".");
+            }
+        }
+        return s.toString();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -244,11 +267,16 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 showLoadingView();
                 changeViewVisiblity(mListView, View.GONE);
                 changeViewVisiblity(buyLayout, View.GONE);
+
             }
         } else if (requestTag != null && requestTag.equals(GET_ORDER_SUMMARY)) {
-            showLoadingView();
-            changeViewVisiblity(mListView, View.GONE);
-            changeViewVisiblity(buyLayout, View.GONE);
+            if(mAdapter==null ||(mAdapter!=null &&  mAdapter.getItemCount() == 0)) {
+                showLoadingView();
+                changeViewVisiblity(mListView, View.GONE);
+                changeViewVisiblity(buyLayout, View.GONE);
+            }else{
+                zProgressDialog= ProgressDialog.show(getActivity(),null,"Updating order Please wait");
+            }
             //view.findViewById(R.id.save).setVisibility(View.GONE);
         }
     }
@@ -381,6 +409,8 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 Toast.makeText(mActivity, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         } else if (requestTag != null && requestTag.equals(GET_ORDER_SUMMARY)) {
+            if (zProgressDialog != null)
+                zProgressDialog.dismiss();
             showNetworkErrorView();
             // changeViewVisiblity(view.findViewById(R.id.save), View.GONE);
         } else if (requestTag != null && requestTag.equalsIgnoreCase(REMOVE_FROM_CART) && !isDestroyed) {
@@ -442,6 +472,8 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         }
     }
 
+
+
     private void setAdapterData() {
         mAdapter = new CartItemListAdapter(mActivity, cartObject, billingAddress, shippingAddress);
         mAdapter.setCartEditListener(new CartItemListAdapter.cartEditListener() {
@@ -452,7 +484,16 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
             @Override
             public void itemQuantityChanged(int position, int quantity) {
-                String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+
+                cartObject.getCart().getDetail().get(position).setQty(quantity);
+
+                OrderSummaryFragment.this.quantity = getProductQuantityStringLoginUser(cartObject.getCart().getDetail());
+
+                OrderSummaryFragment.this.productIds = getProductIdStringsLoginUser(cartObject.getCart().getDetail());
+
+                loadCartData();
+
+                /*String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
                 List<NameValuePair> nameValuePair = new ArrayList<>();
                 nameValuePair.add(new BasicNameValuePair("product_id", cartObject.getCart().getDetail().get(position).getProduct().getId() + ""));
                 nameValuePair.add(new BasicNameValuePair("quantity", quantity + ""));
@@ -460,7 +501,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 quantityUpdatePosition = position;
                 updatedQuantity = quantity;
                 UploadManager.getInstance().makeAyncRequest(url, QUANTITY_UPDATE, cartObject.getCart().getDetail().get(position).getProduct().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
-
+*/
                 //mAdapter.notifyDataSetChanged();
             }
 

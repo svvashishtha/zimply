@@ -50,6 +50,12 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
         this.shippingAddress = shippingAddress;
     }
 
+    public void addCartData(CartObject cartObject){
+     this.cartObject =cartObject;
+        notifyDataSetChanged();
+    }
+
+
     public void changeShippingBillingAddress(AddressObject obj){
         this.billingAddress = obj;
         this.shippingAddress = obj;
