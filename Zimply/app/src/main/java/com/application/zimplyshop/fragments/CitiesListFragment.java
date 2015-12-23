@@ -75,6 +75,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     private boolean isDestroyed = false;
     private boolean forced = false;
     double requestTime = 0;
+    private boolean locationButtonClicked;
 
 
     public CitiesListFragment() {
@@ -102,6 +103,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     @Override
     public void onResume() {
         super.onResume();
+        locationButtonClicked = false;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -277,15 +279,18 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.my_location:
-                if (mLastLocation != null) {
-                    makeCityRequest1();
+                if (!locationButtonClicked) {
+                    locationButtonClicked = true;
+                    if (mLastLocation != null) {
+                        makeCityRequest1();
                     /*if (z_ProgressDialog != null)
                         z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");*/
-                    locationRequested = true;
-                } else {
-                    forced = true;
-                    // AppApplication.getInstance().startLocationCheck();
-                    startLocationCheck1();
+                        locationRequested = true;
+                    } else {
+                        forced = true;
+                        // AppApplication.getInstance().startLocationCheck();
+                        startLocationCheck1();
+                    }
                 }
         }
     }
@@ -524,6 +529,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                         // The user was asked to change settings, but chose not to
                         forced = false;
                         Toast.makeText(getActivity(), "Location not enabled, user cancelled.", Toast.LENGTH_LONG).show();
+
                         break;
                     }
                     default: {
