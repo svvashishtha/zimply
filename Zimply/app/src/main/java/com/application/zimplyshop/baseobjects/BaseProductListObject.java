@@ -23,6 +23,15 @@ public class BaseProductListObject implements Serializable{
 
     private int width;
 
+    private boolean is_cod;
+
+    public boolean is_cod() {
+        return is_cod;
+    }
+
+    public void setIs_cod(boolean is_cod) {
+        this.is_cod = is_cod;
+    }
 
     public void setHeight(int height) {
         this.height = height;

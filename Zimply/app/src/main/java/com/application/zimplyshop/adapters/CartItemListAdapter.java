@@ -132,14 +132,14 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
                     (cartObject.getCart().getDetail().get(position - 1).getQty()
                             * cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()) :
                     ((cartObject.getCart().getDetail().get(position - 1).getQty() * cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()) + (cartObject.getCart().getDetail().get(position - 1).getQty()*cartObject.getCart().getDetail().get(position - 1).getShipping_charge()))));
-           if(cartObject.getCart().getDetail().get(position - 1).getProduct().is_o2o()){
+           if(cartObject.getCart().getDetail().get(position - 1).getProduct().is_cod()){
                 holder.isCocText.setVisibility(View.VISIBLE);
-                holder.isCocText.setText(Html.fromHtml("<b>Cash-at-Counter"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
+               holder.isCocText.setText(Html.fromHtml("<b>Cash-on-Delivery"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_tick);
                 holder.buyOfflineTag.setVisibility(View.VISIBLE);
             }else{
-                holder.isCocText.setVisibility(View.GONE);
-                changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
+               holder.isCocText.setVisibility(View.GONE);
+               //changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
                 holder.buyOfflineTag.setVisibility(View.GONE);
             }
             if(cartObject.getCart().getDetail().get(position-1).isShowingPaymentDesc()){

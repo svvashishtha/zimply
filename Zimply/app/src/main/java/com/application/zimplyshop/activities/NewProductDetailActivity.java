@@ -481,6 +481,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
+                if (progressDialog != null)
+                    progressDialog.dismiss();
             }
         }else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
             /*if (requestType == MARK_FAVOURITE_REQUEST_TAG) {

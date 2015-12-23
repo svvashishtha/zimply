@@ -1210,6 +1210,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     private void phoneVerification() {
+        Toast.makeText(this,"Chechking Phone Verification",Toast.LENGTH_SHORT).show();
+
         String finalUrl = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION
                 + "?userid="+ AppPreferences.getUserID(this);
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,

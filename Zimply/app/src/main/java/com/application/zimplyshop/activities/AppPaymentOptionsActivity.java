@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +51,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     AddressObject addressObj;
 
-    int PAYMENT_TYPE_CASH=4;
+    int PAYMENT_TYPE_CASH=1;
     int PAYMENT_TYPE_CARD = 2;
 //    int PAYMENT_TYPE_COD = 2;
 
@@ -92,8 +93,9 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         if(totalPrice >20000){
             SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
             string.setSpan(new RelativeSizeSpan(0.8f),18,string.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() -1, 0);
             ((CustomTextView)findViewById(R.id.cash_on_delivery)).setText(string);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
+            //((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
             ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(false);
             ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
             ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
