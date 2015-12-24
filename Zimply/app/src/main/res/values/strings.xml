@@ -3,7 +3,7 @@
 
     <string name="facebook_app_id">536800203141661</string>
     <string name="app_name">Zimply</string>
-    <string name="empty_string"/>
+    <string name="empty_string" />
     <string name="read_articles_text">Read Articles</string>
     <string name="see_all_text">See all</string>
     <string name="shop_cat_text">Shop Categories</string>
@@ -117,7 +117,7 @@
 
     <string name="action_settings">Settings</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="my_location">Use my Location</string>
 
     <string name="agree_terms_click_signup">By creating an account, you agree to Zimply\'s Terms of Use and Privacy Policy</string>
@@ -189,6 +189,10 @@
     <string name="incorrect_verification_code">The verification code you entered is incorrect. Please try again</string>
     <string name="retry_in">Resend in %1$s sec</string>
     <string name="change_phone_number">Change Phone Number</string>
+    <string name="change_password">Change Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm new password</string>
 
     <string name="load_error">Error occured in Google tag manager. Please try again later.</string>
 
@@ -199,4 +203,6 @@
     <string name="order_placed_success">Order placed successfully</string>
     <string name="direction">Direction</string>
     <string name="cod_not_avail">* You may only place Cash-on-Delivery orders up to \u20B9 20000</string>
+    <string name="save">SAVE</string>
+    <string name="otp_name">Enter OTP</string>
 </resources>

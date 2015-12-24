@@ -3,7 +3,6 @@ package com.application.zimplyshop.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
 
@@ -28,7 +27,7 @@ public class BookedStoreProductListAdapter extends
     public int TYPE_LOADER = 2;
     public int TYPE_HEADER=0;
 
-    ArrayList<HomeProductObj> objs;
+    ArrayList<BaseProductListObject> objs;
 
     Context mContext;
 
@@ -38,19 +37,19 @@ public class BookedStoreProductListAdapter extends
 
     Activity activity;
 
-    HomeProductObj obj;
+    BaseProductListObject obj;
 
     public BookedStoreProductListAdapter(Activity activity, Context context,
-                                           int height,HomeProductObj obj) {
+                                         int height,BaseProductListObject obj) {
         this.mContext = context;
-        this.objs = new ArrayList<HomeProductObj>();
+        this.objs = new ArrayList<BaseProductListObject>();
         this.height = height;
         this.activity = activity;
         this.obj = obj;
     }
 
-    public void addData(ArrayList<HomeProductObj> objs) {
-        ArrayList<HomeProductObj> newObjs = new ArrayList<HomeProductObj>(objs);
+    public void addData(ArrayList<BaseProductListObject> objs) {
+        ArrayList<BaseProductListObject> newObjs = new ArrayList<BaseProductListObject>(objs);
         this.objs.addAll(this.objs.size(), newObjs);
         notifyDataSetChanged();
     }
@@ -68,7 +67,7 @@ public class BookedStoreProductListAdapter extends
             boolean found = false;
             int prodIdToRemove = -1;
             for(int i=0; i< objs.size(); i++) {
-                HomeProductObj product = objs.get(i);
+                BaseProductListObject product = objs.get(i);
                 if(product.getId() == objId) {
                     found = true;
                     prodIdToRemove = i;
@@ -80,8 +79,8 @@ public class BookedStoreProductListAdapter extends
             }
             notifyDataSetChanged();
         } else if(type == RequestTags.MARK_FAVOURITE_REQUEST_TAG) {
-            if(objectId instanceof HomeProductObj) {
-                objs.add((HomeProductObj) objectId);
+            if(objectId instanceof BaseProductListObject) {
+                objs.add((BaseProductListObject) objectId);
                 notifyDataSetChanged();
             }
         }
@@ -166,7 +165,13 @@ public class BookedStoreProductListAdapter extends
             }
             ((ProductViewHolder) holder).productName.setText(objs.get(newPos)
                     .getName());
-            try {
+            ((ProductViewHolder) holder).productDiscountedPrice
+                    .setText(mContext.getString(R.string.Rs) + " "
+                            + objs.get(newPos).getPrice());
+
+            ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
+            ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+            /*try {
                 if (objs.get(newPos).getDiscounted_price() != 0) {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
@@ -192,7 +197,7 @@ public class BookedStoreProductListAdapter extends
             } catch (NumberFormatException e) {
 
             }
-
+*/
 
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override

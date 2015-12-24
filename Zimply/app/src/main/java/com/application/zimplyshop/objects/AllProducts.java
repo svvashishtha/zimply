@@ -4,21 +4,12 @@ import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimplyshop.baseobjects.CartObject;
 import com.application.zimplyshop.baseobjects.CategoryTree;
 import com.application.zimplyshop.baseobjects.HomeProductCategoryNBookingObj;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
-import com.application.zimplyshop.baseobjects.MyWishListObject;
 import com.application.zimplyshop.baseobjects.OrderList;
-import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.baseobjects.ProductListObject;
-import com.application.zimplyshop.baseobjects.ShopSubCategoryObj;
-import com.application.zimplyshop.baseobjects.VendorAddressObj;
-import com.application.zimplyshop.baseobjects.VendorLocationObj;
-import com.application.zimplyshop.baseobjects.VendorObj;
 import com.application.zimplyshop.utils.JSONUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -110,8 +101,9 @@ public class AllProducts {
     }
 
     public Object parseSearchResultData(String responseString) {
-        if(responseString != null) {
-            JSONObject responseJson = null;
+
+
+            /*JSONObject responseJson = null;
             try {
                 responseJson = new JSONObject(responseString);
                 if( responseJson.has("products") && responseJson.get("products") instanceof JSONArray ) {
@@ -273,9 +265,9 @@ public class AllProducts {
                 }
             } catch(JSONException e) {
                 e.printStackTrace();
-            }
-        }
-        return null;
+            }*/
+       // }
+        return new Gson().fromJson(responseString,ProductListObject.class);
     }
 
     public int getCartCount() {
@@ -287,18 +279,18 @@ public class AllProducts {
     }
 
     public Object parseData(String responseString) {
-        ProductListObject listObject = new ProductListObject();
+       /* ProductListObject listObject = new ProductListObject();
         if(responseString != null) {
             JSONObject responseJson = null;
             try {
                 responseJson = new JSONObject(responseString);
                 if( responseJson.has("products") && responseJson.get("products") instanceof JSONArray ) {
                     JSONArray jsonArray = responseJson.getJSONArray("products");
-                    ArrayList<HomeProductObj> homeProductObjArrayList = new ArrayList<>();
+                    ArrayList<BaseProductListObject> homeProductObjArrayList = new ArrayList<>();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         //parse the product
                         JSONObject bookingJson = jsonArray.getJSONObject(i);
-                        HomeProductObj product = new HomeProductObj();
+                        BaseProductListObject product = new BaseProductListObject();
                         if (bookingJson.has("sku"))
                             product.setSku(String.valueOf(bookingJson.get("sku")));
                         if (bookingJson.has("min_shipping_days") && bookingJson.get("min_shipping_days") instanceof Integer)
@@ -466,7 +458,8 @@ public class AllProducts {
                 e.printStackTrace();
             }
         }
-        return listObject;
+        return listObject;*/
+        return new Gson().fromJson(responseString,ProductListObject.class)   ;
     }
 
     public Object parseOrders(String responseString) {
@@ -509,13 +502,13 @@ public class AllProducts {
         }
     }
 
-    public Object parseWishlistData(String responseString){
+   /* public Object parseWishlistData(String responseString){*//*
         MyWishListObject obj = new MyWishListObject();
         JSONArray jsonArray = JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString),"favourite");
         if(jsonArray!=null){
             for(int k=0;k<jsonArray.length();k++){
 
-                    HomeProductObj product = new HomeProductObj();
+                    BaseProductListObject product = new BaseProductListObject();
                     try {
                         JSONObject productObjectJson = JSONUtils.getJSONObject(jsonArray, k);
                         if (productObjectJson.has("sku"))
@@ -677,8 +670,8 @@ public class AllProducts {
             }
         }
         obj.setNext_url(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(responseString),"next_url"));
-        return obj;
-    }
+        return obj;*//*
+    }*/
 
     public boolean bookedProductsContains(int productId){
         if(bookedObjs!=null && bookedObjs.size()>0){

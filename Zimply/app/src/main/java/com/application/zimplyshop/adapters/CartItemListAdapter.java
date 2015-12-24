@@ -50,6 +50,12 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
         this.shippingAddress = shippingAddress;
     }
 
+    public void addCartData(CartObject cartObject){
+     this.cartObject =cartObject;
+        notifyDataSetChanged();
+    }
+
+
     public void changeShippingBillingAddress(AddressObject obj){
         this.billingAddress = obj;
         this.shippingAddress = obj;
@@ -116,32 +122,30 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
         } else if (position > 0 && position <= (cartObject.getCart().getDetail().size())) {
             //shippingCharges = shippingCharges + cartObject.getCart().getDetail().get(position - 2).getShipping_charges();
             final CartItemHolder holder = (CartItemHolder) defaultHolder;
-            holder.name.setText(cartObject.getCart().getDetail().get(position - 1).getName());
+            holder.name.setText(cartObject.getCart().getDetail().get(position - 1).getProduct().getName());
             Resources r = context.getResources();
 
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 110, r.getDisplayMetrics());
-            new ImageLoaderManager((Activity) context).setImageFromUrl(cartObject.getCart().getDetail().get(position - 1).getImage()
+            new ImageLoaderManager((Activity) context).setImageFromUrl(cartObject.getCart().getDetail().get(position - 1).getProduct().getImage()
                     , holder.product_image, "", (int) px, (int) px, false, false);
-            holder.price.setText(context.getResources().getString(R.string.Rs) + " " + Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice())));
+            holder.price.setText(context.getResources().getString(R.string.Rs) + " " + cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice());
             holder.itemCount.setText("#Item "+(position));
-            holder.quantity.setText(cartObject.getCart().getDetail().get(position - 1).getQuantity());
-            holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " +(Integer.parseInt(cartObject.getCart().getDetail().get(position - 1).getQuantity())* Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice()))));
-            holder.shippingPrice.setText(cartObject.getCart().getDetail().get(position - 1).getShipping_charges()==0?"Free":
-                    context.getString(R.string.rs_text)+" "+Math.round(cartObject.getCart().getDetail().get(position - 1).getShipping_charges()));
-            holder.totalPrice.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position - 1).getShipping_charges() == 0 ?
-                    (Integer.parseInt(cartObject.getCart().getDetail().get(position - 1).getQuantity())
-                            * Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice()))) :
-                    ((Integer.parseInt(cartObject.getCart().getDetail().get(position - 1).getQuantity()) * Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position - 1).getPrice()))) + Math.round(cartObject.getCart().getDetail().get(position - 1).getShipping_charges()))));
-            /*holder.isOnlineText.setText(Html.fromHtml("<b>Online Payment"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
-            changeDrawableLeft(holder.isOnlineText, R.drawable.ic_tick);
-            */if(cartObject.getCart().getDetail().get(position-1).is_o2o()){
+            holder.quantity.setText(cartObject.getCart().getDetail().get(position - 1).getQty()+"");
+            holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " +(cartObject.getCart().getDetail().get(position - 1).getQty()* cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()));
+            holder.shippingPrice.setText(cartObject.getCart().getDetail().get(position - 1).getShipping_charge()==0?"Free":
+                    context.getString(R.string.rs_text)+" "+(cartObject.getCart().getDetail().get(position - 1).getQty()*cartObject.getCart().getDetail().get(position - 1).getShipping_charge()));
+            holder.totalPrice.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position - 1).getShipping_charge() == 0 ?
+                    (cartObject.getCart().getDetail().get(position - 1).getQty()
+                            * cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()) :
+                    ((cartObject.getCart().getDetail().get(position - 1).getQty() * cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()) + (cartObject.getCart().getDetail().get(position - 1).getQty()*cartObject.getCart().getDetail().get(position - 1).getShipping_charge()))));
+           if(cartObject.getCart().getDetail().get(position - 1).getProduct().is_cod()){
                 holder.isCocText.setVisibility(View.VISIBLE);
-                holder.isCocText.setText(Html.fromHtml("<b>Cash-at-Counter"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
+               holder.isCocText.setText(Html.fromHtml("<b>Cash-on-Delivery"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_tick);
                 holder.buyOfflineTag.setVisibility(View.VISIBLE);
             }else{
-                holder.isCocText.setVisibility(View.GONE);
-                changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
+               holder.isCocText.setVisibility(View.GONE);
+               //changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
                 holder.buyOfflineTag.setVisibility(View.GONE);
             }
             if(cartObject.getCart().getDetail().get(position-1).isShowingPaymentDesc()){
@@ -150,7 +154,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             }else{
                 holder.priceDescLayout.setVisibility(View.GONE);
                 holder.shortSubTotalLayout.setVisibility(View.VISIBLE);
-                holder.shortTotal.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position-1).getShipping_charges() == 0 ? (Integer.parseInt(cartObject.getCart().getDetail().get(position-1).getQuantity()) * Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position-1).getPrice()))) : ((Integer.parseInt(cartObject.getCart().getDetail().get(position-1).getQuantity()) * Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position-1).getPrice()))) + Math.round(cartObject.getCart().getDetail().get(position-1).getShipping_charges()))));
+                holder.shortTotal.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position-1).getShipping_charge() == 0 ? (cartObject.getCart().getDetail().get(position-1).getQty() * cartObject.getCart().getDetail().get(position-1).getProduct().getPrice()) : ((cartObject.getCart().getDetail().get(position-1).getQty() * cartObject.getCart().getDetail().get(position-1).getProduct().getPrice()) + (cartObject.getCart().getDetail().get(position-1).getQty()*cartObject.getCart().getDetail().get(position-1).getShipping_charge()))));
             }
 
             holder.shortSubTotalLayout.setOnClickListener(new View.OnClickListener() {
@@ -172,9 +176,9 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
 
                     Intent intent = new Intent(context, NewProductDetailActivity.class);
-                    intent.putExtra("slug", cartObject.getCart().getDetail().get(position-1).getSlug());
-                    intent.putExtra("id", Long.parseLong(cartObject.getCart().getDetail().get(position - 1).getProduct_id()));
-                    intent.putExtra("title", cartObject.getCart().getDetail().get(position-1).getName());
+                    intent.putExtra("slug", cartObject.getCart().getDetail().get(position-1).getProduct().getSlug());
+                    intent.putExtra("id", cartObject.getCart().getDetail().get(position - 1).getProduct().getId());
+                    intent.putExtra("title", cartObject.getCart().getDetail().get(position-1).getProduct().getName());
                     context.startActivity(intent);
 
                 }
@@ -225,7 +229,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(view);
                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.simple_list_item, R.id.text1);
-                        for (int i = 0; i < cartObject.getCart().getDetail().get(position - 1).getAvailable_quantity(); i++) {
+                        for (int i = 0; i < cartObject.getCart().getDetail().get(position - 1).getAvailable_qty(); i++) {
                             adapter.add((i +1)+ "");
                         }
                         ListView listView = ((ListView) dialog.findViewById(R.id.listview));
@@ -261,26 +265,16 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             });
         } else {
             SummaryHolder summaryHolder = (SummaryHolder) defaultHolder;
-            totalPrice = Float.parseFloat(cartObject.getCart().getTotal_price());
-            float price = Float.parseFloat(cartObject.getCart().getPrice());
+            totalPrice = cartObject.getCart().getTotal_price();
+            float price = cartObject.getCart().getPrice();
             if (totalPrice == 0) {
-                summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs)+" " + Math.round(Double.parseDouble(cartObject.getCart().getPrice())));
-                summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) +" "+ Math.round(Double.parseDouble(cartObject.getCart().getTotal_price())));
+                summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs)+" " + cartObject.getCart().getPrice());
+                summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) +" "+ cartObject.getCart().getTotal_price());
             }
             summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs)+" " + Math.round(price));
             summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs)+" " + Math.round(totalPrice));
-            summaryHolder.shipping.setText((Float.parseFloat(cartObject.getCart().getTotal_shipping()) == 0) ? "Free" : (context.getResources().getString(R.string.Rs)+" " + Math.round(Double.parseDouble(cartObject.getCart().getTotal_shipping()))));
-           /* summaryHolder.checkOut.setText("Proceed to Payment");
-            summaryHolder.checkOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(CommonLib.isNetworkAvailable(context)) {
-                        mListener.checkOut(position);
-                    }else{
-                        Toast.makeText(context,"No network available",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });*/
+            summaryHolder.shipping.setText((cartObject.getCart().getTotal_shipping()== 0) ? "Free" : (context.getResources().getString(R.string.Rs)+" " + cartObject.getCart().getTotal_shipping()));
+
         }
     }
     public void changeDrawableLeft(CustomTextView textview , int drawableId){

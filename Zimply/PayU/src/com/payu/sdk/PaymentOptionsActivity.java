@@ -179,6 +179,8 @@ public class PaymentOptionsActivity extends AppCompatActivity implements Payment
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent();
+        setResult(RESULT_CANCELED, intent);
         super.onBackPressed();
     }
 }

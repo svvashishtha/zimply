@@ -2,9 +2,7 @@ package com.application.zimplyshop.activities;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -64,7 +62,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     boolean isScannedProduct;
 
     int width,height;
-
+    double requestTime;
     int spaceHeight;
     TextView addToCart,buyNow;
     @Override
@@ -80,8 +78,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         String[] type = {""};
         if (getIntent().getExtras().containsKey("slug"))
             productSlug = String.valueOf(getIntent().getExtras().get("slug"));
-        if (getIntent().getExtras().containsKey("id") && getIntent().getExtras().get("id") instanceof Long)
-            productId = getIntent().getExtras().getLong("id");
+        if (getIntent().getExtras().containsKey("id") )
+            productId = getIntent().getExtras().getInt("id");
         if(getIntent().getExtras().getBoolean("is_scanned")){
             isScannedProduct = getIntent().getExtras().getBoolean("is_scanned");
         }
@@ -115,7 +113,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             cartCount.setText(AllProducts.getInstance().getCartCount()+"");
         }
 
-        if(adapter!=null && adapter.getObj()!=null && AllProducts.getInstance().cartContains((int)adapter.getObj().getId())){
+        if(adapter!=null && adapter.getObj()!=null && AllProducts.getInstance().cartContains((int)adapter.getObj().getProduct().getId())){
             addToCart.setText("Go to cart");
         }else{
             addToCart.setText("Add to cart");
@@ -143,8 +141,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     }
 
     public void loadData(){
+        requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_REQUETS_URL + "?id=" + productId
-                + "&width=" + width / 2 + "&thumb=100" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
+                + "&width=" + width / 2 + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
         GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL);
     }
@@ -162,6 +161,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)){
+            CommonLib.ZLog("Request Time","Product Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
+            CommonLib.writeRequestData("Product Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
             if (obj instanceof HomeProductObj) {
                 HomeProductObj  product = (HomeProductObj) obj;
                 addAdapterData(product);
@@ -189,7 +190,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     }
     NewProductDetailAdapter adapter;
     public void addAdapterData(HomeProductObj obj){
-        toolbarTitle.setText(obj.getName());
+        toolbarTitle.setText(obj.getProduct().getName());
         adapter =new NewProductDetailAdapter(this,width,height,obj);
         productDetailList.setAdapter(adapter);
         adapter.setOnViewsClickedListener(new NewProductDetailAdapter.OnViewsClickedListener() {
@@ -206,7 +207,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
             @Override
             public void onCancelBookingRequest(NewProductDetailAdapter.ProductInfoHolder2 holder) {
-                final AlertDialog logoutDialog;
+               /* final AlertDialog logoutDialog;
                 logoutDialog = new AlertDialog.Builder(NewProductDetailActivity.this)
                         .setTitle("Confirm?")
                         .setCancelable(false)
@@ -225,7 +226,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                                         cancelBooking(adapter.getObj().getVendor().getBook_product_id());
                                     }
                                 }).create();
-                logoutDialog.show();
+                logoutDialog.show();*/
             }
 
             @Override
@@ -272,12 +273,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         });
 
         (findViewById(R.id.bottom_action_container)).setVisibility(View.VISIBLE);
-        if(AllProducts.getInstance().cartContains((int)adapter.getObj().getId())){
+        if(AllProducts.getInstance().cartContains((int)adapter.getObj().getProduct().getId())){
             addToCart.setText("Go to cart");
         }else{
             addToCart.setText("Add to cart");
         }
-        if(AllProducts.getInstance().vendorIdsContains(adapter.getObj().getVendor().getVendor_id())){
+        if(AllProducts.getInstance().vendorIdsContains(adapter.getObj().getVendor().getId())){
             adapter.setIsCancelBookingShown(true);
         }else{
             adapter.setIsCancelBookingShown(false);
@@ -375,9 +376,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     public void makeProductPreviewRequest(){
         String url = AppApplication.getInstance().getBaseUrl() + MARK_PRODUCT_REVIEW_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
-        list.add(new BasicNameValuePair("product_id", adapter.getObj().getId()+""));
+        list.add(new BasicNameValuePair("product_id", adapter.getObj().getProduct().getId()+""));
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
-        UploadManager.getInstance().makeAyncRequest(url, MARK_PRODUCT_REVIEW_TAG, adapter.getObj().getId() + "",
+        UploadManager.getInstance().makeAyncRequest(url, MARK_PRODUCT_REVIEW_TAG, adapter.getObj().getProduct().getId() + "",
                 OBJECT_TYPE_MARK_PRODUCT_REVIEW, adapter.getObj(), list, null);
     }
 
@@ -439,7 +440,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             if (status) {
 
                 AllProducts.getInstance().getVendorIds().add(((ProductVendorTimeObj) response).getVendor_id());
-                adapter.getObj().getVendor().setBook_product_id(((ProductVendorTimeObj) response).getBook_product_id());
+                //adapter.getObj().getVendor().setBook_product_id(((ProductVendorTimeObj) response).getBook_product_id());
                 newVisitBookedCard();
             } else {
                 Toast.makeText(this, ((ErrorObject) response).getErrorMessage(), Toast.LENGTH_SHORT).show();
@@ -448,7 +449,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             if (progressDialog != null)
                 progressDialog.dismiss();
             if (status) {
-                AllProducts.getInstance().getVendorIds().remove((Integer) adapter.getObj().getVendor().getVendor_id());
+                AllProducts.getInstance().getVendorIds().remove((Integer) adapter.getObj().getVendor().getId());
 
                 adapter.onBookCancelledSuccessfully(holder);
                 // slideViewsLeftToRight(findViewById(R.id.booking_confirm_card),bookAVisitBtn,BOOK_BTN_CLICK);
@@ -470,7 +471,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     message = jsonObject.getString("success");
                 if (message != null) {
                     ((CustomTextView)findViewById(R.id.add_to_cart)).setText("Go To Cart");
-                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) adapter.getObj().getId(), 1));
+                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) adapter.getObj().getProduct().getId(), 1));
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                     cartCount.setVisibility(View.VISIBLE);
                     cartCount.setText(AllProducts.getInstance().getCartCount() + "");
@@ -483,6 +484,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
+                if (progressDialog != null)
+                    progressDialog.dismiss();
             }
         }else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
             /*if (requestType == MARK_FAVOURITE_REQUEST_TAG) {
@@ -502,9 +505,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
         String url = AppApplication.getInstance().getBaseUrl() + MARK_UNFAVOURITE_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
-        list.add(new BasicNameValuePair("favourite_item_id", adapter.getObj().getFavourite_item_id()));
+        list.add(new BasicNameValuePair("favourite_item_id", adapter.getObj().getProduct().getFavourite_item_id()+""));
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
-        UploadManager.getInstance().makeAyncRequest(url, MARK_UN_FAVOURITE_REQUEST_TAG, adapter.getObj().getId() + "",
+        UploadManager.getInstance().makeAyncRequest(url, MARK_UN_FAVOURITE_REQUEST_TAG, adapter.getObj().getProduct().getId() + "",
                 OBJECT_TYPE_MARKED_UNFAV, adapter.getObj(), list, null);
     }
 
@@ -516,8 +519,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("item_type", ITEM_TYPE_PRODUCT + ""));
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
-        list.add(new BasicNameValuePair("item_id", adapter.getObj().getId() + ""));
-        UploadManager.getInstance().makeAyncRequest(url, MARK_FAVOURITE_REQUEST_TAG, adapter.getObj().getId() + "",
+        list.add(new BasicNameValuePair("item_id", adapter.getObj().getProduct().getId() + ""));
+        UploadManager.getInstance().makeAyncRequest(url, MARK_FAVOURITE_REQUEST_TAG, adapter.getObj().getProduct().getId() + "",
                 OBJECT_TYPE_MARKED_FAV, adapter.getObj(), list, null);
     }
 
@@ -595,7 +598,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + adapter.getObj().getVendor().getReg_add().getPhone()));
+                callIntent.setData(Uri.parse("tel:" + adapter.getObj().getVendor().getAddress().getPhone()));
                 startActivity(callIntent);
             }
         });
@@ -603,7 +606,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         ((LinearLayout)view.findViewById(R.id.get_direction_customer)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + adapter.getObj().getVendor().getReg_add().getLocation().getLatitude() + "," + adapter.getObj().getVendor().getReg_add().getLocation().getLongitude() + "(" + adapter.getObj().getVendor().getCompany_name() + ")");
+                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + adapter.getObj().getVendor().getAddress().getLatitude() + "," + adapter.getObj().getVendor().getAddress().getLongitude() + "(" + adapter.getObj().getVendor().getName() + ")");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
                 /*Intent intent = new Intent(mContext, MapPage.class);
@@ -674,7 +677,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                             nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                             nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
 
-                            UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, adapter.getObj().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+                            UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, adapter.getObj().getProduct().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
 
                         } else {
                             Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
@@ -724,7 +727,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     if(AppPreferences.isUserLogIn(NewProductDetailActivity.this)){
                         Intent intent =new Intent(NewProductDetailActivity.this,ProductCheckoutActivity.class);
                         intent.putExtra("OrderSummaryFragment", true);
-                        intent.putExtra("productids",adapter.getObj().getId()+"");
+                        intent.putExtra("productids",adapter.getObj().getProduct().getId()+"");
                         intent.putExtra("quantity","1");
                         startActivity(intent);
                     }else{
@@ -744,7 +747,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     shareIntent.putExtra("title", "Checkout this awesome product ");
                     shareIntent.putExtra("slug", productSlug);
                     shareIntent.putExtra("type_name", AppConstants.ITEM_TYPE_PRODUCT);
-                    shareIntent.putExtra("item_name", adapter.getObj().getName());
+                    shareIntent.putExtra("item_name", adapter.getObj().getProduct().getName());
                     shareIntent.putExtra("product_url", "/shop-product/");
                     shareIntent.putExtra("short_url", "www.zimply.in/shop-product/" + productSlug + "?pid=" + productId);
                     startActivity(shareIntent);
@@ -771,7 +774,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     }
     public class MyPagerAdapter extends PagerAdapter {
 
-        int[] resId = {R.drawable.book_tut1,R.drawable.book_tut2, R.drawable.book_tut3};
+        int[] resId = {R.drawable.book_tut2,R.drawable.book_tut1,R.drawable.book_tut3};
 
         @Override
         public int getCount() {

@@ -1,25 +1,31 @@
 package com.application.zimplyshop.activities;
 
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
+import com.application.zimplyshop.adapters.FavouritesRecyclerViewGridAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.ErrorObject;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.baseobjects.FavouriteObject;
 import com.application.zimplyshop.baseobjects.MyWishListObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.managers.ImageLoaderManager;
+import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.UploadManager;
@@ -31,7 +37,7 @@ import java.util.ArrayList;
 /**
  * Created by Umesh Lohani on 11/2/2015.
  */
-public class MyWishlist extends BaseActivity implements GetRequestListener,View.OnClickListener, UploadManagerCallback {
+public class MyWishlist extends BaseActivity implements GetRequestListener,View.OnClickListener, UploadManagerCallback,AppConstants {
 
     RecyclerView productList;
 
@@ -95,6 +101,41 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     boolean isLoading,isRequestAllowed;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        item.setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.cart:
+                Intent intent = new Intent(this, ProductCheckoutActivity.class);
+                intent.putExtra("OrderSummaryFragment", false);
+                intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        if (AllProducts.getInstance().getCartCount() > 0) {
+            findViewById(R.id.cart_item_true).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.cart_item_true)).setText(AllProducts.getInstance().getCartCount() + "");
+        } else {
+            findViewById(R.id.cart_item_true).setVisibility(View.GONE);
+        }
+        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+        super.onResume();
+    }
+
+    @Override
     public void onRequestStarted(String requestTag) {
         if(requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)){
             if (productList.getAdapter() == null
@@ -102,7 +143,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                 showLoadingView();
                 changeViewVisiblity(productList, View.GONE);
                 if (productList.getAdapter() != null)
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter()).removePreviousData();
+                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter()).removePreviousData();
             } else {
 
             }
@@ -131,7 +172,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
 
                 } else {
                     showToast("No more Products");
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                 }
                 isRequestAllowed = false;
@@ -142,7 +183,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                 changeViewVisiblity(productList, View.VISIBLE);
                 if (((MyWishListObject) obj).getFavourite().size() < 10) {
                     isRequestAllowed = false;
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                 } else {
                     isRequestAllowed = true;
@@ -155,7 +196,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)){
-            {
+
                 if (productList.getAdapter() == null
                         || productList.getAdapter().getItemCount() == 1) {
                     showNetworkErrorView();
@@ -166,12 +207,12 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                     } else {
                         showToast(((ErrorObject) obj).getErrorMessage());
                     }
-                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                     isRequestAllowed = false;
                 }
                 isLoading = false;
-            }
+
         }
     }
 
@@ -186,11 +227,11 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
         }
     }
 
-    private void setAdapterData(ArrayList<HomeProductObj> objs) {
+    private void setAdapterData(ArrayList<FavouriteObject> objs) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
+            FavouritesRecyclerViewGridAdapter adapter = new FavouritesRecyclerViewGridAdapter(
                     this, this, height);
             productList.setAdapter(adapter);
             productList
@@ -240,7 +281,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
                     });
 
         }
-        ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+        ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                 .addData(objs);
     }
 
@@ -248,7 +289,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
         if(requestType == RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG) {
             if(!isDestroyed && status) {
-                ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                         .updateList(objectId, RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG);
 
                 if(productList.getAdapter().getItemCount()==0){
@@ -257,7 +298,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
             }
         } else if(requestType == RequestTags.MARK_FAVOURITE_REQUEST_TAG) {
             if(!isDestroyed && status) {
-                ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                         .updateList(data,  RequestTags.MARK_FAVOURITE_REQUEST_TAG);
             }
         }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.OrderListAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.OrderItemObj;
 import com.application.zimplyshop.baseobjects.OrderList;
 import com.application.zimplyshop.extras.AppConstants;
@@ -45,6 +46,13 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
     private boolean fromHome = false;
 
     boolean backstackRemoved;
+
+    boolean isLoading,isRequestAllowed;
+
+    String nextUrl;
+
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +95,15 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
         toolbar.addView(view);
     }
     public void loadData(){
-        String url = AppApplication.getInstance().getBaseUrl()+ AppConstants.ORDER_LIST_URL+"?userid="+ AppPreferences.getUserID(this);
-        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.ORDERLISTREQUESTTAG, ObjectTypes.OBJECT_TYPE_ORDER_LIST);
+        String finalUrl;
+        if (nextUrl == null) {
+
+            finalUrl = AppApplication.getInstance().getBaseUrl()+ AppConstants.ORDER_LIST_URL+"?userid="+ AppPreferences.getUserID(this);
+        } else {
+            finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
+        }
+        GetRequestManager.getInstance().makeAyncRequest(finalUrl, RequestTags.ORDERLISTREQUESTTAG, ObjectTypes.OBJECT_TYPE_ORDER_LIST);
+
     }
 
 
@@ -97,64 +112,96 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
     OrderListAdapter adapter;
 
     public void setAdapterData(ArrayList<OrderItemObj> objs){
-        adapter = new OrderListAdapter(this);
-        orderList.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
-            @Override
-            public void onCancelClick(final int position, final int orderId) {
-                final AlertDialog logoutDialog;
-                logoutDialog = new AlertDialog.Builder(PurchaseListActivity.this)
-                        .setTitle(getResources().getString(R.string.cancel_order))
-                        .setMessage(getResources().getString(R.string.cancel_order_cofirm))
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        clickedOrder = position;
-                                        orderItemId = orderId;
-                                        status = AppConstants.CANCEL_ORDER;
-                                        sendServerRequest(AppConstants.CANCEL_ORDER, orderId);
-                                        ;
-                                    }
-                                }).setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }).create();
-                logoutDialog.show();
+        if(adapter == null) {
+            adapter = new OrderListAdapter(this);
+            orderList.setAdapter(adapter);
+            adapter.setOnItemClickListener(new OrderListAdapter.OnItemClickListener() {
+                @Override
+                public void onCancelClick(final int position, final int orderId) {
+                    final AlertDialog logoutDialog;
+                    logoutDialog = new AlertDialog.Builder(PurchaseListActivity.this)
+                            .setTitle(getResources().getString(R.string.cancel_order))
+                            .setMessage(getResources().getString(R.string.cancel_order_cofirm))
+                            .setPositiveButton("Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            clickedOrder = position;
+                                            orderItemId = orderId;
+                                            status = AppConstants.CANCEL_ORDER;
+                                            sendServerRequest(AppConstants.CANCEL_ORDER, orderId);
+                                            ;
+                                        }
+                                    }).setNegativeButton("No",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    }).create();
+                    logoutDialog.show();
 
-            }
+                }
 
-            @Override
-            public void onReturnClick(final int position, final int orderId) {
-                final AlertDialog logoutDialog;
-                logoutDialog = new AlertDialog.Builder(PurchaseListActivity.this)
-                        .setTitle(getResources().getString(R.string.return_order))
-                        .setMessage(getResources().getString(R.string.return_order_cofirm))
-                        .setPositiveButton(getResources().getString(R.string.okay_text),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        clickedOrder = position;
-                                        orderItemId = orderId;
-                                        status = AppConstants.CANCEL_ORDER;
-                                        sendServerRequest(AppConstants.CANCEL_ORDER, orderId);
-                                        ;
-                                    }
-                                }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }).create();
-                logoutDialog.show();
+                @Override
+                public void onReturnClick(final int position, final int orderId) {
+                    final AlertDialog logoutDialog;
+                    logoutDialog = new AlertDialog.Builder(PurchaseListActivity.this)
+                            .setTitle(getResources().getString(R.string.return_order))
+                            .setMessage(getResources().getString(R.string.return_order_cofirm))
+                            .setPositiveButton(getResources().getString(R.string.okay_text),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            clickedOrder = position;
+                                            orderItemId = orderId;
+                                            status = AppConstants.CANCEL_ORDER;
+                                            sendServerRequest(AppConstants.CANCEL_ORDER, orderId);
+                                            ;
+                                        }
+                                    }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    }).create();
+                    logoutDialog.show();
 
-            }
+                }
 
-        });
+            });
+            orderList
+                    .addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(RecyclerView recyclerView,
+                                               int dx, int dy) {
+
+                            visibleItemCount = orderList.getLayoutManager()
+                                    .getChildCount();
+                            totalItemCount = orderList.getLayoutManager()
+                                    .getItemCount();
+                            pastVisiblesItems = ((LinearLayoutManager) orderList
+                                    .getLayoutManager())
+                                    .findFirstVisibleItemPosition();
+
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
+                                    && !isLoading && isRequestAllowed) {
+                                loadData();
+                            }
+                            //scrollToolbarAndHeaderBy(-dy);
+
+                        }
+
+                        @Override
+                        public void onScrollStateChanged(
+                                RecyclerView recyclerView, int newState) {
+
+                            super.onScrollStateChanged(recyclerView, newState);
+                        }
+                    });
+
+        }
         adapter.addData(objs);
     }
     public void sendServerRequest(int status , int orderid){
@@ -169,30 +216,71 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
     @Override
     public void onRequestStarted(String requestTag) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.ORDERLISTREQUESTTAG)){
-            showLoadingView();
-            changeViewVisiblity(orderList , View.GONE);
+
+            if (orderList.getAdapter() == null
+                    || orderList.getAdapter().getItemCount() == 0 ) {
+                showLoadingView();
+                changeViewVisiblity(orderList, View.GONE);
+
+            } else {
+
+            }
+            isLoading = true;
         }
     }
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.ORDERLISTREQUESTTAG)){
-            if(((OrderList)obj).getOrders().size() == 0){
-                showNullCaseView("Looks like you haven't ordered anything yet.");
-                changeViewVisiblity(orderList, View.GONE);
-            }else{
+
+            if (((OrderList)obj).getOrders().size() == 0) {
+                if (orderList.getAdapter() == null
+                        || orderList.getAdapter().getItemCount() == 1) {
+                    showNullCaseView("Looks like you haven't ordered anything yet.");
+
+                } else {
+                    showToast("No more orders");
+                    ((OrderListAdapter) orderList.getAdapter())
+                            .removeItem();
+                }
+                isRequestAllowed = false;
+            } else {
                 setAdapterData(((OrderList)obj).getOrders());
+                nextUrl = ((OrderList) obj).getNext_url();
                 showView();
                 changeViewVisiblity(orderList, View.VISIBLE);
+                if (((OrderList)obj).getOrders().size() < 5) {
+                    isRequestAllowed = false;
+                    ((OrderListAdapter) orderList.getAdapter())
+                            .removeItem();
+                } else {
+                    isRequestAllowed = true;
+                }
             }
-
+            isLoading = false;
         }
     }
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.ORDERLISTREQUESTTAG)) {
-            showNetworkErrorView();
+
+            if (orderList.getAdapter() == null
+                    || orderList.getAdapter().getItemCount() == 1) {
+                showNetworkErrorView();
+                changeViewVisiblity(orderList, View.GONE);
+            } else {
+                if (((ErrorObject) obj).getErrorCode() == 500) {
+                    showToast("Could not load more data");
+                } else {
+                    showToast(((ErrorObject) obj).getErrorMessage());
+                }
+                ((OrderListAdapter) orderList.getAdapter())
+                        .removeItem();
+                isRequestAllowed = false;
+            }
+            isLoading = false;
+
         }
     }
 

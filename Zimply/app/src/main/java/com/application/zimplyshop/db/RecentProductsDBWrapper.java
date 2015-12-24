@@ -3,6 +3,7 @@ package com.application.zimplyshop.db;
 import android.content.Context;
 
 import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.baseobjects.ProductObject;
 
 import java.util.ArrayList;
 

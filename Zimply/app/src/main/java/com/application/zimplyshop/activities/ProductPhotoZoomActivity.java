@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductThumbAdapters;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.baseobjects.ProductObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.widgets.ProductThumbListItemDecorator;
 import com.application.zimplyshop.widgets.TouchImageView;
@@ -20,7 +20,7 @@ import com.application.zimplyshop.widgets.TouchImageView;
  */
 public class ProductPhotoZoomActivity extends BaseActivity{
     TouchImageView zoomImage,zoomImageNew;
-    HomeProductObj product;
+    ProductObject product;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -34,7 +34,7 @@ public class ProductPhotoZoomActivity extends BaseActivity{
         });
         if (getIntent() != null && getIntent().getSerializableExtra("product_obj") != null) {
             final int position =  getIntent().getIntExtra("position",0);
-            product = (HomeProductObj)getIntent().getSerializableExtra("product_obj");
+            product = (ProductObject)getIntent().getSerializableExtra("product_obj");
             final int width = getDisplayMetrics().widthPixels;
             final int height = getDisplayMetrics().heightPixels;
             zoomImage = (TouchImageView) findViewById(R.id.zoom_imageview);
@@ -42,7 +42,7 @@ public class ProductPhotoZoomActivity extends BaseActivity{
             new ImageLoaderManager(this).setImageFromUrl(product.getThumbs().get(position), zoomImage, "users", width / 2, height / 20, false,
                     false);
 
-            new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrlNew(product.getImageUrls().get(position), zoomImageNew, "photo_details", width / 2, height / 20, false,
+            new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrlNew(product.getImages().get(position), zoomImageNew, "photo_details", width / 2, height / 20, false,
                     false, new ImageLoaderManager.ImageLoaderCallback() {
                         @Override
                         public void loadingStarted() {
@@ -71,7 +71,7 @@ public class ProductPhotoZoomActivity extends BaseActivity{
                     new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrl(product.getThumbs().get(pos), zoomImage, "users", width / 2, height / 20, false,
                             false);
 
-                    new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrlNew(product.getImageUrls().get(pos), zoomImageNew, "photo_details", width / 2, height / 20, false,
+                    new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrlNew(product.getImages().get(pos), zoomImageNew, "photo_details", width / 2, height / 20, false,
                             false, new ImageLoaderManager.ImageLoaderCallback() {
                                 @Override
                                 public void loadingStarted() {

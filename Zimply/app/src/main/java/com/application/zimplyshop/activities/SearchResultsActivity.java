@@ -26,9 +26,10 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.baseobjects.ProductListObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.InputFilterMinMax;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -65,7 +66,7 @@ public class SearchResultsActivity extends BaseActivity implements
     private boolean isO2o, isFilterApplied;
 
     boolean isRefreshData;
-    ArrayList<HomeProductObj> homeProductObjs;
+    ArrayList<BaseProductListObject> homeProductObjs;
     private String query;
     private String value = "";
     private int type = -1;
@@ -75,6 +76,7 @@ public class SearchResultsActivity extends BaseActivity implements
 
     long FROM_VALUE = 1;
     long TO_VALUE = 500000;
+    private double requestTime;
 
 
     @Override
@@ -99,9 +101,9 @@ public class SearchResultsActivity extends BaseActivity implements
 
         // setProductsGrid();
         url = getIntent().getStringExtra("url");
-        if(getIntent().getExtras().containsKey("name"))
+        if (getIntent().getExtras().containsKey("name"))
             value = getIntent().getStringExtra("name");
-        if(getIntent().getExtras().containsKey("type"))
+        if (getIntent().getExtras().containsKey("type"))
             type = getIntent().getIntExtra("type", CommonLib.CATEGORY);
         //      dupType = getIntent().getIntExtra("dup_type", CommonLib.DUP_TYPE_FALSE);
 
@@ -118,12 +120,12 @@ public class SearchResultsActivity extends BaseActivity implements
 
     ArrayList<Integer> subCategoryId;
 
-    public String getSubCategoryString(){
-        String subCategory="";
-        for(int i=0;i<subCategoryId.size();i++){
-            subCategory+=subCategoryId.get(i);
-            if(i!=subCategoryId.size()-1)
-                subCategory+=".";
+    public String getSubCategoryString() {
+        String subCategory = "";
+        for (int i = 0; i < subCategoryId.size(); i++) {
+            subCategory += subCategoryId.get(i);
+            if (i != subCategoryId.size() - 1)
+                subCategory += ".";
         }
         return subCategory;
     }
@@ -147,7 +149,8 @@ public class SearchResultsActivity extends BaseActivity implements
 
     private void loadData() {
         String finalUrl;
-        if(nextUrl == null) {
+        if (nextUrl == null) {
+
             String queryUrl = "&query=" + query;
             String field = (type == -1) ? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
             String valueQuery = (value == "") ? "" : "&value=" + value;
@@ -155,18 +158,17 @@ public class SearchResultsActivity extends BaseActivity implements
                     + "?width=" + ((width / 2) - (width / 15))
                     + field
                     + queryUrl
-                    + valueQuery
-                    + "&page=" + pageNo+
-                    ( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
+                    + valueQuery +
+                    (sortId != -1 ? "&low_to_high=" + sortId : "") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                     + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
                     ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "")
-                    +(isO2o?"&is_o2o="+1:"");
+                    + (isO2o ? "&is_o2o=" + 1 : "");
         } else {
-            String queryUrl = "&query=" + query;
+           /* String queryUrl = "&query=" + query;
             String field = (type == -1) ? "" : (type == CommonLib.CATEGORY ? "&field=cat" : type == CommonLib.SUB_CATEGORY ? "&field=subcat" : "");
-            String valueQuery = (value == "") ? "" : "&value=" + value;
-            finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl
-                    + "&width=" + ((width / 2) - (width / 15))
+            String valueQuery = (value == "") ? "" : "&value=" + value;*/
+            finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
+                    /*+ "&width=" + ((width / 2) - (width / 15))
                     + field
                     + queryUrl
                     + valueQuery
@@ -174,15 +176,15 @@ public class SearchResultsActivity extends BaseActivity implements
                     ( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                     + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
                     ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "")
-                    +(isO2o?"&is_o2o="+1:"");
+                    +(isO2o?"&is_o2o="+1:"");*/
         }
-
+        requestTime = System.currentTimeMillis();
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,
                 PRODUCT_LIST_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_SEARCH_RESULT);
     }
 
-    private void setAdapterData(ArrayList<HomeProductObj> objs) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
@@ -208,7 +210,7 @@ public class SearchResultsActivity extends BaseActivity implements
                                 loadData();
                                 isRefreshData = true;
                             }
-             //               scrollToolbarAndHeaderBy(-dy);
+                            //               scrollToolbarAndHeaderBy(-dy);
 
                         }
 
@@ -282,14 +284,14 @@ public class SearchResultsActivity extends BaseActivity implements
             case R.id.cart:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
                 intent.putExtra("OrderSummaryFragment", false);
-                intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
+                intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
                 startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void showFilterSlideIn(){
+    public void showFilterSlideIn() {
         View view = findViewById(R.id.filter_layout);
         view.findViewById(R.id.close_filter).setOnClickListener(this);
         findViewById(R.id.reset_btn).setOnClickListener(this);
@@ -298,7 +300,7 @@ public class SearchResultsActivity extends BaseActivity implements
 
     boolean isFiltersShown;
 
-    public void animateViewRightIn(final View view){
+    public void animateViewRightIn(final View view) {
         isFiltersShown = true;
         view.setVisibility(View.VISIBLE);
         View transparentView = findViewById(R.id.transparent_view);
@@ -310,10 +312,10 @@ public class SearchResultsActivity extends BaseActivity implements
                 animateViewRightOut(view);
             }
         });
-        ObjectAnimator anim1 = ObjectAnimator.ofFloat(view , View.TRANSLATION_X,getDisplayMetrics().widthPixels,0);
-        ObjectAnimator anim2 = ObjectAnimator.ofFloat(transparentView,View.ALPHA,0,1);
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(view, View.TRANSLATION_X, getDisplayMetrics().widthPixels, 0);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(transparentView, View.ALPHA, 0, 1);
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(anim1,anim2);
+        set.playTogether(anim1, anim2);
         set.setInterpolator(new AccelerateDecelerateInterpolator());
         set.setDuration(200);
 
@@ -322,14 +324,14 @@ public class SearchResultsActivity extends BaseActivity implements
 
     }
 
-    public void animateViewRightOut(final View view){
+    public void animateViewRightOut(final View view) {
 
         final View transparentView = findViewById(R.id.transparent_view);
 
-        ObjectAnimator anim1 = ObjectAnimator.ofFloat(view , View.TRANSLATION_X,0,getDisplayMetrics().widthPixels);
-        ObjectAnimator anim2 = ObjectAnimator.ofFloat(transparentView,View.ALPHA,1,0);
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(view, View.TRANSLATION_X, 0, getDisplayMetrics().widthPixels);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(transparentView, View.ALPHA, 1, 0);
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(anim1,anim2);
+        set.playTogether(anim1, anim2);
         set.setInterpolator(new AccelerateDecelerateInterpolator());
         set.setDuration(200);
         set.addListener(new Animator.AnimatorListener() {
@@ -388,15 +390,15 @@ public class SearchResultsActivity extends BaseActivity implements
                     isO2o = bundle.getBoolean("is_o2o");
 
                     boolean isResetClicked = bundle.getBoolean("is_reset");
-                    nextUrl = url + "?filter=0" +( sortId != -1 ? "&low_to_high=" + sortId:"") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
+                    nextUrl = url + "?filter=0" + (sortId != -1 ? "&low_to_high=" + sortId : "") + ("&price__gte=" + priceLte) + ("&price__lte=" + priceHigh)
                             + (AppPreferences.isUserLogIn(SearchResultsActivity.this)
                             ? "&userid=" + AppPreferences.getUserID(SearchResultsActivity.this) : "")
-                            +(isO2o?"&is_o2o="+1:"");
+                            + (isO2o ? "&is_o2o=" + 1 : "");
 
                     isRefreshData = true;
-                    if(sortId==-1 && priceHigh == 500000 && priceLte == 1 && !isO2o){
+                    if (sortId == -1 && priceHigh == 500000 && priceLte == 1 && !isO2o) {
                         isFilterApplied = false;
-                    }else {
+                    } else {
                         isFilterApplied = true;
                     }
                     loadData();
@@ -429,7 +431,7 @@ public class SearchResultsActivity extends BaseActivity implements
 
                 break;
             case R.id.retry_layout:
-                if(isRequestFailed){
+                if (isRequestFailed) {
                     loadData();
                 }
                 break;
@@ -458,13 +460,15 @@ public class SearchResultsActivity extends BaseActivity implements
     public void onRequestCompleted(String requestTag, Object obj) {
         if (!isDestroyed
                 && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG)) {
-
+            CommonLib.ZLog("Request Time", "Product Listing Page from search Request :" + (System.currentTimeMillis() - requestTime) + " mS");
+            CommonLib.writeRequestData("Product Listing Page from search Request :" + (System.currentTimeMillis() - requestTime) + " mS");
 
             if (isRefreshData) {
                 homeProductObjs = null;
                 homeProductObjs = new ArrayList<>();
             }
-            homeProductObjs.addAll((ArrayList<HomeProductObj>) obj);
+            homeProductObjs.addAll(((ProductListObject) obj).getProducts());
+
             if (homeProductObjs.size() == 0) {
                 if (productList.getAdapter() == null
                         || productList.getAdapter().getItemCount() == 1) {
@@ -472,17 +476,18 @@ public class SearchResultsActivity extends BaseActivity implements
 
                 } else {
                     showToast("No more Products");
+                    ((ProductsRecyclerViewGridAdapter) productList.getAdapter()).removeItem();
 
                 }
                 isRequestAllowed = false;
             } else {
+                nextUrl = ((ProductListObject) obj).getNext_url();
                 //homeProductObjs.addAll();
                 // so that products are not repeated.
                 setAdapterData(homeProductObjs);
                 // nextUrl = ((ProductListObject) obj).getNext_url();
                 //subCategories =((ProductListObject) obj).getSubcategory();
                 showView();
-                pageNo++;
                 changeViewVisiblity(productList, View.VISIBLE);
                 if (homeProductObjs.size() < 10) {
                     isRequestAllowed = false;
@@ -499,10 +504,10 @@ public class SearchResultsActivity extends BaseActivity implements
             isLoading = false;
         }
         if (isFilterApplied) {
-            if(!isDestroyed)
+            if (!isDestroyed)
                 findViewById(R.id.filter_applied).setVisibility(View.VISIBLE);
         } else {
-            if(!isDestroyed)
+            if (!isDestroyed)
                 findViewById(R.id.filter_applied).setVisibility(View.GONE);
         }
 
@@ -515,7 +520,7 @@ public class SearchResultsActivity extends BaseActivity implements
                 && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG)) {
             if (productList.getAdapter() == null
                     || productList.getAdapter().getItemCount() == 1) {
-                if(CommonLib.isNetworkAvailable(SearchResultsActivity.this))
+                if (CommonLib.isNetworkAvailable(SearchResultsActivity.this))
                     showToast("Please check your internet connection");
                 showNetworkErrorView();
                 changeViewVisiblity(productList, View.GONE);
@@ -544,32 +549,33 @@ public class SearchResultsActivity extends BaseActivity implements
         GetRequestManager.getInstance().removeCallbacks(this);
         super.onDestroy();
     }
-    public void manageFiltersData(){
 
-        if(sortId != -1){
-            if(sortId == 1){
-                ((CustomRadioButton)findViewById(R.id.high_to_low)).setChecked(false);
-                ((CustomRadioButton)findViewById(R.id.low_to_high)).setChecked(true);
-            }else{
-                ((CustomRadioButton)findViewById(R.id.high_to_low)).setChecked(true);
-                ((CustomRadioButton)findViewById(R.id.low_to_high)).setChecked(false);
+    public void manageFiltersData() {
+
+        if (sortId != -1) {
+            if (sortId == 1) {
+                ((CustomRadioButton) findViewById(R.id.high_to_low)).setChecked(false);
+                ((CustomRadioButton) findViewById(R.id.low_to_high)).setChecked(true);
+            } else {
+                ((CustomRadioButton) findViewById(R.id.high_to_low)).setChecked(true);
+                ((CustomRadioButton) findViewById(R.id.low_to_high)).setChecked(false);
             }
 
         }
-        if(isO2o){
-            ((CheckBox)findViewById(R.id.zi_experience_tag)).setChecked(true);
+        if (isO2o) {
+            ((CheckBox) findViewById(R.id.zi_experience_tag)).setChecked(true);
         }
-        ((CheckBox)findViewById(R.id.zi_experience_tag)).setOnClickListener(new View.OnClickListener() {
+        ((CheckBox) findViewById(R.id.zi_experience_tag)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((CheckBox)findViewById(R.id.zi_experience_tag)).isChecked()){
+                if (((CheckBox) findViewById(R.id.zi_experience_tag)).isChecked()) {
                     isFilterApplied = true;
-                }else{
+                } else {
                     isFilterApplied = false;
                 }
             }
         });
-        ((CustomRadioButton)findViewById(R.id.high_to_low)).setOnClickListener(new View.OnClickListener() {
+        ((CustomRadioButton) findViewById(R.id.high_to_low)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sortId = 2;
@@ -584,7 +590,7 @@ public class SearchResultsActivity extends BaseActivity implements
                 ((CheckBox) findViewById(R.id.low_to_high)).setChecked(false);
             }
         });*/
-        ((CustomRadioButton)findViewById(R.id.low_to_high)).setOnClickListener(new View.OnClickListener() {
+        ((CustomRadioButton) findViewById(R.id.low_to_high)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sortId = 1;
@@ -645,33 +651,35 @@ public class SearchResultsActivity extends BaseActivity implements
             }
         });
 
-        ((ListView)findViewById(R.id.subcategory_list)).setVisibility(View.GONE);
+        ((ListView) findViewById(R.id.subcategory_list)).setVisibility(View.GONE);
         (findViewById(R.id.sub_categories_header)).setVisibility(View.GONE);
         findViewById(R.id.apply_filter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pageNo = 1;
-                isO2o = ((CheckBox)findViewById(R.id.zi_experience_tag)).isChecked();
+                isO2o = ((CheckBox) findViewById(R.id.zi_experience_tag)).isChecked();
                 priceLte = Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString());
                 priceHigh = Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString());
                 nextUrl = null;
-                isRefreshData=true;
+                isRefreshData = true;
                 animateViewRightOut(findViewById(R.id.filter_layout));
                 loadData();
             }
         });
     }
-    public void addMaxInputFilter(){
+
+    public void addMaxInputFilter() {
         //((EditText)findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax( Long.parseLong((((EditText) findViewById(R.id.from_price)).getText()).toString()) + "",(TO_VALUE) + "")});
     }
-    public void addMinInputFilter(){
-        ((EditText)findViewById(R.id.from_price)).setFilters(new InputFilter[]{new InputFilterMinMax(( FROM_VALUE) + "", (((EditText) findViewById(R.id.to_price)).getText()).toString().length()>0?Long.parseLong((((EditText) findViewById(R.id.to_price)).getText()).toString()) + "":TO_VALUE+"")});
+
+    public void addMinInputFilter() {
+        ((EditText) findViewById(R.id.from_price)).setFilters(new InputFilter[]{new InputFilterMinMax((FROM_VALUE) + "", (((EditText) findViewById(R.id.to_price)).getText()).toString().length() > 0 ? Long.parseLong((((EditText) findViewById(R.id.to_price)).getText()).toString()) + "" : TO_VALUE + "")});
     }
 
-    public void resetFilterValues(){
+    public void resetFilterValues() {
         sortId = -1;
         isFilterApplied = false;
-        ((CustomCheckBox)findViewById(R.id.zi_experience_tag)).setChecked(false);
+        ((CustomCheckBox) findViewById(R.id.zi_experience_tag)).setChecked(false);
         ((CustomRadioButton) findViewById(R.id.high_to_low)).setChecked(false);
         ((CustomRadioButton) findViewById(R.id.low_to_high)).setChecked(false);
         RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);

@@ -67,27 +67,27 @@ public class MyCartAdapter extends RecyclerView.Adapter {
         if (position <= cartObject.getCart().getDetail().size() - 1) {
             //shippingCharges = shippingCharges + cartObject.getCart().getDetail().get(position).getShipping_charges();
             final CartItemHolder holder = (CartItemHolder) defaultHolder;
-            holder.name.setText(cartObject.getCart().getDetail().get(position).getName());
+            holder.name.setText(cartObject.getCart().getDetail().get(position).getProduct().getName());
             Resources r = context.getResources();
 
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 110, r.getDisplayMetrics());
-            new ImageLoaderManager((Activity) context).setImageFromUrl(cartObject.getCart().getDetail().get(position).getImage()
+            new ImageLoaderManager((Activity) context).setImageFromUrl(cartObject.getCart().getDetail().get(position).getProduct().getImage()
                     , holder.product_image, "", (int) px, (int) px, false, false);
-            holder.price.setText(context.getResources().getString(R.string.Rs) + " " + Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice())));
+            holder.price.setText(context.getResources().getString(R.string.Rs) + " " + cartObject.getCart().getDetail().get(position).getProduct().getPrice());
             holder.itemCount.setText("#Item "+(position+1));
-            holder.quantity.setText(cartObject.getCart().getDetail().get(position).getQuantity());
-            holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " + (Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity())*Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice()))));
-            holder.shippingPrice.setText(cartObject.getCart().getDetail().get(position).getShipping_charges()==0?"Free":
-                    context.getString(R.string.rs_text)+" "+Math.round(cartObject.getCart().getDetail().get(position).getShipping_charges()));
-            holder.totalPrice.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position).getShipping_charges() == 0 ? (Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity()) * Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice()))) : ((Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity()) * Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice()))) + Math.round(cartObject.getCart().getDetail().get(position).getShipping_charges()))));
-            if(cartObject.getCart().getDetail().get(position).is_o2o()){
+            holder.quantity.setText(cartObject.getCart().getDetail().get(position).getQty()+"");
+            holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " + (cartObject.getCart().getDetail().get(position).getQty()*cartObject.getCart().getDetail().get(position).getProduct().getPrice()));
+            holder.shippingPrice.setText(cartObject.getCart().getDetail().get(position).getShipping_charge()==0?"Free":
+                    context.getString(R.string.rs_text)+" "+cartObject.getCart().getDetail().get(position).getShipping_charge()*cartObject.getCart().getDetail().get(position).getQty());
+            holder.totalPrice.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position).getShipping_charge() == 0 ? (cartObject.getCart().getDetail().get(position).getQty() * cartObject.getCart().getDetail().get(position).getProduct().getPrice()) : ((cartObject.getCart().getDetail().get(position).getQty() * cartObject.getCart().getDetail().get(position).getProduct().getPrice()) +(cartObject.getCart().getDetail().get(position).getQty()*cartObject.getCart().getDetail().get(position).getShipping_charge()))));
+            if (cartObject.getCart().getDetail().get(position).getProduct().is_cod()){
                 holder.isCocText.setVisibility(View.VISIBLE);
-                holder.isCocText.setText(Html.fromHtml("<b>Cash-at-Counter"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
+                holder.isCocText.setText(Html.fromHtml("<b>Cash-on-Delivery"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_tick);
                 holder.buyOfflineTag.setVisibility(View.VISIBLE);
             }else{
                 holder.isCocText.setVisibility(View.GONE);
-                changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
+                //  changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
                 holder.buyOfflineTag.setVisibility(View.GONE);
             }
 
@@ -97,7 +97,7 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             }else{
                 holder.priceDescLayout.setVisibility(View.GONE);
                 holder.shortSubTotalLayout.setVisibility(View.VISIBLE);
-                holder.shortTotal.setText(context.getResources().getString(R.string.Rs)+" "+(cartObject.getCart().getDetail().get(position).getShipping_charges()==0? (Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity())*Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice()))):((Integer.parseInt(cartObject.getCart().getDetail().get(position).getQuantity())*Math.round(Double.parseDouble(cartObject.getCart().getDetail().get(position).getPrice())))+Math.round(cartObject.getCart().getDetail().get(position).getShipping_charges()))));
+                holder.shortTotal.setText(context.getResources().getString(R.string.Rs)+" "+(cartObject.getCart().getDetail().get(position).getShipping_charge()==0? (cartObject.getCart().getDetail().get(position).getQty()*cartObject.getCart().getDetail().get(position).getProduct().getPrice()):((cartObject.getCart().getDetail().get(position).getQty()*cartObject.getCart().getDetail().get(position).getProduct().getPrice())+(cartObject.getCart().getDetail().get(position).getQty()*cartObject.getCart().getDetail().get(position).getShipping_charge()))));
             }
 
             holder.cancelCartItem.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +123,7 @@ public class MyCartAdapter extends RecyclerView.Adapter {
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(view);
                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.simple_list_item, R.id.text1);
-                        for (int i = 0; i < cartObject.getCart().getDetail().get(position).getAvailable_quantity(); i++) {
+                        for (int i = 0; i < cartObject.getCart().getDetail().get(position).getAvailable_qty(); i++) {
                             adapter.add((i +1)+ "");
                         }
                         ListView listView = ((ListView) dialog.findViewById(R.id.listview));
@@ -186,34 +186,25 @@ public class MyCartAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
 
                     Intent intent = new Intent(context, NewProductDetailActivity.class);
-                    intent.putExtra("slug", cartObject.getCart().getDetail().get(position).getSlug());
-                    intent.putExtra("id", Long.parseLong(cartObject.getCart().getDetail().get(position).getProduct_id()));
-                    intent.putExtra("title", cartObject.getCart().getDetail().get(position).getName());
+                    intent.putExtra("slug", cartObject.getCart().getDetail().get(position).getProduct().getSlug());
+                    intent.putExtra("id", cartObject.getCart().getDetail().get(position).getProduct().getId());
+                    intent.putExtra("title", cartObject.getCart().getDetail().get(position).getProduct().getName());
                     context.startActivity(intent);
 
                 }
             });
         } else {
             SummaryHolder summaryHolder = (SummaryHolder) defaultHolder;
-            totalPrice = Float.parseFloat(cartObject.getCart().getTotal_price());
-            float price = Float.parseFloat(cartObject.getCart().getPrice());
+            totalPrice = cartObject.getCart().getTotal_price();
+            float price = cartObject.getCart().getPrice();
             if (totalPrice == 0) {
                 summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs) + " " + cartObject.getCart().getPrice());
                 summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) + " " + cartObject.getCart().getTotal_price());
             }
             summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs) + " "+Math.round(price));
             summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) + " "+Math.round(totalPrice));
-            summaryHolder.shipping.setText((cartObject.getCart().getTotal_shipping().equalsIgnoreCase("0")) ? "Free" : context.getResources().getString(R.string.Rs) + " "+Math.round(Double.parseDouble(cartObject.getCart().getTotal_shipping())));
-            /*summaryHolder.checkOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(CommonLib.isNetworkAvailable(context)) {
-                        mListener.checkOut(position);
-                    }else{
-                        Toast.makeText(context,"No network available",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });*/
+            summaryHolder.shipping.setText((cartObject.getCart().getTotal_shipping()==0) ? "Free" : context.getResources().getString(R.string.Rs) + " "+cartObject.getCart().getTotal_shipping());
+
         }
     }
 

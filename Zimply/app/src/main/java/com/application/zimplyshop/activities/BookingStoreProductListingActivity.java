@@ -21,9 +21,9 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.BookedStoreProductListAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ProductListObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -59,7 +59,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
     boolean isNotification;
 
-    HomeProductObj obj;
+    BaseProductListObject obj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
                 (int) getResources().getDimension(R.dimen.margin_mini),true));
 
         // setProductsGrid();
-        obj = (HomeProductObj)getIntent().getSerializableExtra("booked_obj");
+        obj = (BaseProductListObject)getIntent().getSerializableExtra("booked_obj");
         url = getIntent().getStringExtra("url");
         isHideFilter = getIntent().getBooleanExtra("hide_filter",false);
         setStatusBarColor();
@@ -132,7 +132,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
                 ObjectTypes.OBJECT_TYPE_PRODUCT_LIST_OBJECT);
     }
 
-    private void setAdapterData(ArrayList<HomeProductObj> objs) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;

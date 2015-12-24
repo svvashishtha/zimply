@@ -632,7 +632,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 //Toast.makeText(this , "FORMAT:"+format,Toast.LENGTH_SHORT).show();
                 JSONObject obj = JSONUtils.getJSONObject(contents);
                 // Intent workintent = new Intent(this, ProductDetailsActivity.class);
-                productId=(long) JSONUtils.getIntegerfromJSON(obj, "id");
+                productId=JSONUtils.getIntegerfromJSON(obj, "id");
                 slug = JSONUtils.getStringfromJSON(obj, "slug");
                 moveToProductDetail(productId,slug);
                 // addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
@@ -646,7 +646,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         }
     }
 
-    public void addScannedObjToCart(long id,String slug) {
+    public void addScannedObjToCart(int id,String slug) {
         if (AppPreferences.isUserLogIn(this)) {
             if (AllProducts.getInstance().cartContains((int) id)) {
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
@@ -683,7 +683,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         }
     }
 
-    public void moveToProductDetail(long productId , String slug){
+    public void moveToProductDetail(int productId , String slug){
         Intent intent = new Intent(this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
@@ -1101,7 +1101,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         }
     }
 
-    long productId;
+    int productId;
     String slug;
 
     @Override
@@ -1210,6 +1210,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     private void phoneVerification() {
+        Toast.makeText(this,"Chechking Phone Verification",Toast.LENGTH_SHORT).show();
+
         String finalUrl = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION
                 + "?userid="+ AppPreferences.getUserID(this);
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,

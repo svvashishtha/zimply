@@ -1,149 +1,30 @@
 package com.application.zimplyshop.baseobjects;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Umesh Lohani on 11/15/2015.
  */
 public class BookedProductHistoryObject implements Serializable{
 
-    String productImg;
+    private ArrayList<LatestBookingObject> books;
 
-    String name;
+    private String next_url;
 
-    int price;
-
-    String status;
-
-    int id;
-
-    String line1;
-
-    String line2;
-
-    int vendor_id;
-
-    HomeProductObj obj;
-
-    int book_product_id;
-
-    public int getBook_product_id() {
-        return book_product_id;
+    public ArrayList<LatestBookingObject> getBooks() {
+        return books;
     }
 
-    public void setBook_product_id(int book_product_id) {
-        this.book_product_id = book_product_id;
+    public void setBooks(ArrayList<LatestBookingObject> books) {
+        this.books = books;
     }
 
-    public HomeProductObj getObj() {
-        return obj;
+    public String getNext_url() {
+        return next_url;
     }
 
-    public void setObj(HomeProductObj obj) {
-        this.obj = obj;
+    public void setNext_url(String next_url) {
+        this.next_url = next_url;
     }
-
-    public String getLine1() {
-        return line1;
-    }
-
-    public String getLine2() {
-        return line2;
-    }
-
-    public void setLine1(String line1) {
-        this.line1 = line1;
-    }
-
-    public void setLine2(String line2) {
-        this.line2 = line2;
-    }
-
-    String vendor;
-
-    String pincode;
-
-    String city;
-
-    public int getVendor_id() {
-        return vendor_id;
-    }
-
-    public void setVendor_id(int vendor_id) {
-        this.vendor_id = vendor_id;
-    }
-
-    public String getVendor() {
-        return vendor;
-    }
-
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
-    }
-
-    public String getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(String pincode) {
-        this.pincode = pincode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    //  ProductVendorTimeObj vendorTimeObj;
-
-    public String getProductImg() {
-        return productImg;
-    }
-
-    public void setProductImg(String productImg) {
-        this.productImg = productImg;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /*public ProductVendorTimeObj getVendorTimeObj() {
-        return vendorTimeObj;
-    }
-
-    public void setVendorTimeObj(ProductVendorTimeObj vendorTimeObj) {
-        this.vendorTimeObj = vendorTimeObj;
-    }*/
 }

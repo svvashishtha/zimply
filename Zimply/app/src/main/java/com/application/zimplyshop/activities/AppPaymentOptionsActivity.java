@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,11 +47,11 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
 
     String name,orderId,email;
-    Double totalPrice;
+    int totalPrice;
 
     AddressObject addressObj;
 
-    int PAYMENT_TYPE_CASH=4;
+    int PAYMENT_TYPE_CASH=1;
     int PAYMENT_TYPE_CARD = 2;
 //    int PAYMENT_TYPE_COD = 2;
 
@@ -71,7 +72,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             orderId = getIntent().getStringExtra("order_id");
             name = getIntent().getStringExtra("name");
             email = getIntent().getStringExtra("email");
-            totalPrice =Double.parseDouble(getIntent().getStringExtra("total_amount"));
+            totalPrice =getIntent().getIntExtra("total_amount", 0);
             addressObj = (AddressObject)getIntent().getSerializableExtra("address");
             buyingChannel = getIntent().getIntExtra("buying_channel", 0);
             isCoc = getIntent().getBooleanExtra("is_coc", false);
@@ -92,8 +93,9 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         if(totalPrice >20000){
             SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
             string.setSpan(new RelativeSizeSpan(0.8f),18,string.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() -1, 0);
             ((CustomTextView)findViewById(R.id.cash_on_delivery)).setText(string);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
+            //((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
             ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(false);
             ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
             ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
@@ -134,11 +136,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     public void makePaymentRequest(){
         if(paymentType == PAYMENT_TYPE_CASH){
-            if(isCoc) {
-                sendPaymentSuccessFullCashRequest();
-            }else{
-                Toast.makeText(this,"Cash-at-Counter is not available for one or more items. Please remove those items from the cart to use Cash-at-Counter or Pay Online.",Toast.LENGTH_SHORT).show();
-            }
+            sendPaymentSuccessFullCashRequest();
+
         }else{
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("furl",
@@ -152,8 +151,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             params.put(PayU.FIRSTNAME,name);
             params.put(PayU.EMAIL, email);
 
-//
-            PayU.getInstance(this).startPaymentProcess(Double.parseDouble(cartObj.getCart().getTotal_price())
+
+            PayU.getInstance(this).startPaymentProcess(cartObj.getCart().getTotal_price()
                     , params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
                     PayU.PaymentMode.NB, PayU.PaymentMode.DC,
                     PayU.PaymentMode.EMI,

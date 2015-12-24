@@ -136,18 +136,18 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ProductPhotoZoomActivity.class);
-                    intent.putExtra("product_obj", obj);
+                    intent.putExtra("product_obj", obj.getProduct());
                     intent.putExtra("position", (Integer) ((ImageViewHolder) holder).productNewImage.getTag());
                     mContext.startActivity(intent);
                 }
             });
 
-            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrl(obj.getThumbs().get(0), ((ImageViewHolder) holder).productImg, "users", displayWidth / 2, displayHeight / 20, false,
+            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrl(obj.getProduct().getThumbs().get(0), ((ImageViewHolder) holder).productImg, "users", displayWidth / 2, displayHeight / 20, false,
                     false);
 
             ((ImageViewHolder)holder).productNewImage.setLayoutParams(lp);
             ((ImageViewHolder)holder).productNewImage.setTag(0);
-            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrlNew(obj.getImageUrls().get(0), ((ImageViewHolder) holder).productNewImage, "photo_details", displayWidth / 2, displayHeight / 20, false,
+            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrlNew(obj.getProduct().getImages().get(0), ((ImageViewHolder) holder).productNewImage, "photo_details", displayWidth / 2, displayHeight / 20, false,
                     false, new ImageLoaderManager.ImageLoaderCallback() {
                         @Override
                         public void loadingStarted() {
@@ -163,7 +163,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((ImageViewHolder) holder).productTabIcons.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
 
                 ((ImageViewHolder) holder).productTabIcons.addItemDecoration(new ProductThumbListItemDecorator(mContext.getResources().getDimensionPixelSize(R.dimen.margin_small)));
-                final ProductThumbAdapters adapter = new ProductThumbAdapters(mContext, obj.getThumbs(), mContext.getResources().getDimensionPixelSize(R.dimen.z_item_height_48), mContext.getResources().getDimensionPixelSize(R.dimen.z_item_height_48));
+                final ProductThumbAdapters adapter = new ProductThumbAdapters(mContext, obj.getProduct().getThumbs(), mContext.getResources().getDimensionPixelSize(R.dimen.z_item_height_48), mContext.getResources().getDimensionPixelSize(R.dimen.z_item_height_48));
                 ((ImageViewHolder) holder).productTabIcons.setAdapter(adapter);
                 adapter.setOnItemClickListener(new ProductThumbAdapters.OnItemClickListener() {
                     @Override
@@ -172,10 +172,10 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             adapter.setSelectedPos(pos);
                             ((ImageViewHolder)holder).productImg.setVisibility(View.VISIBLE);
                             ((ImageViewHolder) holder).productNewImage.setTag(pos);
-                            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrl(obj.getThumbs().get(pos), ((ImageViewHolder) holder).productImg, "users", displayWidth / 2, displayHeight / 20, false,
+                            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrl(obj.getProduct().getThumbs().get(pos), ((ImageViewHolder) holder).productImg, "users", displayWidth / 2, displayHeight / 20, false,
                                     false);
 
-                            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrlNew(obj.getImageUrls().get(pos), ((ImageViewHolder) holder).productNewImage, "photo_details", displayWidth / 2, displayHeight / 20, false,
+                            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrlNew(obj.getProduct().getImages().get(pos), ((ImageViewHolder) holder).productNewImage, "photo_details", displayWidth / 2, displayHeight / 20, false,
                                     false, new ImageLoaderManager.ImageLoaderCallback() {
                                         @Override
                                         public void loadingStarted() {
@@ -192,20 +192,20 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 });
             }
         }else if(getItemViewType(position) == TYPE_PRODUCT_INFO_1){
-            ((ProductInfoHolder1)holder).productPrice.setText(mContext.getString(R.string.rs_text)+" "+Math.round(obj.getPrice()));
-            ((ProductInfoHolder1)holder).productName.setText(obj.getName());
-            ((ProductInfoHolder1)holder).favImage.setSelected(obj.is_favourite());
+            ((ProductInfoHolder1)holder).productPrice.setText(mContext.getString(R.string.rs_text)+" "+Math.round(obj.getProduct().getPrice()));
+            ((ProductInfoHolder1)holder).productName.setText(obj.getProduct().getName());
+            ((ProductInfoHolder1)holder).favImage.setSelected(obj.getProduct().is_favourite());
             ((ProductInfoHolder1)holder).favImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (AppPreferences.isUserLogIn(mContext)) {
-                        if (obj.is_favourite()) {
-                            obj.setIs_favourite(false);
+                        if (obj.getProduct().is_favourite()) {
+                            obj.getProduct().setIs_favourite(false);
                             ((ProductInfoHolder1)holder).favImage.setSelected(false);
                             mListener.onMarkUnFavorite();
                             Toast.makeText(mContext, "Successfully removed from wishlist", Toast.LENGTH_SHORT).show();
                         } else {
-                            obj.setIs_favourite(true);
+                            obj.getProduct().setIs_favourite(true);
                             ((ProductInfoHolder1)holder).favImage.setSelected(true);
                             mListener.onMarkFavorite();
                             Toast.makeText(mContext, "Successfully added to wishlist", Toast.LENGTH_SHORT).show();
@@ -223,7 +223,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((ProductInfoHolder2) holder).mapImage.setLayoutParams(lp1);
             new ImageLoaderManager((NewProductDetailActivity)mContext).setImageFromUrl(obj.getVendor().getMap(), ((ProductInfoHolder2) holder).mapImage, "users", displayWidth, displayHeight / 5, false, false);
             if(isCancelBookingShown){
-                ((ProductInfoHolder2)holder).storeAddress.setText(obj.getVendor().getCompany_name() + ", " + obj.getVendor().getReg_add().getLine1() + ", " + obj.getVendor().getReg_add().getCity());
+                ((ProductInfoHolder2)holder).storeAddress.setText(obj.getVendor().getName() + ", " + obj.getVendor().getAddress().getLine1() + ", " + obj.getVendor().getAddress().getCity());
                 ((ProductInfoHolder2) holder).bookStoreVisit.setVisibility(View.GONE);
                 ((ProductInfoHolder2) holder).bookingConfirmCard.setVisibility(View.VISIBLE);
                 ((ProductInfoHolder2) holder).cancelBooking.setVisibility(View.GONE);
@@ -236,7 +236,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 });
             }else{
-                ((ProductInfoHolder2)holder).storeAddress.setText(obj.getVendor().getReg_add().getCity());
+                ((ProductInfoHolder2)holder).storeAddress.setText(obj.getVendor().getAddress().getCity());
                 ((ProductInfoHolder2) holder).bookStoreVisit.setVisibility(View.VISIBLE);
                 ((ProductInfoHolder2) holder).bookingConfirmCard.setVisibility(View.GONE);
                 ((ProductInfoHolder2) holder).cancelBooking.setVisibility(View.GONE);
@@ -246,6 +246,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     if (AppPreferences.isUserLogIn(mContext)) {
+
                         showtransition(((ProductInfoHolder2) holder));
 
                     } else {
@@ -261,14 +262,14 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + obj.getVendor().getReg_add().getPhone()));
+                    callIntent.setData(Uri.parse("tel:" + obj.getVendor().getAddress().getPhone()));
                     mContext.startActivity(callIntent);
                 }
             });
             ((ProductInfoHolder2)holder).direction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getReg_add().getLocation().getLatitude() + "," + obj.getVendor().getReg_add().getLocation().getLongitude() + "(" + obj.getVendor().getCompany_name() + ")");
+                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getAddress().getLatitude() + "," + obj.getVendor().getAddress().getLongitude() + "(" + obj.getVendor().getName() + ")");
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     mContext.startActivity(intent);
                 }
@@ -276,7 +277,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((ProductInfoHolder2)holder).mapImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getReg_add().getLocation().getLatitude() + "," + obj.getVendor().getReg_add().getLocation().getLongitude() + "(" + obj.getVendor().getCompany_name() + ")");
+                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getAddress().getLatitude() + "," + obj.getVendor().getAddress().getLongitude() + "(" + obj.getVendor().getName()+ ")");
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     mContext.startActivity(intent);
                 }
@@ -284,7 +285,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((ProductInfoHolder2)holder).directionLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getReg_add().getLocation().getLatitude() + "," + obj.getVendor().getReg_add().getLocation().getLongitude() + "(" + obj.getVendor().getCompany_name() + ")");
+                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getAddress().getLatitude() + "," + obj.getVendor().getAddress().getLongitude() + "(" + obj.getVendor().getName() + ")");
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     mContext.startActivity(intent);
 
@@ -326,21 +327,21 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
 
-            ((ProductInfoHolder3) holder).delivery.setText(obj.getMinShippingDays() + "-" + obj.getMaxShippingDays() + " Days");
-            ((ProductInfoHolder3) holder).shipping_charges.setText((obj.getShippingCharges()==0)?"Free":mContext.getString(R.string.rs_text) + " " + Math.round(obj.getShippingCharges()));
-            ((ProductInfoHolder3) holder).cod_avaiable.setText((obj.isCod()) ? "Available" : "Not Available");
-            SpannableString string = new SpannableString(obj.getVendor().getCompany_name());
-            string.setSpan(new UnderlineSpan(), 0, obj.getVendor().getCompany_name().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            string.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.z_rate_btn_blue_color)), 0, obj.getVendor().getCompany_name().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ((ProductInfoHolder3) holder).delivery.setText(obj.getProduct().getMin_shipping_days() + "-" + obj.getProduct().getMax_shipping_days() + " Days");
+            ((ProductInfoHolder3) holder).shipping_charges.setText((obj.getProduct().getShipping_charges()==0)?"Free":mContext.getString(R.string.rs_text) + " " + Math.round(obj.getProduct().getShipping_charges()));
+            ((ProductInfoHolder3) holder).cod_avaiable.setText((obj.getProduct().is_cod()) ? "Available" : "Not Available");
+            SpannableString string = new SpannableString(obj.getVendor().getName());
+            string.setSpan(new UnderlineSpan(), 0, obj.getVendor().getName().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            string.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.z_rate_btn_blue_color)), 0, obj.getVendor().getName().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             ((ProductInfoHolder3) holder).sold_by.setText(string);
             ((ProductInfoHolder3)holder).moreFromSeller.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent bookIntent = new Intent(mContext, BookingStoreProductListingActivity.class);
                     bookIntent.putExtra("hide_filter",true);
-                    bookIntent.putExtra("vendor_id", obj.getVendor().getVendor_id());
+                    bookIntent.putExtra("vendor_id", obj.getVendor().getId());
                     bookIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
-                    bookIntent.putExtra("vendor_name", obj.getVendor().getCompany_name());
+                    bookIntent.putExtra("vendor_name", obj.getVendor().getName());
                     mContext.startActivity(bookIntent);
                 }
             });
@@ -351,7 +352,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 if(isDescShown){
                     changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_up_black);
-                    ((ProductInfoHolder4)holder).descText.setText(obj.getDescription());
+                    ((ProductInfoHolder4)holder).descText.setText(obj.getProduct().getDescription());
                     ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
                     ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
                 }else{
@@ -371,13 +372,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 });
             }else if(position == 4){
-                if(obj.is_o2o()) {
+                if(obj.getProduct().is_o2o()) {
                     ((ProductInfoHolder4) holder).descTitle.setText("Summary");
 
                     if (isDescShown) {
 
                         changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_up_black);
-                        ((ProductInfoHolder4) holder).descText.setText(obj.getDescription());
+                        ((ProductInfoHolder4) holder).descText.setText(obj.getProduct().getDescription());
                         ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
                         ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
                     } else {
@@ -407,7 +408,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             linLayout.setPadding(mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small));
-                            for (ProductAttribute attribute : obj.getAttributes()) {
+                            for (ProductAttribute attribute : obj.getProduct().getAttribute()) {
 
                                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 LinearLayout layout = new LinearLayout(mContext);
@@ -458,7 +459,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     });
                 }
             }else if(position == 5){
-                if(obj.is_o2o()) {
+                if(obj.getProduct().is_o2o()) {
                     ((ProductInfoHolder4) holder).descTitle.setText("Specifications");
                     if (isSpecsShown) {
                         changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_up_black);
@@ -469,7 +470,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             linLayout.setPadding(mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small));
-                            for (ProductAttribute attribute : obj.getAttributes()) {
+                            for (ProductAttribute attribute : obj.getProduct().getAttribute()) {
 
                                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 LinearLayout layout = new LinearLayout(mContext);
@@ -524,7 +525,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((ProductInfoHolder4)holder).descLayout.setVisibility(View.GONE);
                     if(isCareShown){
                         changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_up_black);
-                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getCare()));
+                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getProduct().getCare()));
                         ((ProductInfoHolder4)holder).descText.setVisibility(View.VISIBLE);
                     }else{
                         changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_down_black);
@@ -533,10 +534,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((ProductInfoHolder4)holder).descTitle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            /*Intent intent = new Intent(mContext, ZWebView.class);
-                            intent.putExtra("title", mContext.getResources().getString(R.string.about_us_terms_of_use));
-                            intent.putExtra("url", "http://www.zimply.co/care/?src=mob");
-                            mContext.startActivity(intent);*/
+
                             if(isCareShown){
                                 isCareShown = false;
                             }else{
@@ -548,13 +546,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 }
             }else if(position == 6){
-                if(obj.is_o2o()){
+                if(obj.getProduct().is_o2o()){
                     ((ProductInfoHolder4)holder).descLayout.setVisibility(View.GONE);
                     changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_down_black);
                     ((ProductInfoHolder4)holder).descTitle.setText("Care");
                     if(isCareShown){
                         ((ProductInfoHolder4)holder).descText.setVisibility(View.VISIBLE);
-                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getCare()));
+                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getProduct().getCare()));
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
                     }else{
                         ((ProductInfoHolder4)holder).descText.setVisibility(View.GONE);
@@ -563,10 +561,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((ProductInfoHolder4)holder).descTitle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            /*Intent intent = new Intent(mContext, ZWebView.class);
-                            intent.putExtra("title", mContext.getResources().getString(R.string.about_us_terms_of_use));
-                            intent.putExtra("url", "http://www.zimply.co/care/?src=mob");
-                            mContext.startActivity(intent);*/
+
                             if(isCareShown){
                                 isCareShown = false;
                             }else{
@@ -581,7 +576,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((ProductInfoHolder4)holder).descTitle.setText("Return & Damage Policy");
                     if(isReturnPolicyShown){
                         ((ProductInfoHolder4)holder).descText.setVisibility(View.VISIBLE);
-                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getReturnPolicy()));
+                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getProduct().getReturn_damage()));
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
                     }else{
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
@@ -592,10 +587,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((ProductInfoHolder4) holder).descTitle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            /*Intent intent = new Intent(mContext, ZWebView.class);
-                            intent.putExtra("title","Return & Damage Policy");
-                            intent.putExtra("url", "http://www.zimply.co/return/?src=mob");
-                            mContext.startActivity(intent);*/
+
                             if(isReturnPolicyShown){
                                 isReturnPolicyShown=false;
                             }else{
@@ -606,14 +598,14 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     });
                 }
             }else if(position == 7){
-                if(obj.is_o2o()){
+                if(obj.getProduct().is_o2o()){
                     ((ProductInfoHolder4)holder).descLayout.setVisibility(View.GONE);
                     changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_down_black);
                     ((ProductInfoHolder4)holder).descTitle.setText("Return & Damage Policy");
 
                     if(isReturnPolicyShown){
                         ((ProductInfoHolder4)holder).descText.setVisibility(View.VISIBLE);
-                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getReturnPolicy()));
+                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getProduct().getReturn_damage()));
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
                     }else{
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
@@ -641,7 +633,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((ProductInfoHolder4)holder).descTitle.setText("FAQ's");
                     if(isFaqShown){
                         ((ProductInfoHolder4)holder).descText.setVisibility(View.VISIBLE);
-                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getFaq()));
+                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getProduct().getFaq()));
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
                     }else{
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
@@ -651,10 +643,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((ProductInfoHolder4) holder).descTitle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            /*Intent intent = new Intent(mContext, ZWebView.class);
-                            intent.putExtra("title","FAQ's");
-                            intent.putExtra("url", "http://www.zimply.co/faq/?src=mob");
-                            mContext.startActivity(intent);*/
+
                             if(isFaqShown){
                                 isFaqShown = false;
                             }else{
@@ -670,7 +659,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((ProductInfoHolder4)holder).descTitle.setText("FAQ's");
                 if(isFaqShown){
                     ((ProductInfoHolder4)holder).descText.setVisibility(View.VISIBLE);
-                    ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getFaq()));
+                    ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getProduct().getFaq()));
                     changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
                 }else{
                     changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
@@ -680,10 +669,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((ProductInfoHolder4) holder).descTitle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                            /*Intent intent = new Intent(mContext, ZWebView.class);
-                            intent.putExtra("title","FAQ's");
-                            intent.putExtra("url", "http://www.zimply.co/faq/?src=mob");
-                            mContext.startActivity(intent);*/
+
                         if(isFaqShown){
                             isFaqShown = false;
                         }else{
@@ -703,8 +689,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         view.setCompoundDrawables(null,null,drawable,null);
     }
 
+    boolean isBookingRequestStarted;
+
     public void showtransition(ProductInfoHolder2 holder){
-        slideViewsRightToLeft(holder, holder.bookStoreVisit, holder.loadingLayout, BOOK_BTN_CLICK);
+        if(!isBookingRequestStarted) {
+            isBookingRequestStarted = true;
+            slideViewsRightToLeft(holder, holder.bookStoreVisit, holder.loadingLayout, BOOK_BTN_CLICK);
+        }
     }
     public void setIsDescShown(boolean isDescShown) {
         this.isDescShown = isDescShown;
@@ -721,7 +712,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public int getItemCount() {
         if(obj!=null){
-            if(obj.is_o2o()){
+            if(obj.getProduct().is_o2o()){
                 return 9;
             }else{
                 return 8;
@@ -737,13 +728,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         }else if(position==1){
             return TYPE_PRODUCT_INFO_1;
         }else if(position == 2){
-            if(obj!=null && obj.is_o2o()) {
+            if(obj!=null && obj.getProduct().is_o2o()) {
                 return TYPE_PRODUCT_INFO_2;
             }else{
                 return TYPE_PRODUCT_INFO_3;
             }
         }else if(position ==3){
-            if(obj!=null && obj.is_o2o()) {
+            if(obj!=null && obj.getProduct().is_o2o()) {
                 return TYPE_PRODUCT_INFO_3;
             }else{
                 return TYPE_PRODUCT_INFO_4;
@@ -778,7 +769,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }else if(checkCase == PROGRESS_LOADING_COMPLETE){
                     moveBookingCompleteCardIn(holder);
                 }else if(checkCase == BOOK_PROCESS_COMPLETE){
-                    holder.storeAddress.setText(obj.getVendor().getCompany_name() + ", " + obj.getVendor().getReg_add().getLine1() + ", " + obj.getVendor().getReg_add().getCity());
+                    holder.storeAddress.setText(obj.getVendor().getName() + ", " + obj.getVendor().getAddress().getLine1() + ", " + obj.getVendor().getAddress().getCity());
                 }
             }
 
@@ -920,7 +911,6 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             timer.cancel();
                             // emptyBtn.setVisibility(View.GONE);
                             slideViewsRightToLeft(holder,holder.loadingLayout, holder.bookProgress,PROGRESS_TIME_COMPLETE);
-
                             //makeProductPreviewRequest();
 
                         } else {
@@ -935,11 +925,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         holder.crossText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 timer.cancel();
                 seconds = 30;
                 holder.loadingBar.setProgress(0);
                 slideViewsLeftToRight(holder.loadingLayout, holder.bookStoreVisit, BOOK_BTN_CLICK);
                 //scaleView(emptyBtn, 0.15f, 1f, false);
+                isBookingRequestStarted = false;
             }
         });
     }

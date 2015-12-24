@@ -34,7 +34,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     private Activity mActivity;
     private boolean destroyed;
     private int height;
-
+    double requestTime = 0;
     public static ProductsListFragment newInstance(Bundle bundle) {
         ProductsListFragment fragment = new ProductsListFragment();
         fragment.setArguments(bundle);
@@ -104,7 +104,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     }
 
     private void loadData() {
-        CommonLib.ZLog("Product_category", "Requesting Product category " + System.currentTimeMillis());
+        requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_PRODUCT_CATEGORY_LIST ;
         GetRequestManager.getInstance().requestCacheThenHTTP(url, RequestTags.PRODUCT_CATEGORY_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_CATEGORY, GetRequestManager.ONE_HOUR);
@@ -126,6 +126,8 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     public void onRequestCompleted(String requestTag, Object obj) {
         if (!destroyed && requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
             if (!destroyed) {
+                CommonLib.ZLog("Request Time","Home Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
+                CommonLib.writeRequestData("Home Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
                 if (obj instanceof ArrayList<?>) {
                     if (((ArrayList<CategoryObject>) obj).size() == 0) {
                         showNullCaseView("No Product categories");

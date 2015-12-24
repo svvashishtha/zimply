@@ -63,14 +63,17 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
         ((BookingHolder) holder).bookCard.setLayoutParams(lp);
         ((BookingHolder)holder).ziStoreName.setText("Zimply Store");
         ((BookingHolder)holder).cancelBooking.setVisibility(View.GONE);
-        ((BookingHolder)holder).storeName.setText(objs.get(position).getVendor().getCompany_name());
+        ((BookingHolder)holder).storeName.setText(objs.get(position).getVendor().getName());
         new ImageLoaderManager((HomeActivity)mContext).setImageFromUrl(objs.get(position).getProduct().getImage(),
                 ((BookingHolder) holder).storeImg,"users",
                 mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size),
                 mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size),false,false);
         //((BookingHolder) holder).storeImg.setImageBitmap(CommonLib.getBitmap(mContext, R.drawable.ic_home_store, mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size)));
 
-        SpannableString string = new SpannableString("Store Address "+objs.get(position).getVendor().getReg_add().getLine1());
+        SpannableString string = new SpannableString("Store Address "+objs.get(position).getVendor().getAddress().getLine1()+", "
+                +(objs.get(position).getVendor().getAddress().getLine2()!=null?objs.get(position).getVendor().getAddress().getLine2()+", ":"")
+                +objs.get(position).getVendor().getAddress().getCity()+", "+objs.get(position).getVendor().getAddress().getState()+
+                ", Pincode:"+objs.get(position).getVendor().getAddress().getPincode());
         string.setSpan(new RelativeSizeSpan(1.1f),0,14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         string.setSpan(new StyleSpan(Typeface.BOLD),0,14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         string.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)), 0, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -80,7 +83,7 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + objs.get(position).getVendor().getReg_add().getPhone()));
+                callIntent.setData(Uri.parse("tel:" + objs.get(position).getVendor().getAddress().getPhone()));
                 mContext.startActivity(callIntent);
             }
         });
@@ -95,7 +98,7 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
                 /*AppApplication.getInstance().zll.forced = true;
                 AppApplication.getInstance().zll.addCallback(mContext);
                 AppApplication.getInstance().startLocationCheck();*/
-                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon +"?q=" + objs.get(position).getVendor().getReg_add().getLocation().getLatitude()+ "," + objs.get(position).getVendor().getReg_add().getLocation().getLongitude() + "(" + objs.get(position).getVendor().getCompany_name()+")");
+                Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon +"?q=" + objs.get(position).getVendor().getAddress().getLatitude()+ "," + objs.get(position).getVendor().getAddress().getLongitude() + "(" + objs.get(position).getVendor().getName()+")");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 mContext.startActivity(intent);
             }
@@ -106,9 +109,9 @@ public class HomePageBookingsAdapter extends RecyclerView.Adapter<RecyclerView.V
                 Intent intent = new Intent(mContext, BookingStoreProductListingActivity.class);
                 intent.putExtra("booked_obj",objs.get(position).getProduct());
                 intent.putExtra("hide_filter",true);
-                intent.putExtra("vendor_id",objs.get(position).getVendor().getVendor_id());
+                intent.putExtra("vendor_id",objs.get(position).getVendor().getId());
                 intent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
-                intent.putExtra("vendor_name",objs.get(position).getVendor().getCompany_name());
+                intent.putExtra("vendor_name",objs.get(position).getVendor().getName());
                 mContext.startActivity(intent);
             }
         });

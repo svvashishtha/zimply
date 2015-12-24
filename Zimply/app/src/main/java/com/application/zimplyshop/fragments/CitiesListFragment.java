@@ -56,7 +56,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class CitiesListFragment extends BaseFragment implements GetRequestListener,
-        RequestTags, ObjectTypes, View.OnClickListener, AppConstants, ZLocationCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+        RequestTags, ObjectTypes, View.OnClickListener, AppConstants, ZLocationCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     RecyclerView cityList;
     LinearLayoutManager linearLayoutManager;
@@ -74,7 +74,8 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     private Location mLastLocation;
     private boolean isDestroyed = false;
     private boolean forced = false;
-
+    double requestTime = 0;
+    private boolean locationButtonClicked;
 
 
     public CitiesListFragment() {
@@ -102,12 +103,13 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     @Override
     public void onResume() {
         super.onResume();
+        locationButtonClicked = false;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 startLocationCheck1();
             }
-        },2000);
+        }, 2000);
 
 
     }
@@ -115,7 +117,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
     @Override
     public void onPause() {
-        if(mGoogleApiClient!=null){
+        if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
         }
         super.onPause();
@@ -158,9 +160,8 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
     public void startLocationCheck1() {
         PackageManager pm = AppApplication.getInstance().getPackageManager();
-        if(pm.hasSystemFeature(PackageManager.FEATURE_LOCATION))
-        {
-            if(getActivity()!=null && mGoogleApiClient == null) {
+        if (pm.hasSystemFeature(PackageManager.FEATURE_LOCATION)) {
+            if (getActivity() != null && mGoogleApiClient == null) {
                 mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                         .addConnectionCallbacks(this)
                         .addOnConnectionFailedListener(this)
@@ -169,12 +170,13 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
 
             }
-            if(mGoogleApiClient !=null && mGoogleApiClient.isConnected()){
+            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                 mGoogleApiClient.disconnect();
             }
-            if(mGoogleApiClient !=null)
+            if (mGoogleApiClient != null)
                 mGoogleApiClient.connect();
         }
+        requestTime = System.currentTimeMillis();
     }
 
 
@@ -195,7 +197,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                 showLoadingView();
                 changeViewVisiblity(cityList, View.GONE);
             } else if (requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_LL)) {
-                if (getActivity() != null ) {
+                if (getActivity() != null) {
                     z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");
                 }
             }
@@ -214,19 +216,19 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                 JSONObject jsonObject = (JSONObject) obj;
                 if (jsonObject != null) {
                     try {
-                        if(z_ProgressDialog!=null){
+                        if (z_ProgressDialog != null) {
                             z_ProgressDialog.dismiss();
                         }
-                        JSONObject city= JSONUtils.getJSONObject(jsonObject, "city");
+                        JSONObject city = JSONUtils.getJSONObject(jsonObject, "city");
                         JSONObject locality = JSONUtils.getJSONObject(jsonObject, "locality");
-                        if( city.getBoolean("serve")){
+                        if (city.getBoolean("serve")) {
                             AppPreferences.setIsLocationSaved(getActivity(), true);
                             AppPreferences.setSavedCityServe(getActivity(), city.getBoolean("serve"));
                             AppPreferences.setSavedCity(getActivity(), JSONUtils.getStringfromJSON(city, "name"));
                             AppPreferences.setSavedCityId(getActivity(), JSONUtils.getStringfromJSON(city, "id"));
                             AppPreferences.setSavedLocality(getActivity(), JSONUtils.getStringfromJSON(locality, "name"));
-                            mListener.onCityReceivedFromServer();
-                        }else{
+                            mListener.onCityReceivedFromServer(requestTime);
+                        } else {
                             final NoDeliveryDialog dialog = NoDeliveryDialog
                                     .newInstance(null);
                             dialog.setStyle(DialogFragment.STYLE_NORMAL,
@@ -262,11 +264,11 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if (!isDestroyed  && requestTag.equalsIgnoreCase(RequestTags.GET_CITY_LIST)) {
+        if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.GET_CITY_LIST)) {
 
             showNetworkErrorView();
-        } else if (!isDestroyed &&requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_LL)) {
-            if(z_ProgressDialog !=null)
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_LL)) {
+            if (z_ProgressDialog != null)
                 z_ProgressDialog.dismiss();
             showToast("Please check your network connection");
 
@@ -277,15 +279,18 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.my_location:
-                if (mLastLocation != null) {
-                    makeCityRequest1();
+                if (!locationButtonClicked) {
+                    locationButtonClicked = true;
+                    if (mLastLocation != null) {
+                        makeCityRequest1();
                     /*if (z_ProgressDialog != null)
                         z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");*/
-                    locationRequested = true;
-                } else {
-                    forced = true;
-                    // AppApplication.getInstance().startLocationCheck();
-                    startLocationCheck1();
+                        locationRequested = true;
+                    } else {
+                        forced = true;
+                        // AppApplication.getInstance().startLocationCheck();
+                        startLocationCheck1();
+                    }
                 }
         }
     }
@@ -295,26 +300,28 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
         lat = mLastLocation.getLatitude();
 
         longitude = mLastLocation.getLongitude();
-        if(CommonLib.isNetworkAvailable(getActivity())) {
+        if (CommonLib.isNetworkAvailable(getActivity())) {
             String url = AppApplication.getInstance().getBaseUrl() + GET_CITY_LL + "?lat=" + lat + "&long=" + longitude;
             GetRequestManager.getInstance().makeAyncRequest(url, GET_CITY_FROM_LL, ObjectTypes.OBJECT_TYPE_CATEGORY_OBJECT);
-        }else{
+        } else {
             showToast("Please check your internet connection");
         }
     }
-    public Location getLocation(){
+
+    public Location getLocation() {
         z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Finding Location..");
-        if(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient) == null){
+        if (LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient) == null) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return getLocation();
-        }else{
+        } else {
             return LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
     }
+
     private void makeCityRequest1() {
        /* mLastLocation = getLocation();
         if(z_ProgressDialog!=null){
@@ -329,7 +336,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
             } else {
                 showToast("Please check your internet connection");
             }
-        }else{
+        } else {
             showToast("Unable to fetch location");
         }
     }
@@ -337,7 +344,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     @Override
     public void onCoordinatesIdentified(Location loc) {
         mLastLocation = loc;
-        if(forced) {
+        if (forced) {
             makeCityRequest();
             locationRequested = true;
             forced = false;
@@ -361,7 +368,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
     @Override
     public void locationNotEnabled() {
-        if(forced) {
+        if (forced) {
             dialog = new AlertDialog.Builder(getActivity());
             dialog.setMessage(getResources().getString(R.string.gps_network_not_enabled));
             dialog.setPositiveButton(getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
@@ -396,7 +403,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
         AppApplication.getInstance().zll.removeCallback(this);
 
         isDestroyed = true;
-        if(z_ProgressDialog != null) {
+        if (z_ProgressDialog != null) {
             z_ProgressDialog.dismiss();
         }
         super.onDestroy();
@@ -407,7 +414,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
         checkLocationConnection();
     }
 
-    public void checkLocationConnection(){
+    public void checkLocationConnection() {
 
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
@@ -468,7 +475,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
-        if (mGoogleApiClient == null){
+        if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -476,22 +483,19 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                     .build();
         }
         mGoogleApiClient.connect();
+        requestTime = System.currentTimeMillis();
 
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("onActivityResult()", Integer.toString(resultCode));
 
         //final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case REQUEST_LOCATION:
-                switch (resultCode)
-                {
-                    case Activity.RESULT_OK:
-                    {
+                switch (resultCode) {
+                    case Activity.RESULT_OK: {
                         // All required changes were successfully made
 
                         Toast.makeText(getActivity(), "Location enabled by user!", Toast.LENGTH_LONG).show();
@@ -503,9 +507,9 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                                     .build();
                         }*/
                         // startLocationCheck1();
-                       // checkLocationConnection();
+                        // checkLocationConnection();
                         forced = true;
-                        if(mGoogleApiClient.isConnected()){
+                        if (mGoogleApiClient.isConnected()) {
                             showToast("Google Api Client connected");
                         }
                         //mGoogleApiClient.connect();
@@ -521,15 +525,14 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
                         break;
                     }
-                    case Activity.RESULT_CANCELED:
-                    {
+                    case Activity.RESULT_CANCELED: {
                         // The user was asked to change settings, but chose not to
                         forced = false;
                         Toast.makeText(getActivity(), "Location not enabled, user cancelled.", Toast.LENGTH_LONG).show();
+
                         break;
                     }
-                    default:
-                    {
+                    default: {
                         break;
                     }
                 }
@@ -541,6 +544,6 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     public interface FragmentInteractionListener {
         void onCitySelected(CategoryObject selectedCity);
 
-        void onCityReceivedFromServer();
+        void onCityReceivedFromServer(double requestTime);
     }
 }
