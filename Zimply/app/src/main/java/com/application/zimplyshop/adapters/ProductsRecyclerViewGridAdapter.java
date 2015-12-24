@@ -51,31 +51,31 @@ public class ProductsRecyclerViewGridAdapter extends
     }
 
     public void updateList(Object objectId, int type) {
-        if (type == RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG) {
+        if ( type == RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG ) {
             long objId = -1;
             try {
                 objId = Long.parseLong(String.valueOf(objectId));
-            } catch (NumberFormatException e) {
+            } catch(NumberFormatException e) {
                 e.printStackTrace();
             }
-            if (objId == -1)
+            if(objId == -1)
                 return;
             boolean found = false;
             int prodIdToRemove = -1;
-            for (int i = 0; i < objs.size(); i++) {
+            for(int i=0; i< objs.size(); i++) {
                 HomeProductObj product = objs.get(i);
-                if (product.getId() == objId) {
+                if(product.getId() == objId) {
                     found = true;
                     prodIdToRemove = i;
                     break;
                 }
             }
-            if (found && prodIdToRemove != -1) {
+            if(found && prodIdToRemove != -1) {
                 objs.remove(prodIdToRemove);
             }
             notifyDataSetChanged();
-        } else if (type == RequestTags.MARK_FAVOURITE_REQUEST_TAG) {
-            if (objectId instanceof HomeProductObj) {
+        } else if(type == RequestTags.MARK_FAVOURITE_REQUEST_TAG) {
+            if(objectId instanceof HomeProductObj) {
                 objs.add((HomeProductObj) objectId);
                 notifyDataSetChanged();
             }
@@ -130,9 +130,9 @@ public class ProductsRecyclerViewGridAdapter extends
                             .getImage());
                 }
             }
-            if (objs.get(position).is_o2o()) {
+            if(objs.get(position).is_o2o()){
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.VISIBLE);
-            } else {
+            }else{
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.GONE);
             }
             ((ProductViewHolder) holder).productName.setText(objs.get(position)
@@ -204,7 +204,7 @@ public class ProductsRecyclerViewGridAdapter extends
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
-        ImageView img, buyOfflineTag;
+        ImageView img,buyOfflineTag;
         TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
 
         public ProductViewHolder(View view) {
@@ -216,7 +216,7 @@ public class ProductsRecyclerViewGridAdapter extends
             productPrice = (TextView) view
                     .findViewById(R.id.product_price);
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
-            buyOfflineTag = (ImageView) view.findViewById(R.id.buy_offline_tag);
+            buyOfflineTag = (ImageView)view.findViewById(R.id.buy_offline_tag);
         }
     }
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -25,8 +24,8 @@ public class ProductCheckoutActivity extends BaseActivity {
     String ADDRESS_SELECTION = "addressSelection", ORDER_SUMMARY = "orderSummary", EDIT_ADDRESS = "editAddress", CART_TAG = "mycart";
 
 
-    public static int MY_CART_FRAGMENT = 1, ORDER_SUMMARY_FRAGMENT = 2, ADDRESS_SELECTION_FRAGMENT = 3, EDIT_ADDRESS_FRAGMENT = 4, NEW_EDIT_ADDRESS_FRAGMENT = 5, ADD_FIRST_ADDRESS_FRAGMENT = 6;
 
+    public static int MY_CART_FRAGMENT = 1,ORDER_SUMMARY_FRAGMENT = 2,ADDRESS_SELECTION_FRAGMENT=3,EDIT_ADDRESS_FRAGMENT=4,NEW_EDIT_ADDRESS_FRAGMENT=5,ADD_FIRST_ADDRESS_FRAGMENT=6;
     @Override
     protected void onCreate(Bundle onSaveInstanceState) {
         super.onCreate(onSaveInstanceState);
@@ -51,6 +50,9 @@ public class ProductCheckoutActivity extends BaseActivity {
             }
         }
     }
+
+
+
 
 
     private void addToolbarView(Toolbar toolbar) {
@@ -87,7 +89,7 @@ public class ProductCheckoutActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //  outState.putInt("n", 1);
+      //  outState.putInt("n", 1);
     }
 
     @Override
@@ -96,23 +98,8 @@ public class ProductCheckoutActivity extends BaseActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.wishlistbuttoncart:
-                Intent i = new Intent(this, MyWishlist.class);
-                startActivity(i);
-                return true;
-            case R.id.homebuttoncart:
-                i = new Intent(this, HomeActivity.class);
-                startActivity(i);
-                return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.cart_activity_menu, menu);
-        return true;
     }
 
     public TextView getTitleText() {
@@ -128,7 +115,7 @@ public class ProductCheckoutActivity extends BaseActivity {
 
     public boolean isBackPressed() {
         boolean isResult = isBackPressed;
-        if (isBackPressed) {
+        if(isBackPressed){
             isBackPressed = false;
         }
         return isResult;
@@ -137,11 +124,11 @@ public class ProductCheckoutActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         isBackPressed = true;
-        if (isAddingFirstAddress) {
+        if(isAddingFirstAddress){
             getSupportFragmentManager().popBackStack();
             getSupportFragmentManager().popBackStack();
-            isAddingFirstAddress = false;
-        } else {
+            isAddingFirstAddress=false;
+        }else {
             super.onBackPressed();
         }
       /*  ZFragment zf = (ZFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -217,7 +204,7 @@ public class ProductCheckoutActivity extends BaseActivity {
 
 
                 } else {
-                    if (count == 0 || count == 1) {
+                    if (count == 0 || count==1) {
                         Bundle bundle = savedInstanceState;
                         bundle.putSerializable("addressShipping", (AddressObject) savedInstanceState.getSerializable("address"));
 
@@ -242,7 +229,7 @@ public class ProductCheckoutActivity extends BaseActivity {
 
     public void setOrderSummaryFragmentWithoutBackstack(Bundle savedInstanceState) {
         savedInstanceState.putBoolean("from_checkout", true);
-        if (orderSummaryFrag != null)
+        if(orderSummaryFrag!=null)
             orderSummaryFrag = OrderSummaryFragment.newInstance(savedInstanceState);
         titleText.setText("Order Summary");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, orderSummaryFrag, ORDER_SUMMARY).commit();
@@ -270,11 +257,10 @@ public class ProductCheckoutActivity extends BaseActivity {
 
     /**
      * Add Order Summary fragment as the first fragment and donot add anything in backstack
-     *
      * @param bundle
      */
-    public void newOrderSummaryFragmentWithoutBackStack(Bundle bundle) {
-        if (orderSummaryFrag == null) {
+    public void newOrderSummaryFragmentWithoutBackStack(Bundle bundle){
+        if(orderSummaryFrag==null){
             orderSummaryFrag = OrderSummaryFragment.newInstance(bundle);
         }
         // titleText.setText("");
@@ -283,31 +269,28 @@ public class ProductCheckoutActivity extends BaseActivity {
 
     /**
      * Add Order Summary fragment as the  fragment and add previos fragment in backstack
-     *
      * @param bundle
      */
-    public void newOrderSummaryFragmentWithBackStack(Bundle bundle) {
-        if (orderSummaryFrag == null) {
+    public void newOrderSummaryFragmentWithBackStack(Bundle bundle){
+        if(orderSummaryFrag==null){
             orderSummaryFrag = OrderSummaryFragment.newInstance(bundle);
         }
-        //  titleText.setText("Order Summary");
+      //  titleText.setText("Order Summary");
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, orderSummaryFrag, ORDER_SUMMARY).addToBackStack(null).commit();
     }
 
     /**
      * MyCart fragment is always added as the first fragment. Nothing is added in the backstack
-     *
      * @param savedInstanceState
      */
     private void setMyCartFragment(Bundle savedInstanceState) {
-        if (myCartFrag == null)
+        if(myCartFrag==null)
             myCartFrag = MyCartFragment.newInstance(savedInstanceState);
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, myCartFrag, CART_TAG).commit();
     }
 
     /**
      * Address Selection fragment is added with a backstack
-     *
      * @param savedInstanceState
      */
     public void setAddressSelectionFragmentWithBackstack(Bundle savedInstanceState) {
@@ -319,24 +302,24 @@ public class ProductCheckoutActivity extends BaseActivity {
     /**
      * Pop fragment from the backstack
      */
-    public void popFromBackStack(int comingFragment) {
+    public void popFromBackStack(int comingFragment){
 
 
-        if (comingFragment == ORDER_SUMMARY_FRAGMENT) {
+        if(comingFragment==ORDER_SUMMARY_FRAGMENT){
             getSupportFragmentManager().popBackStack();
-            ((OrderSummaryFragment) orderSummaryFrag).updateAddress();
-        } else if (comingFragment == EDIT_ADDRESS_FRAGMENT) {
+            ((OrderSummaryFragment)orderSummaryFrag).updateAddress();
+        }else if(comingFragment == EDIT_ADDRESS_FRAGMENT){
 
             getSupportFragmentManager().popBackStack();
-            ((NewAddressSelectionFragment) addressSelectionFrag).updateAddress();
-        } else if (comingFragment == NEW_EDIT_ADDRESS_FRAGMENT) {
+            ((NewAddressSelectionFragment)addressSelectionFrag).updateAddress();
+        }else if(comingFragment == NEW_EDIT_ADDRESS_FRAGMENT){
             getSupportFragmentManager().popBackStack();
             getSupportFragmentManager().popBackStack();
-            ((OrderSummaryFragment) orderSummaryFrag).updateAddress();
-        } else if (comingFragment == ADD_FIRST_ADDRESS_FRAGMENT) {
-            isAddingFirstAddress = false;
+            ((OrderSummaryFragment)orderSummaryFrag).updateAddress();
+        }else if(comingFragment == ADD_FIRST_ADDRESS_FRAGMENT){
+            isAddingFirstAddress=false;
             getSupportFragmentManager().popBackStack();
-            ((OrderSummaryFragment) orderSummaryFrag).updateAddress();
+            ((OrderSummaryFragment)orderSummaryFrag).updateAddress();
         }
     }
 
