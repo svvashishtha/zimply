@@ -230,18 +230,37 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((ProductInfoHolder2) holder).cancelBooking.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mListener!=null){
+                        if (mListener != null) {
                             mListener.onCancelBookingRequest(((ProductInfoHolder2) holder));
                         }
                     }
                 });
+
+                ((ProductInfoHolder2)holder).mapImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getAddress().getLatitude() + "," + obj.getVendor().getAddress().getLongitude() + "(" + obj.getVendor().getName()+ ")");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        mContext.startActivity(intent);
+                    }
+                });
+                ((ProductInfoHolder2)holder).direction.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder2)holder).direction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getAddress().getLatitude() + "," + obj.getVendor().getAddress().getLongitude() + "(" + obj.getVendor().getName() + ")");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        mContext.startActivity(intent);
+                    }
+                });
             }else{
+                ((ProductInfoHolder2)holder).mapImage.setOnClickListener(null);
                 ((ProductInfoHolder2)holder).storeAddress.setText(obj.getVendor().getAddress().getCity());
                 ((ProductInfoHolder2) holder).bookStoreVisit.setVisibility(View.VISIBLE);
                 ((ProductInfoHolder2) holder).bookingConfirmCard.setVisibility(View.GONE);
                 ((ProductInfoHolder2) holder).cancelBooking.setVisibility(View.GONE);
+                ((ProductInfoHolder2)holder).direction.setVisibility(View.INVISIBLE);
             }
-
             ((ProductInfoHolder2) holder).bookStoreVisit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -265,22 +284,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     mContext.startActivity(callIntent);
                 }
             });
-            ((ProductInfoHolder2)holder).direction.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getAddress().getLatitude() + "," + obj.getVendor().getAddress().getLongitude() + "(" + obj.getVendor().getName() + ")");
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    mContext.startActivity(intent);
-                }
-            });
-            ((ProductInfoHolder2)holder).mapImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getAddress().getLatitude() + "," + obj.getVendor().getAddress().getLongitude() + "(" + obj.getVendor().getName()+ ")");
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    mContext.startActivity(intent);
-                }
-            });
+
+
             ((ProductInfoHolder2)holder).directionLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -771,6 +776,16 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     moveBookingCompleteCardIn(holder);
                 }else if(checkCase == BOOK_PROCESS_COMPLETE){
                     holder.storeAddress.setText(obj.getVendor().getName() + ", " + obj.getVendor().getAddress().getLine1() + ", " + obj.getVendor().getAddress().getCity());
+                    holder.direction.setVisibility(View.VISIBLE);
+                    holder.direction.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + obj.getVendor().getAddress().getLatitude() + "," + obj.getVendor().getAddress().getLongitude() + "(" + obj.getVendor().getName() + ")");
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            mContext.startActivity(intent);
+                        }
+                    });
+
                 }
             }
 

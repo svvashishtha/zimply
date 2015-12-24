@@ -385,10 +385,15 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     }
 
     @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-
+        if (isVisibleToUser && mAdapter!=null && AllUsers.getInstance().getObjs()!=null &&AllUsers.getInstance().getObjs().size()>0) {
+            mAdapter.changeShippingBillingAddress(AllUsers.getInstance().getObjs().get(0));
         }
     }
 
@@ -430,6 +435,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             intent.putExtra("address", shippingAddress);
             intent.putExtra("buying_channel", buyingChannel);
             intent.putExtra("is_coc", isCoc());
+            intent.putExtra("is_cod_not_available", isCodNotAvailable());
             intent.putExtra("is_all_online", isAllOnline());
             intent.putExtra("cart_obj", cartObject);
             startActivity(intent);
@@ -445,6 +451,15 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             }
         }
         return true;
+    }
+
+    public boolean isCodNotAvailable() {
+        for (int i = 0; i < cartObject.getCart().getDetail().size(); i++) {
+            if (!cartObject.getCart().getDetail().get(i).getProduct().is_cod()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isAllOnline() {

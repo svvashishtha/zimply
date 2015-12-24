@@ -45,7 +45,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void changeStatus(int position,int orderId,int status){
         for(IndividualOrderItemObj obj :objs.get(position).getOrderitem()){
-            if(obj.getProduct().getId() == orderId){
+            if(obj.getId() == orderId){
                 if(status == AppConstants.CANCEL_ORDER){
                     obj.setStatus("Cancelled");
                     obj.setCancel_orderitem(false);
@@ -125,7 +125,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }else if(!obj.getStatus().equalsIgnoreCase("Cancelled")){
                     view.findViewById(R.id.status_btn).setVisibility(View.GONE);
                     //((TextView) view.findViewById(R.id.status_btn)).setText("Track");
-
                 }else{
                     view.findViewById(R.id.status_btn).setVisibility(View.GONE);
                 }
@@ -134,9 +133,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     @Override
                     public void onClick(View v) {
                         if (obj.isCancel_orderitem()) {
-                            mListener.onCancelClick(position, obj.getProduct().getId());
+                            mListener.onCancelClick(position, obj.getId());
                         } else if (obj.isReturn_orderitem()) {
-                            mListener.onReturnClick(position, obj.getProduct().getId());
+                            mListener.onReturnClick(position, obj.getId());
                         } else {
 
                         }

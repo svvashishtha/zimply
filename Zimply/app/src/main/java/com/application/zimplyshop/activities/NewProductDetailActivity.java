@@ -66,10 +66,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     double requestTime;
     int spaceHeight;
     TextView addToCart,buyNow;
+
+    boolean isShared;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_product_detail_activity);
+        isShared = getIntent().getBooleanExtra("is_shared", false);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
@@ -439,7 +443,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home){
-            finish();
+           onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -822,4 +826,15 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if(isShared){
+            Intent intent = new Intent(this,HomeActivity.class);
+            this.finish();
+            startActivity(intent);
+        }else{
+            super.onBackPressed();
+        }
+    }
 }

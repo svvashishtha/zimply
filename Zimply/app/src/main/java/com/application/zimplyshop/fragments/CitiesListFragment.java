@@ -160,7 +160,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
     public void startLocationCheck1() {
 
-        if(forced && z_ProgressDialog==null){
+        if(getActivity()!=null &&forced && z_ProgressDialog==null){
             z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location. Please wait..");
         }
         PackageManager pm = AppApplication.getInstance().getPackageManager();
@@ -314,7 +314,9 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     }
 
     public Location getLocation() {
-        z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Finding Location..");
+        if(getActivity()!=null) {
+            z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Finding Location..");
+        }
         if (LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient) == null) {
             try {
                 Thread.sleep(1000);
@@ -423,7 +425,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     }
 
     public void checkLocationConnection() {
-        if(forced && (z_ProgressDialog==null ||(z_ProgressDialog!=null && !z_ProgressDialog.isShowing())))
+        if(getActivity()!=null && forced && (z_ProgressDialog==null ||(z_ProgressDialog!=null && !z_ProgressDialog.isShowing())))
             z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);

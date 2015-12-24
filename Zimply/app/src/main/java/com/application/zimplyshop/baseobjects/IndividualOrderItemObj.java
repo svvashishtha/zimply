@@ -25,6 +25,16 @@ public class IndividualOrderItemObj implements Serializable{
 
     private String color;
 
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String estimated_delivery;
 
 

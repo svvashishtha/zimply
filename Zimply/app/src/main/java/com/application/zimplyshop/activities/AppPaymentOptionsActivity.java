@@ -59,7 +59,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     int buyingChannel;
 
-    boolean isCoc,isAllOnline;
+    boolean isCoc,isAllOnline,isCodNotAvailable;
 
     CartObject cartObj;
 
@@ -76,9 +76,9 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             addressObj = (AddressObject)getIntent().getSerializableExtra("address");
             buyingChannel = getIntent().getIntExtra("buying_channel", 0);
             isCoc = getIntent().getBooleanExtra("is_coc", false);
-
             isAllOnline =  getIntent().getBooleanExtra("is_all_online",false);
             cartObj = (CartObject)getIntent().getSerializableExtra("cart_obj");
+            isCodNotAvailable = getIntent().getBooleanExtra("is_cod_not_available",false);
         }
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         addToolbarView(toolbar);
@@ -90,15 +90,28 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
         }*/
 
-        if(totalPrice >20000){
+        if(totalPrice >20000 ){
             SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
             string.setSpan(new RelativeSizeSpan(0.8f),18,string.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() -1, 0);
+            string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() - 1, 0);
             ((CustomTextView)findViewById(R.id.cash_on_delivery)).setText(string);
             //((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
             ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(false);
             ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
             ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
+
+
+        }else if(isCodNotAvailable){
+            SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
+            string.setSpan(new RelativeSizeSpan(0.8f),18,string.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() - 1, 0);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setText(string);
+            //((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(false);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setText("*One or more item(s) in your cart is not eligible for COD. Use online payment mode.");
+            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
+            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
+
         }else{
             ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.GONE);
             ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(true);

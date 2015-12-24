@@ -121,7 +121,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
             @Override
             public void sendPasswordRequest(String newPassword, String oldPassword) {
 //todo add request here
-                String url = AppApplication.getInstance().getBaseUrl() + "zimply-auth/change-password";
+                String url = AppApplication.getInstance().getBaseUrl() + "zimply-auth/change-password/";
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
                 list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(SettingsPage.this)));
                 list.add(new BasicNameValuePair("password", oldPassword));
@@ -234,7 +234,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
 
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
-        if (requestType == CHANGE_PASSWORD) {
+        if (!destroyed && requestType == CHANGE_PASSWORD) {
             progressDialog = ProgressDialog.show(SettingsPage.this, "Changing Password", "Please wait");
         }
     }

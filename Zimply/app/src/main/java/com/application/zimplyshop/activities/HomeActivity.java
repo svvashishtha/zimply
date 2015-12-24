@@ -509,9 +509,17 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         }
                         break;
                     case 5:
-
-                        Intent settingsIntent = new Intent(HomeActivity.this, SettingsPage.class);
-                        startActivity(settingsIntent);
+                        mDrawer.closeDrawers();
+                        if (AppPreferences.isUserLogIn(HomeActivity.this)) {
+                            Intent settingsIntent = new Intent(HomeActivity.this, SettingsPage.class);
+                            startActivity(settingsIntent);
+                        }else{
+                            showToast("Please Login to continue");
+                            intent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
+                            isToLoginPage = true;
+                            intent.putExtra("inside", true);
+                            startActivity(intent);
+                        }
                         break;
 
                     case 6:
@@ -613,19 +621,15 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         } else if (requestCode == REQUEST_TYPE_FROM_SEARCH) {
             if (resultCode == RESULT_OK) {
                 String contents = data.getStringExtra("SCAN_RESULT");
-                //Toast.makeText(this , "CONTENT"+contents,Toast.LENGTH_SHORT).show();
+
                 String format = data.getStringExtra("SCAN_RESULT_FORMAT");
-                //Toast.makeText(this , "FORMAT:"+format,Toast.LENGTH_SHORT).show();
+
                 JSONObject obj = JSONUtils.getJSONObject(contents);
-                // Intent workintent = new Intent(this, ProductDetailsActivity.class);
+
                 productId = JSONUtils.getIntegerfromJSON(obj, "id");
                 slug = JSONUtils.getStringfromJSON(obj, "slug");
                 moveToProductDetail(productId, slug);
-                // addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
-                // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
-                // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
-                // startActivity(workintent );
-                // Handle successful scan
+
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
             }
@@ -701,6 +705,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, SelectCity.class);
+                intent.putExtra("show_back", true);
                 startActivity(intent);
             }
         });
@@ -1197,8 +1202,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     private void phoneVerification() {
-        Toast.makeText(this, "Chechking Phone Verification", Toast.LENGTH_SHORT).show();
-
         String finalUrl = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION
                 + "?userid=" + AppPreferences.getUserID(this);
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,

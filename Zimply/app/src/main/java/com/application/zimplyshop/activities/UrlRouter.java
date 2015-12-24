@@ -101,10 +101,10 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
     }
 
     private void navigateToProduct(String slug, String id) {
-        Intent intent = new Intent(UrlRouter.this, ProductDetailsActivity.class);
+        Intent intent = new Intent(UrlRouter.this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("is_shared",true);
-        long pId = Integer.parseInt(id);
+        int pId = Integer.parseInt(id);
         intent.putExtra("id", pId);
         this.finish();
         startActivity(intent);

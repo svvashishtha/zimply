@@ -95,14 +95,41 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((OrderItemHolder) holder).bookingStatus.setVisibility(View.VISIBLE);
                 ((OrderItemHolder) holder).bookingStatus.setText("CANCELLED");
                 ((OrderItemHolder) holder).cancelBooking.setVisibility(View.GONE);
+                ((OrderItemHolder) holder).getDirections.setBackgroundColor(mContext.getResources().getColor(R.color.z_grey_color));
+                 ((OrderItemHolder) holder).callCustomer.setBackgroundColor(mContext.getResources().getColor(R.color.z_grey_color));
+                ((OrderItemHolder) holder).getDirections.setOnClickListener(null);
+                ((OrderItemHolder) holder).callCustomer.setOnClickListener(null);
             } else if (objs.get(position).getBook().getBooking_status().equalsIgnoreCase("EXPIRED")) {
                 ((OrderItemHolder) holder).bookingStatus.setVisibility(View.VISIBLE);
                 ((OrderItemHolder) holder).bookingStatus.setText(objs.get(position).getBook().getBooking_status());
                 ((OrderItemHolder) holder).cancelBooking.setVisibility(View.GONE);
+                ((OrderItemHolder) holder).getDirections.setBackgroundColor(mContext.getResources().getColor(R.color.z_grey_color));
+                ((OrderItemHolder) holder).callCustomer.setBackgroundColor(mContext.getResources().getColor(R.color.z_grey_color));
+                ((OrderItemHolder) holder).getDirections.setOnClickListener(null);
+                ((OrderItemHolder) holder).callCustomer.setOnClickListener(null);
             } else {
+                ((OrderItemHolder) holder).callCustomer.setBackgroundResource(R.drawable.book_btn_bg);
+                ((OrderItemHolder) holder).getDirections.setBackgroundResource(R.drawable.book_btn_bg);
                 ((OrderItemHolder) holder).bookingStatus.setVisibility(View.GONE);
                 ((OrderItemHolder) holder).cancelBooking.setVisibility(View.VISIBLE);
+                ((OrderItemHolder) holder).callCustomer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:" + objs.get(position).getVendor().getAddress().getPhone()));
+                        mContext.startActivity(callIntent);
+                    }
+                });
 
+                ((OrderItemHolder) holder).getDirections.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + objs.get(position).getVendor().getAddress().getLatitude() + "," + objs.get(position).getVendor().getAddress().getLongitude() + "(" + objs.get(position).getVendor().getName() + ")");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        mContext.startActivity(intent);
+
+                    }
+                });
                 ((OrderItemHolder) holder).cancelBooking.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -113,24 +140,7 @@ public class BookedHistoryAdapter extends RecyclerView.Adapter<RecyclerView.View
                 });
             }
 
-            ((OrderItemHolder) holder).callCustomer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + objs.get(position).getVendor().getAddress().getPhone()));
-                    mContext.startActivity(callIntent);
-                }
-            });
 
-            ((OrderItemHolder) holder).getDirections.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Uri uri = Uri.parse("geo:" + AppApplication.getInstance().lat + "," + AppApplication.getInstance().lon + "?q=" + objs.get(position).getVendor().getAddress().getLatitude() + "," + objs.get(position).getVendor().getAddress().getLongitude() + "(" + objs.get(position).getVendor().getName() + ")");
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    mContext.startActivity(intent);
-
-                }
-            });
 
             ((OrderItemHolder) holder).bookCard.setOnClickListener(new View.OnClickListener() {
                 @Override
