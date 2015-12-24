@@ -206,5 +206,5 @@
     <string name="save">SAVE</string>
     <string name="otp_name">Enter OTP</string>
 
-    <string name="logout_string_phone_verification"><u>Not You? Logout</u></string>
+    <string name="logout_string_phone_verification">Not You? <u>Logout</u></string>
 </resources>
