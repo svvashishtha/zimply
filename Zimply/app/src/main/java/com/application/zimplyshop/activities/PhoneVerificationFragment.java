@@ -56,7 +56,7 @@ public class PhoneVerificationFragment extends BaseFragment implements UploadMan
         getView = getView();
         destroyed = false;
         width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        ((EditText)getView.findViewById(R.id.phone_number)).setInputType(InputType.TYPE_CLASS_PHONE);
+        ((EditText) getView.findViewById(R.id.phone_number)).setInputType(InputType.TYPE_CLASS_PHONE);
         UploadManager.getInstance().addCallback(this);
 
         View verifyButton = getView.findViewById(R.id.proceed_button);
@@ -70,9 +70,9 @@ public class PhoneVerificationFragment extends BaseFragment implements UploadMan
         getView.findViewById(R.id.proceed_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mobile = ((TextView)getView.findViewById(R.id.phone_number)).getText().toString();
+                String mobile = ((TextView) getView.findViewById(R.id.phone_number)).getText().toString();
 
-                if(mobile == null || mobile.length() < 10 || mobile.length() > 10) {
+                if (mobile == null || mobile.length() < 10 || mobile.length() > 10) {
                     showToast("Invalid phone number");
                     return;
                 }
@@ -91,16 +91,22 @@ public class PhoneVerificationFragment extends BaseFragment implements UploadMan
             }
         });
 
+        getView.findViewById(R.id.notyoulogout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BaseActivity.logOutUserFromApp(getActivity(), BaseLoginSignupActivity.class);
+            }
+        });
     }
 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
-        if(requestType == RequestTags.PHONE_VERIFICATION_INPUT_NUMBER) {
-            if(!destroyed) {
+        if (requestType == RequestTags.PHONE_VERIFICATION_INPUT_NUMBER) {
+            if (!destroyed) {
                 getView.findViewById(R.id.proceed_button_progress).setVisibility(View.GONE);
                 getView.findViewById(R.id.proceed_button_text).setVisibility(View.VISIBLE);
-                if(status) {
-                    ((CheckPhoneVerificationActivity)getActivity()).setSubCategoryFragment(((TextView)getView.findViewById(R.id.phone_number)).getText().toString());
+                if (status) {
+                    ((CheckPhoneVerificationActivity) getActivity()).setSubCategoryFragment(((TextView) getView.findViewById(R.id.phone_number)).getText().toString());
                 } else {
                     showToast("Something went wrong in the phone verification. Please try after some time.");
                 }
