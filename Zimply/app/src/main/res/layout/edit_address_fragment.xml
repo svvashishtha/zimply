@@ -146,12 +146,31 @@
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small">
+                <com.application.zimplyshop.widgets.CustomEdittext
+                    android:id="@+id/pincode"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/pin_code_et_hint"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:maxLength="6"
+                    android:padding="@dimen/size12"
+                    android:singleLine="true"
+                    android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/text_color1"
+                    android:textSize="@dimen/font_medium" />
+            </android.support.design.widget.TextInputLayout>
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+               <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small">
@@ -194,24 +213,7 @@
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_small">
-                <com.application.zimplyshop.widgets.CustomEdittext
-                    android:id="@+id/pincode"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/pin_code_et_hint"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:maxLength="6"
-                    android:padding="@dimen/size12"
-                    android:singleLine="true"
-                    android:textColorHint="@color/zhl_darkest"
-                    android:textColor="@color/text_color1"
-                    android:textSize="@dimen/font_medium" />
-            </android.support.design.widget.TextInputLayout>
+
 
             <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/is_available_pincode"

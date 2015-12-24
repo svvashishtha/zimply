@@ -1,5 +1,6 @@
 package com.application.zimplyshop.activities;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.SettingAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.preferences.AppPreferences;
@@ -34,7 +36,7 @@ import java.util.StringTokenizer;
 /**
  * Created by apoorvarora on 23/11/15.
  */
-public class SettingsPage extends BaseActivity implements UploadManagerCallback {
+public class SettingsPage extends BaseActivity implements UploadManagerCallback, RequestTags {
 
     private boolean destroyed = false;
     RecyclerView settingList;
@@ -42,6 +44,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
     SettingAdapter mAdapter;
     String number, prevOtp = "";
     boolean cancelled;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +119,15 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
             }
 
             @Override
-            public void sendPasswordRequest() {
-
+            public void sendPasswordRequest(String newPassword, String oldPassword) {
+//todo add request here
+                String url = AppApplication.getInstance().getBaseUrl() + "zimply-auth/change-password";
+                List<NameValuePair> list = new ArrayList<NameValuePair>();
+                list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(SettingsPage.this)));
+                list.add(new BasicNameValuePair("password", oldPassword));
+                list.add(new BasicNameValuePair("new_password", newPassword));
+                UploadManager.getInstance().makeAyncRequest(url, CHANGE_PASSWORD, "", ObjectTypes.OBJECT_TYPE_CHANGE_PASSWORD,
+                        null, list, null);
             }
 
             @Override
@@ -206,11 +216,27 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback 
             }
 
         }
+        if (requestType == CHANGE_PASSWORD) {
+            if (!destroyed) {
+                if (progressDialog != null && progressDialog.isShowing())
+                    progressDialog.dismiss();
+                if (status) {
+                    showToast("Password changed successfully");
+                } else {
+                    if (response != null)
+                        showToast(((ErrorObject) response).getErrorMessage());
+                    else
+                        showToast("Old password incorrect");
+                }
+            }
+        }
     }
 
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
-
+        if (requestType == CHANGE_PASSWORD) {
+            progressDialog = ProgressDialog.show(SettingsPage.this, "Changing Password", "Please wait");
+        }
     }
 
     private BroadcastReceiver mNotificationReceived = new BroadcastReceiver() {

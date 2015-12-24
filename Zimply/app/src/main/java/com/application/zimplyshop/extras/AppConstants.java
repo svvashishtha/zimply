@@ -57,7 +57,7 @@ public interface AppConstants {
     String NOTIFICATION_COUNT = "notification/gcmnotification-count/";
     String LATEST_BOOKINGS = "ecommerce/latest-bookings/";
     String GET_ORDER_SUMMARY_URL = "ecommerce/order-summ/";
-
+    String GET_CITY_FROM_PINCODE = "ecommerce/get-city/";
 
     String FILTER_CATEGORY_FRAGMENT_TAG = "filtercategoryfragmenttag";
     String FILTER_SUBCATEGORY_FRAGMENT_TAG = "filtersubcategoryfragmenttag";
