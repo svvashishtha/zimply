@@ -222,6 +222,8 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
                     progressDialog.dismiss();
                 if (status) {
                     showToast("Password changed successfully");
+                    mAdapter.setCounter(1);
+                    mAdapter.notifyItemChanged(1);
                 } else {
                     if (response != null)
                         showToast(((ErrorObject) response).getErrorMessage());

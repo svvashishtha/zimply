@@ -226,17 +226,29 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
             } else if (counter == 4) {
                 // when edit password is selected
+
                 itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
                 itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.VISIBLE);
+                itemHolderPassword.newPassword.setText("");
+                itemHolderPassword.oldpassword.setText("");
+                itemHolderPassword.confirmPassword.setText("");
                 itemHolderPassword.container.findViewById(R.id.cancel_verify).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setCounter(1);
                         notifyItemChanged(1);
                         try {
-                            CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolderPassword.container.findViewById(R.id.old_password)));
-                            CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolderPassword.container.findViewById(R.id.new_password)));
-                            CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolderPassword.container.findViewById(R.id.confirm_password)));
+                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -245,18 +257,44 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 itemHolderPassword.container.findViewById(R.id.change_password).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         if (itemHolderPassword.newPassword.getText().toString().trim().length() > 0 &&
                                 itemHolderPassword.oldpassword.getText().toString().trim().length() > 0 &&
                                 itemHolderPassword.confirmPassword.getText().toString().trim().length() > 0) {
-                            if (itemHolderPassword.newPassword.getText().toString()
+                            if (itemHolderPassword.newPassword.getText().toString().trim().length() > 8 &&
+                                    itemHolderPassword.oldpassword.getText().toString().trim().length() > 8 &&
+                                    itemHolderPassword.confirmPassword.getText().toString().trim().length() > 8) {
+
+                                if (itemHolderPassword.newPassword.getText().toString()
                                     .equalsIgnoreCase(itemHolderPassword.confirmPassword.getText().toString())) {
+                                try {
+                                    CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                //send request via activity
                                 mListener.sendPasswordRequest(itemHolderPassword.newPassword.getText().toString(),
                                         itemHolderPassword.oldpassword.getText().toString());
                             } else {
                                 Toast.makeText(context, "Passwords must match", Toast.LENGTH_SHORT).show();
                             }
+                        }else {
+                                Toast.makeText(context, "Password must be 8 characters long.", Toast.LENGTH_SHORT).show();
+                            }
+
                         } else {
-                            Toast.makeText(context, "All feilds are important", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "All fields are important", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

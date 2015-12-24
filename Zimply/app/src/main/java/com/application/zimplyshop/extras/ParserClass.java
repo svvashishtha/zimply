@@ -913,6 +913,12 @@ public class ParserClass implements ObjectTypes {
                 return latestBookingObjects;
             case OBJECT_TYPE_CITY_STATE:
                 return responseString;
+            case OBJECT_TYPE_CHANGE_PASSWORD:
+                try {
+                    return JSONUtils.getStringfromJSON(new JSONObject(responseString),"success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             default:
                 return null;
         }
