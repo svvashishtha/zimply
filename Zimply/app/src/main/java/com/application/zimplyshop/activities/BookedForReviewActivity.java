@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 11/14/2015.
  */
-public class BookedForReviewActivity extends BaseActivity implements GetRequestListener,UploadManagerCallback,View.OnClickListener,AppConstants,RequestTags {
+public class BookedForReviewActivity extends BaseActivity implements GetRequestListener, UploadManagerCallback, View.OnClickListener, AppConstants, RequestTags {
 
     RecyclerView orderList;
 
@@ -51,8 +51,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
 
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
-    boolean isLoading,isRequestAllowed;
-
+    boolean isLoading, isRequestAllowed;
 
 
     @Override
@@ -64,7 +63,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        orderList = (RecyclerView)findViewById(R.id.categories_list);
+        orderList = (RecyclerView) findViewById(R.id.categories_list);
         orderList.setLayoutManager(new LinearLayoutManager(this));
         orderList.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small)));
         GetRequestManager.getInstance().addCallbacks(this);
@@ -75,18 +74,18 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
         loadData();
     }
 
-    public void addToolbarView(Toolbar toolbar){
-        View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar,false);
+    public void addToolbarView(Toolbar toolbar) {
+        View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar, false);
         ((TextView) view.findViewById(R.id.title_textview)).setText("My Bookings");
         toolbar.addView(view);
     }
 
     String nextUrl;
 
-    public void loadData(){
+    public void loadData() {
         String finalUrl;
         if (nextUrl == null) {
-            finalUrl = AppApplication.getInstance().getBaseUrl()+ AppConstants.BOOKED_PRODUCTS_URL+"?userid="+ AppPreferences.getUserID(this);
+            finalUrl = AppApplication.getInstance().getBaseUrl() + AppConstants.BOOKED_PRODUCTS_URL + "?userid=" + AppPreferences.getUserID(this);
 
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
@@ -96,12 +95,12 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
-        if(!isDestroyed && requestType == RequestTags.CANCEL_PRODUCT_REVIEW_TAG){
-            if(progressDialog!=null){
+        if (!isDestroyed && requestType == RequestTags.CANCEL_PRODUCT_REVIEW_TAG) {
+            if (progressDialog != null) {
                 progressDialog.dismiss();
             }
 
-            if(status) {
+            if (status) {
                 final AlertDialog logoutDialog;
                 logoutDialog = new AlertDialog.Builder(BookedForReviewActivity.this)
                         .setTitle("Success")
@@ -119,27 +118,28 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                                 }).create();
                 logoutDialog.show();
             }
-        }else if(!isDestroyed && requestType == ADD_TO_CART_PRODUCT_DETAIL){
-            if(progressDialog!=null){
+        } else if (!isDestroyed && requestType == ADD_TO_CART_PRODUCT_DETAIL) {
+            if (progressDialog != null) {
                 progressDialog.dismiss();
             }
-            if(status){
+            if (status) {
                 showToast("Successfully added to cart");
                 AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(addToCartId, 1));
                 AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                 adapter.changeAddBtnText(addToCartId);
-            }else{
+            } else {
                 showToast("Could not add into cart. Try again");
             }
         }
     }
 
-    ProgressDialog  progressDialog;
+    ProgressDialog progressDialog;
+
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
-        if(!isDestroyed && requestType == RequestTags.CANCEL_PRODUCT_REVIEW_TAG){
+        if (!isDestroyed && requestType == RequestTags.CANCEL_PRODUCT_REVIEW_TAG) {
             progressDialog = ProgressDialog.show(this, null, "Loading.Please Wait..");
-        }else if(!isDestroyed && requestType == RequestTags.ADD_TO_CART_PRODUCT_DETAIL){
+        } else if (!isDestroyed && requestType == RequestTags.ADD_TO_CART_PRODUCT_DETAIL) {
             progressDialog = ProgressDialog.show(this, null, "Adding to cart.Please Wait..");
         }
     }
@@ -147,7 +147,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)) {
 
             if (orderList.getAdapter() == null
                     || orderList.getAdapter().getItemCount() == 0) {
@@ -165,9 +165,9 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)) {
 
-            if (((BookedProductHistoryObject)obj).getBooks().size()  == 0) {
+            if (((BookedProductHistoryObject) obj).getBooks().size() == 0) {
                 if (orderList.getAdapter() == null
                         || orderList.getAdapter().getItemCount() == 1) {
                     showNullCaseView("No Bookings");
@@ -179,13 +179,13 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
                 }
                 isRequestAllowed = false;
             } else {
-                setAdapterData(((BookedProductHistoryObject)obj).getBooks());
+                setAdapterData(((BookedProductHistoryObject) obj).getBooks());
 
                 nextUrl = ((BookedProductHistoryObject) obj).getNext_url();
 
                 showView();
                 changeViewVisiblity(orderList, View.VISIBLE);
-                if (((BookedProductHistoryObject)obj).getBooks().size() < 10) {
+                if (((BookedProductHistoryObject) obj).getBooks().size() < 10) {
                     isRequestAllowed = false;
                     ((BookedHistoryAdapter) orderList.getAdapter())
                             .removeItem();
@@ -203,15 +203,34 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
 
     int clickedPos;
 
-    public void setAdapterData(ArrayList<LatestBookingObject> objs){
-        if(adapter==null) {
+    public void setAdapterData(ArrayList<LatestBookingObject> objs) {
+        if (adapter == null) {
             adapter = new BookedHistoryAdapter(this);
             orderList.setAdapter(adapter);
             adapter.setOnItemClickListener(new BookedHistoryAdapter.OnItemClickListener() {
                 @Override
-                public void onCancelClick(int pos, int bookProductId) {
-                    clickedPos = pos;
-                    removeBookedItem(bookProductId);
+                public void onCancelClick(final int pos, final int bookProductId) {
+                    final AlertDialog cancelBooking;
+                    cancelBooking = new AlertDialog.Builder(BookedForReviewActivity.this)
+                            .setCancelable(false)
+                            .setTitle("Confirm")
+                            .setMessage("Do you want to cancel the booking?")
+                            .setPositiveButton("Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            clickedPos = pos;
+                                            removeBookedItem(bookProductId);
+                                        }
+                                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).create();
+                    cancelBooking.show();
+
                 }
 
                 @Override
@@ -263,30 +282,30 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
         adapter.addData(objs);
     }
 
-    public void addToCart(int id){
+    public void addToCart(int id) {
         String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
         List<NameValuePair> nameValuePair = new ArrayList<>();
-        nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_OFFLINE+""));
+        nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_OFFLINE + ""));
         nameValuePair.add(new BasicNameValuePair("product_id", id + ""));
         nameValuePair.add(new BasicNameValuePair("quantity", "1"));
         nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
 
-        UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, id+"", ObjectTypes.OBJECT_ADD_TO_CART, null, nameValuePair, null);
+        UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL, id + "", ObjectTypes.OBJECT_ADD_TO_CART, null, nameValuePair, null);
 
     }
 
-    public void removeBookedItem(int productId){
+    public void removeBookedItem(int productId) {
         String url = AppApplication.getInstance().getBaseUrl() + REMOVE_PRODUCT_REVIEW_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
 
-        list.add(new BasicNameValuePair("book_product_id", productId+""));
+        list.add(new BasicNameValuePair("book_product_id", productId + ""));
         UploadManager.getInstance().makeAyncRequest(url, RequestTags.CANCEL_PRODUCT_REVIEW_TAG, productId + "",
                 ObjectTypes.OBJECT_TYPE_REMOVE_PRODUCT_REVIEW, productId, list, null);
     }
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)) {
+        if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.BOOKED_HISTORY_REQUEST_TAG)) {
 
             if (orderList.getAdapter() == null
                     || orderList.getAdapter().getItemCount() == 1) {
@@ -311,9 +330,9 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.retry_layout:
-                if(isRequestFailed){
+                if (isRequestFailed) {
                     loadData();
                 }
                 break;
@@ -322,7 +341,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
 
     @Override
     protected void onDestroy() {
-        isDestroyed=true;
+        isDestroyed = true;
         UploadManager.getInstance().removeCallback(this);
         super.onDestroy();
 

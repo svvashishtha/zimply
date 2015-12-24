@@ -192,7 +192,7 @@
     <string name="change_password">Change Password</string>
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
-    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password">Confirm new password</string>
 
     <string name="load_error">Error occured in Google tag manager. Please try again later.</string>
 
@@ -205,4 +205,6 @@
     <string name="cod_not_avail">* You may only place Cash-on-Delivery orders up to \u20B9 20000</string>
     <string name="save">SAVE</string>
     <string name="otp_name">Enter OTP</string>
+
+    <string name="logout_string_phone_verification">Not You? <u>Logout</u></string>
 </resources>

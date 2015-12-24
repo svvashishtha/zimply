@@ -88,6 +88,13 @@ public class CheckPhoneVerificationFragment extends BaseFragment implements Uplo
         mVerificationCodeEditText.getLayoutParams().height = 3 * width / 20;
         ((RelativeLayout.LayoutParams) mVerificationCodeEditText.getLayoutParams()).setMargins(0, width / 20, 0, width / 20);
 
+        getView.findViewById(R.id.notyoulogout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BaseActivity.logOutUserFromApp(getActivity(), BaseLoginSignupActivity.class);
+            }
+        });
+
         mVerificationCodeEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -123,7 +130,7 @@ public class CheckPhoneVerificationFragment extends BaseFragment implements Uplo
 
             @Override
             public void onClick(View v) {
-                if(mobile == null || mobile.length() < 10 || mobile.length() > 10) {
+                if (mobile == null || mobile.length() < 10 || mobile.length() > 10) {
                     showToast("Invalid phone number");
                     return;
                 }
@@ -146,7 +153,7 @@ public class CheckPhoneVerificationFragment extends BaseFragment implements Uplo
 
             @Override
             public void onClick(View v) {
-                ((CheckPhoneVerificationActivity)getActivity()).setPreviousFragment(mBundle);
+                ((CheckPhoneVerificationActivity) getActivity()).setPreviousFragment(mBundle);
             }
         });
 
@@ -169,11 +176,11 @@ public class CheckPhoneVerificationFragment extends BaseFragment implements Uplo
 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
-        if(requestType == RequestTags.PHONE_VERIFICATION_OTP) {
+        if (requestType == RequestTags.PHONE_VERIFICATION_OTP) {
 
-            if(!destroyed) {
-                if(status) {
-                    AppPreferences.setUserPhoneNumber(getActivity(),mobile);
+            if (!destroyed) {
+                if (status) {
+                    AppPreferences.setUserPhoneNumber(getActivity(), mobile);
                     showToast("Verified");
                     CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
                     getActivity().finish();
@@ -258,9 +265,9 @@ public class CheckPhoneVerificationFragment extends BaseFragment implements Uplo
                     StringTokenizer tokens = new StringTokenizer(verificationMessage, " ");
                     String otp = "";
                     boolean otpFound = false;
-                    if(tokens.countTokens() > 0) {
+                    if (tokens.countTokens() > 0) {
 
-                        if(tokens.hasMoreTokens()) {
+                        if (tokens.hasMoreTokens()) {
                             otp = tokens.nextToken();
                             if (otp != null && otp.length() == 6) {
                                 otpFound = true;
@@ -268,10 +275,10 @@ public class CheckPhoneVerificationFragment extends BaseFragment implements Uplo
                         }
                     }
 
-                    if(!otpFound)
+                    if (!otpFound)
                         return;
 
-                    ((TextView)getView.findViewById(R.id.verification_code)).setText(otp+"");
+                    ((TextView) getView.findViewById(R.id.verification_code)).setText(otp + "");
                     CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
                     String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION;
                     List<NameValuePair> nameValuePair = new ArrayList<>();

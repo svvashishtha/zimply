@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/zhl"
-    android:padding="@dimen/size20"
-    android:clickable="true">
+    android:clickable="true"
+    android:padding="@dimen/size20">
 
     <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/verify_phone_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size20"
+        android:layout_marginTop="@dimen/size20"
         android:gravity="center_horizontal"
         android:padding="@dimen/size20"
-        android:layout_marginTop="@dimen/size20"
-        android:layout_marginBottom="@dimen/size20"
         android:textColor="@color/zdark" />
 
     <com.application.zimplyshop.widgets.CustomEdittext
@@ -21,13 +21,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/verify_phone_text"
+        android:layout_marginBottom="@dimen/size20"
+        android:layout_marginTop="@dimen/size20"
         android:background="@drawable/round_corner_borders_zhl"
         android:gravity="center"
         android:inputType="number"
         android:maxLength="6"
         android:textColor="@color/zdark"
-        android:layout_marginTop="@dimen/size20"
-        android:layout_marginBottom="@dimen/size20"
         android:textSize="@dimen/size18" />
 
     <com.application.zimplyshop.widgets.CustomTextView
@@ -51,6 +51,20 @@
         android:gravity="center"
         android:text="@string/edit_number"
         android:textColor="@color/zdark" />
+
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/notyoulogout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_number"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/size10"
+        android:text="@string/logout_string_phone_verification"
+        android:textColor="@color/z_blue_color"
+        android:textSize="@dimen/size14" />
 
     <RelativeLayout
         android:id="@+id/verification_code_loader"

@@ -1,11 +1,16 @@
 package com.application.zimplyshop.activities;
 
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,6 +25,7 @@ import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.managers.ImageLoaderManager;
+import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.UploadManager;
@@ -31,7 +37,7 @@ import java.util.ArrayList;
 /**
  * Created by Umesh Lohani on 11/2/2015.
  */
-public class MyWishlist extends BaseActivity implements GetRequestListener,View.OnClickListener, UploadManagerCallback {
+public class MyWishlist extends BaseActivity implements GetRequestListener,View.OnClickListener, UploadManagerCallback,AppConstants {
 
     RecyclerView productList;
 
@@ -94,6 +100,41 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     }
 
     boolean isLoading,isRequestAllowed;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        item.setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.cart:
+                Intent intent = new Intent(this, ProductCheckoutActivity.class);
+                intent.putExtra("OrderSummaryFragment", false);
+                intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        if (AllProducts.getInstance().getCartCount() > 0) {
+            findViewById(R.id.cart_item_true).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.cart_item_true)).setText(AllProducts.getInstance().getCartCount() + "");
+        } else {
+            findViewById(R.id.cart_item_true).setVisibility(View.GONE);
+        }
+        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+        super.onResume();
+    }
 
     @Override
     public void onRequestStarted(String requestTag) {

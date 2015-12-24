@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:textColor="@color/text_color1"
             android:hint="Search For City"
+            android:singleLine="true"
             android:background="@android:color/transparent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"

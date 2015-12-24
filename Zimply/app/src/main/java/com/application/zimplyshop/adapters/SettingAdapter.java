@@ -1,19 +1,27 @@
 package com.application.zimplyshop.adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.activities.BaseLoginSignupActivity;
+import com.application.zimplyshop.objects.AllProducts;
+import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomButton;
 import com.application.zimplyshop.widgets.CustomEdittext;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
@@ -47,11 +55,15 @@ public class SettingAdapter extends RecyclerView.Adapter {
         this.mListener = mListener;
     }
 
+    // case 1 when all views are minimised
+    // case 2 when number is enetered
+    // case 3 when otp is enetered
+    // case 4 when password view is visible
     @Override
     public int getItemViewType(int position) {
-        if (position == 0)
-            return 0;
-        else return 1;
+        if (position == 1)
+            return 1;
+        else return 0;
     }
 
     @Override
@@ -76,8 +88,11 @@ public class SettingAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position == 0) {
             final ItemHolderPhone itemHolder = (ItemHolderPhone) holder;
+            //this view is visible in case 1(all minimised) and case 4(password view is visible)
             if (counter == 1 || counter == 4) {
                 prevCounter = 1;
+                itemHolder.container.findViewById(R.id.title).setVisibility(View.VISIBLE);
+                itemHolder.container.findViewById(R.id.edit_image).setVisibility(View.VISIBLE);
                 itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
                 itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.GONE);
@@ -89,6 +104,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                         mListener.editNumber();
                     }
                 });
+                // this view is visible when edit option for phone number is selected
             } else if (counter == 2) {
                 itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.VISIBLE);
                 itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
@@ -96,7 +112,6 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)).setText(AppPreferences.getUserPhoneNumber(context));
                 itemHolder.container.findViewById(R.id.verify_number_progress).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.verify_button).setVisibility(View.VISIBLE);
-
                 itemHolder.container.findViewById(R.id.verify_button).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -123,14 +138,26 @@ public class SettingAdapter extends RecyclerView.Adapter {
                         mListener.onPhoneNumberCancel();
                     }
                 });
-               // ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)).requestFocus();
+                android.os.Handler handler = new android.os.Handler();
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)).requestFocus();
+                        ((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)).setSelection(((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)).getText().length());
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)), InputMethodManager.SHOW_IMPLICIT);
+                    }
+                },500);
+                //// this view is visible when otp is to be verified
             } else if (counter == 3) {
+
                 itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
                 itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.VISIBLE);
                 ((CustomEdittext) itemHolder.container.findViewById(R.id.otp)).setText("");
                 if (refreshView) {
-                    CommonLib.ZLog("SettingAdapter","timer started");
+                    CommonLib.ZLog("SettingAdapter", "timer started");
                     seconds = 60;
                     startTimer((CustomButton) itemHolder.container.findViewById(R.id.resend_code));
                 }
@@ -181,7 +208,9 @@ public class SettingAdapter extends RecyclerView.Adapter {
             }
 
         } else if (position == 1) {
-            ItemHolderPassword itemHolderPassword = (ItemHolderPassword) holder;
+            final ItemHolderPassword itemHolderPassword = (ItemHolderPassword) holder;
+            // this view is visible in all of cases 1 2 and 3
+            // all of these are phone number related views
             if (counter == 1 || counter == 2 || counter == 3) {
                 itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
                 itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.GONE);
@@ -195,6 +224,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 });
 
             } else if (counter == 4) {
+                // when edit password is selected
                 itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
                 itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.VISIBLE);
                 itemHolderPassword.container.findViewById(R.id.cancel_verify).setOnClickListener(new View.OnClickListener() {
@@ -202,6 +232,13 @@ public class SettingAdapter extends RecyclerView.Adapter {
                     public void onClick(View v) {
                         setCounter(1);
                         notifyItemChanged(1);
+                        try {
+                            CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolderPassword.container.findViewById(R.id.old_password)));
+                            CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolderPassword.container.findViewById(R.id.new_password)));
+                            CommonLib.hideKeyBoard((Activity) context, ((CustomEdittext) itemHolderPassword.container.findViewById(R.id.confirm_password)));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 itemHolderPassword.container.findViewById(R.id.change_password).setOnClickListener(new View.OnClickListener() {
@@ -210,8 +247,57 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
                     }
                 });
-
             }
+
+        } else if (position == 2) {
+            //this view is constant. all other views will be minimised when this is selected
+            final ItemHolderPhone itemHolder = (ItemHolderPhone) holder;
+            itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
+            itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
+            itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.GONE);
+
+            itemHolder.container.findViewById(R.id.title).setVisibility(View.GONE);
+            itemHolder.container.findViewById(R.id.edit_image).setVisibility(View.GONE);
+            ((CustomTextViewBold) itemHolder.container.findViewById(R.id.number)).setText("Logout");
+            itemHolder.container.findViewById(R.id.number).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setCounter(1);
+                    notifyItemChanged(0);
+                    notifyItemChanged(1);
+                    ZTracker.logGAEvent(context, "Settings", "Logout", "");
+                    final AlertDialog logoutDialog;
+                    logoutDialog = new AlertDialog.Builder(context)
+                            .setTitle(context.getResources().getString(R.string.logout))
+                            .setMessage(context.getResources().getString(R.string.logout_confirm))
+                            .setPositiveButton(context.getResources().getString(R.string.logout),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            AppPreferences.setIsUserLogin(context, false);
+                                            AppPreferences.setUserID(context, "");
+                                            AllProducts.getInstance().setCartCount(0);
+                                            AllProducts.getInstance().setCartObjs(null);
+                                            AllUsers.getInstance().setObjs(null);
+                                            AllProducts.getInstance().setHomeProCatNBookingObj(null);
+                                            AllProducts.getInstance().getVendorIds().clear();
+                                            Intent loginIntent = new Intent(context, BaseLoginSignupActivity.class);
+                                            loginIntent.putExtra("is_logout", true);
+
+                                            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            //loginIntent.putExtra("inside", true);
+                                            context.startActivity(loginIntent);
+                                        }
+                                    }).setNegativeButton(context.getResources().getString(R.string.dialog_cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    }).create();
+                    logoutDialog.show();
+                }
+            });
 
         }
 
@@ -220,7 +306,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 
     class ItemHolderPhone extends RecyclerView.ViewHolder {
