@@ -42,6 +42,9 @@ public class PayU {
     private Activity mActivity;
     private String mSalt;
 
+    public static void setINSTANCE() {
+        PayU.INSTANCE = null;
+    }
 
     public static final String AMOUNT = "amount";
     public static final String TXNID = "txnid";
@@ -210,7 +213,7 @@ public class PayU {
             intent.putExtra(PAYMENT_OPTIONS, m);
         }
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+       // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mActivity.startActivityForResult(intent, RESULT);
     }
 

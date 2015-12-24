@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -120,24 +121,41 @@ public class ProductListingActivity extends BaseActivity implements
 
         if (!AppPreferences.isPlpTutorialShown(this)) {
             AppPreferences.setIsPlpTutorialShown(this, true);
-            final ImageView plpTut = (ImageView) findViewById(R.id.plp_tutorial);
-            final TextView gotIt = (TextView) findViewById(R.id.next_title);
-            gotIt.setVisibility(View.VISIBLE);
-            plpTut.setVisibility(View.VISIBLE);
-            plpTut.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_plp, getDisplayMetrics().widthPixels, getDisplayMetrics().heightPixels));
-            gotIt.setOnClickListener(new OnClickListener() {
+
+            new Handler().postDelayed(new Runnable() {
                 @Override
-                public void onClick(View v) {
-                    plpTut.setVisibility(View.GONE);
-                    gotIt.setVisibility(View.GONE);
+                public void run() {
+                    final ImageView plpTut = (ImageView) findViewById(R.id.plp_tutorial);
+                    final TextView gotIt = (TextView) findViewById(R.id.next_title);
+                    gotIt.setVisibility(View.VISIBLE);
+                    plpTut.setVisibility(View.VISIBLE);
+                    plpTut.setClickable(true);
+                    plpTut.setImageBitmap(CommonLib.getBitmap(ProductListingActivity.this, R.drawable.ic_plp, getDisplayMetrics().widthPixels, getDisplayMetrics().heightPixels));
+                    gotIt.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            plpTut.setVisibility(View.GONE);
+                            gotIt.setVisibility(View.GONE);
+
+                            showFilterTut();
+
+                        }
+                    });
                 }
-            });
+            },5000);
         }
-
-
         loadData();
     }
 
+
+    public void showFilterTut(){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            },500);
+    }
 
     boolean isHideFilter;
     /*public int getSelectedCatgeoryId(int categoryId) {

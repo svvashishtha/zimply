@@ -57,7 +57,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_layout);
-
+        PAGE_TYPE =AppConstants.PAGE_TYPE_ORDER;
         findViewById(R.id.parent).setBackgroundColor(getResources().getColor(R.color.pager_bg));
 
         if( getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("fromHome"))

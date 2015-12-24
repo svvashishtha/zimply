@@ -12,7 +12,7 @@
         zimply:showAsAction="always"/>
     <item
         android:id="@+id/filter"
-        android:icon="@drawable/ic_action_content_filter_list"
+        android:icon="@drawable/ic_filter1"
         android:orderInCategory="100"
         android:title="@string/filters_text"
         android:visible="false"

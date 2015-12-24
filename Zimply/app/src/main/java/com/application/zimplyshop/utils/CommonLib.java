@@ -512,6 +512,7 @@ public class CommonLib {
 				FileInputStream fi;
 				BitmapFactory.Options opts = new BitmapFactory.Options();
 				opts.inPreferredConfig = Config.RGB_565;
+				opts.inDither=true;
 				fi = new FileInputStream(filePath);
 				defautBitmap = BitmapFactory.decodeStream(fi, null, opts);
 			}

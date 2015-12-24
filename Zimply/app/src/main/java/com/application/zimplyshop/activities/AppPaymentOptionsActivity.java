@@ -216,6 +216,11 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     int paymentType;
 
     public void sendPaymentSuccessFullRequest() {

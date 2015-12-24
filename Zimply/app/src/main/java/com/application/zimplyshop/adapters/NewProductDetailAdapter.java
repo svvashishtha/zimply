@@ -246,7 +246,6 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     if (AppPreferences.isUserLogIn(mContext)) {
-
                         showtransition(((ProductInfoHolder2) holder));
 
                     } else {
@@ -690,6 +689,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     boolean isBookingRequestStarted;
+
+
 
     public void showtransition(ProductInfoHolder2 holder){
         if(!isBookingRequestStarted) {

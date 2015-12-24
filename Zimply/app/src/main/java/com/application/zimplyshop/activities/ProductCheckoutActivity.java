@@ -125,8 +125,14 @@ public class ProductCheckoutActivity extends BaseActivity {
     public void onBackPressed() {
         isBackPressed = true;
         if(isAddingFirstAddress){
-            getSupportFragmentManager().popBackStack();
-            getSupportFragmentManager().popBackStack();
+
+            if(getSupportFragmentManager().getBackStackEntryCount()==2) {
+                getSupportFragmentManager().popBackStack();
+                getSupportFragmentManager().popBackStack();
+            }else{
+                getSupportFragmentManager().popBackStack();
+                this.finish();
+            }
             isAddingFirstAddress=false;
         }else {
             super.onBackPressed();

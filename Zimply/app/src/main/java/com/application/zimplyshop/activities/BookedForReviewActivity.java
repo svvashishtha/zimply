@@ -59,6 +59,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_layout);
+        PAGE_TYPE =AppConstants.PAGE_TYPE_BOOKINGS;
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);

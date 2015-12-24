@@ -4,20 +4,16 @@
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:id="@+id/parent_layout"
+             android:background="@drawable/bg_dropshadow"
              android:foreground="@drawable/photo_feedback"
              android:layout_height="match_parent">
 
-    <com.application.zimplyshop.widgets.RoundedImageView
+    <ImageView
         android:id="@+id/category_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:riv_border_color="@android:color/transparent"
-        app:riv_corner_radius="0dp"
         android:scaleType="centerCrop"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparent_black_color"/>
+
     <com.application.zimplyshop.widgets.CustomTextViewBold
         android:id="@+id/category_name"
         android:layout_width="wrap_content"
@@ -26,5 +22,6 @@
         android:textColor="@color/white"
         android:textSize="@dimen/font_xlarge"
         android:textStyle="bold"
+        android:visibility="gone"
         android:layout_height="wrap_content"/>
 </FrameLayout>

@@ -139,11 +139,13 @@ public class GetImage extends AsyncTask<Void, Void, Bitmap>implements Cloneable 
 						BitmapFactory.Options opts = new BitmapFactory.Options();
 						opts.inJustDecodeBounds = true;
 						opts.inPreferredConfig = Bitmap.Config.RGB_565;
+                        opts.inDither=true;
 						BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
 
 						opts.inJustDecodeBounds = false;
 						opts.inSampleSize = CommonLib.calculateInSampleSize(opts, width, height);
-						opts.inPreferredConfig = Bitmap.Config.RGB_565;
+                        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+                        opts.inDither=true;
 						bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
 
 						if (useDiskCache) {

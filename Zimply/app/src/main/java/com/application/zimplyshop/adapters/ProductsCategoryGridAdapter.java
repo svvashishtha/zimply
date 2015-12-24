@@ -93,7 +93,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             ((ProductsCategoryViewHolder) holder).parentFrame.setLayoutParams(lp);
-            ((ProductsCategoryViewHolder) holder).categoryName.setText(obj.getProduct_category().get(newPos).getName());
+            //((ProductsCategoryViewHolder) holder).categoryName.setText(obj.getProduct_category().get(newPos).getName());
 
             //((ProductsCategoryViewHolder) holder).categoryImg.setBackgroundResource(R.drawable.bg_dropshadow);
             if (obj.getProduct_category().get(newPos).getImg().getImage() != null) {

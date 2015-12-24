@@ -65,5 +65,35 @@
             android:visibility="gone"
             android:src="@drawable/ic_navigation_refresh" />
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/nullcase_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@android:color/transparent">
+
+        <ImageView
+            android:id="@+id/null_case_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_empty_cart" />
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/start_shopping"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/z_item_height_48"
+            android:paddingRight="@dimen/margin_large"
+            android:paddingLeft="@dimen/margin_large"
+            android:layout_below="@id/null_case_image"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="Start Shopping"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_large"
+            android:background="@drawable/orange_btn_bg"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
+    </RelativeLayout>
 
 </FrameLayout>

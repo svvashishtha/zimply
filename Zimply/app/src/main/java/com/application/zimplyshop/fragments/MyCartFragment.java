@@ -76,6 +76,8 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
         cartList.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small), true));
         buyLayout = (LinearLayout) view.findViewById(R.id.payment_layout);
         setLoadingVariables();
+
+        FRAGMENT_PAGE_TYPE = AppConstants.FRAGMENT_TYPE_MY_CART;
         return view;
     }
 

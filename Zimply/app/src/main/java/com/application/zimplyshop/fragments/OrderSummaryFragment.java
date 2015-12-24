@@ -459,6 +459,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     public void updateAddress() {
         if (AllUsers.getInstance().getObjs() != null && AllUsers.getInstance().getObjs().size() > 0 && mAdapter != null) {
             mAdapter.changeShippingBillingAddress(AllUsers.getInstance().getObjs().get(0));
+            shippingAddress = AllUsers.getInstance().getObjs().get(0);
         }
     }
 
