@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BaseLoginSignupActivity;
@@ -148,7 +149,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(((CustomEdittext) itemHolder.container.findViewById(R.id.phone_number)), InputMethodManager.SHOW_IMPLICIT);
                     }
-                },500);
+                }, 500);
                 //// this view is visible when otp is to be verified
             } else if (counter == 3) {
 
@@ -244,7 +245,19 @@ public class SettingAdapter extends RecyclerView.Adapter {
                 itemHolderPassword.container.findViewById(R.id.change_password).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if (itemHolderPassword.newPassword.getText().toString().trim().length() > 0 &&
+                                itemHolderPassword.oldpassword.getText().toString().trim().length() > 0 &&
+                                itemHolderPassword.confirmPassword.getText().toString().trim().length() > 0) {
+                            if (itemHolderPassword.newPassword.getText().toString()
+                                    .equalsIgnoreCase(itemHolderPassword.confirmPassword.getText().toString())) {
+                                mListener.sendPasswordRequest(itemHolderPassword.newPassword.getText().toString(),
+                                        itemHolderPassword.oldpassword.getText().toString());
+                            } else {
+                                Toast.makeText(context, "Passwords must match", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, "All feilds are important", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -320,10 +333,14 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     class ItemHolderPassword extends RecyclerView.ViewHolder {
         FrameLayout container;
+        CustomEdittext oldpassword, newPassword, confirmPassword;
 
         public ItemHolderPassword(View itemView) {
             super(itemView);
             container = (FrameLayout) itemView.findViewById(R.id.container);
+            oldpassword = (CustomEdittext) itemView.findViewById(R.id.old_password);
+            newPassword = (CustomEdittext) itemView.findViewById(R.id.new_password);
+            confirmPassword = (CustomEdittext) itemView.findViewById(R.id.confirm_password);
         }
     }
 
@@ -339,7 +356,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
         void resendOtp();
 
-        void sendPasswordRequest();
+        void sendPasswordRequest(String newPassword, String oldPassword);
 
         void verifyOtp(String otp);
     }
