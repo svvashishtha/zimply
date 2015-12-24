@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.activities.MyWishlist;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.managers.ImageLoaderManager;
@@ -20,7 +21,7 @@ import com.application.zimplyshop.serverapis.RequestTags;
 
 import java.util.ArrayList;
 
-public class ProductsRecyclerViewGridAdapter extends
+public class WishlistRecyclerViewGridAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public int TYPE_DATA = 0;
@@ -36,7 +37,9 @@ public class ProductsRecyclerViewGridAdapter extends
 
     Activity activity;
 
-    public ProductsRecyclerViewGridAdapter(Activity activity, Context context,
+    int currentButtonsViewPosition = -1;
+
+    public WishlistRecyclerViewGridAdapter(Activity activity, Context context,
                                            int height) {
         this.mContext = context;
         this.objs = new ArrayList<HomeProductObj>();
@@ -110,7 +113,7 @@ public class ProductsRecyclerViewGridAdapter extends
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_DATA) {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, height);
@@ -175,6 +178,29 @@ public class ProductsRecyclerViewGridAdapter extends
                     mContext.startActivity(intent);
                 }
             });
+
+            if (position == currentButtonsViewPosition)
+                ((ProductViewHolder) holder).wishlistButtonsContainer.setVisibility(View.VISIBLE);
+            else
+                ((ProductViewHolder) holder).wishlistButtonsContainer.setVisibility(View.GONE);
+
+            ((ProductViewHolder) holder).wishlistOverflowButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (currentButtonsViewPosition == -1) {
+                        currentButtonsViewPosition = position;
+                        ((ProductViewHolder) holder).wishlistButtonsContainer.setVisibility(View.VISIBLE);
+                    } else if (currentButtonsViewPosition == position) {
+                        currentButtonsViewPosition = -1;
+                        ((ProductViewHolder) holder).wishlistButtonsContainer.setVisibility(View.GONE);
+                    } else {
+                        ((MyWishlist) mContext).hideWishlistGridButtonsForPosition(currentButtonsViewPosition);
+                        ((ProductViewHolder) holder).wishlistButtonsContainer.setVisibility(View.VISIBLE);
+                        currentButtonsViewPosition = position;
+                    }
+                }
+            });
         } else {
 
         }
@@ -187,7 +213,7 @@ public class ProductsRecyclerViewGridAdapter extends
         RecyclerView.ViewHolder holder;
         if (itemViewType == TYPE_DATA) {
             View view = LayoutInflater.from(viewGrp.getContext()).inflate(
-                    R.layout.product_grid_item_layout, null);
+                    R.layout.wishlist_grid_item_layout, null);
             holder = new ProductViewHolder(view);
         } else {
             View view = LayoutInflater.from(viewGrp.getContext()).inflate(
@@ -206,6 +232,8 @@ public class ProductsRecyclerViewGridAdapter extends
     public class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView img, buyOfflineTag;
         TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
+        public LinearLayout wishlistButtonsContainer, wishlistOverflowButton;
+        View wishlistButtonsBlackBg;
 
         public ProductViewHolder(View view) {
             super(view);
@@ -217,6 +245,9 @@ public class ProductsRecyclerViewGridAdapter extends
                     .findViewById(R.id.product_price);
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
             buyOfflineTag = (ImageView) view.findViewById(R.id.buy_offline_tag);
+            wishlistButtonsContainer = (LinearLayout) view.findViewById(R.id.wishlistbuttoncontainer);
+            wishlistButtonsBlackBg = view.findViewById(R.id.wishlistbuttoncontainerbgblack);
+            wishlistOverflowButton = (LinearLayout) view.findViewById(R.id.wishlistoverflow);
         }
     }
 
