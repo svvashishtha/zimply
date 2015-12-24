@@ -27,16 +27,16 @@ public interface RequestTags {
     String ORDERLISTREQUESTTAG = "orderlistrequesttag";
     String CHECKPINCODEREQUESTTAG = "checkpincoderequesttag";
     String PRO_REQUEST_TAGS = "pro_request_tags";
-    String BOOKED_HISTORY_REQUEST_TAG=  "bookedhistoryrequesttag";
-    String BANNER_REQUEST_TAG="bannerrequesttag";
-    String LATEST_NOTIFICATION_COUNT_TAG  = "latestnotifcounttext";
+    String BOOKED_HISTORY_REQUEST_TAG = "bookedhistoryrequesttag";
+    String BANNER_REQUEST_TAG = "bannerrequesttag";
+    String LATEST_NOTIFICATION_COUNT_TAG = "latestnotifcounttext";
     String LATEST_BOOKINGS_TAG = "latestbookingtag";
 
 
     String FAV_LIST_REQUEST_TAG = "favlistrequesttag";
     String FORGOT_PASSWORD_REQUEST_TAG = "forgotPasswordRequestTag";
     String GET_USER_DATA = "userdatatag";
-    String NON_LOGGED_IN_CART_CACHE="nonloggedincartcache";
+    String NON_LOGGED_IN_CART_CACHE = "nonloggedincartcache";
     String USER_WISHLIST = "userwishlist";
     String NOTIFICATION_LIST_REQUEST_TAG = "notificationlistrequesttag";
 
@@ -58,6 +58,7 @@ public interface RequestTags {
     int BUY_NOW = 0x0010;
     int PHONE_VERIFICATION_INPUT_NUMBER = 0x0011;
     int PHONE_VERIFICATION_OTP = 0x0012;
+    int CHANGE_PASSWORD = 0x0013;
 
     String GET_PHOTO_SINGLE = "getSinglePhotoObject";
     String GET_CITY_FROM_LL = "getCityformLL";
@@ -66,5 +67,6 @@ public interface RequestTags {
     String GET_CART_DETAILS = "getCartDetails";
     String GET_ORDER_SUMMARY = "getordersummary";
     String GET_CART_COMPUTATION = "getcartcomputation";
+    String GET_CITY_FROM_PINCODE = "getCityFromPinCode";
     int SAVE_ADDRESS = 101;
 }

@@ -34,12 +34,14 @@ import com.application.zimplyshop.utils.UploadManagerCallback;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class EditAddressFragment extends ZFragment implements UploadManagerCallback, View.OnClickListener, GetRequestListener {
+public class EditAddressFragment extends ZFragment implements UploadManagerCallback, View.OnClickListener, GetRequestListener, RequestTags {
 
     private static EditAddressFragment fragment;
     Activity mActivity;
@@ -54,7 +56,7 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
 
     boolean isEditAddress;
 
-    int editPosition=-1;
+    int editPosition = -1;
 
     boolean isAddNewAddress;
 
@@ -98,10 +100,10 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
             zProgressDialog.dismiss();
         }
 
-        if(isEditAddress ||  ((ProductCheckoutActivity)getActivity()).isBackPressed()){
-            ((ProductCheckoutActivity)getActivity()).setTitleText("Choose Address");
-        }else{
-            ((ProductCheckoutActivity)getActivity()).setTitleText("Order Summary");
+        if (isEditAddress || ((ProductCheckoutActivity) getActivity()).isBackPressed()) {
+            ((ProductCheckoutActivity) getActivity()).setTitleText("Choose Address");
+        } else {
+            ((ProductCheckoutActivity) getActivity()).setTitleText("Order Summary");
         }
         destroyed = true;
         GetRequestManager.getInstance().removeCallbacks(this);
@@ -141,7 +143,7 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
                 String text = s.toString();
                 int length = text.length();
 
-                if(!Pattern.matches("^[a-zA-Z\\s]*$", text) && length > 0) {
+                if (!Pattern.matches("^[a-zA-Z\\s]*$", text) && length > 0) {
                     s.delete(length - 1, length);
                 }
             }
@@ -151,26 +153,29 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         addLine2 = (EditText) view.findViewById(R.id.address_line2);
         city = (EditText) view.findViewById(R.id.city);
         city.setText(AppPreferences.getSavedCity(getActivity()));
+        city.setKeyListener(null);
         state = (EditText) view.findViewById(R.id.state);
+        state.setKeyListener(null);
         pinCode = (EditText) view.findViewById(R.id.pincode);
+
         setLoadingVariables();
         showView();
 
         if (getArguments() != null) {
             //get the arguments and set the value
             isAddNewAddress = getArguments().getBoolean("adding_first_fragment");
-            editPosition = getArguments().getInt("edit_position",-1);
+            editPosition = getArguments().getInt("edit_position", -1);
             isEditAddress = getArguments().getBoolean("is_edit_address");
             finishActivity = getArguments().getBoolean("stack");
             try {
                 addressObject = (AddressObject) getArguments().getSerializable("addressObject");
 
                 if (addressObject != null) {
-                    ((ProductCheckoutActivity)getActivity()).setTitleText("Edit Address");
+                    ((ProductCheckoutActivity) getActivity()).setTitleText("Edit Address");
                     setData();
-                }else{
+                } else {
 
-                    ((ProductCheckoutActivity)getActivity()).setTitleText("Add Address");
+                    ((ProductCheckoutActivity) getActivity()).setTitleText("Add Address");
 
                 }
             } catch (Exception e) {
@@ -241,7 +246,7 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
                         showToast("Invalid Phone Number ( Phone number should be 10 digits )");
                         return false;
                     }
-                }else {
+                } else {
                     showToast("Not a valid email address");
                     return false;
                 }
@@ -314,11 +319,16 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
     }
 
     public void checkPincodeAvailabilty(String text) {
-        if(CommonLib.isNetworkAvailable(getActivity())){
-            String url = AppApplication.getInstance().getBaseUrl() + AppConstants.CHECK_PINCODE + "?pincode=" + text;
+        if (CommonLib.isNetworkAvailable(getActivity())) {
+            String url = AppApplication.getInstance().getBaseUrl() +
+                    AppConstants.GET_CITY_FROM_PINCODE + "?pincode=" + text;
+            GetRequestManager.getInstance().makeAyncRequest(url, GET_CITY_FROM_PINCODE, ObjectTypes.OBJECT_TYPE_CITY_STATE);
+            CommonLib.hideKeyBoard(mActivity, view.findViewById(R.id.pincode));
+            /*String url = AppApplication.getInstance().getBaseUrl() + AppConstants.CHECK_PINCODE + "?pincode=" + text;
             GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.CHECKPINCODEREQUESTTAG, ObjectTypes.OBJECT_TYPE_CHECK_PINCODE);
-        }else{
-            Toast.makeText(getActivity(),"No network available",Toast.LENGTH_SHORT).show();
+    */
+        } else {
+            Toast.makeText(getActivity(), "No network available", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -345,18 +355,18 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         }
         if (requestType == RequestTags.SAVE_ADDRESS && status && !destroyed) {
             addressObject = (AddressObject) response;
-            if(isEditAddress){
-                AllUsers.getInstance().getObjs().set(editPosition,addressObject);
-            }else{
+            if (isEditAddress) {
+                AllUsers.getInstance().getObjs().set(editPosition, addressObject);
+            } else {
                 AllUsers.getInstance().getObjs().add(0, addressObject);
             }
            /* Bundle bundle = new Bundle();
             bundle.putSerializable("address", addressObject);*/
-            if(isEditAddress) {
+            if (isEditAddress) {
                 ((ProductCheckoutActivity) mActivity).popFromBackStack(ProductCheckoutActivity.EDIT_ADDRESS_FRAGMENT);
-            }else if(isAddNewAddress){
+            } else if (isAddNewAddress) {
                 ((ProductCheckoutActivity) mActivity).popFromBackStack(ProductCheckoutActivity.ADD_FIRST_ADDRESS_FRAGMENT);
-            }else{
+            } else {
                 ((ProductCheckoutActivity) mActivity).popFromBackStack(ProductCheckoutActivity.NEW_EDIT_ADDRESS_FRAGMENT);
             }
             //((ProductCheckoutActivity) mActivity).setOrderSummaryFragment(bundle);
@@ -387,6 +397,9 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         if (!destroyed && requestTag.equalsIgnoreCase(RequestTags.CHECKPINCODEREQUESTTAG)) {
             zProgressDialog = ProgressDialog.show(mActivity, null, "Checking availability.Please Wait..");
         }
+        if (!destroyed && requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_PINCODE)) {
+            zProgressDialog = ProgressDialog.show(mActivity, null, "Getting details.Please Wait..");
+        }
         // findViewById(R.id.progress_container).setVisibility(View.VISIBLE);
 
     }
@@ -407,7 +420,25 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
                 }
                 CommonLib.hideKeyBoard(mActivity, view.findViewById(R.id.pincode));
             }
+        } else if (!destroyed && requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_PINCODE)) {
+            if (zProgressDialog != null) {
+                zProgressDialog.dismiss();
+            }
+            if (obj != null) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = (JSONObject) (new JSONObject((String) obj)).get("Address");
+                    String cityString = (String) jsonObject.get("city");
+                    String stateString = (String) jsonObject.get("state");
+                    city.setText(cityString);
+                    state.setText(stateString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
+
     }
 
     @Override
@@ -419,6 +450,10 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
                 Toast.makeText(mActivity, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(mActivity, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
+        } else if (requestTag != null && requestTag.equals(RequestTags.GET_CITY_FROM_PINCODE) && !destroyed) {
+            if (zProgressDialog != null) {
+                zProgressDialog.dismiss();
+            }
         }
     }
 

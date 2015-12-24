@@ -911,7 +911,8 @@ public class ParserClass implements ObjectTypes {
                 }*/
                 AllProducts.getInstance().getHomeProCatNBookingObj().setLatest_bookings(latestBookingObjects);
                 return latestBookingObjects;
-
+            case OBJECT_TYPE_CITY_STATE:
+                return responseString;
             default:
                 return null;
         }
