@@ -261,8 +261,11 @@ public class SettingAdapter extends RecyclerView.Adapter {
                         if (itemHolderPassword.newPassword.getText().toString().trim().length() > 0 &&
                                 itemHolderPassword.oldpassword.getText().toString().trim().length() > 0 &&
                                 itemHolderPassword.confirmPassword.getText().toString().trim().length() > 0) {
+                            if (itemHolderPassword.newPassword.getText().toString().trim().length() > 8 &&
+                                    itemHolderPassword.oldpassword.getText().toString().trim().length() > 8 &&
+                                    itemHolderPassword.confirmPassword.getText().toString().trim().length() > 8) {
 
-                            if (itemHolderPassword.newPassword.getText().toString()
+                                if (itemHolderPassword.newPassword.getText().toString()
                                     .equalsIgnoreCase(itemHolderPassword.confirmPassword.getText().toString())) {
                                 try {
                                     CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
@@ -286,8 +289,12 @@ public class SettingAdapter extends RecyclerView.Adapter {
                             } else {
                                 Toast.makeText(context, "Passwords must match", Toast.LENGTH_SHORT).show();
                             }
+                        }else {
+                                Toast.makeText(context, "Password must be 8 characters long.", Toast.LENGTH_SHORT).show();
+                            }
+
                         } else {
-                            Toast.makeText(context, "All feilds are important", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "All fields are important", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
