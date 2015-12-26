@@ -628,6 +628,8 @@ public class SearchResultsActivity extends BaseActivity implements
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
+                minValue = (int)minValue / 5000 * 5000;
+                maxValue = (int)maxValue / 5000 * 5000;
                 ((EditText) findViewById(R.id.from_price)).setText(minValue + "");
                 ((EditText) findViewById(R.id.to_price)).setText(maxValue + "");
                 isFilterApplied = true;
