@@ -141,6 +141,7 @@
         android:background="@drawable/action_bar_item_bg"
         android:padding="@dimen/margin_small"
         android:text="SKIP LOGIN"
+        android:textSize="@dimen/font_large"
         android:textColor="@color/text_color1" />
 
 </FrameLayout>
