@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@color/pager_bg"
-             android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pager_bg"
+    android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/categories_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:paddingTop="64dp"/>
+        android:paddingTop="64dp" />
 
     <!-- <include layout="@layout/filter_layout" />-->
 
@@ -63,35 +63,39 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <ImageView android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:id="@+id/plp_tutorial"
-               android:visibility="gone"
-               android:scaleType="centerCrop"/>
+    <ImageView
+        android:id="@+id/plp_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
     <com.application.zimplyshop.widgets.CustomTextViewBold
         android:id="@+id/next_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/font_large"
-        android:textColor="@color/white"
-        android:visibility="gone"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="@dimen/margin_large"
-        android:padding="@dimen/margin_medium"
         android:gravity="center"
-        android:text="GOT IT"/>
+        android:padding="@dimen/margin_medium"
+        android:text="GOT IT"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_large"
+        android:visibility="gone" />
 
     <View
         android:id="@+id/transparent_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="@color/black_trans_seventy"></View>
-    <include layout="@layout/product_price_filter_layout"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:visibility="gone"
-             android:id="@+id/filter_layout">
+        android:background="@color/black_trans_seventy"
+        android:visibility="gone"></View>
+
+    <include
+        android:id="@+id/filter_layout"
+        layout="@layout/product_price_filter_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
     </include>
 </FrameLayout>

@@ -85,6 +85,9 @@ public class ProductListingActivity extends BaseActivity implements
 
     ArrayList<ShopSubCategoryObj> subCategories;
 
+    public boolean isRecyclerViewInLongItemMode = false;
+    GridLayoutManager gridLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +105,21 @@ public class ProductListingActivity extends BaseActivity implements
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
 
-        productList.setLayoutManager(new GridLayoutManager(this, 2));
+        gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+            @Override
+            public int getSpanSize(int position) {
+                if (position == 0)
+                    return 2;
+                else if (position == productList.getLayoutManager().getItemCount() - 1) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        productList.setLayoutManager(gridLayoutManager);
         productList.addItemDecoration(new SpaceGridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
                 (int) getResources().getDimension(R.dimen.margin_mini)));
@@ -142,19 +159,30 @@ public class ProductListingActivity extends BaseActivity implements
                         }
                     });
                 }
-            },5000);
+            }, 5000);
         }
         loadData();
     }
 
 
-    public void showFilterTut(){
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+    public void showFilterTut() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-                }
-            },500);
+            }
+        }, 500);
+    }
+
+    public void switchRecyclerViewLayoutManager() {
+        if (isRecyclerViewInLongItemMode) {
+            productList.setLayoutManager(gridLayoutManager);
+            productList.getAdapter().notifyDataSetChanged();
+        } else {
+            productList.setLayoutManager(new LinearLayoutManager(this));
+            productList.getAdapter().notifyDataSetChanged();
+        }
+        isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
     }
 
     boolean isHideFilter;
@@ -243,22 +271,6 @@ public class ProductListingActivity extends BaseActivity implements
                             super.onScrollStateChanged(recyclerView, newState);
                         }
                     });
-            ((GridLayoutManager) productList.getLayoutManager())
-                    .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                        @Override
-                        public int getSpanSize(int position) {
-                            switch (productList
-                                    .getAdapter().getItemViewType(position)) {
-                                case 0:
-                                    return 1;
-                                case 1:
-                                    return 2;
-                                default:
-                                    return -1;
-                            }
-                        }
-                    });
-
         }
         ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
                 .addData(objs);
@@ -497,13 +509,10 @@ public class ProductListingActivity extends BaseActivity implements
     public void onRequestCompleted(String requestTag, Object obj) {
         if (!isDestroyed
                 && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 1)) {
-            if (!filterApplied)
-            {
+            if (!filterApplied) {
                 CommonLib.ZLog("Request Time", "Product Listing Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
                 CommonLib.writeRequestData("Product Listing Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
-            }
-            else
-            {
+            } else {
                 CommonLib.ZLog("Request Time", "Product Listing Page with filters Request :" + (System.currentTimeMillis() - requestTime) + " mS");
                 CommonLib.writeRequestData("Product Listing Page with filters Request :" + (System.currentTimeMillis() - requestTime) + " mS");
             }
@@ -678,8 +687,8 @@ public class ProductListingActivity extends BaseActivity implements
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
-                minValue = (int)minValue / 5000 * 5000;
-                maxValue = (int)maxValue / 5000 * 5000;
+                minValue = (int) minValue / 5000 * 5000;
+                maxValue = (int) maxValue / 5000 * 5000;
                 ((EditText) findViewById(R.id.from_price)).setText(minValue + "");
                 ((EditText) findViewById(R.id.to_price)).setText(maxValue + "");
                 isFilterApplied = true;
