@@ -196,6 +196,7 @@
             android:name="com.application.zimplyshop.activities.AppPaymentOptionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
+
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity

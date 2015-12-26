@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/toolbar_height_product"
     android:layout_gravity="fill"
-    android:background="@color/white">
+    >
 
     <FrameLayout
         android:id="@+id/cart_view"

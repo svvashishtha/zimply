@@ -91,7 +91,7 @@
                 android:textColor="@color/white"
                 android:gravity="center_horizontal"
                 android:textSize="@dimen/font_large"
-                android:text="Visit the store at our convinience to touch and feel the product"
+                android:text="Visit the store at your convenience to see the product"
                 android:layout_height="wrap_content"/>
             <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/got_it"

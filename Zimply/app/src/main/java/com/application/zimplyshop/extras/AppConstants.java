@@ -166,5 +166,12 @@ public interface AppConstants {
     int NOTIFICATION_TYPE_PRODUCT_LIST = 1;
     int NOTIFICATION_TYPE_PRODUCT_DETAIL = 3;
 
+
+    int FRAGMENT_TYPE_MY_CART = 1;
+
+    int PAGE_TYPE_ORDER = 2;
+    int PAGE_TYPE_WISHLIST = 3;
+    int PAGE_TYPE_BOOKINGS = 4;
+
 }
 

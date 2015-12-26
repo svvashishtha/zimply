@@ -3,6 +3,7 @@ package com.application.zimplyshop.activities;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -27,6 +28,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,8 @@ import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.managers.ImageLoaderManager;
+import com.application.zimplyshop.objects.AllProducts;
+import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
@@ -82,7 +86,13 @@ public class BaseActivity extends AppCompatActivity
     int PROFILE_PIC_SIZE = 400;
     boolean isActivityRunning;
     String personName, personPhotoUrl, email, personId;
+
     GifMovieView gifLoadingView ;
+
+    int PAGE_TYPE = -1;
+
+    RelativeLayout nullCaseLayout;
+
     AsyncTask task = new AsyncTask() {
         @Override
         protected String doInBackground(Object... params) {
@@ -161,11 +171,11 @@ public class BaseActivity extends AppCompatActivity
     public void setLoadingVariables() {
         progress = (ProgressBar) findViewById(R.id.progress);
         progress.setVisibility(View.GONE);
-        gifLoadingView = (GifMovieView)findViewById(R.id.gifView);
+        gifLoadingView = (GifMovieView) findViewById(R.id.gifView);
         nullcaseText = (TextView) findViewById(R.id.nullcase_text);
         retryLayout = (LinearLayout) findViewById(R.id.retry_layout);
         quoteText = (TextView) findViewById(R.id.quote);
-
+        nullCaseLayout = (RelativeLayout)findViewById(R.id.nullcase_layout);
     }
 
     public void setFilterVariables() {
@@ -197,11 +207,12 @@ public class BaseActivity extends AppCompatActivity
      * from the server and loaded into the adapter
      */
     public void showView() {
-      //  progress.setVisibility(View.GONE);
+        //  progress.setVisibility(View.GONE);
         gifLoadingView.setVisibility(View.GONE);
         nullcaseText.setVisibility(View.GONE);
         retryLayout.setVisibility(View.GONE);
         quoteText.setVisibility(View.GONE);
+        nullCaseLayout.setVisibility(View.GONE);
 
     }
 
@@ -209,13 +220,14 @@ public class BaseActivity extends AppCompatActivity
      * Method shows loading view when a server request is generated
      */
     public void showLoadingView() {
-      //  progress.setVisibility(View.VISIBLE);
+        //  progress.setVisibility(View.VISIBLE);
         gifLoadingView.setVisibility(View.VISIBLE);
         nullcaseText.setVisibility(View.GONE);
         retryLayout.setVisibility(View.GONE);
         quoteText.setVisibility(View.VISIBLE);
         quoteText.setText(UiUtils.getTextFromRes(this));
         retryLayout.setVisibility(View.GONE);
+        nullCaseLayout.setVisibility(View.GONE);
     }
 
     /**
@@ -231,24 +243,42 @@ public class BaseActivity extends AppCompatActivity
         nullcaseText.setTextColor(getResources().getColor(R.color.heading_text_color));
         //changeLeftDrawable(R.drawable.ic_navigation_refresh);
         quoteText.setVisibility(View.GONE);
-      //  progress.setVisibility(View.GONE);
+        //  progress.setVisibility(View.GONE);
         gifLoadingView.setVisibility(View.GONE);
         retryLayout.setVisibility(View.VISIBLE);
         retryLayout.setBackgroundResource(R.drawable.ic_navigation_refresh);
+        nullCaseLayout.setVisibility(View.GONE);
     }
 
     public void showNullCaseView(String text) {
-        nullcaseText.setVisibility(View.VISIBLE);
-        nullcaseText.setText(text);
-        nullcaseText.setTypeface(null, Typeface.BOLD);
-        nullcaseText.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        nullcaseText.setTextColor(getResources().getColor(R.color.heading_text_color));
-        changeLeftDrawable(0);
-        quoteText.setVisibility(View.GONE);
-        //progress.setVisibility(View.GONE);
-        gifLoadingView.setVisibility(View.GONE);
-        retryLayout.setVisibility(View.VISIBLE);
-        retryLayout.setBackgroundResource(R.drawable.ic_null_case);
+        if(PAGE_TYPE == AppConstants.PAGE_TYPE_WISHLIST||PAGE_TYPE == AppConstants.PAGE_TYPE_ORDER||PAGE_TYPE == AppConstants.PAGE_TYPE_BOOKINGS){
+            quoteText.setVisibility(View.GONE);
+
+            gifLoadingView.setVisibility(View.GONE);
+            retryLayout.setVisibility(View.GONE);
+            nullCaseLayout.setVisibility(View.VISIBLE);
+            findViewById(R.id.start_shopping).setVisibility(View.GONE);
+            if(PAGE_TYPE == AppConstants.PAGE_TYPE_WISHLIST) {
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_wishlist,getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            }else if(PAGE_TYPE == AppConstants.PAGE_TYPE_ORDER){
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_order,getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            }else if(PAGE_TYPE == AppConstants.PAGE_TYPE_BOOKINGS){
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_booking, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            }
+        }else {
+            nullCaseLayout.setVisibility(View.GONE);
+            nullcaseText.setVisibility(View.VISIBLE);
+            nullcaseText.setText(text);
+            nullcaseText.setTypeface(null, Typeface.BOLD);
+            nullcaseText.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            nullcaseText.setTextColor(getResources().getColor(R.color.heading_text_color));
+            changeLeftDrawable(0);
+            quoteText.setVisibility(View.GONE);
+            //progress.setVisibility(View.GONE);
+            gifLoadingView.setVisibility(View.GONE);
+            retryLayout.setVisibility(View.VISIBLE);
+            retryLayout.setBackgroundResource(R.drawable.ic_null_case);
+        }
     }
 
     /**
@@ -422,7 +452,7 @@ public class BaseActivity extends AppCompatActivity
         if (isActivityRunning && z_ProgressDialog != null) {
             z_ProgressDialog.dismiss();
         }
-        if ( isActivityRunning && z_ProgressDialog != null && !z_ProgressDialog.isShowing())
+        if (isActivityRunning && z_ProgressDialog != null && !z_ProgressDialog.isShowing())
             z_ProgressDialog = ProgressDialog.show(this, null, "Fetching Details.Please wait..");
         Log.d(TAG, "onConnected:" + bundle);
         mShouldResolve = false;
@@ -713,5 +743,21 @@ public class BaseActivity extends AppCompatActivity
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
 
+    }
+
+    public static void logOutUserFromApp(Context context, Class classToOpenAfterLogout) {
+        AppPreferences.setIsUserLogin(context, false);
+        AppPreferences.setUserID(context, "");
+        AllProducts.getInstance().setCartCount(0);
+        AllProducts.getInstance().setCartObjs(null);
+        AllUsers.getInstance().setObjs(null);
+        AllProducts.getInstance().setHomeProCatNBookingObj(null);
+        AllProducts.getInstance().getVendorIds().clear();
+        Intent loginIntent = new Intent(context, classToOpenAfterLogout);
+        loginIntent.putExtra("is_logout", true);
+
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //loginIntent.putExtra("inside", true);
+        context.startActivity(loginIntent);
     }
 }

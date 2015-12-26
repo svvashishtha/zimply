@@ -361,6 +361,18 @@ public class SearchResultsActivity extends BaseActivity implements
 
     }
 
+    @Override
+    protected void onResume() {
+
+        if (AllProducts.getInstance().getCartCount() > 0) {
+            findViewById(R.id.cart_item_true).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.cart_item_true)).setText(AllProducts.getInstance().getCartCount() + "");
+        } else {
+            findViewById(R.id.cart_item_true).setVisibility(View.GONE);
+        }
+
+        super.onResume();
+    }
 
     public void showFilterContent() {
         if (AllCategories.getInstance().getPhotoCateogryObjs() == null) {

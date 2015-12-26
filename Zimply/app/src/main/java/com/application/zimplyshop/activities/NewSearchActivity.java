@@ -188,7 +188,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    performSearch(v.getText().toString());
+                    performSearch(v.getText().toString().trim());
                     return true;
                 }
                 return false;
@@ -391,25 +391,21 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         }
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TYPE_FROM_SEARCH) {
             if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                //Toast.makeText(this , "CONTENT"+contents,Toast.LENGTH_SHORT).show();
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                //Toast.makeText(this , "FORMAT:"+format,Toast.LENGTH_SHORT).show();
+                String contents = data.getStringExtra("SCAN_RESULT");
+
+                String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+
                 JSONObject obj = JSONUtils.getJSONObject(contents);
-                // Intent workintent = new Intent(this, ProductDetailsActivity.class);
-                productId=(long) JSONUtils.getIntegerfromJSON(obj, "id");
+
+                productId = JSONUtils.getIntegerfromJSON(obj, "id");
                 slug = JSONUtils.getStringfromJSON(obj, "slug");
-                addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
-                // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
-                // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
-                // startActivity(workintent );
-                // Handle successful scan
+                moveToProductDetail(productId, slug);
+
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
-                Toast.makeText(this,"Not a valid QR Code",Toast.LENGTH_SHORT).show();
             }
         }
     }

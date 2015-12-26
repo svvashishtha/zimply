@@ -57,7 +57,6 @@ import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.objects.AllNotifications;
 import com.application.zimplyshop.objects.AllProducts;
-import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
@@ -108,7 +107,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     boolean noNetworkViewAdded = false;
     boolean isFreshDataLoaded;
     TextView toolbarTitle;
-    MenuItem filterItem, searchItem,notificationsItem;
+    MenuItem filterItem, searchItem, notificationsItem;
     HashMap<Integer, Fragment> fragments;
     Runnable r2 = new Runnable() {
 
@@ -178,9 +177,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         setNavigationList();
 
         onNewIntent(getIntent());
-        if(AppPreferences.getNotifModDateTime(this)!=0)
+        if (AppPreferences.getNotifModDateTime(this) != 0)
             getUserNotificationCount();
-        if(AppPreferences.isUserLogIn(this))
+        if (AppPreferences.isUserLogIn(this))
             phoneVerification();
 
         //init fragements
@@ -193,9 +192,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 .commit();
 
 
-
-        if(!AppPreferences.isBarcodeTutorialShown(this) && AppPreferences.isFirstBookingDone(this)){
-            AppPreferences.setIsBarcodeTutorialShown(this,true);
+        if (!AppPreferences.isBarcodeTutorialShown(this) && AppPreferences.isFirstBookingDone(this)) {
+            AppPreferences.setIsBarcodeTutorialShown(this, true);
             findViewById(R.id.fab_tutorial).setVisibility(View.VISIBLE);
             findViewById(R.id.hint_fab).setVisibility(View.VISIBLE);
             findViewById(R.id.hint_fab).setOnClickListener(new OnClickListener() {
@@ -208,15 +206,15 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         }
     }
 
-    public void closeFabTutorial(){
+    public void closeFabTutorial() {
         findViewById(R.id.fab_tutorial).setVisibility(View.GONE);
         findViewById(R.id.hint_fab).setVisibility(View.GONE);
     }
 
-    public void getUserNotificationCount(){
+    public void getUserNotificationCount() {
 
         CommonLib.ZLog("Notification Date Time", TimeUtils.getFormatedDate(AppPreferences.getNotifModDateTime(this)));
-        String url = AppApplication.getInstance().getBaseUrl()+AppConstants.NOTIFICATION_COUNT+"?created_on="+ TimeUtils.getFormatedDate(AppPreferences.getNotifModDateTime(this));
+        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.NOTIFICATION_COUNT + "?created_on=" + TimeUtils.getFormatedDate(AppPreferences.getNotifModDateTime(this));
         GetRequestManager.getInstance().makeAyncRequest(url, LATEST_NOTIFICATION_COUNT_TAG, ObjectTypes.OBJECT_TYPE_NOTIFICATION_COUNT);
     }
 
@@ -274,7 +272,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             }
         });
         mFABOverlay.setClickable(false);
-        ((FABUnit)findViewById(R.id.fab_post_request)).setIcon(R.drawable.ic_barcodescanner);
+        ((FABUnit) findViewById(R.id.fab_post_request)).setIcon(R.drawable.ic_barcodescanner);
         showFAB(true);
     }
 
@@ -357,7 +355,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
     public void fabSelected(View view) {
         closeFabTutorial();
-        Intent intent = new Intent(HomeActivity.this,BarcodeScannerActivity.class);
+        Intent intent = new Intent(HomeActivity.this, BarcodeScannerActivity.class);
         startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
         /*switch (view.getId()) {
             case R.id.fab_post_request:
@@ -425,7 +423,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 switch (position) {
                     case 0:
                         intent = new Intent(HomeActivity.this, SelectCity.class);
-                        intent.putExtra("show_back",true);
+                        intent.putExtra("show_back", true);
                         mDrawer.closeDrawers();
                         startActivity(intent);
                         break;
@@ -511,9 +509,17 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         }
                         break;
                     case 5:
-
-                        Intent settingsIntent = new Intent(HomeActivity.this, SettingsPage.class);
-                        startActivity(settingsIntent);
+                        mDrawer.closeDrawers();
+                        if (AppPreferences.isUserLogIn(HomeActivity.this)) {
+                            Intent settingsIntent = new Intent(HomeActivity.this, SettingsPage.class);
+                            startActivity(settingsIntent);
+                        }else{
+                            showToast("Please Login to continue");
+                            intent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
+                            isToLoginPage = true;
+                            intent.putExtra("inside", true);
+                            startActivity(intent);
+                        }
                         break;
 
                     case 6:
@@ -587,19 +593,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                AppPreferences.setIsUserLogin(HomeActivity.this, false);
-                                                AppPreferences.setUserID(HomeActivity.this, "");
-                                                AllProducts.getInstance().setCartCount(0);
-                                                AllProducts.getInstance().setCartObjs(null);
-                                                AllUsers.getInstance().setObjs(null);
-                                                AllProducts.getInstance().setHomeProCatNBookingObj(null);
-                                                AllProducts.getInstance().getVendorIds().clear();
-                                                Intent loginIntent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
-                                                loginIntent.putExtra("is_logout", true);
-
-                                                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                //loginIntent.putExtra("inside", true);
-                                                startActivity(loginIntent);
+                                                BaseActivity.logOutUserFromApp(HomeActivity.this, BaseLoginSignupActivity.class);
                                             }
                                         }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
                                         new DialogInterface.OnClickListener() {
@@ -627,26 +621,22 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         } else if (requestCode == REQUEST_TYPE_FROM_SEARCH) {
             if (resultCode == RESULT_OK) {
                 String contents = data.getStringExtra("SCAN_RESULT");
-                //Toast.makeText(this , "CONTENT"+contents,Toast.LENGTH_SHORT).show();
+
                 String format = data.getStringExtra("SCAN_RESULT_FORMAT");
-                //Toast.makeText(this , "FORMAT:"+format,Toast.LENGTH_SHORT).show();
+
                 JSONObject obj = JSONUtils.getJSONObject(contents);
-                // Intent workintent = new Intent(this, ProductDetailsActivity.class);
-                productId=JSONUtils.getIntegerfromJSON(obj, "id");
+
+                productId = JSONUtils.getIntegerfromJSON(obj, "id");
                 slug = JSONUtils.getStringfromJSON(obj, "slug");
-                moveToProductDetail(productId,slug);
-                // addScannedObjToCart((long) JSONUtils.getIntegerfromJSON(obj, "id"),JSONUtils.getStringfromJSON(obj, "slug"));
-                // intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
-                // workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
-                // startActivity(workintent );
-                // Handle successful scan
+                moveToProductDetail(productId, slug);
+
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
             }
         }
     }
 
-    public void addScannedObjToCart(int id,String slug) {
+    public void addScannedObjToCart(int id, String slug) {
         if (AppPreferences.isUserLogIn(this)) {
             if (AllProducts.getInstance().cartContains((int) id)) {
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
@@ -655,7 +645,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
                 String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
                 List<NameValuePair> nameValuePair = new ArrayList<>();
-                nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_OFFLINE+""));
+                nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_OFFLINE + ""));
                 nameValuePair.add(new BasicNameValuePair("product_id", id + ""));
                 nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
@@ -668,7 +658,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             if (oldObj == null) {
                 oldObj = new ArrayList<NonLoggedInCartObj>();
             }
-            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1,BUYING_CHANNEL_OFFLINE);
+            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1, BUYING_CHANNEL_OFFLINE);
             if (oldObj.contains(item)) {
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
             } else {
@@ -683,7 +673,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         }
     }
 
-    public void moveToProductDetail(int productId , String slug){
+    public void moveToProductDetail(int productId, String slug) {
         Intent intent = new Intent(this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
@@ -691,7 +681,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         startActivity(intent);
     }
 
-    public void moveToCartActivity(){
+    public void moveToCartActivity() {
         Intent intent = new Intent(this, ProductCheckoutActivity.class);
         intent.putExtra("OrderSummaryFragment", false);
         startActivity(intent);
@@ -715,6 +705,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, SelectCity.class);
+                intent.putExtra("show_back", true);
                 startActivity(intent);
             }
         });
@@ -774,10 +765,10 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 userImage.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_user, getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material), getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material)));
                 backgroundImg.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_user_profile_bg, width, width));
             }
-            ((TextView)navView.findViewById(R.id.drawer_user_email)).setVisibility(View.VISIBLE);
-            ((TextView)navView.findViewById(R.id.drawer_user_email)).setText(AppPreferences.getUserEmail(this));
-            ((TextView)navView.findViewById(R.id.drawer_user_phone)).setVisibility(View.VISIBLE);
-            ((TextView)navView.findViewById(R.id.drawer_user_phone)).setText(AppPreferences.getUserPhoneNumber(this));
+            ((TextView) navView.findViewById(R.id.drawer_user_email)).setVisibility(View.VISIBLE);
+            ((TextView) navView.findViewById(R.id.drawer_user_email)).setText(AppPreferences.getUserEmail(this));
+            ((TextView) navView.findViewById(R.id.drawer_user_phone)).setVisibility(View.VISIBLE);
+            ((TextView) navView.findViewById(R.id.drawer_user_phone)).setText(AppPreferences.getUserPhoneNumber(this));
 
             userName.setText(AppPreferences.getUserName(this));
         } else {
@@ -831,14 +822,14 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             reloadUserInfo = false;
         }
 
-        if(AppPreferences.isUserLogIn(this)){
-            if(((TextView)navView.findViewById(R.id.drawer_user_phone)).getText()!=null &&((TextView)navView.findViewById(R.id.drawer_user_phone)).getText().length()==0){
-                ((TextView)navView.findViewById(R.id.drawer_user_phone)).setText(AppPreferences.getUserPhoneNumber(this));
+        if (AppPreferences.isUserLogIn(this)) {
+            if (((TextView) navView.findViewById(R.id.drawer_user_phone)).getText() != null && ((TextView) navView.findViewById(R.id.drawer_user_phone)).getText().length() == 0) {
+                ((TextView) navView.findViewById(R.id.drawer_user_phone)).setText(AppPreferences.getUserPhoneNumber(this));
             }
         }
 
-        if(!AppPreferences.isBarcodeTutorialShown(this) && AppPreferences.isFirstBookingDone(this)){
-            AppPreferences.setIsBarcodeTutorialShown(this,true);
+        if (!AppPreferences.isBarcodeTutorialShown(this) && AppPreferences.isFirstBookingDone(this)) {
+            AppPreferences.setIsBarcodeTutorialShown(this, true);
             findViewById(R.id.fab_tutorial).setVisibility(View.VISIBLE);
             findViewById(R.id.hint_fab).setVisibility(View.VISIBLE);
             findViewById(R.id.hint_fab).setOnClickListener(new OnClickListener() {
@@ -852,8 +843,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
         super.onResume();
     }
-
-
 
 
     private void loadData() {
@@ -963,7 +952,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     //   loadData();
                     break;
             case R.id.drawer_user_container:
-                if(!AppPreferences.isUserLogIn(this)) {
+                if (!AppPreferences.isUserLogIn(this)) {
                     Intent loginIntent = new Intent(this, BaseLoginSignupActivity.class);
                     loginIntent.putExtra("inside", true);
                     isToLoginPage = true;
@@ -987,12 +976,12 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             case R.id.cart:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
                 intent.putExtra("OrderSummaryFragment", false);
-                intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
+                intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
                 startActivity(intent);
                 break;
             case R.id.notifications:
                 findViewById(R.id.notification_count).setVisibility(View.GONE);
-                Intent notifIntent = new Intent(this , NotificationsActivity.class);
+                Intent notifIntent = new Intent(this, NotificationsActivity.class);
                 startActivity(notifIntent);
                 break;
         }
@@ -1035,33 +1024,34 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 }
                 noInterNetConnection.setText("No Internet Connection");
             }
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(BANNER_REQUEST_TAG)){
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(BANNER_REQUEST_TAG)) {
             if (((BannerObject) obj).getType() != 0) {
                 showBanner((BannerObject) obj);
             }
-        } else if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.PHONE_VERIFICATION)) {
-            if(obj instanceof Object[]) {
-                Object[] response = (Object[])obj;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.PHONE_VERIFICATION)) {
+            if (obj instanceof Object[]) {
+                Object[] response = (Object[]) obj;
 
                 String phoneNumber = (String) response[0];
                 boolean isVerified = (Boolean) response[1];
 
-                if(!isVerified) {
+                if (!isVerified) {
                     Intent intent = new Intent(this, CheckPhoneVerificationActivity.class);
                     startActivity(intent);
                 }
             }
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(LATEST_NOTIFICATION_COUNT_TAG)){
-            if(AllNotifications.getsInstance().getNewNotificationCount() == 0){
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(LATEST_NOTIFICATION_COUNT_TAG)) {
+            if (AllNotifications.getsInstance().getNewNotificationCount() == 0) {
                 findViewById(R.id.notification_count).setVisibility(View.GONE);
-            }else{
-                ((TextView)findViewById(R.id.notification_count)).setText(AllNotifications.getsInstance().getNewNotificationCount()+"");
+            } else {
+                ((TextView) findViewById(R.id.notification_count)).setText(AllNotifications.getsInstance().getNewNotificationCount() + "");
                 findViewById(R.id.notification_count).setVisibility(View.VISIBLE);
             }
         }
 
     }
-    public void showBanner(BannerObject obj){
+
+    public void showBanner(BannerObject obj) {
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("banner_obj", obj);
@@ -1073,6 +1063,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
         dialog.show(getSupportFragmentManager(), "BannerTag");
     }
+
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
         CommonLib.ZLog("err", "request failed");
@@ -1093,6 +1084,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
     ProgressDialog progressDialog;
+
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object object) {
         if (requestType == ADD_TO_CART && !isDestroyed) {
@@ -1108,7 +1100,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
         if (isDestroyed)
             return;
-        if (requestType == ADD_TO_CART && status ) {
+        if (requestType == ADD_TO_CART && status) {
 
             String message = "An error occurred. Please try again...";
             if (progressDialog != null) {
@@ -1120,9 +1112,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
                     message = jsonObject.getString("success");
                 if (message != null) {
-                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int)productId, 1));
+                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) productId, 1));
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
-                    moveToProductDetail(productId,slug);
+                    moveToProductDetail(productId, slug);
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
 
                     message = jsonObject.getString("error");
@@ -1133,7 +1125,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else if (requestType == SIGNUP_REQUEST_TAG_BASE) {
+        } else if (requestType == SIGNUP_REQUEST_TAG_BASE) {
             if (status) {
                 reloadUserInfo = true;
                 AppPreferences.setIsUserLogin(this, true);
@@ -1211,7 +1203,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
     private void phoneVerification() {
         String finalUrl = AppApplication.getInstance().getBaseUrl() + AppConstants.PHONE_VERIFICATION
-                + "?userid="+ AppPreferences.getUserID(this);
+                + "?userid=" + AppPreferences.getUserID(this);
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,
                 RequestTags.PHONE_VERIFICATION,
                 ObjectTypes.OBJECT_TYPE_PHONE_VERIFICATION);

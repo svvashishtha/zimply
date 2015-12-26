@@ -50,7 +50,7 @@ public class BarcodeScannerActivity  extends BaseActivity implements ZXingScanne
         View view = LayoutInflater.from(this).inflate(
                 R.layout.common_toolbar_text_layout, null);
         CustomTextView titleText = (CustomTextView) view.findViewById(R.id.title_textview);
-        titleText.setText("Scan Product");
+        titleText.setText("Scan QR Code at Zimply Store");
         toolbar.addView(view);
     }
 

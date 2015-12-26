@@ -1,17 +1,23 @@
 package com.application.zimplyshop.fragments;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.activities.HomeActivity;
+import com.application.zimplyshop.extras.AppConstants;
+import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.UiUtils;
 import com.application.zimplyshop.utils.gif.GifMovieView;
 
@@ -23,11 +29,18 @@ public class BaseFragment extends Fragment {
     GifMovieView gifLoadingView;
     TextView nullcaseText;
     TextView quoteText;
+
+    RelativeLayout nullCaseLayout;
+
     boolean isRequestFailed;
     LinearLayout retryLayout;
     LinearLayout filterLayout;
     LinearLayout categoriesLayout, selectfiltersLayout, sortByLayout;
     int filterLayoutHeight;
+
+    int FRAGMENT_PAGE_TYPE=-1;
+
+
 
     public DisplayMetrics getDisplayMetrics() {
         DisplayMetrics metrics = new DisplayMetrics();
@@ -53,6 +66,7 @@ public class BaseFragment extends Fragment {
         nullcaseText = (TextView) view.findViewById(R.id.nullcase_text);
         retryLayout = (LinearLayout) view.findViewById(R.id.retry_layout);
         quoteText = (TextView) view.findViewById(R.id.quote);
+        nullCaseLayout = (RelativeLayout)view.findViewById(R.id.nullcase_layout);
     }
 
     public void setFilterVariables() {
@@ -83,9 +97,9 @@ public class BaseFragment extends Fragment {
         gifLoadingView.setVisibility(View.GONE);
         nullcaseText.setVisibility(View.GONE);
         retryLayout.findViewById(R.id.retry_image).setVisibility(View.GONE);
-
         retryLayout.setVisibility(View.GONE);
         quoteText.setVisibility(View.GONE);
+        nullCaseLayout.setVisibility(View.GONE);
 
     }
 
@@ -100,6 +114,7 @@ public class BaseFragment extends Fragment {
         retryLayout.setVisibility(View.GONE);
         quoteText.setVisibility(View.VISIBLE);
         quoteText.setText(UiUtils.getTextFromRes(getActivity()));
+        nullCaseLayout.setVisibility(View.GONE);
     }
 
     /**
@@ -124,6 +139,7 @@ public class BaseFragment extends Fragment {
 
         retryLayout.findViewById(R.id.retry_image).setVisibility(View.VISIBLE);
         retryLayout.findViewById(R.id.nullcase_text).setVisibility(View.GONE);
+        nullCaseLayout.setVisibility(View.GONE);
         //retryLayout.setBackgroundResource(R.drawable.ic_navigation_refresh);
         //retryLayout.setBackgroundDrawable(new BitmapDrawable(CommonLib.getBitmap(getActivity(), R.drawable.ic_navigation_refresh, width, height)));
 //        retryLayout.setBackgroundResource(R.drawable.ic_navigation_refresh);
@@ -132,20 +148,40 @@ public class BaseFragment extends Fragment {
     }
 
     public void showNullCaseView(String text) {
-        nullcaseText.setVisibility(View.VISIBLE);
-        nullcaseText.setText(text);
-        nullcaseText.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        nullcaseText.setTextColor(getResources().getColor(R.color.heading_text_color));
-        changeLeftDrawable(0);
-        nullcaseText.setTypeface(null, Typeface.BOLD);
-        quoteText.setVisibility(View.GONE);
-        //   nullcaseText.setTextColor(Color.WHITE);
-        progress.setVisibility(View.GONE);
-        gifLoadingView.setVisibility(View.GONE);
-        retryLayout.setVisibility(View.VISIBLE);
-        retryLayout.findViewById(R.id.retry_image).setVisibility(View.GONE);
-        retryLayout.findViewById(R.id.nullcase_text).setVisibility(View.VISIBLE);
-        retryLayout.setBackgroundResource(R.drawable.ic_null_case);
+        if(FRAGMENT_PAGE_TYPE == AppConstants.FRAGMENT_TYPE_MY_CART){
+            quoteText.setVisibility(View.GONE);
+            progress.setVisibility(View.GONE);
+            gifLoadingView.setVisibility(View.GONE);
+            retryLayout.setVisibility(View.GONE);
+            nullCaseLayout.setVisibility(View.VISIBLE);
+            ((ImageView)view.findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(getActivity(), R.drawable.ic_empty_cart, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            ((TextView) view.findViewById(R.id.start_shopping)).setVisibility(View.VISIBLE);
+            ((TextView) view.findViewById(R.id.start_shopping)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(getActivity()!=null) {
+                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+                        getActivity().finish();
+                        startActivity(intent);
+                    }
+                }
+            });
+        }else {
+            nullcaseText.setVisibility(View.VISIBLE);
+            nullcaseText.setText(text);
+            nullcaseText.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            nullcaseText.setTextColor(getResources().getColor(R.color.heading_text_color));
+            changeLeftDrawable(0);
+            nullcaseText.setTypeface(null, Typeface.BOLD);
+            quoteText.setVisibility(View.GONE);
+            //   nullcaseText.setTextColor(Color.WHITE);
+            progress.setVisibility(View.GONE);
+            gifLoadingView.setVisibility(View.GONE);
+            retryLayout.setVisibility(View.VISIBLE);
+            retryLayout.findViewById(R.id.retry_image).setVisibility(View.GONE);
+            retryLayout.findViewById(R.id.nullcase_text).setVisibility(View.VISIBLE);
+            retryLayout.setBackgroundResource(R.drawable.ic_null_case);
+        }
     }
 
     /**

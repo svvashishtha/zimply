@@ -159,6 +159,10 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     public static final int REQUEST_LOCATION = 199;
 
     public void startLocationCheck1() {
+
+        if(getActivity()!=null &&forced && z_ProgressDialog==null){
+            z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location. Please wait..");
+        }
         PackageManager pm = AppApplication.getInstance().getPackageManager();
         if (pm.hasSystemFeature(PackageManager.FEATURE_LOCATION)) {
             if (getActivity() != null && mGoogleApiClient == null) {
@@ -198,7 +202,8 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                 changeViewVisiblity(cityList, View.GONE);
             } else if (requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_LL)) {
                 if (getActivity() != null) {
-                    z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");
+                    if(z_ProgressDialog==null ||(z_ProgressDialog!=null && !z_ProgressDialog.isShowing()))
+                        z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Checking location, Please wait...");
                 }
             }
         }
@@ -309,7 +314,9 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     }
 
     public Location getLocation() {
-        z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Finding Location..");
+        if(getActivity()!=null) {
+            z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Finding Location..");
+        }
         if (LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient) == null) {
             try {
                 Thread.sleep(1000);
@@ -411,11 +418,15 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
     @Override
     public void onConnected(Bundle bundle) {
+        if(z_ProgressDialog!=null){
+            z_ProgressDialog.dismiss();
+        }
         checkLocationConnection();
     }
 
     public void checkLocationConnection() {
-
+        if(getActivity()!=null && forced && (z_ProgressDialog==null ||(z_ProgressDialog!=null && !z_ProgressDialog.isShowing())))
+            z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         mLocationRequest.setInterval(30 * 1000);
@@ -438,6 +449,9 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                         // requests here.
                         //...
                         if (forced) {
+                            if(z_ProgressDialog!=null){
+                                z_ProgressDialog.dismiss();
+                            }
                             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                             makeCityRequest1();
                         }
@@ -449,6 +463,8 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                             // Show the dialog by calling startResolutionForResult(),
                             // and check the result in onActivityResult().
                             if (forced && getActivity() != null) {
+                                if(z_ProgressDialog==null )
+                                    z_ProgressDialog.dismiss();
                                 status.startResolutionForResult(
                                         getActivity(),
                                         REQUEST_LOCATION);
@@ -482,6 +498,9 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                     .addApi(LocationServices.API)
                     .build();
         }
+        if(z_ProgressDialog!=null){
+            z_ProgressDialog.dismiss();
+        }
         mGoogleApiClient.connect();
         requestTime = System.currentTimeMillis();
 
@@ -499,33 +518,17 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                         // All required changes were successfully made
 
                         Toast.makeText(getActivity(), "Location enabled by user!", Toast.LENGTH_LONG).show();
-                        /*if (mGoogleApiClient == null){
-                            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                                    .addConnectionCallbacks(this)
-                                    .addOnConnectionFailedListener(this)
-                                    .addApi(LocationServices.API)
-                                    .build();
-                        }*/
-                        // startLocationCheck1();
-                        // checkLocationConnection();
+
                         forced = true;
-                        if (mGoogleApiClient.isConnected()) {
-                            showToast("Google Api Client connected");
-                        }
-                        //mGoogleApiClient.connect();
-                        //  onConnected(null);
-                        //   makeCityRequest1();
-                       /* mGoogleApiClient.disconnect();
-                        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                                .addConnectionCallbacks(this)
-                                .addOnConnectionFailedListener(this)
-                                .addApi(LocationServices.API)
-                                .build();
-                        mGoogleApiClient.connect();*/
+                         checkLocationConnection();
 
                         break;
                     }
                     case Activity.RESULT_CANCELED: {
+
+                        if(z_ProgressDialog!=null){
+                            z_ProgressDialog.dismiss();
+                        }
                         // The user was asked to change settings, but chose not to
                         forced = false;
                         Toast.makeText(getActivity(), "Location not enabled, user cancelled.", Toast.LENGTH_LONG).show();

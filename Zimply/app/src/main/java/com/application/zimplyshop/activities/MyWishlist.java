@@ -50,6 +50,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
+        PAGE_TYPE =AppConstants.PAGE_TYPE_WISHLIST;
         GetRequestManager.getInstance().addCallbacks(this);
         UploadManager.getInstance().addCallback(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);

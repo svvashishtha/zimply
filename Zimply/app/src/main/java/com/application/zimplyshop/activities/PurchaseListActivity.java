@@ -57,7 +57,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_layout);
-
+        PAGE_TYPE =AppConstants.PAGE_TYPE_ORDER;
         findViewById(R.id.parent).setBackgroundColor(getResources().getColor(R.color.pager_bg));
 
         if( getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey("fromHome"))
@@ -155,8 +155,8 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
                                         public void onClick(DialogInterface dialog, int which) {
                                             clickedOrder = position;
                                             orderItemId = orderId;
-                                            status = AppConstants.CANCEL_ORDER;
-                                            sendServerRequest(AppConstants.CANCEL_ORDER, orderId);
+                                            status = AppConstants.RETURN_ORDER;
+                                            sendServerRequest(AppConstants.RETURN_ORDER, orderId);
                                             ;
                                         }
                                     }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
@@ -309,8 +309,12 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
             if(dialog !=null)
                 dialog.dismiss();
             if(status){
-                adapter.changeStatus(clickedOrder,orderItemId,this.status);
-                Toast.makeText(this,"Order successfully cancelled",Toast.LENGTH_SHORT).show();
+                adapter.changeStatus(clickedOrder, orderItemId, this.status);
+                if(this.status == AppConstants.CANCEL_ORDER) {
+                    Toast.makeText(this, "Order successfully cancelled", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "Order return in-process", Toast.LENGTH_SHORT).show();
+                }
             }else{
                 Toast.makeText(this,"Could not process request.Please try again",Toast.LENGTH_SHORT).show();
             }

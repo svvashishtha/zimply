@@ -65,6 +65,8 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder,final int position) {
         if(getItemViewType(position) ==TYPE_DATA){
+
+            ((ProductViewHolder)holder).itemNum.setText("#Item "+position);
             ((ProductViewHolder)holder).productName.setText(cartObj.getCart().getDetail().get(position-1).getProduct().getName());
             ((ProductViewHolder)holder).productPrice.setText(mContext.getString(R.string.rs_text) + " " + cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice());
             ((ProductViewHolder)holder).productQty.setText("Qty: " + cartObj.getCart().getDetail().get(position - 1).getQty());

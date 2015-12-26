@@ -122,15 +122,15 @@ public class CommonLib {
 	/**
 	 * Version string
 	 */
-	public static final String VERSION_STRING = "1.0.9";
+	public static final String VERSION_STRING = "1.0.2";
 	/**
 	 * Crashlytics version string
 	 */
-	public static final String CRASHLYTICS_VERSION_STRING = "1.0.9 Live";
+	public static final String CRASHLYTICS_VERSION_STRING = "1.0.2 Live";
 	/**
 	 * Log control
 	 */
-	public final static boolean ZimplyLog = true;
+	public final static boolean ZimplyLog = false;
 	/**
 	 * GCM Sender ID
 	 */
@@ -512,6 +512,7 @@ public class CommonLib {
 				FileInputStream fi;
 				BitmapFactory.Options opts = new BitmapFactory.Options();
 				opts.inPreferredConfig = Config.RGB_565;
+				opts.inDither=true;
 				fi = new FileInputStream(filePath);
 				defautBitmap = BitmapFactory.decodeStream(fi, null, opts);
 			}

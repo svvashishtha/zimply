@@ -80,14 +80,14 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             holder.shippingPrice.setText(cartObject.getCart().getDetail().get(position).getShipping_charge()==0?"Free":
                     context.getString(R.string.rs_text)+" "+cartObject.getCart().getDetail().get(position).getShipping_charge()*cartObject.getCart().getDetail().get(position).getQty());
             holder.totalPrice.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position).getShipping_charge() == 0 ? (cartObject.getCart().getDetail().get(position).getQty() * cartObject.getCart().getDetail().get(position).getProduct().getPrice()) : ((cartObject.getCart().getDetail().get(position).getQty() * cartObject.getCart().getDetail().get(position).getProduct().getPrice()) +(cartObject.getCart().getDetail().get(position).getQty()*cartObject.getCart().getDetail().get(position).getShipping_charge()))));
-            if (cartObject.getCart().getDetail().get(position).getProduct().is_o2o()){
+            if (cartObject.getCart().getDetail().get(position).getProduct().is_cod()){
                 holder.isCocText.setVisibility(View.VISIBLE);
                 holder.isCocText.setText(Html.fromHtml("<b>Cash-on-Delivery"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_tick);
                 holder.buyOfflineTag.setVisibility(View.VISIBLE);
             }else{
                 holder.isCocText.setVisibility(View.GONE);
-                changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
+                //  changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
                 holder.buyOfflineTag.setVisibility(View.GONE);
             }
 
@@ -204,16 +204,7 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs) + " "+Math.round(price));
             summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) + " "+Math.round(totalPrice));
             summaryHolder.shipping.setText((cartObject.getCart().getTotal_shipping()==0) ? "Free" : context.getResources().getString(R.string.Rs) + " "+cartObject.getCart().getTotal_shipping());
-            /*summaryHolder.checkOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(CommonLib.isNetworkAvailable(context)) {
-                        mListener.checkOut(position);
-                    }else{
-                        Toast.makeText(context,"No network available",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });*/
+
         }
     }
 

@@ -2,7 +2,9 @@ package com.application.zimplyshop.baseobjects;
 
 import com.application.zimplyshop.utils.JSONUtils;
 
-public class ErrorObject {
+import java.io.Serializable;
+
+public class ErrorObject implements Serializable{
 	private int errorCode;
 
 	private String errorMessage;
