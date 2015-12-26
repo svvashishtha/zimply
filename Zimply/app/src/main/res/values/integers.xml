@@ -4,4 +4,7 @@
     <integer name="viewfinder_border_length">60</integer>
     <integer name="viewfinder_border_width">4</integer>
 
+    <integer name="wishlist_tag_position">1</integer>
+    <integer name="wishlist_tag_holder">2</integer>
+
 </resources>

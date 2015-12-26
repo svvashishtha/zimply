@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dropshadowcard"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/buy_offline_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|end"
+                android:src="@drawable/ic_zi_experience" />
+
+            <ImageView
+                android:id="@+id/product_img"
+                android:layout_width="@dimen/product_img_size"
+                android:layout_height="@dimen/product_img_size"
+                android:scaleType="fitCenter" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/wishlistmorenbuttonslayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <View
+                android:id="@+id/wishlistmorebuttonbg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/z_black_50_percent_transparent" />
+
+            <LinearLayout
+                android:id="@+id/buttonslayoutwishlstbuttonsanimate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/removefromwishlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/z_margin_small">
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/z_margin_medium"
+                        android:background="@drawable/wishlist_remove_from_wishlist_text_bg"
+                        android:includeFontPadding="false"
+                        android:padding="@dimen/height4"
+                        android:text="Remove"
+                        android:textColor="@color/z_text_color_dark"
+                        android:textSize="@dimen/z_font_mini" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/wishlist_remove_from_wishlist_button_bg"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="@dimen/z_margin_large"
+                            android:layout_height="@dimen/z_margin_large"
+                            android:src="@drawable/ic_delete_white" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/movetocartfromwoshlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/z_margin_small">
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/z_margin_medium"
+                        android:background="@drawable/wishlist_remove_from_wishlist_text_bg"
+                        android:includeFontPadding="false"
+                        android:padding="@dimen/height4"
+                        android:text="Move to Cart"
+                        android:textColor="@color/z_text_color_dark"
+                        android:textSize="@dimen/z_font_mini" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/wishlist_move_to_cart_button_bg"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="@dimen/z_margin_large"
+                            android:layout_height="@dimen/z_margin_large"
+                            android:layout_margin="@dimen/z_margin_small"
+                            android:src="@drawable/ic_add_shopping_cart_white" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:paddingBottom="@dimen/margin_mini"
+                android:paddingLeft="@dimen/margin_small"
+                android:paddingRight="@dimen/margin_small"
+                android:paddingTop="@dimen/margin_mini"
+                android:singleLine="true"
+                android:text="Orange stool"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/white_card_without_border_normal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
+                        android:id="@+id/product_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/margin_mini"
+                        android:paddingLeft="@dimen/margin_small"
+                        android:paddingRight="@dimen/margin_small"
+                        android:text="Rs 350"
+                        android:textColor="@color/red_text_color"
+                        android:textSize="@dimen/font_medium" />
+
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
+                        android:id="@+id/product_disounted_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/margin_mini"
+                        android:paddingLeft="@dimen/margin_small"
+                        android:paddingRight="@dimen/margin_small"
+                        android:text="Rs 350"
+                        android:textColor="@color/text_color1"
+                        android:textSize="@dimen/font_medium"
+                        android:textStyle="bold" />
+
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
+                        android:id="@+id/product_disounted_factor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/margin_mini"
+                        android:paddingLeft="@dimen/margin_small"
+                        android:paddingRight="@dimen/margin_small"
+                        android:text="( 20% )"
+                        android:textColor="@color/green_text_color"
+                        android:textSize="@dimen/font_mini" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wihslistbuttonoverflow"
+            android:layout_width="@dimen/size32"
+            android:layout_height="@dimen/z_item_height_48"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/size16"
+                android:layout_height="@dimen/size16"
+                android:alpha="0.8"
+                android:src="@drawable/ic_navigation_more_vert" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

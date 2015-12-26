@@ -193,5 +193,6 @@
     <dimen name="booking_card_height">164dp</dimen>
 
     <dimen name="product_detail_padding_bottom">172dp</dimen>
+    <dimen name="z_wishlist_button_delete_from_wishlist_bg_radius">40dp</dimen>
 
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+
+    <size
+        android:width="@dimen/z_wishlist_button_delete_from_wishlist_bg_radius"
+        android:height="@dimen/z_wishlist_button_delete_from_wishlist_bg_radius" />
+
+    <solid android:color="@color/z_red" />
+
+</shape>

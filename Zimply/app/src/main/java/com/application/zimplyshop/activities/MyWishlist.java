@@ -1,5 +1,6 @@
 package com.application.zimplyshop.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.FavouritesRecyclerViewGridAdapter;
@@ -32,12 +34,16 @@ import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Umesh Lohani on 11/2/2015.
  */
-public class MyWishlist extends BaseActivity implements GetRequestListener,View.OnClickListener, UploadManagerCallback,AppConstants {
+public class MyWishlist extends BaseActivity implements GetRequestListener, View.OnClickListener, UploadManagerCallback, AppConstants, RequestTags, ObjectTypes {
 
     RecyclerView productList;
 
@@ -46,6 +52,8 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     int width;
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +88,8 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     private void loadData() {
         String finalUrl;
         if (nextUrl == null) {
-            int width = (getDisplayMetrics().widthPixels-(3*getResources().getDimensionPixelSize(R.dimen.margin_small)))/3;
-            finalUrl = AppApplication.getInstance().getBaseUrl() + AppConstants.USER_WISHLIST+"?userid="+ AppPreferences.getUserID(this)+"&width="+width;
+            int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
+            finalUrl = AppApplication.getInstance().getBaseUrl() + AppConstants.USER_WISHLIST + "?userid=" + AppPreferences.getUserID(this) + "&width=" + width;
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
@@ -98,7 +106,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
         toolbar.addView(view);
     }
 
-    boolean isLoading,isRequestAllowed;
+    boolean isLoading, isRequestAllowed;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,8 +119,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.cart:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
                 intent.putExtra("OrderSummaryFragment", false);
@@ -137,9 +144,9 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if(requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)){
+        if (requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)) {
             if (productList.getAdapter() == null
-                    || productList.getAdapter().getItemCount() == 0 ) {
+                    || productList.getAdapter().getItemCount() == 0) {
                 showLoadingView();
                 changeViewVisiblity(productList, View.GONE);
                 if (productList.getAdapter() != null)
@@ -162,9 +169,10 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
 
         super.onDestroy();
     }
+
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)) {
             if (((MyWishListObject) obj).getFavourite().size() == 0) {
                 if (productList.getAdapter() == null
                         || productList.getAdapter().getItemCount() == 1) {
@@ -195,32 +203,32 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.USER_WISHLIST)) {
 
-                if (productList.getAdapter() == null
-                        || productList.getAdapter().getItemCount() == 1) {
-                    showNetworkErrorView();
-                    changeViewVisiblity(productList, View.GONE);
+            if (productList.getAdapter() == null
+                    || productList.getAdapter().getItemCount() == 1) {
+                showNetworkErrorView();
+                changeViewVisiblity(productList, View.GONE);
+            } else {
+                if (((ErrorObject) obj).getErrorCode() == 500) {
+                    showToast("Could not load more data");
                 } else {
-                    if (((ErrorObject) obj).getErrorCode() == 500) {
-                        showToast("Could not load more data");
-                    } else {
-                        showToast(((ErrorObject) obj).getErrorMessage());
-                    }
-                    ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
-                            .removeItem();
-                    isRequestAllowed = false;
+                    showToast(((ErrorObject) obj).getErrorMessage());
                 }
-                isLoading = false;
+                ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
+                        .removeItem();
+                isRequestAllowed = false;
+            }
+            isLoading = false;
 
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.retry_layout:
-                if(isRequestFailed){
+                if (isRequestFailed) {
                     loadData();
                 }
                 break;
@@ -287,25 +295,45 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
 
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
-        if(requestType == RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG) {
-            if(!isDestroyed && status) {
+        if (requestType == RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG) {
+            if (!isDestroyed && status) {
+                ((FavouritesRecyclerViewGridAdapter) productList.getAdapter()).currentSelectedWishlistItem = -1;
                 ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
                         .updateList(objectId, RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG);
 
-                if(productList.getAdapter().getItemCount()==0){
+                if (productList.getAdapter().getItemCount() == 0) {
                     showNullCaseView("No Products");
                 }
+            } else if (!isDestroyed) {
+                Toast.makeText(this, "Network Error Occured", Toast.LENGTH_SHORT).show();
             }
-        } else if(requestType == RequestTags.MARK_FAVOURITE_REQUEST_TAG) {
-            if(!isDestroyed && status) {
+
+            if (!isDestroyed && progressDialog != null) {
+                progressDialog.dismiss();
+            }
+        } else if (requestType == RequestTags.MARK_FAVOURITE_REQUEST_TAG) {
+            if (!isDestroyed && status) {
                 ((FavouritesRecyclerViewGridAdapter) productList.getAdapter())
-                        .updateList(data,  RequestTags.MARK_FAVOURITE_REQUEST_TAG);
+                        .updateList(data, RequestTags.MARK_FAVOURITE_REQUEST_TAG);
             }
         }
     }
 
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
+        if (requestType == RequestTags.MARK_UN_FAVOURITE_REQUEST_TAG && !isDestroyed) {
+            if (progressDialog != null)
+                progressDialog.dismiss();
+            progressDialog = ProgressDialog.show(this, null, "Removing from Wishlist");
+        }
+    }
 
+    public void removeProductFromWishlistRequest(int pos, int favourite_item_id) {
+        String url = AppApplication.getInstance().getBaseUrl() + MARK_UNFAVOURITE_URL;
+        List<NameValuePair> list = new ArrayList<NameValuePair>();
+        list.add(new BasicNameValuePair("favourite_item_id", favourite_item_id + ""));
+        list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
+        UploadManager.getInstance().makeAyncRequest(url, MARK_UN_FAVOURITE_REQUEST_TAG, favourite_item_id + "",
+                OBJECT_TYPE_MARKED_UNFAV, null, list, null);
     }
 }
