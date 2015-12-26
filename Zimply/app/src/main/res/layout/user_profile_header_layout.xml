@@ -29,7 +29,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/margin_small"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_user_pic"
             app:border="false" />
 
         <com.application.zimplyshop.widgets.CustomTextView

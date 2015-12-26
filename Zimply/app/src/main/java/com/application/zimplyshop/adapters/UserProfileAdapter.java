@@ -1,7 +1,6 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.utils.ImageUtils;
 
 public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -41,8 +39,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
 		if (getItemViewType(position) == TYPE_HEADER) {
-			((ProfileHeaderViewHolder) holder).imageView.setImageBitmap(ImageUtils
-					.fastblur(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_user_pic), 20));
+			/*((ProfileHeaderViewHolder) holder).imageView.setImageBitmap(ImageUtils
+					.fastblur(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_user_pic), 20));*/
 		} else {
 			((ProfileItemViewHolder) holder).textView.setText(array[position - 1]);
 
