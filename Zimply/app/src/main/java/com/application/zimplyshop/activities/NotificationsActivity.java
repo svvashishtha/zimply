@@ -251,5 +251,9 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        GetRequestManager.getInstance().removeCallbacks(this);
+        super.onDestroy();
+    }
 }

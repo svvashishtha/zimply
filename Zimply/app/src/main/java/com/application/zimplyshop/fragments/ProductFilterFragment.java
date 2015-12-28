@@ -127,6 +127,7 @@ public class ProductFilterFragment extends BaseFragment implements GetRequestLis
     @Override
     public void onDestroy() {
         destroyed = true;
+        GetRequestManager.getInstance().removeCallbacks(this);
         super.onDestroy();
     }
 

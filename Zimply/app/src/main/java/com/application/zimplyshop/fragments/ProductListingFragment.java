@@ -240,4 +240,10 @@ public class ProductListingFragment extends BaseFragment implements View.OnClick
 
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        GetRequestManager.getInstance().removeCallbacks(this);
+        super.onDestroyView();
+    }
 }

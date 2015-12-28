@@ -172,6 +172,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
     @Override
     public void onDestroy() {
         destroyed = true;
+        UploadManager.getInstance().removeCallback(this);
         super.onDestroy();
     }
 

@@ -160,7 +160,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
     public void startLocationCheck1() {
 
-        if(getActivity()!=null &&forced && z_ProgressDialog==null){
+        if (getActivity() != null && forced && z_ProgressDialog == null) {
             z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location. Please wait..");
         }
         PackageManager pm = AppApplication.getInstance().getPackageManager();
@@ -202,7 +202,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                 changeViewVisiblity(cityList, View.GONE);
             } else if (requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_LL)) {
                 if (getActivity() != null) {
-                    if(z_ProgressDialog==null ||(z_ProgressDialog!=null && !z_ProgressDialog.isShowing()))
+                    if (z_ProgressDialog == null || (z_ProgressDialog != null && !z_ProgressDialog.isShowing()))
                         z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Checking location, Please wait...");
                 }
             }
@@ -314,7 +314,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     }
 
     public Location getLocation() {
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Finding Location..");
         }
         if (LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient) == null) {
@@ -408,7 +408,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
     @Override
     public void onDestroy() {
         AppApplication.getInstance().zll.removeCallback(this);
-
+        GetRequestManager.getInstance().removeCallbacks(this);
         isDestroyed = true;
         if (z_ProgressDialog != null) {
             z_ProgressDialog.dismiss();
@@ -418,14 +418,14 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
 
     @Override
     public void onConnected(Bundle bundle) {
-        if(z_ProgressDialog!=null){
+        if (z_ProgressDialog != null) {
             z_ProgressDialog.dismiss();
         }
         checkLocationConnection();
     }
 
     public void checkLocationConnection() {
-        if(getActivity()!=null && forced && (z_ProgressDialog==null ||(z_ProgressDialog!=null && !z_ProgressDialog.isShowing())))
+        if (getActivity() != null && forced && (z_ProgressDialog == null || (z_ProgressDialog != null && !z_ProgressDialog.isShowing())))
             z_ProgressDialog = ProgressDialog.show(getActivity(), null, "Fetching location, Please wait...");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
@@ -449,7 +449,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                         // requests here.
                         //...
                         if (forced) {
-                            if(z_ProgressDialog!=null){
+                            if (z_ProgressDialog != null) {
                                 z_ProgressDialog.dismiss();
                             }
                             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -463,7 +463,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                             // Show the dialog by calling startResolutionForResult(),
                             // and check the result in onActivityResult().
                             if (forced && getActivity() != null) {
-                                if(z_ProgressDialog==null )
+                                if (z_ProgressDialog == null)
                                     z_ProgressDialog.dismiss();
                                 status.startResolutionForResult(
                                         getActivity(),
@@ -498,7 +498,7 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                     .addApi(LocationServices.API)
                     .build();
         }
-        if(z_ProgressDialog!=null){
+        if (z_ProgressDialog != null) {
             z_ProgressDialog.dismiss();
         }
         mGoogleApiClient.connect();
@@ -520,13 +520,13 @@ public class CitiesListFragment extends BaseFragment implements GetRequestListen
                         Toast.makeText(getActivity(), "Location enabled by user!", Toast.LENGTH_LONG).show();
 
                         forced = true;
-                         checkLocationConnection();
+                        checkLocationConnection();
 
                         break;
                     }
                     case Activity.RESULT_CANCELED: {
 
-                        if(z_ProgressDialog!=null){
+                        if (z_ProgressDialog != null) {
                             z_ProgressDialog.dismiss();
                         }
                         // The user was asked to change settings, but chose not to

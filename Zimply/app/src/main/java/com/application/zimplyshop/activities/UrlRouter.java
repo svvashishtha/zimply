@@ -157,4 +157,9 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
 
     }
 
+    @Override
+    protected void onDestroy() {
+        GetRequestManager.getInstance().removeCallbacks(this);
+        super.onDestroy();
+    }
 }
