@@ -59,4 +59,5 @@ public interface ObjectTypes {
     int OBJECT_TYPE_LATEST_BOOKKING_OBJ = 51;
     int OBJECT_TYPE_CHANGE_PASSWORD = 52;
     int OBJECT_TYPE_CITY_STATE = 53;
+    int OBJECT_TYPE_NOTIFY_ME=54;
 }

@@ -41,4 +41,15 @@
             android:layout_marginRight="@dimen/margin_small"
             android:src="@drawable/fav_bigger_bg"/>
     </LinearLayout>
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/out_of_stock_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Out Of Stock"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        android:textColor="@color/red_text_color"
+        android:textSize="@dimen/font_xlarge" />
 </LinearLayout>

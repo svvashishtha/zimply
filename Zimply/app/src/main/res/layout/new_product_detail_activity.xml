@@ -15,7 +15,40 @@
         android:paddingTop="@dimen/padding_top_56"
         android:paddingBottom="@dimen/padding_top_56">
     </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/out_of_stock_layout"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        android:background="@color/pager_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/margin_medium"
+        android:paddingRight="@dimen/margin_medium"
+        android:layout_height="@dimen/z_item_height_48">
+        <com.application.zimplyshop.widgets.CustomEdittext
+            android:id="@+id/search_text"
+            android:layout_width="0dp"
+            style="@style/EditTextAppTheme"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:layout_marginRight="@dimen/margin_medium"
+            android:textColor="@color/text_color1"/>
 
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/notify_me_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notify"
+            android:paddingTop="@dimen/margin_small"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingRight="@dimen/margin_large"
+            android:textAllCaps="true"
+            android:background="@drawable/z_rate_blue_btn_bg"
+            android:textSize="@dimen/font_medium"
+            android:textColor="@color/white"/>
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/bottom_action_container"
         android:layout_width="fill_parent"

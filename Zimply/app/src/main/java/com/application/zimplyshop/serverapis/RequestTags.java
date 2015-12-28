@@ -59,6 +59,7 @@ public interface RequestTags {
     int PHONE_VERIFICATION_INPUT_NUMBER = 0x0011;
     int PHONE_VERIFICATION_OTP = 0x0012;
     int CHANGE_PASSWORD = 0x0013;
+    int NOTIFY_ME_TAG=0x0014;
 
     String GET_PHOTO_SINGLE = "getSinglePhotoObject";
     String GET_CITY_FROM_LL = "getCityformLL";

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -126,11 +127,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(adapter!=null){
+                if (adapter != null) {
                     adapter.notifyItemChanged(1);
                 }
             }
-        },500);
+        }, 500);
 
     }
 
@@ -175,8 +176,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)){
-            CommonLib.ZLog("Request Time","Product Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
-            CommonLib.writeRequestData("Product Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
+            CommonLib.ZLog("Request Time", "Product Detail Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
+            CommonLib.writeRequestData("Product Detail Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
             if (obj instanceof HomeProductObj) {
                 HomeProductObj  product = (HomeProductObj) obj;
                 addAdapterData(product);
@@ -221,26 +222,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
             @Override
             public void onCancelBookingRequest(NewProductDetailAdapter.ProductInfoHolder2 holder) {
-               /* final AlertDialog logoutDialog;
-                logoutDialog = new AlertDialog.Builder(NewProductDetailActivity.this)
-                        .setTitle("Confirm?")
-                        .setCancelable(false)
-                        .setMessage("Are you sure you want to cancel?")
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        cancelBooking(adapter.getObj().getVendor().getBook_product_id());
-                                    }
-                                }).create();
-                logoutDialog.show();*/
+
             }
 
             @Override
@@ -272,7 +254,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     System.out.println("Scroll Position::" + adapter.getRefernceHolder().mapParent.getTop());
                     if (!AppPreferences.isBookTutorialShown(NewProductDetailActivity.this) && adapter.getRefernceHolder().mapParent.getTop() < spaceHeight && !isViewShown) {
                         ((ScrollCustomizedLayoutManager) productDetailList.getLayoutManager()).setScrollEnabled(false);
-                        AppPreferences.setIsBookTutorialShown(NewProductDetailActivity.this,true);
+                        AppPreferences.setIsBookTutorialShown(NewProductDetailActivity.this, true);
                         showTransparentView();
                     } else {
                         super.onScrolled(recyclerView, dx, dy);
@@ -285,8 +267,30 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
             }
         });
+        if((int)adapter.getObj().getProduct().getAvailable_quantity() == 0){
+            (findViewById(R.id.out_of_stock_layout)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.bottom_action_container)).setVisibility(View.GONE);
+            ((EditText)findViewById(R.id.search_text)).setText(AppPreferences.getUserEmail(this));
+        }else {
+            (findViewById(R.id.out_of_stock_layout)).setVisibility(View.GONE);
+            (findViewById(R.id.bottom_action_container)).setVisibility(View.VISIBLE);
+        }
 
-        (findViewById(R.id.bottom_action_container)).setVisibility(View.VISIBLE);
+        (findViewById(R.id.notify_me_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((EditText) findViewById(R.id.search_text)).getText().toString().trim().length() > 0) {
+                    if(checkEmailFormat(((EditText) findViewById(R.id.search_text)).getText().toString())){
+                        notifyMeAbout(((EditText) findViewById(R.id.search_text)).getText().toString());
+                    }else{
+                        Toast.makeText(NewProductDetailActivity.this, "Pease enter a valid email address",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(NewProductDetailActivity.this,"Please enter an email address",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         if(AllProducts.getInstance().cartContains((int)adapter.getObj().getProduct().getId())){
             addToCart.setText("Go to cart");
         }else{
@@ -304,6 +308,24 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         }
 
 
+    }
+    private boolean checkEmailFormat(CharSequence target) {
+
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+
+        }
+    }
+    public void notifyMeAbout(String emailId){
+        String url =AppApplication.getInstance().getBaseUrl()+AppConstants.NOTIFY_ME_URL;
+
+        List<NameValuePair> list = new ArrayList<NameValuePair>();
+        list.add(new BasicNameValuePair("product_id", adapter.getObj().getProduct().getId() + ""));
+        list.add(new BasicNameValuePair("email", emailId));
+        UploadManager.getInstance().makeAyncRequest(url, NOTIFY_ME_TAG, adapter.getObj().getProduct().getId() + "",
+                OBJECT_TYPE_NOTIFY_ME, adapter.getObj(), list, null);
     }
 
     boolean isViewShown;
@@ -443,7 +465,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home){
-           onBackPressed();
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -471,8 +493,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             } else {
                 showToast("Cannot cancel request. Try again");
             }
-        }
-        if (requestType == ADD_TO_CART_PRODUCT_DETAIL && status && !isDestroyed) {
+        }else if (requestType == ADD_TO_CART_PRODUCT_DETAIL && status && !isDestroyed) {
 
             String message = "An error occurred. Please try again...";
             if (progressDialog != null) {
@@ -511,6 +532,17 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 if (status) {
                     adapter.getObj().getProduct().setIs_favourite(false);
                 }
+            }
+        }else if(requestType == NOTIFY_ME_TAG && !isDestroyed){
+            if(progressDialog!=null){
+                progressDialog.dismiss();
+            }
+            if (status) {
+                Toast.makeText(this,"You will be notified once the item is available.",
+                        Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this,"Could not process request. Please try again.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -601,6 +633,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         }else if ((requestType == ADD_TO_CART_PRODUCT_DETAIL || requestType == BUY_NOW) && !isDestroyed) {
             progressDialog = ProgressDialog.show(this, null, "Adding to cart. Please wait");
             // isLoading = true;
+        }else if(!isDestroyed && requestType == NOTIFY_ME_TAG){
+            progressDialog = ProgressDialog.show(this, null, "Loading. Please wait...");
         }
     }
 

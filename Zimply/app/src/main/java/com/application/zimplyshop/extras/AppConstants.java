@@ -12,6 +12,7 @@ public interface AppConstants {
     String PHOTOS_LISTING_URL = "explore/photo-list/";
     String DEALS_PRODUCT_LISTING_URL = "content/deals/";
     String PRO_CATEGORY_TREE = "pro/category-tree";
+    String NOTIFY_ME_URL = "ecommerce/notify/";
 
     String FEATURED_PRODUCT_LISTING_URL = "content/featured-products/";
     String COMPLETE_CATEGORY_LISTING_URL = "content/categories/";

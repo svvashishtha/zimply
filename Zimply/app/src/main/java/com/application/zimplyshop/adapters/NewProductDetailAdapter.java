@@ -192,6 +192,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 });
             }
         }else if(getItemViewType(position) == TYPE_PRODUCT_INFO_1){
+            if(obj.getProduct().getAvailable_quantity() == 0){
+                ((ProductInfoHolder1)holder).outOfStock.setVisibility(View.VISIBLE);
+            }else{
+                ((ProductInfoHolder1)holder).outOfStock.setVisibility(View.GONE);
+            }
             ((ProductInfoHolder1)holder).productPrice.setText(mContext.getString(R.string.rs_text)+" "+Math.round(obj.getProduct().getPrice()));
             ((ProductInfoHolder1)holder).productName.setText(obj.getProduct().getName());
             ((ProductInfoHolder1)holder).favImage.setSelected(obj.getProduct().is_favourite());
@@ -825,7 +830,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
     public class ProductInfoHolder1 extends RecyclerView.ViewHolder{
-        TextView productName;
+        TextView productName,outOfStock;
         TextView productPrice;
         ImageView favImage;
         public ProductInfoHolder1(View itemView) {
@@ -833,6 +838,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             productName = (TextView)itemView.findViewById(R.id.product_title);
             productPrice=(TextView)itemView.findViewById(R.id.product_price);
             favImage = (ImageView)itemView.findViewById(R.id.product_fav);
+            outOfStock= (TextView)itemView.findViewById(R.id.out_of_stock_text);
+
         }
     }
 
