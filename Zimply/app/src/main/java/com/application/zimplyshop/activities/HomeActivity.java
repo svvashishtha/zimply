@@ -750,6 +750,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         navView = (NavigationView) findViewById(R.id.navigation_view);
 
         CircularImageView userImage = (CircularImageView) navView.findViewById(R.id.user_img);
+        userImage.setOnClickListener(this);
         TextView userName = (TextView) navView.findViewById(R.id.drawer_user_name);
 
         ImageView backgroundImg = (ImageView) navView.findViewById(R.id.drawer_user_info_background_image_blurr);
@@ -958,6 +959,20 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     isToLoginPage = true;
                     mDrawer.closeDrawers();
                     startActivity(loginIntent);
+                }
+            case R.id.user_img:
+                if (!AppPreferences.isUserLogIn(this)) {
+                    Intent loginIntent = new Intent(this, BaseLoginSignupActivity.class);
+                    loginIntent.putExtra("inside", true);
+                    isToLoginPage = true;
+                    mDrawer.closeDrawers();
+                    startActivity(loginIntent);
+                }
+                else
+                {
+                    Intent intent = new Intent(HomeActivity.this,ProfileActivity.class);
+                    startActivity(intent);
+
                 }
                 break;
         }
