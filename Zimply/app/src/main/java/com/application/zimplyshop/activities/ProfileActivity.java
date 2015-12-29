@@ -1,5 +1,6 @@
 package com.application.zimplyshop.activities;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.managers.ImageLoaderManager;
+import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.widgets.CircularImageView;
@@ -28,10 +30,10 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
 
     ImageView backgroundImage;
     CircularImageView propic;
-    CustomTextView emailUser, pNumber, nameAddress, addressLine1, addressLine2, numberAddress, viewAll;
-    CustomTextViewBold nameOfUser;
+    CustomTextView emailUser, pNumber, addressLine1, addressLine2, numberAddress, viewAll;
+    CustomTextViewBold nameOfUser, nameAddress;
     ArrayList<AddressObject> addressObjectArrayList;
-    View mainView, addressView;
+    View mainView, addressView, settings;
 
 
     @Override
@@ -61,11 +63,12 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
         nameOfUser.setText(AppPreferences.getUserName(ProfileActivity.this));
         emailUser.setText(AppPreferences.getUserEmail(ProfileActivity.this));
         pNumber.setText(AppPreferences.getUserPhoneNumber(ProfileActivity.this));
-        nameAddress = (CustomTextView) findViewById(R.id.name_address);
+        nameAddress = (CustomTextViewBold) findViewById(R.id.name_address);
         addressLine1 = (CustomTextView) findViewById(R.id.address_line1);
         addressLine2 = (CustomTextView) findViewById(R.id.address_line2);
         numberAddress = (CustomTextView) findViewById(R.id.phone_number);
-
+        settings = findViewById(R.id.settings_view);
+        settings.setOnClickListener(this);
         Resources r = getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, r.getDisplayMetrics());
         float density = getResources().getDisplayMetrics().density;
@@ -76,9 +79,15 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     }
 
     void fillAddressView(AddressObject addressObject) {
+        addressView.setVisibility(View.VISIBLE);
         nameAddress.setText(addressObject.getName());
-        addressLine1.setText(addressObject.getLine1());
-        addressLine2.setText(addressObject.getLine2());
+        if (addressObject.getLine1()!=null && addressObject.getLine1().length()>0)
+            addressLine1.setText(addressObject.getLine1());
+        else
+            addressLine1.setVisibility(View.GONE);
+        if (addressObject.getLine2()!=null && addressObject.getLine2().length()>0)
+            addressLine2.setText(addressObject.getLine2());
+        else addressLine2.setVisibility(View.GONE);
         numberAddress.setText(addressObject.getPhone());
     }
 
@@ -102,6 +111,7 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
 
             showView();
             mainView.setVisibility(View.VISIBLE);
+
             if (addressObjectArrayList == null)
                 addressObjectArrayList = new ArrayList<>();
             addressObjectArrayList = (ArrayList<AddressObject>) obj;
@@ -117,6 +127,7 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
             case android.R.id.home:
                 onBackPressed();
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -141,8 +152,28 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_all:
-
+                Intent intent = new Intent(ProfileActivity.this, AddressListActivity.class);
+                startActivity(intent);
                 break;
+            case R.id.settings_view:
+                Intent settingIntent  = new Intent(ProfileActivity.this,SettingsPage.class);
+                startActivity(settingIntent);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            if (AllUsers.getInstance().getObjs().size() > 0) {
+                showView();
+                mainView.setVisibility(View.VISIBLE);
+                fillAddressView(AllUsers.getInstance().getObjs().get(0));
+            } else
+                addressView.setVisibility(View.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
     }
 }

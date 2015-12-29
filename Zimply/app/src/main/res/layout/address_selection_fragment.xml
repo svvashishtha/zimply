@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/margin_small"
-        android:text="Choose address to deliver"
+        android:id="@+id/address_list_title"
         android:textColor="@color/heading_text_color"
         android:textSize="@dimen/font_medium" />
 
