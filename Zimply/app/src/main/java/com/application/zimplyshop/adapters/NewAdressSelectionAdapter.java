@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.baseobjects.AddressObject;
+import com.application.zimplyshop.objects.AllUsers;
+import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
 import com.application.zimplyshop.widgets.CustomTextView;
 
@@ -28,6 +30,8 @@ public class NewAdressSelectionAdapter extends RecyclerView.Adapter<RecyclerView
 
     Context mContext;
 
+    //this variable is for single CheckBox selection.
+    int selectedPosition = 1;
 
     int TYPE_HEADER = 0;
 
@@ -69,7 +73,7 @@ public class NewAdressSelectionAdapter extends RecyclerView.Adapter<RecyclerView
                     addressObjectArrayList.get(position - 1).getLine2() + ", " : "") +
                     addressObjectArrayList.get(position - 1).getCity() + "\nPincode-" +
                     addressObjectArrayList.get(position - 1).getPincode());
-            if (position == 1) {
+            if (position == selectedPosition) {
                 ((AddressHolder) holder).useAddress.setChecked(true);
             } else {
                 ((AddressHolder) holder).useAddress.setChecked(false);
@@ -83,19 +87,42 @@ public class NewAdressSelectionAdapter extends RecyclerView.Adapter<RecyclerView
                     }
                 }
             });
+
             ((AddressHolder) holder).editAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mListener.editExistingAddress(position - 1);
                 }
             });
-            if (activityType == 1)
-            {
-                ((AddressHolder)holder).useAddress.setText("Deliver to this address");
-            }
-            else{
-                ((AddressHolder)holder).useAddress.setText("Set as default");
+            if (activityType == 1) {
+                ((AddressHolder) holder).useAddress.setVisibility(View.VISIBLE);
+                ((AddressHolder) holder).defaultAddress.setVisibility(View.GONE);
+            } else {
+                ((AddressHolder) holder).useAddress.setVisibility(View.GONE);
+                ((AddressHolder) holder).defaultAddress.setVisibility(View.VISIBLE);
 
+                //((AddressHolder) holder).defaultAddress.setOnCheckedChangeListener(null);
+                if (position == selectedPosition) {
+                    ((AddressHolder) holder).defaultAddress.setChecked(true);
+                } else {
+                    ((AddressHolder) holder).defaultAddress.setChecked(false);
+                }
+                ((AddressHolder) holder).defaultAddress.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (((CustomCheckBox) v).isChecked()) {
+
+                            //if (mListener != null)
+                            //mListener.onAddressSelected(position - 1);
+                            AllUsers.getInstance().swapAddress1(selectedPosition - 1, position - 1);
+                            selectedPosition = position;
+                            notifyDataSetChanged();
+
+                        }
+
+                    }
+                });
             }
         } else {
             ((HeaderHolderView) holder).newAddressHeader.setOnClickListener(new View.OnClickListener() {
@@ -104,12 +131,10 @@ public class NewAdressSelectionAdapter extends RecyclerView.Adapter<RecyclerView
                     mListener.addNewAddress();
                 }
             });
-            if (activityType == 1)
-            {
+            if (activityType == 1) {
                 ((HeaderHolderView) holder).addressTitle.setText("Choose address to deliver");
                 ((HeaderHolderView) holder).addressTitle.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 ((HeaderHolderView) holder).addressTitle.setVisibility(View.GONE);
             }
         }
@@ -135,6 +160,7 @@ public class NewAdressSelectionAdapter extends RecyclerView.Adapter<RecyclerView
 
     public class AddressHolder extends RecyclerView.ViewHolder {
         CustomRadioButton useAddress;
+        CustomCheckBox defaultAddress;
         CustomTextView address, phone;
         ImageView editAddress;
 
@@ -144,12 +170,14 @@ public class NewAdressSelectionAdapter extends RecyclerView.Adapter<RecyclerView
             address = (CustomTextView) itemView.findViewById(R.id.address);
             phone = (CustomTextView) itemView.findViewById(R.id.phone);
             editAddress = (ImageView) itemView.findViewById(R.id.edit);
+            defaultAddress = (CustomCheckBox) itemView.findViewById(R.id.default_address);
         }
     }
 
     public class HeaderHolderView extends RecyclerView.ViewHolder {
         CustomTextView newAddressHeader;
         CustomTextView addressTitle;
+
         public HeaderHolderView(View itemView) {
             super(itemView);
             newAddressHeader = (CustomTextView) itemView.findViewById(R.id.add_new_address);
