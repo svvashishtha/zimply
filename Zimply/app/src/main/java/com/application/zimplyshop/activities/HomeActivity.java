@@ -513,7 +513,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
                             Intent settingsIntent = new Intent(HomeActivity.this, SettingsPage.class);
                             startActivity(settingsIntent);
-                        }else{
+                        } else {
                             showToast("Please Login to continue");
                             intent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
                             isToLoginPage = true;

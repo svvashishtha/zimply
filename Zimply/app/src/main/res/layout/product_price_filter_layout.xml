@@ -1,249 +1,328 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:paddingLeft="@dimen/padding_top_66"
-              android:orientation="vertical"
-              android:background="@android:color/transparent"
-              android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/padding_top_66">
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="@dimen/z_item_height_48"
-                  android:background="@color/z_rate_btn_blue_color"
-                  android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/z_item_height_48"
+        android:background="@color/z_rate_btn_blue_color"
+        android:orientation="horizontal">
 
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/close_filter"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_cross_white"
-            android:paddingLeft="@dimen/margin_small"
-            android:background="@drawable/z_blue_btn_without_rad_bg"
-            android:gravity="center_vertical"
-            android:drawablePadding="@dimen/margin_small"
-            android:textColor="@color/white"
-            android:text="Filters"
-            android:textSize="@dimen/font_large"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_height="match_parent"/>
+            android:layout_weight="1"
+            android:background="@drawable/z_blue_btn_without_rad_bg"
+            android:drawableLeft="@drawable/ic_cross_white"
+            android:drawablePadding="@dimen/margin_small"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_small"
+            android:text="Filters"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
+
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/reset_btn"
             android:layout_width="wrap_content"
-            android:gravity="center_vertical"
-            android:textColor="@color/white"
-            android:background="@drawable/z_blue_btn_without_rad_bg"
-            android:text="RESET"
-            android:paddingRight="@dimen/margin_small"
-            android:paddingLeft="@dimen/margin_small"
-            android:textSize="@dimen/font_large"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_height="match_parent"/>
+            android:background="@drawable/z_blue_btn_without_rad_bg"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small"
+            android:text="RESET"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
     </LinearLayout>
-    <ScrollView android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:fillViewport="true">
 
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:background="@color/white"
-                      android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
             <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:layout_width="match_parent"
-                android:text="Sort By"
-                android:textSize="@dimen/font_large"
-                android:textStyle="bold"
-                android:layout_marginTop="@dimen/margin_small"
-                android:paddingLeft="@dimen/margin_mini"
-                android:textColor="@color/heading_text_color"
-                android:layout_height="wrap_content"/>
-            <com.application.zimplyshop.widgets.CustomTextView
-                android:layout_width="match_parent"
-                android:text="Price"
-                android:paddingLeft="@dimen/margin_small"
-                android:textSize="@dimen/font_medium"
-                android:textStyle="bold"
-                android:layout_marginTop="@dimen/margin_small"
-                android:textColor="@color/text_color1"
-                android:layout_height="wrap_content"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_height="wrap_content">
-                <LinearLayout android:layout_width="0dp"
-                              android:layout_height="wrap_content"
-                              android:gravity="center_vertical"
-                              android:layout_weight="1">
-                    <com.application.zimplyshop.widgets.CustomRadioButton
-                        android:id="@+id/low_to_high"
-                        android:layout_width="wrap_content"
-                        android:text="Low to High"
-                        android:gravity="center_vertical"
-                        style="@style/RadioButtonStyle"
-                        android:textSize="@dimen/font_small"
-                        android:textColor="@color/filter_item_text_selector"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-                <View
-                    android:layout_width="@dimen/margin_small"
-                    android:layout_height="match_parent"></View>
-                <LinearLayout android:layout_width="0dp"
-                              android:layout_height="wrap_content"
-                              android:gravity="center_vertical"
-                              android:layout_weight="1">
-                    <com.application.zimplyshop.widgets.CustomRadioButton
-                        android:id="@+id/high_to_low"
-                        android:textSize="@dimen/font_small"
-                        android:layout_width="wrap_content"
-                        android:gravity="center"
-                        style="@style/RadioButtonStyle"
-                        android:text="High to Low"
-                        android:textColor="@color/filter_item_text_selector"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-            </LinearLayout>
-            <View android:layout_width="match_parent" android:layout_height="1dp"
-                  android:layout_marginTop="@dimen/margin_small"
-                  android:background="@color/separator_color">
-
-            </View>
-            <com.application.zimplyshop.widgets.CustomTextViewBold
-                android:layout_width="match_parent"
-                android:text="Filters"
-                android:textSize="@dimen/font_large"
-                android:textStyle="bold"
-                android:paddingLeft="@dimen/margin_mini"
-                android:layout_marginTop="@dimen/margin_small"
-                android:textColor="@color/heading_text_color"
-                android:layout_height="wrap_content"/>
-            <com.application.zimplyshop.widgets.CustomCheckBox
-                android:id="@+id/zi_experience_tag"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:textSize="@dimen/font_medium"
-                style="@style/CheckBoxStyle"
-                android:gravity="center_vertical"
-                android:drawableRight="@drawable/ic_zi_experience"
-                android:text="Only Products with tag "
-                android:textColor="@color/heading_text_color"/>
-
-            <View android:layout_width="match_parent" android:layout_height="1dp"
-                  android:background="@color/separator_color"
-                  android:layout_marginLeft="@dimen/margin_small"
-                  android:layout_marginRight="@dimen/margin_small"></View>
+                android:paddingLeft="@dimen/margin_mini"
+                android:text="Sort By"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_large"
+                android:textStyle="bold" />
 
             <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="match_parent"
-                android:text="Select Price Range"
-                android:textSize="@dimen/font_medium"
-                android:textStyle="bold"
-                android:paddingLeft="@dimen/margin_small"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:textColor="@color/heading_text_color"
-                android:layout_height="wrap_content"/>
-
-            <com.application.zimplyshop.widgets.RangeSeekBar
-                android:id="@+id/range_seekbar"
-                android:layout_width="match_parent"
-                app:absoluteMaxValue="500000"
-                app:absoluteMinValue="0"
-                android:layout_height="wrap_content"/>
+                android:paddingLeft="@dimen/margin_small"
+                android:text="Price"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_height="wrap_content">
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:text="@string/rs_text"
-                    android:textSize="@dimen/font_small"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/margin_small"
-                    android:paddingRight="@dimen/margin_small"
-                    android:textColor="@color/heading_text_color"
-                    android:layout_height="match_parent"/>
-                <com.application.zimplyshop.widgets.CustomEdittext
-                    android:id="@+id/from_price"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small">
+
+                <LinearLayout
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="@dimen/margin_mini"
-                    android:textColor="@color/text_color1"
-                    android:inputType="number"
-                    android:background="@drawable/ic_card_bg"
-                    android:layout_height="wrap_content"/>
+                    android:gravity="center_vertical">
 
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:text="to"
-                    android:textSize="@dimen/font_small"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/margin_small"
-                    android:paddingRight="@dimen/margin_small"
-                    android:textColor="@color/heading_text_color"
-                    android:layout_height="match_parent"/>
+                    <com.application.zimplyshop.widgets.CustomRadioButton
+                        android:id="@+id/low_to_high"
+                        style="@style/RadioButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Low to High"
+                        android:textColor="@color/filter_item_text_selector"
+                        android:textSize="@dimen/font_small" />
+                </LinearLayout>
 
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:text="@string/rs_text"
-                    android:textSize="@dimen/font_small"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/margin_small"
-                    android:paddingRight="@dimen/margin_small"
-                    android:textColor="@color/heading_text_color"
-                    android:layout_height="match_parent"/>
+                <View
+                    android:layout_width="@dimen/margin_small"
+                    android:layout_height="match_parent" />
 
-                <com.application.zimplyshop.widgets.CustomEdittext
-                    android:id="@+id/to_price"
+                <LinearLayout
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_color1"
-                    android:padding="@dimen/margin_mini"
-                    android:inputType="number"
-                    android:background="@drawable/ic_card_bg"
-                    android:layout_height="wrap_content"/>
+                    android:gravity="center_vertical">
+
+                    <com.application.zimplyshop.widgets.CustomRadioButton
+                        android:id="@+id/high_to_low"
+                        style="@style/RadioButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="High to Low"
+                        android:textColor="@color/filter_item_text_selector"
+                        android:textSize="@dimen/font_small" />
+                </LinearLayout>
             </LinearLayout>
-            <View android:layout_width="match_parent" android:layout_height="1dp"
-                  android:background="@color/separator_color"
-                  android:layout_marginTop="@dimen/margin_small"
-                  android:layout_marginLeft="@dimen/margin_small"
-                  android:layout_marginRight="@dimen/margin_small"></View>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:background="@color/separator_color">
+
+            </View>
+
+            <com.application.zimplyshop.widgets.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:paddingLeft="@dimen/margin_mini"
+                android:text="Filters"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_large"
+                android:textStyle="bold" />
+
+            <com.application.zimplyshop.widgets.CustomCheckBox
+                android:id="@+id/zi_experience_tag"
+                style="@style/CheckBoxStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_small"
+                android:drawableRight="@drawable/ic_zi_experience"
+                android:gravity="center_vertical"
+                android:text="Only Products with tag "
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_small"
+                android:background="@color/separator_color" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:paddingLeft="@dimen/margin_small"
+                android:text="Select Price Range"
+                android:textColor="@color/heading_text_color"
+                android:textSize="@dimen/font_medium"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.application.zimplyshop.widgets.RangeSeekBar
+                    android:id="@+id/range_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:absoluteMaxValue="500000"
+                    app:absoluteMinValue="0" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_filter_seekbar_text_margin"
+                    android:layout_marginRight="@dimen/z_filter_seekbar_text_margin"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:orientation="horizontal">
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rs_text"
+                        android:textColor="@color/heading_text_color"
+                        android:textSize="@dimen/font_small" />
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:id="@+id/tv_new_from_price_filter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/rs_text"
+                        android:textColor="@color/heading_text_color"
+                        android:textSize="@dimen/font_small" />
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rs_text"
+                        android:textColor="@color/heading_text_color"
+                        android:textSize="@dimen/font_small" />
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:id="@+id/tv_new_to_price_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rs_text"
+                        android:textColor="@color/heading_text_color"
+                        android:textSize="@dimen/font_small" />
+
+
+                </LinearLayout>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/radiogroupfiltrprice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.application.zimplyshop.widgets.CustomRadioButton
+                        android:id="@+id/filterpriceradiobutton1"
+                        style="@style/RadioButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Low to High"
+                        android:textColor="@color/filter_item_text_selector"
+                        android:textSize="@dimen/font_small" />
+
+                    <com.application.zimplyshop.widgets.CustomRadioButton
+                        android:id="@+id/filterpriceradiobutton2"
+                        style="@style/RadioButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Low to High"
+                        android:textColor="@color/filter_item_text_selector"
+                        android:textSize="@dimen/font_small" />
+
+                    <com.application.zimplyshop.widgets.CustomRadioButton
+                        android:id="@+id/filterpriceradiobutton3"
+                        style="@style/RadioButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Low to High"
+                        android:textColor="@color/filter_item_text_selector"
+                        android:textSize="@dimen/font_small" />
+
+                    <com.application.zimplyshop.widgets.CustomRadioButton
+                        android:id="@+id/filterpriceradiobutton4"
+                        style="@style/RadioButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Low to High"
+                        android:textColor="@color/filter_item_text_selector"
+                        android:textSize="@dimen/font_small" />
+
+                    <com.application.zimplyshop.widgets.CustomRadioButton
+                        android:id="@+id/filterpriceradiobutton5"
+                        style="@style/RadioButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Low to High"
+                        android:textColor="@color/filter_item_text_selector"
+                        android:textSize="@dimen/font_small" />
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_small"
+                android:background="@color/separator_color" />
+
             <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/sub_categories_header"
                 android:layout_width="match_parent"
-                android:text="Select Sub-Categories"
-                android:textSize="@dimen/font_medium"
-                android:textStyle="bold"
-                android:paddingLeft="@dimen/margin_small"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
+                android:paddingLeft="@dimen/margin_small"
+                android:text="Select Sub-Categories"
                 android:textColor="@color/heading_text_color"
-                android:layout_height="wrap_content"/>
+                android:textSize="@dimen/font_medium"
+                android:textStyle="bold" />
+
             <ListView
                 android:id="@+id/subcategory_list"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small">
 
             </ListView>
         </LinearLayout>
     </ScrollView>
+
     <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/apply_filter"
         android:layout_width="match_parent"
         android:layout_height="@dimen/z_item_height_48"
+        android:background="@drawable/green_btn_rectangle_bg"
+        android:gravity="center"
         android:text="Apply Filter"
         android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="@dimen/font_large"
-        android:background="@drawable/green_btn_rectangle_bg"/>
+        android:textSize="@dimen/font_large" />
 </LinearLayout>

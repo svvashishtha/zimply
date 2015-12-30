@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.extras.InputFilterMinMax;
@@ -23,13 +23,15 @@ public class ProductPriceFilterFragment extends BaseFragment {
 
     int sortById;
 
-    int fromPrice,toPrice;
+    int fromPrice, toPrice;
 
     boolean isZiExperience;
 
     int FROM_PRICE = 1;
 
-    int TO_PRICE=500000;
+    int TO_PRICE = 500000;
+
+    TextView filterFromTextView, filterToTextView;
 
     public static ProductPriceFilterFragment newInstance(Bundle bundle) {
         ProductPriceFilterFragment fragment = new ProductPriceFilterFragment();
@@ -48,19 +50,22 @@ public class ProductPriceFilterFragment extends BaseFragment {
         //sortById = 1;
         if (sortById == 1) {
             view.findViewById(R.id.low_to_high).setSelected(true);
-        } else if(sortById == 2){
+        } else if (sortById == 2) {
             view.findViewById(R.id.high_to_low).setSelected(true);
         }
-        ((CheckBox)view.findViewById(R.id.zi_experience_tag)).setChecked(isZiExperience);
-        ((CheckBox)view.findViewById(R.id.zi_experience_tag)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ((CheckBox) view.findViewById(R.id.zi_experience_tag)).setChecked(isZiExperience);
+        ((CheckBox) view.findViewById(R.id.zi_experience_tag)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isZiExperience =isChecked;
-                isReseted=false;
+                isZiExperience = isChecked;
+                isReseted = false;
             }
         });
-        ((EditText) view.findViewById(R.id.from_price)).setText(priceLow + "");
-        ((EditText) view.findViewById(R.id.to_price)).setText(priceHigh + "");
+
+        filterFromTextView = (TextView) view.findViewById(R.id.tv_new_from_price_filter);
+        filterToTextView = (TextView) view.findViewById(R.id.tv_new_to_price_filter);
+        filterFromTextView.setText(priceLow + "");
+        filterToTextView.setText(priceHigh + "");
         setSortByClicks();
         /*((EditText) view.findViewById(R.id.from_price)).addTextChangedListener(new TextWatcher() {
             @Override
@@ -93,40 +98,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
             }
         });*/
 
-        ((EditText) view.findViewById(R.id.to_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    try {
-                        if (Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) < Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())) {
-                            ((EditText) view.findViewById(R.id.to_price)).setText(Math.round(Double.parseDouble((((EditText) view.findViewById(R.id.from_price)).getText().toString())))+"");
-                        }else if(Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) >TO_PRICE){
-                            ((EditText) view.findViewById(R.id.to_price)).setText(TO_PRICE+"");
-                        }
-                    } catch (Exception e) {
-                        ((EditText) view.findViewById(R.id.to_price)).setText(TO_PRICE+"");
-                    }
-                }
-            }
-        });
 
-
-        ((EditText) view.findViewById(R.id.from_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    try{
-                        if(Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())>Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString())) {
-                            ((EditText) view.findViewById(R.id.from_price)).setText(Math.round((Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString())))+"");
-                        }else if(Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString()) <FROM_PRICE){
-                            ((EditText) view.findViewById(R.id.from_price)).setText(FROM_PRICE+"");
-                        }
-                    }catch(Exception e){
-                        ((EditText) view.findViewById(R.id.from_price)).setText("1");
-                    }
-                }
-            }
-        });
 
 
    /*     ((EditText) view.findViewById(R.id.to_price)).addTextChangedListener(new TextWatcher() {
@@ -153,7 +125,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                isReseted=false;
+                isReseted = false;
                 setMinEditTextValue(minValue);
                 setMaxEdittextValue(maxValue);
             }
@@ -168,14 +140,14 @@ public class ProductPriceFilterFragment extends BaseFragment {
         return isZiExperience;
     }
 
-    public boolean checkPriceRange(){
+    public boolean checkPriceRange() {
         try {
-            if ((Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()) > TO_PRICE) || (Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString()) < FROM_PRICE)
-                    ||(Double.parseDouble(((EditText) view.findViewById(R.id.to_price)).getText().toString()))<=Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString())){
+            if ((Double.parseDouble(filterFromTextView.getText().toString()) > TO_PRICE) || (Double.parseDouble(filterFromTextView.getText().toString()) < FROM_PRICE)
+                    || (Double.parseDouble(filterToTextView.getText().toString())) <= Double.parseDouble(filterToTextView.getText().toString())) {
                 showToast("Please check the price range");
                 return false;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             showToast("Please check the price range");
             return false;
         }
@@ -186,7 +158,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
         view.findViewById(R.id.low_to_high).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isReseted=false;
+                isReseted = false;
                 sortById = 1;
                 view.findViewById(R.id.low_to_high).setSelected(true);
                 view.findViewById(R.id.high_to_low).setSelected(false);
@@ -195,7 +167,7 @@ public class ProductPriceFilterFragment extends BaseFragment {
         view.findViewById(R.id.high_to_low).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isReseted=false;
+                isReseted = false;
                 sortById = 2;
                 view.findViewById(R.id.low_to_high).setSelected(false);
                 view.findViewById(R.id.high_to_low).setSelected(true);
@@ -204,27 +176,27 @@ public class ProductPriceFilterFragment extends BaseFragment {
     }
 
     public void addMinMaxValueCheckForMinValue() {
-        double minValue = Double.parseDouble(((EditText) view.findViewById(R.id.from_price)).getText().toString().length() > 0 ? ((EditText) view.findViewById(R.id.from_price)).getText().toString() : FROM_PRICE+"");
-        double maxValue = Double.parseDouble((((EditText) view.findViewById(R.id.to_price)).getText().toString().length() > 0) ? ((EditText) view.findViewById(R.id.to_price)).getText().toString() : TO_PRICE + "");
+        double minValue = Double.parseDouble(filterFromTextView.getText().toString().length() > 0 ? filterFromTextView.getText().toString() : FROM_PRICE + "");
+        double maxValue = Double.parseDouble((filterToTextView.getText().toString().length() > 0) ? filterToTextView.getText().toString() : TO_PRICE + "");
         // ((EditText) view.findViewById(R.id.from_price)).setFilters(new InputFilter[]{new InputFilterMinMax("0", (maxValue - 1) + "")});
-        ((EditText) view.findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax((minValue + 1) + "", TO_PRICE + "")});
+        filterToTextView.setFilters(new InputFilter[]{new InputFilterMinMax((minValue + 1) + "", TO_PRICE + "")});
     }
 
     public void setMinEditTextValue(int value) {
-        ((EditText) view.findViewById(R.id.from_price)).setText(value + "");
+        filterFromTextView.setText(value + "");
 
     }
 
     public void setMaxEdittextValue(int value) {
-        ((EditText) view.findViewById(R.id.to_price)).setText(value + "");
+        filterToTextView.setText(value + "");
     }
 
     public String getSelectedMinValue() {
-        return ((EditText) view.findViewById(R.id.from_price)).getText().toString();
+        return filterFromTextView.getText().toString();
     }
 
     public String getSelectedMaxValue() {
-        return ((EditText) view.findViewById(R.id.to_price)).getText().toString();
+        return filterToTextView.getText().toString();
     }
 
     public int getSortById() {
@@ -242,14 +214,14 @@ public class ProductPriceFilterFragment extends BaseFragment {
     }
 
     public void changeSelectedValues() {
-        isReseted=true;
+        isReseted = true;
         sortById = -1;
         view.findViewById(R.id.low_to_high).setSelected(false);
         view.findViewById(R.id.high_to_low).setSelected(false);
         seekBar.setSelectedMaxValue(TO_PRICE);
         seekBar.setSelectedMinValue(FROM_PRICE);
-        ((EditText) view.findViewById(R.id.from_price)).setText(FROM_PRICE + "");
-        ((EditText) view.findViewById(R.id.to_price)).setText(TO_PRICE+ "");
-        ((CheckBox)view.findViewById(R.id.zi_experience_tag)).setChecked(false);
+        filterFromTextView.setText(FROM_PRICE + "");
+        filterToTextView.setText(TO_PRICE + "");
+        ((CheckBox) view.findViewById(R.id.zi_experience_tag)).setChecked(false);
     }
 }

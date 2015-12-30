@@ -22,9 +22,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,10 +86,17 @@ public class ProductListingActivity extends BaseActivity implements
 
     ArrayList<ShopSubCategoryObj> subCategories;
 
+    TextView filterFromTextView, filterToTextView;
+    ArrayList<RadioButton> priceRadioButtonsArrayList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
+
+        filterFromTextView = (TextView) findViewById(R.id.tv_new_from_price_filter);
+        filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
+
         context = getApplicationContext();
         if (getIntent().getStringExtra("category_id") != null)
             categoryId = Integer.parseInt(getIntent().getStringExtra("category_id"));
@@ -142,19 +150,19 @@ public class ProductListingActivity extends BaseActivity implements
                         }
                     });
                 }
-            },5000);
+            }, 5000);
         }
         loadData();
     }
 
 
-    public void showFilterTut(){
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+    public void showFilterTut() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-                }
-            },500);
+            }
+        }, 500);
     }
 
     boolean isHideFilter;
@@ -497,16 +505,16 @@ public class ProductListingActivity extends BaseActivity implements
     public void onRequestCompleted(String requestTag, Object obj) {
         if (!isDestroyed
                 && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 1)) {
-            if (!filterApplied)
-            {
+            if (!filterApplied) {
                 CommonLib.ZLog("Request Time", "Product Listing Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
                 CommonLib.writeRequestData("Product Listing Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
-            }
-            else
-            {
+            } else {
                 CommonLib.ZLog("Request Time", "Product Listing Page with filters Request :" + (System.currentTimeMillis() - requestTime) + " mS");
                 CommonLib.writeRequestData("Product Listing Page with filters Request :" + (System.currentTimeMillis() - requestTime) + " mS");
             }
+
+            int size = ((ProductListObject) obj).getProducts().size();
+            boolean zerosie = (((ProductListObject) obj).getProducts().size() == 0);
 
             if (((ProductListObject) obj).getProducts().size() == 0) {
                 if (productList.getAdapter() == null
@@ -520,6 +528,9 @@ public class ProductListingActivity extends BaseActivity implements
                 }
                 isRequestAllowed = false;
             } else {
+                if (productList.getAdapter() == null) {
+                    setMinimumAndMaximumFilterPriceValues(((ProductListObject) obj));
+                }
                 setAdapterData(((ProductListObject) obj).getProducts());
 
                 nextUrl = ((ProductListObject) obj).getNext_url();
@@ -547,6 +558,69 @@ public class ProductListingActivity extends BaseActivity implements
 
         }
 
+    }
+
+    private void setMinimumAndMaximumFilterPriceValues(ProductListObject obj) {
+        if (obj.getMin_price() != null && obj.getMax_price() != null) {
+            final RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
+            priceLte = obj.getMin_price();
+            priceHigh = obj.getMax_price();
+            seekBar.setRangeValues(priceLte, priceHigh);
+
+            try {
+                if (Long.parseLong(filterFromTextView.getText().toString()) < priceLte) {
+                    filterFromTextView.setText(priceLte + "");
+                    seekBar.setSelectedMinValue(priceLte);
+                }
+                if (Long.parseLong(filterToTextView.getText().toString()) > priceHigh) {
+                    filterToTextView.setText(priceHigh + "");
+                    seekBar.setSelectedMaxValue(priceHigh);
+                }
+            } catch (Exception e) {
+
+            }
+
+            long diff = obj.getMax_price() - obj.getMin_price();
+
+            final long[][] pricesList = new long[5][2];
+            pricesList[0][0] = priceLte;
+            pricesList[0][1] = (long) (priceLte + .10 * diff);
+            pricesList[1][0] = (long) (priceLte + .10 * diff);
+            pricesList[1][1] = (long) (priceLte + .25 * diff);
+            pricesList[2][0] = (long) (priceLte + .25 * diff);
+            pricesList[2][1] = (long) (priceLte + .50 * diff);
+            pricesList[3][0] = (long) (priceLte + .50 * diff);
+            pricesList[3][1] = (long) (priceLte + .80 * diff);
+            pricesList[4][0] = (long) (priceLte + .80 * diff);
+            pricesList[4][1] = priceHigh;
+
+            priceRadioButtonsArrayList = new ArrayList<>();
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton1)));
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton2)));
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton3)));
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton4)));
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton5)));
+
+            for (int i = 0; i < priceRadioButtonsArrayList.size(); i++) {
+                String radioButtonText = "₹" + pricesList[i][0] + " - ₹" + pricesList[i][1];
+                priceRadioButtonsArrayList.get(i).setText(radioButtonText);
+                priceRadioButtonsArrayList.get(i).setSelected(false);
+            }
+
+            RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radiogroupfiltrprice);
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    int index = group.indexOfChild(findViewById(group.getCheckedRadioButtonId()));
+                    seekBar.setSelectedMinValue(pricesList[index][0]);
+                    seekBar.setSelectedMaxValue(pricesList[index][1]);
+                    seekBar.setSelectedMinValue(pricesList[index][0]);
+
+                    filterToTextView.setText(pricesList[index][1] + "");
+                    filterFromTextView.setText(pricesList[index][0] + "");
+                }
+            });
+        }
     }
 
     @Override
@@ -578,7 +652,6 @@ public class ProductListingActivity extends BaseActivity implements
 
     @Override
     protected void onResume() {
-
         if (AllProducts.getInstance().getCartCount() > 0) {
             findViewById(R.id.cart_item_true).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.cart_item_true)).setText(AllProducts.getInstance().getCartCount() + "");
@@ -668,8 +741,8 @@ public class ProductListingActivity extends BaseActivity implements
             }
         });*/
         //Add Logic for price
-        ((EditText) findViewById(R.id.from_price)).setText(priceLte + "");
-        ((EditText) findViewById(R.id.to_price)).setText(priceHigh + "");
+        filterFromTextView.setText(priceLte + "");
+        filterToTextView.setText(priceHigh + "");
 
         RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
         seekBar.setNotifyWhileDragging(true);
@@ -678,40 +751,12 @@ public class ProductListingActivity extends BaseActivity implements
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
-                minValue = (int)minValue / 5000 * 5000;
-                maxValue = (int)maxValue / 5000 * 5000;
-                ((EditText) findViewById(R.id.from_price)).setText(minValue + "");
-                ((EditText) findViewById(R.id.to_price)).setText(maxValue + "");
+                filterFromTextView.setText(minValue + "");
+                filterToTextView.setText(maxValue + "");
                 isFilterApplied = true;
-            }
-        });
-        ((EditText) findViewById(R.id.from_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                addMinInputFilter();
-                if (!hasFocus) {
-                    if (((EditText) findViewById(R.id.from_price)).getText().length() == 0) {
-                        ((EditText) findViewById(R.id.from_price)).setText(FROM_VALUE + "");
-                    }
-                    isFilterApplied = true;
+                for (RadioButton radioButton : priceRadioButtonsArrayList) {
+                    radioButton.setChecked(false);
                 }
-            }
-        });
-
-        ((EditText) findViewById(R.id.to_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //addMaxInputFilter();
-                if (!hasFocus) {
-                    if (((EditText) findViewById(R.id.to_price)).getText().length() == 0) {
-                        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
-                    } else if (Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString()) < Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString())) {
-                        ((EditText) findViewById(R.id.to_price)).setText(((EditText) findViewById(R.id.from_price)).getText().toString());
-                    } else if (Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString()) > TO_VALUE) {
-                        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
-                    }
-                }
-                isFilterApplied = true;
             }
         });
 
@@ -724,8 +769,8 @@ public class ProductListingActivity extends BaseActivity implements
             public void onClick(View v) {
                 subCategoryId = new ArrayList<Integer>(subCategoryAdapter.getSubCategorIds());
                 isO2o = ((CheckBox) findViewById(R.id.zi_experience_tag)).isChecked();
-                priceLte = Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString());
-                priceHigh = Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString());
+                priceLte = Long.parseLong(filterFromTextView.getText().toString());
+                priceHigh = Long.parseLong(filterToTextView.getText().toString());
                 nextUrl = null;
                 isRefreshData = true;
                 animateViewRightOut(findViewById(R.id.filter_layout));
@@ -741,7 +786,7 @@ public class ProductListingActivity extends BaseActivity implements
     }
 
     public void addMinInputFilter() {
-        ((EditText) findViewById(R.id.from_price)).setFilters(new InputFilter[]{new InputFilterMinMax((FROM_VALUE) + "", (((EditText) findViewById(R.id.to_price)).getText()).toString().length() > 0 ? Long.parseLong((((EditText) findViewById(R.id.to_price)).getText()).toString()) + "" : TO_VALUE + "")});
+        filterFromTextView.setFilters(new InputFilter[]{new InputFilterMinMax((FROM_VALUE) + "", (filterToTextView.getText()).toString().length() > 0 ? Long.parseLong((filterToTextView.getText()).toString()) + "" : TO_VALUE + "")});
     }
 
     public void resetFilterValues() {
@@ -757,8 +802,8 @@ public class ProductListingActivity extends BaseActivity implements
         subCategoryId.clear();
         if (((SubCategoryAdapter) ((ListView) findViewById(R.id.subcategory_list)).getAdapter()) != null)
             ((SubCategoryAdapter) ((ListView) findViewById(R.id.subcategory_list)).getAdapter()).clearAll();
-        ((EditText) findViewById(R.id.from_price)).setText(FROM_VALUE + "");
-        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
+        filterFromTextView.setText(FROM_VALUE + "");
+        filterToTextView.setText(TO_VALUE + "");
         filterApplied = false;
     }
 }

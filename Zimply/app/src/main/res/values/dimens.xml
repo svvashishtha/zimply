@@ -194,4 +194,6 @@
 
     <dimen name="product_detail_padding_bottom">172dp</dimen>
 
+    <dimen name="z_filter_seekbar_text_margin">40dp</dimen>
+
 </resources>

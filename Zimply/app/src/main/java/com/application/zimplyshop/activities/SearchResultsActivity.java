@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +77,8 @@ public class SearchResultsActivity extends BaseActivity implements
     long TO_VALUE = 500000;
     private double requestTime;
 
+    TextView filterFromTextView, filterToTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,9 @@ public class SearchResultsActivity extends BaseActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        filterFromTextView = (TextView) findViewById(R.id.tv_new_from_price_filter);
+        filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
 
@@ -618,8 +622,8 @@ public class SearchResultsActivity extends BaseActivity implements
             }
         });*/
         //Add Logic for price
-        ((EditText) findViewById(R.id.from_price)).setText(priceLte + "");
-        ((EditText) findViewById(R.id.to_price)).setText(priceHigh + "");
+        filterFromTextView.setText(priceLte + "");
+        filterToTextView.setText(priceHigh + "");
 
         RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
         seekBar.setNotifyWhileDragging(true);
@@ -628,42 +632,14 @@ public class SearchResultsActivity extends BaseActivity implements
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
-                minValue = (int)minValue / 5000 * 5000;
-                maxValue = (int)maxValue / 5000 * 5000;
-                ((EditText) findViewById(R.id.from_price)).setText(minValue + "");
-                ((EditText) findViewById(R.id.to_price)).setText(maxValue + "");
+                minValue = (int) minValue / 5000 * 5000;
+                maxValue = (int) maxValue / 5000 * 5000;
+                filterFromTextView.setText(minValue + "");
+                filterToTextView.setText(maxValue + "");
                 isFilterApplied = true;
-            }
-        });
-        ((EditText) findViewById(R.id.from_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                addMinInputFilter();
-                if (!hasFocus) {
-                    if (((EditText) findViewById(R.id.from_price)).getText().length() == 0) {
-                        ((EditText) findViewById(R.id.from_price)).setText(FROM_VALUE + "");
-                    }
-                    isFilterApplied = true;
-                }
             }
         });
 
-        ((EditText) findViewById(R.id.to_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //addMaxInputFilter();
-                if (!hasFocus) {
-                    if (((EditText) findViewById(R.id.to_price)).getText().length() == 0) {
-                        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
-                    } else if (Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString()) < Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString())) {
-                        ((EditText) findViewById(R.id.to_price)).setText(((EditText) findViewById(R.id.from_price)).getText().toString());
-                    } else if (Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString()) > TO_VALUE) {
-                        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
-                    }
-                }
-                isFilterApplied = true;
-            }
-        });
 
         ((ListView) findViewById(R.id.subcategory_list)).setVisibility(View.GONE);
         (findViewById(R.id.sub_categories_header)).setVisibility(View.GONE);
@@ -672,8 +648,8 @@ public class SearchResultsActivity extends BaseActivity implements
             public void onClick(View v) {
                 pageNo = 1;
                 isO2o = ((CheckBox) findViewById(R.id.zi_experience_tag)).isChecked();
-                priceLte = Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString());
-                priceHigh = Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString());
+                priceLte = Long.parseLong(filterFromTextView.getText().toString());
+                priceHigh = Long.parseLong(filterToTextView.getText().toString());
                 nextUrl = null;
                 isRefreshData = true;
                 animateViewRightOut(findViewById(R.id.filter_layout));
@@ -687,7 +663,7 @@ public class SearchResultsActivity extends BaseActivity implements
     }
 
     public void addMinInputFilter() {
-        ((EditText) findViewById(R.id.from_price)).setFilters(new InputFilter[]{new InputFilterMinMax((FROM_VALUE) + "", (((EditText) findViewById(R.id.to_price)).getText()).toString().length() > 0 ? Long.parseLong((((EditText) findViewById(R.id.to_price)).getText()).toString()) + "" : TO_VALUE + "")});
+        filterFromTextView.setFilters(new InputFilter[]{new InputFilterMinMax((FROM_VALUE) + "", (filterToTextView.getText()).toString().length() > 0 ? Long.parseLong((filterToTextView.getText()).toString()) + "" : TO_VALUE + "")});
     }
 
     public void resetFilterValues() {
@@ -701,8 +677,8 @@ public class SearchResultsActivity extends BaseActivity implements
         seekBar.setSelectedMaxValue(TO_VALUE);
         seekBar.setSelectedMinValue(FROM_VALUE);
 
-        ((EditText) findViewById(R.id.from_price)).setText(FROM_VALUE + "");
-        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
+        filterFromTextView.setText(FROM_VALUE + "");
+        filterToTextView.setText(TO_VALUE + "");
 
     }
 
