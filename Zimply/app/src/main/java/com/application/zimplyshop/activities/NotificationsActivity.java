@@ -140,18 +140,19 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
         switch(obj.getType()){
             case AppConstants.NOTIFICATION_TYPE_PRODUCT_DETAIL:
                 JSONObject jsonObj = JSONUtils.getJSONObject(obj.getSlug());
-                Intent intent = new Intent(this , ProductDetailsActivity.class);
+                Intent intent = new Intent(this , NewProductDetailActivity.class);
                 intent.putExtra("slug", JSONUtils.getStringfromJSON(jsonObj,"slug"));
-                intent.putExtra("id", Long.parseLong(JSONUtils.getStringfromJSON(jsonObj, "id")));
+                intent.putExtra("id",Integer.parseInt(JSONUtils.getStringfromJSON(jsonObj, "id")));
                 startActivity(intent);
                 break;
             case NOTIFICATION_TYPE_PRODUCT_LIST:
                 Intent listIntent = new Intent(this, ProductListingActivity.class);
-                listIntent .putExtra("category_id", "-1");
-                listIntent.putExtra("hide_filter",true);
+                listIntent .putExtra("category_id", "0");
+                listIntent.putExtra("hide_filter", false);
                 listIntent .putExtra("category_name", obj.getTitle());
-                listIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST+"?shop__id__in="+obj.getSlug());
-                startActivity(listIntent );
+                listIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST);
+                listIntent.putExtra("discount_id",Integer.parseInt(obj.getSlug()));
+                startActivity(listIntent);
                 break;
             case NOTIFICATION_TYPE_WEBVIEW:
                 Intent  notificationIntent = new Intent(this, ZWebView.class);
@@ -190,11 +191,11 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
         if (!isDestroyed && requestTag.equalsIgnoreCase(NOTIFICATION_LIST_REQUEST_TAG)) {
             if (((NotificationsBaseObj) obj).getNotifications().size() == 0) {
                 if (categoriesList.getAdapter() == null || categoriesList.getAdapter().getItemCount() == 1) {
-                    showNullCaseView("No Articles");
+                    showNullCaseView("No Notifications");
                     changeViewVisiblity(categoriesList, View.GONE);
                 } else {
                     ((NotificationsAdapter) categoriesList.getAdapter()).removeItem();
-                    showToast("No more Articles");
+                    showToast("No more Notifications");
 
                 }
                 isRequestAllowed = false;

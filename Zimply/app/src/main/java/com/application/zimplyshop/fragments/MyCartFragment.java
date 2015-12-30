@@ -205,7 +205,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                 showNullCaseView("No Items in cart");
                 changeViewVisiblity(cartList, View.GONE);
                 changeViewVisiblity(buyLayout, View.GONE);
-                AllProducts.getInstance().setCartCount(getCartQuantity());
+                AllProducts.getInstance().setCartCount(0);
             }
 
             if (requestTag.equalsIgnoreCase(GET_CART_DETAILS)) {
@@ -240,11 +240,13 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                 if (cartObject.getCart().getDetail().size() > 1) {
                     cartObject.getCart().getDetail().remove(quantityUpdatePosition);
                     setAdapterData(cartObject);
+
                 } else {
                     cartObject.getCart().getDetail().remove(quantityUpdatePosition);
                     showNullCaseView("No items in cart");
                     changeViewVisiblity(cartList, View.GONE);
                     changeViewVisiblity(buyLayout, View.GONE);
+                    AllProducts.getInstance().setCartCount(0);
                 }
 
 

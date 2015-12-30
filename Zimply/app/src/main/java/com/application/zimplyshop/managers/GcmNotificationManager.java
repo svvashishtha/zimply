@@ -21,7 +21,7 @@ import android.widget.RemoteViews;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
+import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.activities.ProductListingActivity;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.utils.CommonLib;
@@ -68,10 +68,11 @@ public class GcmNotificationManager implements AppConstants {
         // TaskBuilder
         if (type == NOTIFICATION_TYPE_SHOP_LISTING) {
             notificationIntent = new Intent(mContext, ProductListingActivity.class);
-            notificationIntent .putExtra("category_id", "-1");
-            notificationIntent.putExtra("hide_filter",true);
+            notificationIntent .putExtra("category_id", "0");
+            notificationIntent.putExtra("hide_filter", false);
             notificationIntent .putExtra("category_name", message);
-            notificationIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST + "?shop__id__in=" +slug);
+            notificationIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST);
+            notificationIntent.putExtra("discount_id", Integer.parseInt(slug));
             notificationIntent.putExtra("nType", NOTIFICATION_TYPE_SHOP_LISTING);
             notificationIntent.putExtra("is_notification", true);
             notificationIntent.setAction("Big Offer Notification");
@@ -83,13 +84,13 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent.putExtra("url", slug);
             notificationIntent.setAction("Big Offer Notification");
         } else if (type == NOTIFICATION_TYPE_PRODUCT_DETAIL) {
-            notificationIntent = new Intent(mContext, ProductDetailsActivity.class);
+            notificationIntent = new Intent(mContext, NewProductDetailActivity.class);
             notificationIntent.putExtra("slug", slug);
             notificationIntent.putExtra("nType",NOTIFICATION_TYPE_PRODUCT_DETAIL);
             notificationIntent.putExtra("message", message);
-            notificationIntent.putExtra("is_notification", true);
+            notificationIntent.putExtra("is_shared", true);
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
-            notificationIntent.putExtra("id", Long.parseLong(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
+            notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
             notificationIntent.setAction("Big Offer Notification");
         } else {
             notificationIntent = new Intent(mContext, HomeActivity.class);
@@ -131,7 +132,7 @@ public class GcmNotificationManager implements AppConstants {
         mId++;
     }
 
-    public void showCustomNotification(String message, int type, String pageUrl) {
+    public void showCustomNotification(String message, int type, String slug) {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).setSmallIcon(R.drawable.ic_ticker)
                 .setTicker(message).setAutoCancel(true);
@@ -146,10 +147,44 @@ public class GcmNotificationManager implements AppConstants {
         remoteViews.setTextViewText(R.id.tv_notification_time, TimeUtils.getNotificationDateTime());
 
         // on tapping notification
-        Intent notificationIntent = new Intent(mContext, HomeActivity.class);
-        notificationIntent.setAction("Feed Notification");
+        Intent notificationIntent;
 
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (type == NOTIFICATION_TYPE_SHOP_LISTING) {
+            notificationIntent = new Intent(mContext, ProductListingActivity.class);
+            notificationIntent .putExtra("category_id", "0");
+            notificationIntent.putExtra("hide_filter", false);
+            notificationIntent .putExtra("category_name", message);
+            notificationIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST);
+            notificationIntent.putExtra("discount_id", Integer.parseInt(slug));
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_SHOP_LISTING);
+            notificationIntent.putExtra("is_notification", true);
+            notificationIntent.setAction("Big Offer Notification");
+        } else if (type == NOTIFICATION_TYPE_WEBVIEW) {
+            notificationIntent = new Intent(mContext, ZWebView.class);
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_WEBVIEW);
+            notificationIntent.putExtra("is_notification", true);
+            notificationIntent.putExtra("title",message );
+            notificationIntent.putExtra("url", slug);
+            notificationIntent.setAction("Big Offer Notification");
+        } else if (type == NOTIFICATION_TYPE_PRODUCT_DETAIL) {
+            notificationIntent = new Intent(mContext, NewProductDetailActivity.class);
+            notificationIntent.putExtra("slug", slug);
+            notificationIntent.putExtra("nType",NOTIFICATION_TYPE_PRODUCT_DETAIL);
+            notificationIntent.putExtra("message", message);
+            notificationIntent.putExtra("is_shared", true);
+            notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
+            notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
+            notificationIntent.setAction("Big Offer Notification");
+        } else {
+            notificationIntent = new Intent(mContext, HomeActivity.class);
+            notificationIntent.putExtra("slug", slug);
+            notificationIntent.putExtra("message", message);
+            notificationIntent.putExtra("is_notification", true);
+            notificationIntent.setAction("Big Offer Notification");
+        }
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
 
         builder.setContentIntent(pendingNotificationIntent);

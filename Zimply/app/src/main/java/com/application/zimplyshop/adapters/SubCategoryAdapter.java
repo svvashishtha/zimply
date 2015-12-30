@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.baseobjects.ShopSubCategoryObj;
@@ -61,19 +60,27 @@ public class SubCategoryAdapter extends BaseAdapter{
             ViewHolder holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
-        ViewHolder holder = (ViewHolder)convertView.getTag();
+        final ViewHolder holder = (ViewHolder)convertView.getTag();
         holder.name.setText(objs.get(position).getName());
         if(subCategorIds.contains(objs.get(position).getId())){
             holder.name.setChecked(true);
         }else{
             holder.name.setChecked(false);
         }
-        holder.name.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+       /* holder.name.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });*/
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if(subCategorIds.contains(objs.get(position).getId())){
+                    holder.name.setChecked(false);
                     subCategorIds.remove((Integer)objs.get(position).getId());
                 }else{
+                    holder.name.setChecked(true);
                     subCategorIds.add((Integer)objs.get(position).getId());
                 }
             }

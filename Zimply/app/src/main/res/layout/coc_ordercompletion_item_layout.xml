@@ -36,7 +36,6 @@
         <ImageView
             android:id="@+id/product_img"
             android:layout_width="@dimen/pro_cover_img_height"
-
             android:layout_height="@dimen/pro_cover_img_height"
             android:scaleType="fitCenter"/>
         <LinearLayout android:layout_width="match_parent"
@@ -51,27 +50,51 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_medium"
                 android:text="#Item1"/>
-            <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:layout_marginTop="@dimen/margin_small"
-                          android:gravity="center_vertical"
-                          android:orientation="horizontal">
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/product_price"
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_mini"
+                android:text="Rs 350"
+                android:textColor="@color/zdhl5"
+                android:textSize="@dimen/font_small" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <com.application.zimplyshop.widgets.CustomTextViewBold
+                    android:id="@+id/product_disounted_price"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/text_color1"
                     android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/margin_small"
+                    android:text="Rs 350"
+                    android:textColor="@color/heading_text_color"
                     android:textSize="@dimen/font_medium"
-                    android:text="#Item1"/>
+                    android:textStyle="bold" />
                 <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/product_qty"
+                    android:id="@+id/product_disounted_factor"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/text_color1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:textSize="@dimen/font_medium"
-                    android:text="#Item1"/>
+                    android:paddingTop="@dimen/margin_mini"
+                    android:layout_below="@id/price_layout"
+                    android:layout_toRightOf="@id/product_img"
+                    android:paddingRight="@dimen/margin_small"
+                    android:text="( 20% )"
+                    android:textColor="@color/btn_green_color_normal"
+                    android:textSize="@dimen/font_small" />
             </LinearLayout>
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/product_qty"
+                android:layout_width="wrap_content"
+                android:textColor="@color/text_color1"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_medium"
+                android:text="#Item1"/>
+
 
         </LinearLayout>
 

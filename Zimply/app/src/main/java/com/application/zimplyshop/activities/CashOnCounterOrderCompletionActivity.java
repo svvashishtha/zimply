@@ -14,6 +14,7 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.CocOrderCompletionAdapter;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.baseobjects.CartObject;
+import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.widgets.OrderCompletionItemDecoration;
 
 /**
@@ -40,9 +41,14 @@ public class CashOnCounterOrderCompletionActivity extends BaseActivity{
         AddressObject addressObject = (AddressObject)getIntent().getSerializableExtra("address_obj");
         boolean isCoc = getIntent().getBooleanExtra("is_coc",false);
         CocOrderCompletionAdapter adapter = new CocOrderCompletionAdapter(this,cartObj,orderId,isCoc,addressObject);
+        removeProductsFromSavedProducts(cartObj);
         recyclerView.setAdapter(adapter);
     }
-
+    public void removeProductsFromSavedProducts(CartObject cartObj){
+        for(int i=0;i<cartObj.getCart().getDetail().size();i++){
+            AllProducts.getInstance().removeCartItem(cartObj.getCart().getDetail().get(i).getProduct().getId());
+        }
+    }
     private void addToolbarView(Toolbar toolbar) {
         View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar, false);
         TextView titleText = (TextView) view.findViewById(R.id.title_textview);

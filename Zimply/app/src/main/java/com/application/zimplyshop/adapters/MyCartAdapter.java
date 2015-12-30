@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -73,7 +74,42 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 110, r.getDisplayMetrics());
             new ImageLoaderManager((Activity) context).setImageFromUrl(cartObject.getCart().getDetail().get(position).getProduct().getImage()
                     , holder.product_image, "", (int) px, (int) px, false, false);
-            holder.price.setText(context.getResources().getString(R.string.Rs) + " " + cartObject.getCart().getDetail().get(position).getProduct().getPrice());
+            //holder.price.setText(context.getResources().getString(R.string.Rs) + " " + cartObject.getCart().getDetail().get(position).getProduct().getPrice());
+
+
+            try {
+                if (cartObject.getCart().getDetail().get(position).getProduct().getMrp()!= cartObject.getCart().getDetail().get(position).getProduct().getPrice()) {
+                    holder.productDiscountedPrice
+                            .setText(context.getString(R.string.Rs) + " "
+                                    + cartObject.getCart().getDetail().get(position).getProduct().getPrice());
+                    holder.productPrice.setVisibility(View.VISIBLE);
+                    holder.productPrice.setText(context
+                            .getString(R.string.Rs)
+                            + " "
+                            + cartObject.getCart().getDetail().get(position).getProduct().getMrp());
+                    holder.productPrice
+                            .setPaintFlags(holder.productPrice
+                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    holder.productDiscountFactor.setVisibility(View.VISIBLE);
+                    holder.productDiscountFactor.setText(cartObject.getCart().getDetail().get(position).getProduct().getDiscount() + "% OFF");
+                } else {
+                    holder.productDiscountedPrice
+                            .setText(context.getString(R.string.Rs) + " "
+                                    + Math.round(cartObject.getCart().getDetail().get(position).getProduct().getPrice()));
+
+                    holder.productPrice.setVisibility(View.GONE);
+                    holder.productDiscountFactor.setVisibility(View.GONE);
+                }
+            } catch (NumberFormatException e) {
+
+            }
+
+
+
+
+
+
+
             holder.itemCount.setText("#Item "+(position+1));
             holder.quantity.setText(cartObject.getCart().getDetail().get(position).getQty()+"");
             holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " + (cartObject.getCart().getDetail().get(position).getQty()*cartObject.getCart().getDetail().get(position).getProduct().getPrice()));
@@ -82,12 +118,18 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             holder.totalPrice.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position).getShipping_charge() == 0 ? (cartObject.getCart().getDetail().get(position).getQty() * cartObject.getCart().getDetail().get(position).getProduct().getPrice()) : ((cartObject.getCart().getDetail().get(position).getQty() * cartObject.getCart().getDetail().get(position).getProduct().getPrice()) +(cartObject.getCart().getDetail().get(position).getQty()*cartObject.getCart().getDetail().get(position).getShipping_charge()))));
             if (cartObject.getCart().getDetail().get(position).getProduct().is_cod()){
                 holder.isCocText.setVisibility(View.VISIBLE);
-                holder.isCocText.setText(Html.fromHtml("<b>Cash-on-Delivery"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
+                holder.isCocText.setText(Html.fromHtml("<b>Cash-on-Delivery" + "</b>" + "<font color=#B5CA01> Available" + "</font>"));
                 changeDrawableLeft(holder.isCocText, R.drawable.ic_tick);
-                holder.buyOfflineTag.setVisibility(View.VISIBLE);
+
             }else{
                 holder.isCocText.setVisibility(View.GONE);
                 //  changeDrawableLeft(holder.isCocText, R.drawable.ic_cross_red);
+
+            }
+
+            if (cartObject.getCart().getDetail().get(position).getProduct().is_o2o()){
+                holder.buyOfflineTag.setVisibility(View.VISIBLE);
+            }else{
                 holder.buyOfflineTag.setVisibility(View.GONE);
             }
 
@@ -238,7 +280,7 @@ public class MyCartAdapter extends RecyclerView.Adapter {
     }
 
     public class CartItemHolder extends RecyclerView.ViewHolder {
-        TextView price, name, delivery_date, quantity,viewDetails,hideDetails,itemCount;
+        TextView productPrice , name, delivery_date, quantity,viewDetails,hideDetails,itemCount,productDiscountedPrice,productDiscountFactor;
         ImageView product_image, cancelCartItem,buyOfflineTag;
         View quantityView;
         CustomTextView subTotal,shippingPrice,totalPrice,isCocText,shortTotal;
@@ -248,7 +290,11 @@ public class MyCartAdapter extends RecyclerView.Adapter {
         public CartItemHolder(View itemView) {
             super(itemView);
             //itemView.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.white)));
-            price = (TextView) itemView.findViewById(R.id.product_price);
+            productDiscountedPrice = (TextView) itemView
+                    .findViewById(R.id.product_disounted_price);
+            productPrice = (TextView) itemView
+                    .findViewById(R.id.product_price);
+            productDiscountFactor = (TextView) itemView.findViewById(R.id.product_disounted_factor);
             quantity = (TextView) itemView.findViewById(R.id.cart_quantity);
             delivery_date = (TextView) itemView.findViewById(R.id.expected_delivery_date_text);
             quantityView = itemView.findViewById(R.id.quantity_view);

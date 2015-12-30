@@ -122,11 +122,11 @@ public class CommonLib {
 	/**
 	 * Version string
 	 */
-	public static final String VERSION_STRING = "1.0.3";
+	public static final String VERSION_STRING = "1.0.4";
 	/**
 	 * Crashlytics version string
 	 */
-	public static final String CRASHLYTICS_VERSION_STRING = "1.0.3 Live";
+	public static final String CRASHLYTICS_VERSION_STRING = "1.0.4 Live";
 	/**
 	 * Log control
 	 */

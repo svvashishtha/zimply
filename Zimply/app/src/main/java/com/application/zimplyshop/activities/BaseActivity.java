@@ -695,6 +695,14 @@ public class BaseActivity extends AppCompatActivity
         dialog.show();
     }
 
+
+    @Override
+    protected void onDestroy() {
+      //  GetRequestManager.getInstance().removeCallbacks(this);
+        super.onDestroy();
+
+    }
+
     public void loadUserData() {
         GetRequestManager.getInstance().addCallbacks(this);
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_USER_DATA + "?userid=" + AppPreferences.getUserID(this);
