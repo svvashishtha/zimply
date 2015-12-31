@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by Umesh Lohani on 12/16/2015.
  */
-public class SubCategoryAdapter extends BaseAdapter{
+public class SubCategoryAdapter extends BaseAdapter {
 
     Context mContext;
 
@@ -25,16 +25,14 @@ public class SubCategoryAdapter extends BaseAdapter{
     ArrayList<Integer> subCategorIds;
 
 
-
-    public SubCategoryAdapter(Context context,ArrayList<ShopSubCategoryObj> objs,ArrayList<Integer> subCategoryId){
+    public SubCategoryAdapter(Context context, ArrayList<ShopSubCategoryObj> objs) {
         this.mContext = context;
         this.objs = new ArrayList<>(objs);
-        this.subCategorIds = new ArrayList<>(subCategoryId);
-
+        this.subCategorIds = new ArrayList<>();
     }
 
 
-    public void clearAll(){
+    public void clearAll() {
         subCategorIds.clear();
         notifyDataSetChanged();
     }
@@ -56,25 +54,25 @@ public class SubCategoryAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.checkbox_layout,parent,false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.checkbox_layout, parent, false);
             ViewHolder holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
-        ViewHolder holder = (ViewHolder)convertView.getTag();
+        ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.name.setText(objs.get(position).getName());
-        if(subCategorIds.contains(objs.get(position).getId())){
+        if (subCategorIds.contains(objs.get(position).getId())) {
             holder.name.setChecked(true);
-        }else{
+        } else {
             holder.name.setChecked(false);
         }
         holder.name.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(subCategorIds.contains(objs.get(position).getId())){
-                    subCategorIds.remove((Integer)objs.get(position).getId());
-                }else{
-                    subCategorIds.add((Integer)objs.get(position).getId());
+                if (subCategorIds.contains(objs.get(position).getId())) {
+                    subCategorIds.remove(objs.get(position).getId());
+                } else {
+                    subCategorIds.add(objs.get(position).getId());
                 }
             }
         });
@@ -85,10 +83,11 @@ public class SubCategoryAdapter extends BaseAdapter{
         return subCategorIds;
     }
 
-    public class ViewHolder{
+    public class ViewHolder {
         CheckBox name;
-        public ViewHolder(View view){
-            name = (CheckBox)view.findViewById(R.id.sub_cat_name);
+
+        public ViewHolder(View view) {
+            name = (CheckBox) view.findViewById(R.id.sub_cat_name);
         }
     }
 }

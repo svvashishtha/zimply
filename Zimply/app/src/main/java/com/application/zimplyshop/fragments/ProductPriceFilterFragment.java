@@ -23,8 +23,6 @@ public class ProductPriceFilterFragment extends BaseFragment {
 
     int sortById;
 
-    int fromPrice, toPrice;
-
     boolean isZiExperience;
 
     int FROM_PRICE = 1;

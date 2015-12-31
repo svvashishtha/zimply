@@ -76,8 +76,6 @@ public class ProductListingActivity extends BaseActivity implements
     long FROM_VALUE = 1;
     long TO_VALUE = 500000;
 
-    ArrayList<Integer> subCategoryId;
-
     boolean isRefreshData;
     Context context;
     TextView titleText;
@@ -88,6 +86,7 @@ public class ProductListingActivity extends BaseActivity implements
 
     TextView filterFromTextView, filterToTextView;
     ArrayList<RadioButton> priceRadioButtonsArrayList;
+    SubCategoryAdapter subCategoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +99,6 @@ public class ProductListingActivity extends BaseActivity implements
         context = getApplicationContext();
         if (getIntent().getStringExtra("category_id") != null)
             categoryId = Integer.parseInt(getIntent().getStringExtra("category_id"));
-        subCategoryId = new ArrayList<>();
         isNotification = getIntent().getBooleanExtra("is_notification", false);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
@@ -146,7 +144,6 @@ public class ProductListingActivity extends BaseActivity implements
                             gotIt.setVisibility(View.GONE);
 
                             showFilterTut();
-
                         }
                     });
                 }
@@ -188,12 +185,10 @@ public class ProductListingActivity extends BaseActivity implements
     private void loadData() {
         String finalUrl;
         if (nextUrl == null) {
-
             int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
             finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
                     + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + categoryId : "") + (isO2o ? "&is_o2o=" + 1 : "")
-                    + (subCategoryId.size() > 0 ? "&subcategory__id__in=" + getSubCategoryString() : "") + "&price__gte=" + priceLte + "&price__lte=" + priceHigh + (sortId != -1 ? "&low_to_high=" + sortId : "");
-
+                    + ((subCategoryAdapter != null && subCategoryAdapter.getSubCategorIds().size() > 0) ? "&subcategory__id__in=" + getSubCategoryString() : "") + "&price__gte=" + priceLte + "&price__lte=" + priceHigh + (sortId != -1 ? "&low_to_high=" + sortId : "");
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
@@ -206,9 +201,9 @@ public class ProductListingActivity extends BaseActivity implements
 
     public String getSubCategoryString() {
         String subCategory = "";
-        for (int i = 0; i < subCategoryId.size(); i++) {
-            subCategory += subCategoryId.get(i);
-            if (i != subCategoryId.size() - 1)
+        for (int i = 0; i < subCategoryAdapter.getSubCategorIds().size(); i++) {
+            subCategory += subCategoryAdapter.getSubCategorIds().get(i);
+            if (i != subCategoryAdapter.getSubCategorIds().size() - 1)
                 subCategory += ".";
         }
         return subCategory;
@@ -513,9 +508,6 @@ public class ProductListingActivity extends BaseActivity implements
                 CommonLib.writeRequestData("Product Listing Page with filters Request :" + (System.currentTimeMillis() - requestTime) + " mS");
             }
 
-            int size = ((ProductListObject) obj).getProducts().size();
-            boolean zerosie = (((ProductListObject) obj).getProducts().size() == 0);
-
             if (((ProductListObject) obj).getProducts().size() == 0) {
                 if (productList.getAdapter() == null
                         || productList.getAdapter().getItemCount() == 1) {
@@ -565,6 +557,8 @@ public class ProductListingActivity extends BaseActivity implements
             final RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
             priceLte = obj.getMin_price();
             priceHigh = obj.getMax_price();
+            FROM_VALUE = obj.getMin_price();
+            TO_VALUE = obj.getMax_price();
             seekBar.setRangeValues(priceLte, priceHigh);
 
             try {
@@ -761,13 +755,14 @@ public class ProductListingActivity extends BaseActivity implements
         });
 
         ListView subCategoriesListView = (ListView) findViewById(R.id.subcategory_list);
-        final SubCategoryAdapter subCategoryAdapter = new SubCategoryAdapter(this, subCategories, subCategoryId);
-        subCategoriesListView.setAdapter(subCategoryAdapter);
+        if (subCategoryAdapter == null) {
+            subCategoryAdapter = new SubCategoryAdapter(this, subCategories);
+            subCategoriesListView.setAdapter(subCategoryAdapter);
+        }
         CommonLib.setListViewHeightBasedOnChildren(subCategoriesListView);
         findViewById(R.id.apply_filter).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                subCategoryId = new ArrayList<Integer>(subCategoryAdapter.getSubCategorIds());
                 isO2o = ((CheckBox) findViewById(R.id.zi_experience_tag)).isChecked();
                 priceLte = Long.parseLong(filterFromTextView.getText().toString());
                 priceHigh = Long.parseLong(filterToTextView.getText().toString());
@@ -799,11 +794,14 @@ public class ProductListingActivity extends BaseActivity implements
         seekBar.setNotifyWhileDragging(true);
         seekBar.setSelectedMaxValue(TO_VALUE);
         seekBar.setSelectedMinValue(FROM_VALUE);
-        subCategoryId.clear();
-        if (((SubCategoryAdapter) ((ListView) findViewById(R.id.subcategory_list)).getAdapter()) != null)
-            ((SubCategoryAdapter) ((ListView) findViewById(R.id.subcategory_list)).getAdapter()).clearAll();
+        if (subCategoryAdapter != null)
+            subCategoryAdapter.clearAll();
         filterFromTextView.setText(FROM_VALUE + "");
         filterToTextView.setText(TO_VALUE + "");
         filterApplied = false;
+
+        for (RadioButton radioButton : priceRadioButtonsArrayList) {
+            radioButton.setChecked(false);
+        }
     }
 }
