@@ -3,6 +3,7 @@ package com.application.zimplyshop.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,31 +134,31 @@ public class ProductsRecyclerViewGridAdapter extends
             if(objs.get(position).is_o2o()){
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.VISIBLE);
             }else{
-                ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.GONE);
+                ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.INVISIBLE);
             }
             ((ProductViewHolder) holder).productName.setText(objs.get(position)
                     .getName());
-            ((ProductViewHolder) holder).productDiscountedPrice
+            /*((ProductViewHolder) holder).productDiscountedPrice
                     .setText(mContext.getString(R.string.Rs) + " "
                             + Math.round(objs.get(position).getPrice()));
-
-            ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
-            ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
-            /*try {
-                if (objs.get(position).getDiscounted_price() != 0) {
+*/
+            /*((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
+            ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);*/
+            try {
+                if (objs.get(position).getMrp()!= objs.get(position).getPrice()) {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + Math.round(objs.get(position).getDiscounted_price()));
+                                    + objs.get(position).getPrice());
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.VISIBLE);
                     ((ProductViewHolder) holder).productPrice.setText(mContext
                             .getString(R.string.Rs)
                             + " "
-                            + Math.round(objs.get(position).getPrice()));
+                            + objs.get(position).getMrp());
                     ((ProductViewHolder) holder).productPrice
                             .setPaintFlags(((ProductViewHolder) holder).productPrice
                                     .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.VISIBLE);
-                    ((ProductViewHolder) holder).productDiscountFactor.setText("( " + objs.get(position).getDiscountFactor() + " % )");
+                    ((ProductViewHolder) holder).productDiscountFactor.setText(objs.get(position).getDiscount() + "% OFF");
                 } else {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
@@ -169,7 +170,7 @@ public class ProductsRecyclerViewGridAdapter extends
             } catch (NumberFormatException e) {
 
             }
-                */
+
 
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override

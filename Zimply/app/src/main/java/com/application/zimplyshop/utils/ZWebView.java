@@ -18,6 +18,14 @@ import android.widget.TextView;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BaseActivity;
 import com.application.zimplyshop.activities.HomeActivity;
+import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
+import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
+import com.application.zimplyshop.managers.GetRequestManager;
+import com.application.zimplyshop.objects.AllProducts;
+import com.application.zimplyshop.preferences.AppPreferences;
+import com.application.zimplyshop.serverapis.RequestTags;
+
+import java.util.ArrayList;
 
 public class ZWebView extends BaseActivity {
 
@@ -111,6 +119,21 @@ public class ZWebView extends BaseActivity {
                 //	handler.proceed("staging", "phaughoXii5ayu");
             }
         });
+
+        if(isNotification ){
+            if (AppPreferences.isUserLogIn(this)) {
+                loadUserData();
+            } else {
+                ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                if (objs != null) {
+                    int count = 0;
+                    for (NonLoggedInCartObj cObj : objs) {
+                        AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()), cObj.getQuantity()));
+                    }
+                    AllProducts.getInstance().setCartCount(objs.size());
+                }
+            }
+        }
     }
     
     private void addToolbarView(Toolbar toolbar) {

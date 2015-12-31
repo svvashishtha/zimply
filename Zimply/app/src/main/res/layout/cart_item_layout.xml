@@ -54,20 +54,43 @@
                 android:text="Granite Cheese Platter"
                 android:textColor="@color/heading_text_color"
                 android:textSize="@dimen/font_large" />
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_mini"
+                android:text="Rs 350"
+                android:textColor="@color/zdhl5"
+                android:textSize="@dimen/font_small" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
+
                 android:layout_height="wrap_content">
 
                 <com.application.zimplyshop.widgets.CustomTextViewBold
-                    android:id="@+id/product_price"
+                    android:id="@+id/product_disounted_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:text="\u20B9 2434"
-                    android:textColor="@color/zhl_darkest"
-                    android:textSize="@dimen/font_medium" />
+                    android:paddingRight="@dimen/margin_small"
+                    android:text="Rs 350"
+                    android:textColor="@color/heading_text_color"
+                    android:textSize="@dimen/font_medium"
+                    android:textStyle="bold" />
+                <com.application.zimplyshop.widgets.CustomTextView
+                    android:id="@+id/product_disounted_factor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/margin_mini"
+                    android:layout_below="@id/price_layout"
+                    android:layout_toRightOf="@id/product_img"
+                    android:paddingRight="@dimen/margin_small"
+                    android:text="( 20% )"
+                    android:textColor="@color/btn_green_color_normal"
+                    android:textSize="@dimen/font_small" />
             </LinearLayout>
+
             <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/expected_delivery_date"
                 android:layout_width="wrap_content"
@@ -95,15 +118,16 @@
                 android:id="@+id/quantity_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/margin_small"
-                android:paddingTop="@dimen/margin_small">
+                android:paddingBottom="@dimen/margin_mini"
+                android:paddingTop="@dimen/margin_mini">
 
                 <com.application.zimplyshop.widgets.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:padding="@dimen/margin_mini"
+                    android:paddingRight="@dimen/margin_mini"
+                    android:paddingLeft="@dimen/margin_mini"
                     android:text="Quantity"
                     android:textColor="@color/zhl_darkest"
                     android:textSize="@dimen/font_small" />
@@ -265,7 +289,7 @@
                     android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
             </LinearLayout>
-            <com.application.zimplyshop.widgets.CustomTextViewBold
+            <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/hide_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -298,13 +322,12 @@
                     android:text="10000"
                     android:textColor="@color/text_color1"
                     android:textSize="@dimen/font_medium" />
-                <com.application.zimplyshop.widgets.CustomTextViewBold
+                <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/view_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="View Details"
                     android:layout_gravity="right"
-
                     android:textColor="@color/blue_button"
                     android:textSize="@dimen/font_medium" />
             </LinearLayout>

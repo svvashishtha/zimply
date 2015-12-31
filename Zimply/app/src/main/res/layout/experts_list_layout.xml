@@ -23,6 +23,7 @@
         android:gravity="center_vertical"
         android:background="@drawable/bottom_dropshadow"
         android:padding="@dimen/margin_small"
+        android:clickable="true"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <com.application.zimplyshop.widgets.CustomTextViewBold

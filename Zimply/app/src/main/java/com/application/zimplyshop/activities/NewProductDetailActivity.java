@@ -104,6 +104,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         GetRequestManager.getInstance().addCallbacks(this);
         UploadManager.getInstance().addCallback(this);
         loadData();
+
+
     }
     TextView toolbarTitle;
 
@@ -173,6 +175,18 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     }
 
+    boolean isCartChecked;
+    @Override
+    public void userDataReceived() {
+        isCartChecked = true;
+        if(AllProducts.getInstance().getCartCount() == 0){
+            cartCount.setVisibility(View.GONE);
+        }else{
+            cartCount.setVisibility(View.VISIBLE);
+            cartCount.setText(AllProducts.getInstance().getCartCount()+"");
+        }
+    }
+
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)){
@@ -185,6 +199,20 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 changeViewVisiblity(productDetailList, View.VISIBLE);
             } else {
                 showNullCaseView("No Info Available");
+            }
+            if(isCartChecked && isShared){
+                if (AppPreferences.isUserLogIn(this)) {
+                    loadUserData();
+                } else {
+                    ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                    if (objs != null) {
+                        int count = 0;
+                        for (NonLoggedInCartObj cObj : objs) {
+                            AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()), cObj.getQuantity()));
+                        }
+                        AllProducts.getInstance().setCartCount(objs.size());
+                    }
+                }
             }
         }else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) ) {
             if (progressDialog != null ) {

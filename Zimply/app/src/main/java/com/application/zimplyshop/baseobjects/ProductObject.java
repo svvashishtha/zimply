@@ -59,6 +59,36 @@ public class ProductObject implements Serializable{
 
     private boolean is_o2o;
 
+    private int mrp;
+
+    private int sp;
+
+    private int discount;
+
+    public int getSp() {
+        return sp;
+    }
+
+    public void setSp(int sp) {
+        this.sp = sp;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public int getMrp() {
+        return mrp;
+    }
+
+    public void setMrp(int mrp) {
+        this.mrp = mrp;
+    }
+
     public boolean is_o2o() {
         return is_o2o;
     }

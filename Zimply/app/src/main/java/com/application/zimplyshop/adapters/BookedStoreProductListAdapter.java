@@ -3,6 +3,7 @@ package com.application.zimplyshop.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -165,31 +166,31 @@ public class BookedStoreProductListAdapter extends
             }
             ((ProductViewHolder) holder).productName.setText(objs.get(newPos)
                     .getName());
-            ((ProductViewHolder) holder).productDiscountedPrice
+            /*((ProductViewHolder) holder).productDiscountedPrice
                     .setText(mContext.getString(R.string.Rs) + " "
-                            + objs.get(newPos).getPrice());
+                            + objs.get(newPos).getPrice());*/
 
             ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
             ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
-            /*try {
-                if (objs.get(newPos).getDiscounted_price() != 0) {
+            try {
+                if (objs.get(newPos).getMrp()!= objs.get(newPos).getPrice()) {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + objs.get(newPos).getDiscounted_price());
+                                    + objs.get(newPos).getPrice());
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.VISIBLE);
                     ((ProductViewHolder) holder).productPrice.setText(mContext
                             .getString(R.string.Rs)
                             + " "
-                            + objs.get(newPos).getPrice());
+                            + objs.get(newPos).getMrp());
                     ((ProductViewHolder) holder).productPrice
                             .setPaintFlags(((ProductViewHolder) holder).productPrice
                                     .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.VISIBLE);
-                    ((ProductViewHolder) holder).productDiscountFactor.setText("( " + objs.get(newPos).getDiscountFactor() + " % )");
+                    ((ProductViewHolder) holder).productDiscountFactor.setText(objs.get(newPos).getDiscount() + "% OFF");
                 } else {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + objs.get(newPos).getPrice());
+                                    + Math.round(objs.get(newPos).getPrice()));
 
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
@@ -197,7 +198,7 @@ public class BookedStoreProductListAdapter extends
             } catch (NumberFormatException e) {
 
             }
-*/
+
 
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -211,7 +212,6 @@ public class BookedStoreProductListAdapter extends
             });
         } else if(getItemViewType(position) == TYPE_HEADER){
             ((HeaderViewHolder)holder).productName.setText(obj.getName());
-            ((HeaderViewHolder)holder).productPrice.setText(mContext.getString(R.string.rs_text)+" "+obj.getPrice()+"");
             ((HeaderViewHolder)holder).productLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -225,6 +225,34 @@ public class BookedStoreProductListAdapter extends
             new ImageLoaderManager(activity).setImageFromUrl(
                     obj.getImage(),((HeaderViewHolder)holder).productImg, "users", height,
                     height, true, false);
+
+            try {
+                if (obj.getMrp()!= obj.getPrice()) {
+                    ((HeaderViewHolder) holder).productDiscountedPrice
+                            .setText(mContext.getString(R.string.Rs) + " "
+                                    + obj.getPrice());
+                    ((HeaderViewHolder) holder).productPrice.setVisibility(View.VISIBLE);
+                    ((HeaderViewHolder) holder).productPrice.setText(mContext
+                            .getString(R.string.Rs)
+                            + " "
+                            + obj.getMrp());
+                    ((HeaderViewHolder) holder).productPrice
+                            .setPaintFlags(((HeaderViewHolder) holder).productPrice
+                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    ((HeaderViewHolder) holder).productDiscountFactor.setVisibility(View.VISIBLE);
+                    ((HeaderViewHolder) holder).productDiscountFactor.setText(obj.getDiscount() + "% OFF");
+                } else {
+                    ((HeaderViewHolder) holder).productDiscountedPrice
+                            .setText(mContext.getString(R.string.Rs) + " "
+                                    + Math.round(obj.getPrice()));
+
+                    ((HeaderViewHolder) holder).productPrice.setVisibility(View.GONE);
+                    ((HeaderViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+                }
+            } catch (NumberFormatException e) {
+
+            }
+
 
         }else{
 
@@ -286,14 +314,18 @@ public class BookedStoreProductListAdapter extends
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView productName, productPrice;
+        TextView productName, productPrice,productDiscountedPrice,productDiscountFactor;
         ImageView productImg;
         RelativeLayout productLayout;
         public HeaderViewHolder (View view) {
             super(view);
             productImg = (ImageView)view.findViewById(R.id.product_img);
             productName = (TextView)view.findViewById(R.id.product_name);
-            productPrice = (TextView)view.findViewById(R.id.product_price);
+            productDiscountedPrice = (TextView) view
+                    .findViewById(R.id.product_disounted_price);
+            productPrice = (TextView) view
+                    .findViewById(R.id.product_price);
+            productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
             productLayout = (RelativeLayout)view.findViewById(R.id.product_card);
         }
 
