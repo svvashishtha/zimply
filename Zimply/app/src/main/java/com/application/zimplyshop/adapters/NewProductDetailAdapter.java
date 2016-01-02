@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -197,7 +198,51 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             }else{
                 ((ProductInfoHolder1)holder).outOfStock.setVisibility(View.GONE);
             }
-            ((ProductInfoHolder1)holder).productPrice.setText(mContext.getString(R.string.rs_text)+" "+Math.round(obj.getProduct().getPrice()));
+
+            if(obj.getProduct().getMrp() != obj.getProduct().getSp()){
+                if(obj.getProduct().getPrice()!=obj.getProduct().getSp()){
+                    ((ProductInfoHolder1)holder).priceType.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1)holder).marketPrice.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1)holder).discount.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1)holder).priceType.setText("Offer Price");
+                    ((ProductInfoHolder1)holder).spTag.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1)holder).mrpTag.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1)holder).productPrice.setText(mContext.getResources().getString(R.string.rs_text)+" "+obj.getProduct().getPrice());
+                    ((ProductInfoHolder1)holder).marketPrice.setText(mContext.getResources().getString(R.string.rs_text)+" "+obj.getProduct().getMrp());
+                    ((ProductInfoHolder1) holder).marketPrice
+                            .setPaintFlags(((ProductInfoHolder1) holder).marketPrice
+                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    ((ProductInfoHolder1)holder).sellingPrice.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1)holder).sellingPrice.setText(mContext.getResources().getString(R.string.rs_text)+" "+obj.getProduct().getSp());
+                    ((ProductInfoHolder1) holder).sellingPrice
+                            .setPaintFlags(((ProductInfoHolder1) holder).sellingPrice
+                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                    ((ProductInfoHolder1)holder).discount.setText(obj.getProduct().getDiscount()+"% OFF");
+                }else{
+                    ((ProductInfoHolder1)holder).priceType.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1)holder).priceType.setText("Selling Price");
+                    ((ProductInfoHolder1)holder).productPrice.setText(mContext.getResources().getString(R.string.rs_text)+" "+obj.getProduct().getPrice());
+                    ((ProductInfoHolder1)holder).marketPrice.setText(mContext.getResources().getString(R.string.rs_text)+" "+obj.getProduct().getMrp());
+                    ((ProductInfoHolder1)holder).spTag.setVisibility(View.GONE);
+                    ((ProductInfoHolder1)holder).mrpTag.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1) holder).marketPrice
+                            .setPaintFlags(((ProductInfoHolder1) holder).marketPrice
+                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    ((ProductInfoHolder1) holder).sellingPrice.setVisibility(View.GONE);
+                    ((ProductInfoHolder1)holder).discount.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder1) holder).discount.setText(obj.getProduct().getDiscount()+"% OFF");
+                }
+            }else{
+                ((ProductInfoHolder1)holder).productPrice.setText(mContext.getResources().getString(R.string.rs_text)+" "+obj.getProduct().getPrice());
+                ((ProductInfoHolder1)holder).priceType.setVisibility(View.GONE);
+                ((ProductInfoHolder1)holder).marketPrice.setVisibility(View.GONE);
+                ((ProductInfoHolder1)holder).sellingPrice.setVisibility(View.GONE);
+                ((ProductInfoHolder1)holder).discount.setVisibility(View.GONE);
+                ((ProductInfoHolder1)holder).spTag.setVisibility(View.GONE);
+                ((ProductInfoHolder1)holder).mrpTag.setVisibility(View.GONE);
+            }
+            //((ProductInfoHolder1)holder).productPrice.setText(mContext.getString(R.string.rs_text)+" "+Math.round(obj.getProduct().getPrice()));
             ((ProductInfoHolder1)holder).productName.setText(obj.getProduct().getName());
             ((ProductInfoHolder1)holder).favImage.setSelected(obj.getProduct().is_favourite());
             ((ProductInfoHolder1)holder).favImage.setOnClickListener(new View.OnClickListener() {
@@ -831,7 +876,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
     public class ProductInfoHolder1 extends RecyclerView.ViewHolder{
         TextView productName,outOfStock;
-        TextView productPrice;
+        TextView productPrice,sellingPrice,discount,marketPrice,priceType,mrpTag,spTag;
         ImageView favImage;
         public ProductInfoHolder1(View itemView) {
             super(itemView);
@@ -839,7 +884,12 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             productPrice=(TextView)itemView.findViewById(R.id.product_price);
             favImage = (ImageView)itemView.findViewById(R.id.product_fav);
             outOfStock= (TextView)itemView.findViewById(R.id.out_of_stock_text);
-
+            sellingPrice = (TextView)itemView.findViewById(R.id.sp_price);
+            marketPrice = (TextView)itemView.findViewById(R.id.mrp);
+            discount = (TextView)itemView.findViewById(R.id.discount);
+            priceType = (TextView)itemView.findViewById(R.id.price_type);
+            mrpTag = (TextView)itemView.findViewById(R.id.mrp_tag);
+            spTag = (TextView)itemView.findViewById(R.id.sp_tag);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -68,7 +69,38 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
 
             ((ProductViewHolder)holder).itemNum.setText("#Item "+position);
             ((ProductViewHolder)holder).productName.setText(cartObj.getCart().getDetail().get(position-1).getProduct().getName());
-            ((ProductViewHolder)holder).productPrice.setText(mContext.getString(R.string.rs_text) + " " + cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice());
+
+            try {
+                if (cartObj.getCart().getDetail().get(position-1).getProduct().getMrp()!= cartObj.getCart().getDetail().get(position-1).getProduct().getPrice()) {
+                    ((ProductViewHolder)holder).productDiscountedPrice
+                            .setText(mContext.getString(R.string.Rs) + " "
+                                    + cartObj.getCart().getDetail().get(position-1).getProduct().getPrice());
+                    ((ProductViewHolder)holder).productPrice.setVisibility(View.VISIBLE);
+                    ((ProductViewHolder)holder).productPrice.setText(mContext
+                            .getString(R.string.Rs)
+                            + " "
+                            + cartObj.getCart().getDetail().get(position-1).getProduct().getMrp());
+                    ((ProductViewHolder)holder).productPrice
+                            .setPaintFlags(((ProductViewHolder)holder).productPrice
+                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    ((ProductViewHolder)holder).productDiscountFactor.setVisibility(View.VISIBLE);
+                    ((ProductViewHolder)holder).productDiscountFactor.setText(cartObj.getCart().getDetail().get(position-1).getProduct().getDiscount() + "% OFF");
+                } else {
+                    ((ProductViewHolder)holder).productDiscountedPrice
+                            .setText(mContext.getString(R.string.Rs) + " "
+                                    + Math.round(cartObj.getCart().getDetail().get(position-1).getProduct().getPrice()));
+
+                    ((ProductViewHolder)holder).productPrice.setVisibility(View.GONE);
+                    ((ProductViewHolder)holder).productDiscountFactor.setVisibility(View.GONE);
+                }
+            } catch (NumberFormatException e) {
+
+            }
+
+
+
+
+            /*((ProductViewHolder)holder).productPrice.setText(mContext.getString(R.string.rs_text) + " " + cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice());*/
             ((ProductViewHolder)holder).productQty.setText("Qty: " + cartObj.getCart().getDetail().get(position - 1).getQty());
 
             new ImageLoaderManager((CashOnCounterOrderCompletionActivity)mContext).setImageFromUrl(cartObj.getCart().getDetail().get(position - 1).getProduct().getImage(),
@@ -120,7 +152,7 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder{
-        TextView productName,productPrice,productQty,itemNum,payAmount,paymentStatus,deliveryAddress,deliverTime,payAtStore,toPay;
+        TextView productName,productPrice,productQty,itemNum,payAmount,paymentStatus,deliveryAddress,deliverTime,payAtStore,toPay,productDiscountedPrice,productDiscountFactor;;
         ImageView productImage;
         LinearLayout callLayout,directionLayout,deliveryAddressLayout,btnLayout;
 
@@ -128,7 +160,11 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
             super(itemView);
             itemNum = (TextView)itemView.findViewById(R.id.item_no);
             productName = (TextView)itemView.findViewById(R.id.product_name);
-            productPrice = (TextView)itemView.findViewById(R.id.product_price);
+            productPrice = (TextView) itemView
+                    .findViewById(R.id.product_price);
+            productDiscountFactor = (TextView) itemView.findViewById(R.id.product_disounted_factor);
+            productDiscountedPrice = (TextView) itemView
+                    .findViewById(R.id.product_disounted_price);
             productQty = (TextView)itemView.findViewById(R.id.product_qty);
 
             payAmount = (TextView)itemView.findViewById(R.id.pay_amount);

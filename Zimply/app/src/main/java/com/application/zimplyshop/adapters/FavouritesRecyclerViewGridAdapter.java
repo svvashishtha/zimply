@@ -3,6 +3,7 @@ package com.application.zimplyshop.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,7 +137,7 @@ public class FavouritesRecyclerViewGridAdapter extends
             if (objs.get(position).getProduct().is_o2o()) {
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.VISIBLE);
             } else {
-                ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.GONE);
+                ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.INVISIBLE);
             }
             ((ProductViewHolder) holder).productName.setText(objs.get(position)
                     .getProduct().getName());
@@ -146,6 +147,33 @@ public class FavouritesRecyclerViewGridAdapter extends
 
             ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
             ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+            try {
+                if (objs.get(position).getProduct().getMrp()!= objs.get(position).getProduct().getPrice()) {
+                    ((ProductViewHolder) holder).productDiscountedPrice
+                            .setText(mContext.getString(R.string.Rs) + " "
+                                    + objs.get(position).getProduct().getPrice());
+                    ((ProductViewHolder) holder).productPrice.setVisibility(View.VISIBLE);
+                    ((ProductViewHolder) holder).productPrice.setText(mContext
+                            .getString(R.string.Rs)
+                            + " "
+                            + objs.get(position).getProduct().getMrp());
+                    ((ProductViewHolder) holder).productPrice
+                            .setPaintFlags(((ProductViewHolder) holder).productPrice
+                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.VISIBLE);
+                    ((ProductViewHolder) holder).productDiscountFactor.setText(objs.get(position).getProduct().getDiscount() + "% OFF");
+                } else {
+                    ((ProductViewHolder) holder).productDiscountedPrice
+                            .setText(mContext.getString(R.string.Rs) + " "
+                                    + Math.round(objs.get(position).getProduct().getPrice()));
+
+                    ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
+                    ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+                }
+            } catch (NumberFormatException e) {
+
+            }
+
             /*try {
                 if (objs.get(position).getDiscounted_price() != 0) {
                     ((ProductViewHolder) holder).productDiscountedPrice

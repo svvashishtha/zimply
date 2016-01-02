@@ -15,6 +15,8 @@ public class BaseProductListObject implements Serializable{
 
     private int price;
 
+    private int mrp;
+
     private String slug;
 
     private int id;
@@ -23,7 +25,25 @@ public class BaseProductListObject implements Serializable{
 
     private int width;
 
+    private int discount;
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
     private boolean is_cod;
+
+    public int getMrp() {
+        return mrp;
+    }
+
+    public void setMrp(int mrp) {
+        this.mrp = mrp;
+    }
 
     public boolean is_cod() {
         return is_cod;

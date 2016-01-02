@@ -204,6 +204,31 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 }
             });
         }
+        boolean isNotification = getIntent().getBooleanExtra("is_notification", false);
+        if(isNotification ){
+            if (AppPreferences.isUserLogIn(this)) {
+                loadUserData();
+            } else {
+                ArrayList<NonLoggedInCartObj> objs = (ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
+                if (objs != null) {
+                    int count = 0;
+                    for (NonLoggedInCartObj cObj : objs) {
+                        AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj(Integer.parseInt(cObj.getProductId()), cObj.getQuantity()));
+                    }
+                    AllProducts.getInstance().setCartCount(objs.size());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void userDataReceived() {
+        if (AllProducts.getInstance().getCartCount() > 0) {
+            findViewById(R.id.cart_item_true).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.cart_item_true)).setText(AllProducts.getInstance().getCartCount() + "");
+        } else {
+            findViewById(R.id.cart_item_true).setVisibility(View.GONE);
+        }
     }
 
     public void closeFabTutorial() {
