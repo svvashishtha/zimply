@@ -132,6 +132,10 @@ public class CommonLib {
 	 */
 	public final static boolean ZimplyLog = false;
 	/**
+	 * GA event control
+	 */
+	public final static boolean LogGAEvent = false;
+	/**
 	 * GCM Sender ID
 	 */
 	public static final String GCM_SENDER_ID = "747396934818";
