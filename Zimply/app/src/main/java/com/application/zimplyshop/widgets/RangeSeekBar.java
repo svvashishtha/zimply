@@ -72,9 +72,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final int LINE_HEIGHT_IN_DP = 2;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Bitmap thumbImage = BitmapFactory.decodeResource(
-            getResources(), R.drawable.apptheme_scrubber_control_normal_holo);
+            getResources(), R.drawable.ic_filter_seekbar_thumb_pressed);
     private final Bitmap thumbPressedImage = BitmapFactory.decodeResource(
-            getResources(), R.drawable.apptheme_scrubber_control_pressed_holo);
+            getResources(), R.drawable.ic_filter_seekbar_thumb_pressed);
     private final Bitmap thumbDisabledImage = BitmapFactory.decodeResource(
             getResources(), R.drawable.apptheme_scrubber_control_disabled_holo);
     private final float thumbWidth = thumbImage.getWidth();

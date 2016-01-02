@@ -106,7 +106,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     private void loadData() {
         requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_PRODUCT_CATEGORY_LIST ;
-        GetRequestManager.getInstance().requestCacheThenHTTP(url, RequestTags.PRODUCT_CATEGORY_REQUEST_TAG,
+        GetRequestManager.getInstance().requestHTTPThenCache(url, RequestTags.PRODUCT_CATEGORY_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_CATEGORY, GetRequestManager.ONE_HOUR);
     }
 

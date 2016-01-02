@@ -18,8 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +78,9 @@ public class SearchResultsActivity extends BaseActivity implements
     long TO_VALUE = 500000;
     private double requestTime;
 
+    TextView filterFromTextView, filterToTextView;
+    ArrayList<RadioButton> priceRadioButtonsArrayList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,9 @@ public class SearchResultsActivity extends BaseActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        filterFromTextView = (TextView) findViewById(R.id.tv_new_from_price_filter);
+        filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
 
@@ -196,7 +202,6 @@ public class SearchResultsActivity extends BaseActivity implements
                         @Override
                         public void onScrolled(RecyclerView recyclerView,
                                                int dx, int dy) {
-
                             visibleItemCount = productList.getLayoutManager()
                                     .getChildCount();
                             totalItemCount = productList.getLayoutManager()
@@ -496,6 +501,9 @@ public class SearchResultsActivity extends BaseActivity implements
                 nextUrl = ((ProductListObject) obj).getNext_url();
                 //homeProductObjs.addAll();
                 // so that products are not repeated.
+                if (productList.getAdapter() == null) {
+                    setMinimumAndMaximumFilterPriceValues(((ProductListObject) obj));
+                }
                 setAdapterData(homeProductObjs);
                 // nextUrl = ((ProductListObject) obj).getNext_url();
                 //subCategories =((ProductListObject) obj).getSubcategory();
@@ -524,6 +532,71 @@ public class SearchResultsActivity extends BaseActivity implements
         }
 
 
+    }
+
+    private void setMinimumAndMaximumFilterPriceValues(ProductListObject obj) {
+        if (obj.getMin_price() != null && obj.getMax_price() != null) {
+            final RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
+            priceLte = obj.getMin_price();
+            priceHigh = obj.getMax_price();
+            FROM_VALUE = obj.getMin_price();
+            TO_VALUE = obj.getMax_price();
+            seekBar.setRangeValues(priceLte, priceHigh);
+
+            try {
+                if (Long.parseLong(filterFromTextView.getText().toString()) < priceLte) {
+                    filterFromTextView.setText(priceLte + "");
+                    seekBar.setSelectedMinValue(priceLte);
+                }
+                if (Long.parseLong(filterToTextView.getText().toString()) > priceHigh) {
+                    filterToTextView.setText(priceHigh + "");
+                    seekBar.setSelectedMaxValue(priceHigh);
+                }
+            } catch (Exception e) {
+
+            }
+
+            long diff = obj.getMax_price() - obj.getMin_price();
+
+            final long[][] pricesList = new long[5][2];
+            pricesList[0][0] = priceLte;
+            pricesList[0][1] = (long) (priceLte + .10 * diff);
+            pricesList[1][0] = (long) (priceLte + .10 * diff);
+            pricesList[1][1] = (long) (priceLte + .25 * diff);
+            pricesList[2][0] = (long) (priceLte + .25 * diff);
+            pricesList[2][1] = (long) (priceLte + .50 * diff);
+            pricesList[3][0] = (long) (priceLte + .50 * diff);
+            pricesList[3][1] = (long) (priceLte + .80 * diff);
+            pricesList[4][0] = (long) (priceLte + .80 * diff);
+            pricesList[4][1] = priceHigh;
+
+            priceRadioButtonsArrayList = new ArrayList<>();
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton1)));
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton2)));
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton3)));
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton4)));
+            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton5)));
+
+            for (int i = 0; i < priceRadioButtonsArrayList.size(); i++) {
+                String radioButtonText = "₹" + pricesList[i][0] + " - ₹" + pricesList[i][1];
+                priceRadioButtonsArrayList.get(i).setText(radioButtonText);
+                priceRadioButtonsArrayList.get(i).setSelected(false);
+            }
+
+            RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radiogroupfiltrprice);
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    int index = group.indexOfChild(findViewById(group.getCheckedRadioButtonId()));
+                    seekBar.setSelectedMinValue(pricesList[index][0]);
+                    seekBar.setSelectedMaxValue(pricesList[index][1]);
+                    seekBar.setSelectedMinValue(pricesList[index][0]);
+
+                    filterToTextView.setText(pricesList[index][1] + "");
+                    filterFromTextView.setText(pricesList[index][0] + "");
+                }
+            });
+        }
     }
 
     @Override
@@ -618,8 +691,8 @@ public class SearchResultsActivity extends BaseActivity implements
             }
         });*/
         //Add Logic for price
-        ((EditText) findViewById(R.id.from_price)).setText(priceLte + "");
-        ((EditText) findViewById(R.id.to_price)).setText(priceHigh + "");
+        filterFromTextView.setText(priceLte + "");
+        filterToTextView.setText(priceHigh + "");
 
         RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
         seekBar.setNotifyWhileDragging(true);
@@ -628,52 +701,25 @@ public class SearchResultsActivity extends BaseActivity implements
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
-                minValue = (int)minValue / 5000 * 5000;
-                maxValue = (int)maxValue / 5000 * 5000;
-                ((EditText) findViewById(R.id.from_price)).setText(minValue + "");
-                ((EditText) findViewById(R.id.to_price)).setText(maxValue + "");
+                filterFromTextView.setText(minValue + "");
+                filterToTextView.setText(maxValue + "");
                 isFilterApplied = true;
-            }
-        });
-        ((EditText) findViewById(R.id.from_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                addMinInputFilter();
-                if (!hasFocus) {
-                    if (((EditText) findViewById(R.id.from_price)).getText().length() == 0) {
-                        ((EditText) findViewById(R.id.from_price)).setText(FROM_VALUE + "");
-                    }
-                    isFilterApplied = true;
+                for (RadioButton radioButton : priceRadioButtonsArrayList) {
+                    radioButton.setChecked(false);
                 }
             }
         });
 
-        ((EditText) findViewById(R.id.to_price)).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //addMaxInputFilter();
-                if (!hasFocus) {
-                    if (((EditText) findViewById(R.id.to_price)).getText().length() == 0) {
-                        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
-                    } else if (Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString()) < Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString())) {
-                        ((EditText) findViewById(R.id.to_price)).setText(((EditText) findViewById(R.id.from_price)).getText().toString());
-                    } else if (Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString()) > TO_VALUE) {
-                        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
-                    }
-                }
-                isFilterApplied = true;
-            }
-        });
 
-        ((ListView) findViewById(R.id.subcategory_list)).setVisibility(View.GONE);
+        findViewById(R.id.subcategory_list).setVisibility(View.GONE);
         (findViewById(R.id.sub_categories_header)).setVisibility(View.GONE);
         findViewById(R.id.apply_filter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pageNo = 1;
                 isO2o = ((CheckBox) findViewById(R.id.zi_experience_tag)).isChecked();
-                priceLte = Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString());
-                priceHigh = Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString());
+                priceLte = Long.parseLong(filterFromTextView.getText().toString());
+                priceHigh = Long.parseLong(filterToTextView.getText().toString());
                 nextUrl = null;
                 isRefreshData = true;
                 animateViewRightOut(findViewById(R.id.filter_layout));
@@ -687,7 +733,7 @@ public class SearchResultsActivity extends BaseActivity implements
     }
 
     public void addMinInputFilter() {
-        ((EditText) findViewById(R.id.from_price)).setFilters(new InputFilter[]{new InputFilterMinMax((FROM_VALUE) + "", (((EditText) findViewById(R.id.to_price)).getText()).toString().length() > 0 ? Long.parseLong((((EditText) findViewById(R.id.to_price)).getText()).toString()) + "" : TO_VALUE + "")});
+        filterFromTextView.setFilters(new InputFilter[]{new InputFilterMinMax((FROM_VALUE) + "", (filterToTextView.getText()).toString().length() > 0 ? Long.parseLong((filterToTextView.getText()).toString()) + "" : TO_VALUE + "")});
     }
 
     public void resetFilterValues() {
@@ -701,9 +747,12 @@ public class SearchResultsActivity extends BaseActivity implements
         seekBar.setSelectedMaxValue(TO_VALUE);
         seekBar.setSelectedMinValue(FROM_VALUE);
 
-        ((EditText) findViewById(R.id.from_price)).setText(FROM_VALUE + "");
-        ((EditText) findViewById(R.id.to_price)).setText(TO_VALUE + "");
+        filterFromTextView.setText(FROM_VALUE + "");
+        filterToTextView.setText(TO_VALUE + "");
 
+        for (RadioButton radioButton : priceRadioButtonsArrayList) {
+            radioButton.setChecked(false);
+        }
     }
 
 }

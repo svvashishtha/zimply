@@ -196,4 +196,6 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+    <dimen name="z_filter_seekbar_text_margin">40dp</dimen>
+
 </resources>

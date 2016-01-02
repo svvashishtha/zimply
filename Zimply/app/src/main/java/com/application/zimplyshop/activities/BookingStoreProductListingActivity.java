@@ -79,12 +79,12 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         productList.setLayoutManager(new GridLayoutManager(this, 2));
         productList.addItemDecoration(new SpaceGridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini),true));
+                (int) getResources().getDimension(R.dimen.margin_mini), true));
 
         // setProductsGrid();
-        obj = (BaseProductListObject)getIntent().getSerializableExtra("booked_obj");
+        obj = (BaseProductListObject) getIntent().getSerializableExtra("booked_obj");
         url = getIntent().getStringExtra("url");
-        isHideFilter = getIntent().getBooleanExtra("hide_filter",false);
+        isHideFilter = getIntent().getBooleanExtra("hide_filter", false);
         setStatusBarColor();
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
@@ -97,6 +97,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
 
     boolean isHideFilter;
+
     public int getSelectedCatgeoryId(int categoryId) {
         if (AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category() != null) {
             for (int i = 0; i < AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().size(); i++) {
@@ -119,9 +120,9 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
     private void loadData() {
         String finalUrl;
         if (nextUrl == null) {
-            int width = (getDisplayMetrics().widthPixels-(3*getResources().getDimensionPixelSize(R.dimen.margin_small)))/3;
+            int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
             finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
-                        + "&width=" + width + "&vendor__id__in="+vendorId ;
+                    + "&width=" + width + "&vendor__id__in=" + vendorId;
 
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
@@ -137,7 +138,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
             BookedStoreProductListAdapter adapter = new BookedStoreProductListAdapter(
-                    this, this, height,obj);
+                    this, this, height, obj);
             productList.setAdapter(adapter);
             productList
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -203,7 +204,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
        /* titleText.setLines(2);
         titleText.setTextSize(14);*/
         if (getIntent().getStringExtra("vendor_name") != null) {
-            titleText.setText("More products from "+ getIntent().getStringExtra("vendor_name"));
+            titleText.setText("More products from " + getIntent().getStringExtra("vendor_name"));
         } else {
             titleText.setText("Products");
         }
@@ -215,9 +216,9 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         MenuItem item = menu.findItem(R.id.filter);
-        if(isHideFilter){
+        if (isHideFilter) {
             item.setVisible(false);
-        }else {
+        } else {
             item.setVisible(true);
         }
         return true;
@@ -232,12 +233,12 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
             case R.id.cart:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
                 intent.putExtra("OrderSummaryFragment", false);
-                intent.putExtra("buying_channel",BUYING_CHANNEL_ONLINE);
+                intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
                 startActivity(intent);
                 break;
             case R.id.search:
                 Intent searchIntent = new Intent(this, NewSearchActivity.class);
-                searchIntent.putExtra("position",0);
+                searchIntent.putExtra("position", 0);
                 startActivity(searchIntent);
                 break;
             case R.id.filter:
@@ -316,7 +317,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
                 break;
             case R.id.retry_layout:
-                if(isRequestFailed) {
+                if (isRequestFailed) {
                     loadData();
                 }
                 break;
@@ -432,8 +433,8 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        if(isNotification){
-            Intent intent = new Intent(this,HomeActivity.class);
+        if (isNotification) {
+            Intent intent = new Intent(this, HomeActivity.class);
             this.finish();
             startActivity(intent);
         }
