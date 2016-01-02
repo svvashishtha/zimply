@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/abc_action_bar_default_height_material"
     android:background="@android:color/transparent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/cancel_action"
         android:layout_width="@dimen/abc_action_bar_default_height_material"
         android:layout_height="match_parent"
-        android:background="@drawable/action_bar_item_bg"
+        android:background="?attr/selectableItemBackground"
         android:scaleType="center"
         android:src="@drawable/ic_cross" />
 
