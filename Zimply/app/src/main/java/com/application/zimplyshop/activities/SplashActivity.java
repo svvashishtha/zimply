@@ -370,7 +370,7 @@ public class SplashActivity extends BaseActivity implements RequestTags, GetRequ
                     Log.i("SplashActivity", msg);
                     storeRegistrationId(SplashActivity.this, regId);
 
-                    if (AppPreferences.isUserLogIn(SplashActivity.this) && !regId.equals(""))
+                    if (!regId.equals(""))
                         sendRegistrationIdToBackend();
 
                 } catch (IOException ex) {

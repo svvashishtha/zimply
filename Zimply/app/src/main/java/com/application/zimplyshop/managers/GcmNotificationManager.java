@@ -49,7 +49,7 @@ public class GcmNotificationManager implements AppConstants {
     public void showBigImageNotification(String imageUrl, String message, int type, String slug) {
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext).setContentTitle("Zimply")
                 .setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
-                .setDefaults(Notification.DEFAULT_SOUND).setAutoCancel(true).setColor(Color.parseColor("#ffffff"));
+                .setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setColor(Color.parseColor("#ffffff"));
         BitmapDrawable bitmapDrawable_large_logo = (BitmapDrawable) mContext.getResources()
                 .getDrawable(R.drawable.ic_app_launcher_icon);
         Bitmap bitmap_large_logo = bitmapDrawable_large_logo.getBitmap();
@@ -135,7 +135,7 @@ public class GcmNotificationManager implements AppConstants {
     public void showCustomNotification(String message, int type, String slug) {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).setSmallIcon(R.drawable.ic_ticker)
-                .setTicker(message).setAutoCancel(true);
+                .setTicker(message).setAutoCancel(true).setDefaults(Notification.DEFAULT_ALL);
 
         // Using RemoteViews to bind custom layouts into Notification
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.gcm_custom_notification);
