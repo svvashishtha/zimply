@@ -178,7 +178,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
         onNewIntent(getIntent());
         if (AppPreferences.getNotifModDateTime(this) != 0)
-            getUserNotificationCount();
+        getUserNotificationCount();
         if (AppPreferences.isUserLogIn(this))
             phoneVerification();
 
@@ -203,6 +203,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
                 }
             });
+        }else{
+            loadBanner();
         }
         boolean isNotification = getIntent().getBooleanExtra("is_notification", false);
         if(isNotification ){
@@ -871,6 +873,16 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
 
+boolean isLoadingBanner;
+    private void loadBanner() {
+        if(!isLoadingBanner) {
+            isLoadingBanner = true;
+            String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_BANNER_REQUEST;
+            GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.BANNER_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_BANNER_OBJECT);
+        }
+    }
+
+
     private void loadData() {
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.HOMEPAGE_URL + "?product_width="
                 + getResources().getDimensionPixelSize(R.dimen.product_img_size) + "&product_height="
@@ -986,7 +998,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     startActivity(loginIntent);
                 }
             case R.id.user_img:
-                if (!AppPreferences.isUserLogIn(this)) {
+                /*if (!AppPreferences.isUserLogIn(this)) {
                     Intent loginIntent = new Intent(this, BaseLoginSignupActivity.class);
                     loginIntent.putExtra("inside", true);
                     isToLoginPage = true;
@@ -998,7 +1010,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     Intent intent = new Intent(HomeActivity.this,ProfileActivity.class);
                     startActivity(intent);
 
-                }
+                }*/
                 break;
         }
     }
@@ -1066,6 +1078,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             }
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(BANNER_REQUEST_TAG)) {
             if (((BannerObject) obj).getType() != 0) {
+                isLoadingBanner=false;
                 showBanner((BannerObject) obj);
             }
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.PHONE_VERIFICATION)) {
@@ -1112,6 +1125,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         if (!isDestroyed && requestTag.equalsIgnoreCase(HOME_PAGE_REQUEST_TAG)) {
             showNetworkErrorView();
             changeViewVisiblity(parentScrollView, View.GONE);
+        }else if(!isDestroyed && requestTag.equalsIgnoreCase(BANNER_REQUEST_TAG)){
+            isLoadingBanner=false;
         }
     }
 

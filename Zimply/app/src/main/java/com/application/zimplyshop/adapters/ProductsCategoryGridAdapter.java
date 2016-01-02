@@ -89,7 +89,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
             }else{
                 newPos = position;
             }
-            int height = (obj.getProduct_category().get(newPos).getImg().getHeight()*displayWidth)/obj.getProduct_category().get(newPos).getImg().getWidth();
+            int height = (obj.getProduct_category().get(newPos).getImg().getHeight()*(displayWidth-(2*mContext.getResources().getDimensionPixelSize(R.dimen.margin_small))))/obj.getProduct_category().get(newPos).getImg().getWidth();
 
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             ((ProductsCategoryViewHolder) holder).parentFrame.setLayoutParams(lp);

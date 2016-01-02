@@ -515,7 +515,7 @@ public class CommonLib {
 			if (filePath.exists() && filePath.isFile() && !filePath.isDirectory()) {
 				FileInputStream fi;
 				BitmapFactory.Options opts = new BitmapFactory.Options();
-				opts.inPreferredConfig = Config.RGB_565;
+				opts.inPreferredConfig = Config.ARGB_8888;
 				opts.inDither=true;
 				fi = new FileInputStream(filePath);
 				defautBitmap = BitmapFactory.decodeStream(fi, null, opts);
