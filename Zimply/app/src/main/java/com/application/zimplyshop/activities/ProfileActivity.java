@@ -178,14 +178,13 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     protected void onResume() {
         super.onResume();
         try {
-            fillHeaderDetails();
             if (AllUsers.getInstance().getObjs().size() > 0) {
                 showView();
                 mainView.setVisibility(View.VISIBLE);
                 fillAddressView(AllUsers.getInstance().getObjs().get(0));
-
             } else
                 addressView.setVisibility(View.GONE);
+            fillHeaderDetails();
         } catch (Exception e) {
             e.printStackTrace();
 
