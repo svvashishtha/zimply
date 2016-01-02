@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/mainView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                <ImageView
+                    android:id="@+id/background_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#CC00a2f0" />
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="top"
+                    android:background="#00000000" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="259dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.application.zimplyshop.widgets.CircularImageView
+                        android:id="@+id/profile_pic"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:border="false" />
+
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
+                        android:id="@+id/name_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_xxxlarge" />
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:id="@+id/email_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_content_mail"
+                        android:drawablePadding="@dimen/margin_mini"
+                        android:text="email@eamil.com"
+                        android:textColor="@color/white" />
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:id="@+id/number_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0000000000"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/address_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:background="@drawable/dropshadowcard"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height48">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/margin_midsmall"
+                        android:layout_marginRight="@dimen/margin_mini"
+                        android:src="@drawable/ic_location_blue" />
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:drawablePadding="@dimen/margin_small"
+                        android:gravity="left|center_vertical"
+
+                        android:paddingLeft="@dimen/margin_midsmall"
+                        android:text="My Address"
+                        android:textSize="@dimen/font_large" />
+
+                    <com.application.zimplyshop.widgets.CustomTextView
+                        android:id="@+id/view_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:gravity="center_vertical"
+                        android:text="View All"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/font_large" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/z_grey_color" />
+
+                <com.application.zimplyshop.widgets.CustomTextViewBold
+                    android:id="@+id/name_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_xxlarge"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="Name"
+
+                    android:textSize="@dimen/font_large" />
+
+                <com.application.zimplyshop.widgets.CustomTextView
+                    android:id="@+id/address_line1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_xxlarge"
+                    android:text="Name"
+                    android:textSize="@dimen/font_medium" />
+
+                <com.application.zimplyshop.widgets.CustomTextView
+                    android:id="@+id/address_line2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_xxlarge"
+                    android:text="Name"
+                    android:textSize="@dimen/font_medium" />
+
+                <com.application.zimplyshop.widgets.CustomTextView
+                    android:id="@+id/phone_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_xxlarge"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="Name"
+                    android:textSize="@dimen/font_medium" />
+            </LinearLayout>
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/settings_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height48"
+                android:layout_margin="@dimen/margin_small"
+                android:background="@drawable/dropshadowcard"
+                android:drawableLeft="@drawable/ic_settings"
+                android:drawablePadding="@dimen/margin_midsmall"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/margin_midsmall"
+                android:text="Settings"
+                android:textSize="@dimen/font_large" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+    <include layout="@layout/progress_layout" />
+</FrameLayout>

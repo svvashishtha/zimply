@@ -133,7 +133,7 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
     }
 
     private void navigateToProfile() {
-        intent = new Intent(UrlRouter.this, UserProfileActivity.class);
+        intent = new Intent(UrlRouter.this, ProfileActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("Source", "Router");
         intent.putExtras(bundle);

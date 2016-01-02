@@ -130,7 +130,9 @@ public class NewAddressSelectionFragment extends ZFragment implements GetRequest
 
     public void setAdapterData(){
         if(recyclerView.getAdapter()==null){
-            final NewAdressSelectionAdapter adapter = new NewAdressSelectionAdapter(getActivity());
+            //the second argument is for the purpose of reusing adapter class @NewAdressSelectionAdapter.
+            // Please read the comments in @NewAdressSelectionAdapter
+            final NewAdressSelectionAdapter adapter = new NewAdressSelectionAdapter(getActivity(),1);
             recyclerView.setAdapter(adapter);
             adapter.setOnUseAdressClickListener(new NewAdressSelectionAdapter.OnUseAdressClickListener() {
                 @Override

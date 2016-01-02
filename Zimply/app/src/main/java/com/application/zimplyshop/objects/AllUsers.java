@@ -45,4 +45,12 @@ public class AllUsers implements Serializable {
             objs.set(position,obj);
         }
     }
+	public void swapAddress1(int iPosition,int fPosition)
+	{
+		if(objs.size()>fPosition ) {
+			AddressObject obj = objs.get(iPosition);
+			objs.set(iPosition ,objs.get(fPosition));
+			objs.set(fPosition,obj);
+		}
+	}
 }

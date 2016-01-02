@@ -193,6 +193,8 @@
     <dimen name="booking_card_height">164dp</dimen>
 
     <dimen name="product_detail_padding_bottom">172dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
     <dimen name="z_filter_seekbar_text_margin">40dp</dimen>
 
