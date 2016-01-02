@@ -13,13 +13,14 @@ public class ZTracker {
 
 		try {
 			// Get tracker.
-			Tracker tracker = ((AppApplication) ctx.getApplicationContext())
-					.getTracker(CommonLib.TrackerName.APPLICATION_TRACKER);
+			if (CommonLib.LogGAEvent) {
+				Tracker tracker = ((AppApplication) ctx.getApplicationContext())
+						.getTracker(CommonLib.TrackerName.APPLICATION_TRACKER);
 
-			// Build and send an Event.
-			tracker.send(new HitBuilders.EventBuilder().setCategory(categoryStr).setAction(actionStr).setLabel(labelStr)
-					.build());
-
+				// Build and send an Event.
+				tracker.send(new HitBuilders.EventBuilder().setCategory(categoryStr).setAction(actionStr).setLabel(labelStr)
+						.build());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
