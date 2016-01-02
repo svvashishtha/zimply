@@ -8,6 +8,7 @@ import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.extras.ParserClass;
 import com.application.zimplyshop.managers.HttpManager;
+import com.application.zimplyshop.preferences.AppPreferences;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -110,6 +111,10 @@ public class UploadManager {
 		protected Object doInBackground(Void... params) {
 			try {
 				HttpPost httpPost = new HttpPost(this.url);
+				httpPost.setHeader("Deviceid", AppPreferences.getDeviceID(mContext));
+				if(AppPreferences.isUserLogIn(mContext)){
+					httpPost.setHeader("Userid", AppPreferences.getUserID(mContext));
+				}
 				// httpPost.addHeader(new BasicHeader("X-API-Key",
 				// CommonLib.APIKEY));
 

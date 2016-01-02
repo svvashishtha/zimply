@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.extras.ParserClass;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.ResponseCacheManager;
 import com.application.zimplyshop.utils.ResponseQuery;
@@ -27,7 +28,7 @@ public class GetRequestManager {
 
     private static volatile GetRequestManager sInstance;
 
-    Context mContext;
+    static Context mContext;
 
     ArrayList<GetRequestListener> callbacks = new ArrayList<GetRequestListener>();
 
@@ -249,7 +250,10 @@ public class GetRequestManager {
 
     public static Object[] fetchhttp(String urlstring) throws Exception {
         HttpGet get = new HttpGet(urlstring);
-
+        get.setHeader("Deviceid", AppPreferences.getDeviceID(mContext));
+        if(AppPreferences.isUserLogIn(mContext)){
+            get.setHeader("Userid", AppPreferences.getUserID(mContext));
+        }
         HttpResponse response = HttpManager.execute(get);
         BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
