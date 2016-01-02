@@ -60,9 +60,10 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
         nameOfUser = (CustomTextViewBold) findViewById(R.id.name_user);
         emailUser = (CustomTextView) findViewById(R.id.email_user);
         pNumber = (CustomTextView) findViewById(R.id.number_user);
-        nameOfUser.setText(AppPreferences.getUserName(ProfileActivity.this));
-        emailUser.setText(AppPreferences.getUserEmail(ProfileActivity.this));
-        pNumber.setText(AppPreferences.getUserPhoneNumber(ProfileActivity.this));
+//        nameOfUser.setText(AppPreferences.getUserName(ProfileActivity.this));
+//        emailUser.setText(AppPreferences.getUserEmail(ProfileActivity.this));
+//        pNumber.setText(AppPreferences.getUserPhoneNumber(ProfileActivity.this));
+        fillHeaderDetails();
         nameAddress = (CustomTextViewBold) findViewById(R.id.name_address);
         addressLine1 = (CustomTextView) findViewById(R.id.address_line1);
         addressLine2 = (CustomTextView) findViewById(R.id.address_line2);
@@ -78,14 +79,20 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
         loadData();
     }
 
+    void fillHeaderDetails() {
+        nameOfUser.setText(AppPreferences.getUserName(ProfileActivity.this));
+        emailUser.setText(AppPreferences.getUserEmail(ProfileActivity.this));
+        pNumber.setText(AppPreferences.getUserPhoneNumber(ProfileActivity.this));
+    }
+
     void fillAddressView(AddressObject addressObject) {
         addressView.setVisibility(View.VISIBLE);
         nameAddress.setText(addressObject.getName());
-        if (addressObject.getLine1()!=null && addressObject.getLine1().length()>0)
+        if (addressObject.getLine1() != null && addressObject.getLine1().length() > 0)
             addressLine1.setText(addressObject.getLine1());
         else
             addressLine1.setVisibility(View.GONE);
-        if (addressObject.getLine2()!=null && addressObject.getLine2().length()>0)
+        if (addressObject.getLine2() != null && addressObject.getLine2().length() > 0)
             addressLine2.setText(addressObject.getLine2());
         else addressLine2.setVisibility(View.GONE);
         numberAddress.setText(addressObject.getPhone());
@@ -115,9 +122,14 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
             if (addressObjectArrayList == null)
                 addressObjectArrayList = new ArrayList<>();
             addressObjectArrayList = (ArrayList<AddressObject>) obj;
-            if (addressObjectArrayList.size() > 0)
+            if (addressObjectArrayList.size() > 0) {
+                addressView.setVisibility(View.VISIBLE);
                 fillAddressView(addressObjectArrayList.get(0));
-            else addressView.setVisibility(View.INVISIBLE);
+            } else {
+                addressView.setVisibility(View.GONE);
+                mainView.invalidate();
+            }
+
         }
     }
 
@@ -156,8 +168,9 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
                 startActivity(intent);
                 break;
             case R.id.settings_view:
-                Intent settingIntent  = new Intent(ProfileActivity.this,SettingsPage.class);
+                Intent settingIntent = new Intent(ProfileActivity.this, SettingsPage.class);
                 startActivity(settingIntent);
+                break;
         }
     }
 
@@ -165,10 +178,12 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     protected void onResume() {
         super.onResume();
         try {
+            fillHeaderDetails();
             if (AllUsers.getInstance().getObjs().size() > 0) {
                 showView();
                 mainView.setVisibility(View.VISIBLE);
                 fillAddressView(AllUsers.getInstance().getObjs().get(0));
+
             } else
                 addressView.setVisibility(View.GONE);
         } catch (Exception e) {
