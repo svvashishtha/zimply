@@ -739,6 +739,11 @@ public class SearchResultsActivity extends BaseActivity implements
     public void resetFilterValues() {
         sortId = -1;
         isFilterApplied = false;
+
+        for (RadioButton radioButton : priceRadioButtonsArrayList) {
+            radioButton.setChecked(false);
+        }
+
         ((CustomCheckBox) findViewById(R.id.zi_experience_tag)).setChecked(false);
         ((CustomRadioButton) findViewById(R.id.high_to_low)).setChecked(false);
         ((CustomRadioButton) findViewById(R.id.low_to_high)).setChecked(false);
@@ -749,10 +754,6 @@ public class SearchResultsActivity extends BaseActivity implements
 
         filterFromTextView.setText(FROM_VALUE + "");
         filterToTextView.setText(TO_VALUE + "");
-
-        for (RadioButton radioButton : priceRadioButtonsArrayList) {
-            radioButton.setChecked(false);
-        }
     }
 
 }

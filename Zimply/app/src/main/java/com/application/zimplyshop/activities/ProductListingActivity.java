@@ -823,11 +823,17 @@ public class ProductListingActivity extends BaseActivity implements
     public void resetFilterValues() {
         sortId = -1;
         isFilterApplied = false;
+
+        for (RadioButton radioButton : priceRadioButtonsArrayList) {
+            radioButton.setChecked(false);
+        }
+
         ((CustomCheckBox) findViewById(R.id.zi_experience_tag)).setChecked(false);
         ((CustomRadioButton) findViewById(R.id.high_to_low)).setChecked(false);
         ((CustomRadioButton) findViewById(R.id.low_to_high)).setChecked(false);
         RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
         seekBar.setNotifyWhileDragging(true);
+        seekBar.setSelectedMinValue(FROM_VALUE);
         seekBar.setSelectedMaxValue(TO_VALUE);
         seekBar.setSelectedMinValue(FROM_VALUE);
         if (subCategoryAdapter != null)
@@ -835,10 +841,6 @@ public class ProductListingActivity extends BaseActivity implements
         filterFromTextView.setText(FROM_VALUE + "");
         filterToTextView.setText(TO_VALUE + "");
         filterApplied = false;
-
-        for (RadioButton radioButton : priceRadioButtonsArrayList) {
-            radioButton.setChecked(false);
-        }
     }
 
 
