@@ -89,15 +89,15 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
             }else{
                 newPos = position;
             }
-            int height = (obj.getProduct_category().get(newPos).getImg().getHeight()*(displayWidth-(2*mContext.getResources().getDimensionPixelSize(R.dimen.margin_small))))/obj.getProduct_category().get(newPos).getImg().getWidth();
+            int height = (obj.getProduct_category().get(newPos).getImg().getHeight()*(displayWidth))/obj.getProduct_category().get(newPos).getImg().getWidth();
 
-            AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+            AbsListView.LayoutParams lp = new AbsListView.LayoutParams(displayWidth, height);
             ((ProductsCategoryViewHolder) holder).parentFrame.setLayoutParams(lp);
             //((ProductsCategoryViewHolder) holder).categoryName.setText(obj.getProduct_category().get(newPos).getName());
 
             //((ProductsCategoryViewHolder) holder).categoryImg.setBackgroundResource(R.drawable.bg_dropshadow);
             if (obj.getProduct_category().get(newPos).getImg().getImage() != null) {
-                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(obj.getProduct_category().get(newPos).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", height, height, false, false);
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(obj.getProduct_category().get(newPos).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", displayWidth, height, false, false);
             }
         } else if(getItemViewType(position) == TYPE_HEADER){
             ((HeaderViewHolder)holder).recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));

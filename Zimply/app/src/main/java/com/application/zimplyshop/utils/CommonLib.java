@@ -122,15 +122,15 @@ public class CommonLib {
 	/**
 	 * Version string
 	 */
-	public static final String VERSION_STRING = "1.0.4";
+	public static final String VERSION_STRING = "1.0.5";
 	/**
 	 * Crashlytics version string
 	 */
-	public static final String CRASHLYTICS_VERSION_STRING = "1.0.4 Live";
+	public static final String CRASHLYTICS_VERSION_STRING = "1.0.5 Live";
 	/**
 	 * Log control
 	 */
-	public final static boolean ZimplyLog = false;
+	public final static boolean ZimplyLog = true;
 	/**
 	 * GA event control
 	 */

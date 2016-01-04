@@ -71,6 +71,7 @@
                         android:visibility="gone" />
                 </FrameLayout>
             </android.support.design.widget.AppBarLayout>
+
             <!-- Helps handing the Fragments to load for each Tab -->
             <FrameLayout
                 android:id="@+id/container"
@@ -106,7 +107,28 @@
         </android.support.design.widget.NavigationView>
 
     </android.support.v4.widget.DrawerLayout>
-
+    <FrameLayout
+        android:id="@+id/notif_tut"
+        android:layout_width="fill_parent"
+        android:visibility="gone"
+        android:layout_height="fill_parent" >
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/notification_tut"
+        android:layout_width="@dimen/padding_top_136"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|end"
+        android:text="New notifications waiting for you."
+        android:layout_marginRight="@dimen/margin_mini"
+        android:layout_marginTop="@dimen/pro_image_size"
+        android:background="@drawable/ic_filter_tut_bg"
+        android:gravity="center"
+        android:paddingTop="@dimen/margin_medium"
+        android:paddingBottom="@dimen/margin_small"
+        android:paddingLeft="@dimen/margin_mini"
+        android:paddingRight="@dimen/margin_mini"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_small" />
+    </FrameLayout>
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >

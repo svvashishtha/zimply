@@ -135,7 +135,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                     } else {
                         AllProducts.getInstance().getHomeProCatNBookingObj().setProduct_category((ArrayList<CategoryObject>) obj);
                         if(productsCategoryGridAdapter == null) {
-                            int width = getDisplayMetrics().widthPixels - (2 * (getResources().getDimensionPixelSize(R.dimen.margin_medium)));
+                            int width = (getDisplayMetrics().widthPixels - (2 * (getResources().getDimensionPixelSize(R.dimen.margin_small))));
                             productsCategoryGridAdapter = new ProductsCategoryGridAdapter(getActivity(), height, width);
                             cateoryList.setAdapter(productsCategoryGridAdapter);
                         }

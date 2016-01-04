@@ -37,6 +37,8 @@ public class AppPreferences {
 	private static final String IS_BARCODE_TUTORIAL_SHOWN="isbarcodetutorialshown";
 	private static final String IS_PLP_TUTORIAL_SHOWN="isplptutorialshown";
 	private static final String IS_FIRST_BOOKING_DONE="isfirstbookingdone";
+	private static final String NOTIFICATION_COUNT="notificationcount";
+
 
 
 
@@ -301,7 +303,7 @@ public class AppPreferences {
     public static String getSavedCityId(Context context) {
 
         SharedPreferences savedSession = context.getSharedPreferences(KEY,
-                Context.MODE_PRIVATE);
+				Context.MODE_PRIVATE);
         return savedSession.getString(USER_CITY_ID, "");
     }
     public static void setSavedPincode(Context context, String text) {
@@ -314,7 +316,7 @@ public class AppPreferences {
     public static String getSavedPincode(Context context) {
 
         SharedPreferences savedSession = context.getSharedPreferences(KEY,
-                Context.MODE_PRIVATE);
+				Context.MODE_PRIVATE);
         return savedSession.getString(USER_PINCODE, "");
     }
 
@@ -397,5 +399,16 @@ public class AppPreferences {
 		SharedPreferences savedSession = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
 		return savedSession.getBoolean(IS_FIRST_BOOKING_DONE, false);
 	}
+	public static int getPreviousNotificationCount(Context context) {
 
+		SharedPreferences savedSession = context.getSharedPreferences(KEY,
+				Context.MODE_PRIVATE);
+		return savedSession.getInt(NOTIFICATION_COUNT, 0);
+	}
+	public static void setPreviousNotificationCount(Context context, int notifCount) {
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
+				.edit();
+		editor.putInt(NOTIFICATION_COUNT, notifCount);
+		editor.commit();
+	}
 }
