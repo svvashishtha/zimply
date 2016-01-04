@@ -177,8 +177,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         setNavigationList();
 
         onNewIntent(getIntent());
-        if (AppPreferences.getNotifModDateTime(this) != 0)
+
         getUserNotificationCount();
+
         if (AppPreferences.isUserLogIn(this))
             phoneVerification();
 
@@ -873,7 +874,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
     }
 
 
-boolean isLoadingBanner;
+    boolean isLoadingBanner;
     private void loadBanner() {
         if(!isLoadingBanner) {
             isLoadingBanner = true;
@@ -1099,6 +1100,19 @@ boolean isLoadingBanner;
             } else {
                 ((TextView) findViewById(R.id.notification_count)).setText(AllNotifications.getsInstance().getNewNotificationCount() + "");
                 findViewById(R.id.notification_count).setVisibility(View.VISIBLE);
+                if(AllNotifications.getsInstance().getNewNotificationCount()!=AppPreferences.getPreviousNotificationCount(this) ){
+
+                    AppPreferences.setPreviousNotificationCount(this,AllNotifications.getsInstance().getNewNotificationCount());
+                    (findViewById(R.id.notif_tut)).setVisibility(View.VISIBLE);
+                    (findViewById(R.id.notif_tut)).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            (findViewById(R.id.notif_tut)).setVisibility(View.GONE);
+                        }
+                    });
+                }else{
+                    (findViewById(R.id.notif_tut)).setVisibility(View.GONE);
+                }
             }
         }
 

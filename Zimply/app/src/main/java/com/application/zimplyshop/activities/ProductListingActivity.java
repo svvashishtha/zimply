@@ -785,11 +785,18 @@ public class ProductListingActivity extends BaseActivity implements
         });
 
         ListView subCategoriesListView = (ListView) findViewById(R.id.subcategory_list);
-        if (subCategoryAdapter == null) {
-            subCategoryAdapter = new SubCategoryAdapter(this, subCategories);
-            subCategoriesListView.setAdapter(subCategoryAdapter);
+        if(subCategories!=null && subCategories.size()>0) {
+            (findViewById(R.id.sub_categories_header)).setVisibility(View.VISIBLE);
+            if (subCategoryAdapter == null) {
+                subCategoryAdapter = new SubCategoryAdapter(this, subCategories);
+                subCategoriesListView.setAdapter(subCategoryAdapter);
+            }
+            CommonLib.setListViewHeightBasedOnChildren(subCategoriesListView);
+
+        }else{
+            (findViewById(R.id.sub_categories_header)).setVisibility(View.GONE);
         }
-        CommonLib.setListViewHeightBasedOnChildren(subCategoriesListView);
+
         findViewById(R.id.apply_filter).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -802,7 +809,7 @@ public class ProductListingActivity extends BaseActivity implements
                 filterApplied = true;
                 requestTime = System.currentTimeMillis();
                 loadData();
-                if (subCategoryAdapter.getSubCategorIds().size() > 0 || isO2o || sortId == 1 || sortId == 2 || priceLte != FROM_VALUE || priceHigh != TO_VALUE) {
+                if ((subCategoryAdapter!=null &&subCategoryAdapter.getSubCategorIds().size() > 0 )|| isO2o || sortId == 1 || sortId == 2 || priceLte != FROM_VALUE || priceHigh != TO_VALUE) {
                     isFilterApplied = true;
                     filterApplied = true;
                 } else {

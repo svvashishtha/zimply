@@ -1,3 +1,4 @@
+
 package com.application.zimplyshop.activities;
 
 import android.animation.Animator;
@@ -323,6 +324,7 @@ public class BaseLoginSignupActivity extends BaseActivity
 				AppPreferences.setUserToken(this, ((SignupObject) respose).getToken());
 				AppPreferences.setUserEmail(this, ((SignupObject) respose).getEmail());
 				AppPreferences.setUserName(this, ((SignupObject) respose).getName());
+				AppPreferences.setUserPhoneNumber(this,((SignupObject) respose).getPhone());
 				AppPreferences.setUserPhoto(this, ((SignupObject) respose).getPhoto());
 				if(fromInside ||isLoggedOut) {
 					loadUserData();

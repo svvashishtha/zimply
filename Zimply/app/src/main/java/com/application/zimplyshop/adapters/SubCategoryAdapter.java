@@ -70,7 +70,7 @@ public class SubCategoryAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (subCategorIds.contains(objs.get(position).getId())) {
-                    subCategorIds.remove(objs.get(position).getId());
+                    subCategorIds.remove((Integer)objs.get(position).getId());
                 } else {
                     subCategorIds.add(objs.get(position).getId());
                 }

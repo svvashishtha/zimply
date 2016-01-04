@@ -37,7 +37,7 @@ public abstract class BarcodeScannerView extends FrameLayout implements PreviewC
         this.mPreview = new CameraPreview(this.getContext());
         RelativeLayout relativeLayout = new RelativeLayout(this.getContext());
         relativeLayout.setGravity(17);
-        relativeLayout.setBackgroundColor(this.getContext().getResources().getColor(R.color.blue_header_normal));
+        relativeLayout.setBackgroundColor(this.getContext().getResources().getColor(R.color.white));
         relativeLayout.addView(this.mPreview);
         this.addView(relativeLayout);
         this.mViewFinderView = this.createViewFinderView(this.getContext());

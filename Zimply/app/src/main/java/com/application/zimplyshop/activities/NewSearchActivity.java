@@ -330,7 +330,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         startActivity(intent);
     }
 
-    public void moveToProductDetail(long productId , String slug){
+    public void moveToProductDetail(int productId , String slug){
         Intent intent = new Intent(this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
@@ -339,7 +339,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
     }
     ProgressDialog progressDialog;
 
-    long productId;
+    int productId;
 
     String slug;
 
@@ -410,7 +410,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         }
     }
 
-    public void addScannedObjToCart(long id,String slug){
+    public void addScannedObjToCart(int id,String slug){
         if (AppPreferences.isUserLogIn(this)) {
             if(AllProducts.getInstance().cartContains((int)id)){
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
