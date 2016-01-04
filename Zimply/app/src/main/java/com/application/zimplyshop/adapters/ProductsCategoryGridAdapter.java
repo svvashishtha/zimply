@@ -93,10 +93,18 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_CATEGORY) {
             int newPos;
-            if (obj.getLatest_bookings().size() > 0) {
-                newPos = position - 2;
+            if (offersObject != null && offersObject.getOffers().size() > 0) {
+                if (obj.getLatest_bookings().size() > 0) {
+                    newPos = position - 2 - 1;
+                } else {
+                    newPos = position - 1;
+                }
             } else {
-                newPos = position;
+                if (obj.getLatest_bookings().size() > 0) {
+                    newPos = position - 2;
+                } else {
+                    newPos = position;
+                }
             }
             int height = (obj.getProduct_category().get(newPos).getImg().getHeight() * (displayWidth)) / obj.getProduct_category().get(newPos).getImg().getWidth();
 
@@ -234,6 +242,9 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
             ImageView button = new ImageView(container.getContext());
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             button.setLayoutParams(params);
+
+            if (offersObject.getOffers().get(position).getImage() != null)
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(offersObject.getOffers().get(position).getImage(), button, "users", displayWidth, height, false, false);
 
             container.addView(button);
             return button;

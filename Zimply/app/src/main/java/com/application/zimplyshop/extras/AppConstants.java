@@ -68,7 +68,7 @@ public interface AppConstants {
     String ARTICLE_PHOTO_CATEGROY_DIALOG_TAG = "articlefiltercategorydialogtag";
     String ARTICLE_SORT_CATEGROY_DIALOG_TAG = "articlesortfiltercategorydialogtag";
 
-    String OFFERS_LIST_URL = "explore/offers/";
+    String OFFERS_LIST_URL = "explore/shop/";
 
     int TYPE_CATEGORY = 1;
     int TYPE_SUB_CATEGORY = 2;
