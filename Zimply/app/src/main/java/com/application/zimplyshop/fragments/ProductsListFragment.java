@@ -14,6 +14,7 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductsCategoryGridAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.CategoryObject;
+import com.application.zimplyshop.baseobjects.OffersObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -35,6 +36,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     private boolean destroyed;
     private int height;
     double requestTime = 0;
+    private boolean isOffersLoading = false;
 
     public static ProductsListFragment newInstance(Bundle bundle) {
         ProductsListFragment fragment = new ProductsListFragment();
@@ -120,6 +122,8 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
             }
         } else if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.LATEST_BOOKINGS_TAG)) {
             isBookingsLoading = true;
+        } else if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.OFFERS_REQUEST_TAG)) {
+            isOffersLoading = true;
         }
     }
 
@@ -144,7 +148,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
 
                         showView();
                         changeViewVisiblity(cateoryList, View.VISIBLE);
-                        loadBookingData();
+                        loadOffersData();
                     }
                 } else {
                     Toast.makeText(mActivity, "Something went wrong. Please try again..", Toast.LENGTH_SHORT).show();
@@ -163,7 +167,17 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                 productsCategoryGridAdapter.addLatestBookingsData(null);
             }
             isBookingsLoading = false;
+        } else if (!destroyed && requestTag != null && requestTag.equalsIgnoreCase(RequestTags.OFFERS_REQUEST_TAG)) {
+            OffersObject offersData = (OffersObject) obj;
+            productsCategoryGridAdapter.addOffersData(offersData);
+            isOffersLoading = false;
+            loadBookingData();
         }
+    }
+
+    public void loadOffersData() {
+        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.OFFERS_LIST_URL + "?userid=" + AppPreferences.getUserID(getActivity());
+        GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.OFFERS_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_OFFERS_REQUEST_OBJ);
     }
 
     public void loadBookingData() {
@@ -182,6 +196,8 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
             }
         } else if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.PRODUCT_CATEGORY_REQUEST_TAG)) {
             isBookingsLoading = false;
+        } else if (requestTag != null && requestTag.equalsIgnoreCase(RequestTags.OFFERS_REQUEST_TAG)) {
+            isOffersLoading = false;
         }
     }
 }

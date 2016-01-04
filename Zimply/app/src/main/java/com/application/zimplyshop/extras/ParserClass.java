@@ -13,6 +13,7 @@ import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ImageObject;
 import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.baseobjects.MyWishListObject;
+import com.application.zimplyshop.baseobjects.OffersObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
 import com.application.zimplyshop.objects.AllCategories;
@@ -206,7 +207,7 @@ public class ParserClass implements ObjectTypes {
                 return parentCategory;
             }
             case OBJECT_TYPE_PRODUCT_DETAIL:
-                return new Gson().fromJson(responseString,HomeProductObj.class);
+                return new Gson().fromJson(responseString, HomeProductObj.class);
             case OBJECT_TYPE_ALL_BOOKED_PRODUCTS:
 
                 return new Gson().fromJson(responseString, BookedProductHistoryObject.class);
@@ -604,7 +605,7 @@ public class ParserClass implements ObjectTypes {
                             ArrayList<CategoryObject> cities = new ArrayList<CategoryObject>();
                             for (int i = 0; i < citiesArr.length(); i++) {
                                 JSONObject cityObject = citiesArr.getJSONObject(i);
-                                if(cityObject.getBoolean("serve")) {
+                                if (cityObject.getBoolean("serve")) {
                                     CategoryObject city = new CategoryObject();
                                     if (cityObject.has("id"))
                                         city.setId(String.valueOf(cityObject.get("id")));
@@ -665,8 +666,7 @@ public class ParserClass implements ObjectTypes {
                 return new Gson().fromJson(JSONUtils.getJSONObject(JSONUtils.getJSONObject(responseString), "context").toString(), ProductVendorTimeObj.class);
             case OBJECT_TYPE_REMOVE_PRODUCT_REVIEW:
                 return responseString;
-            case OBJECT_TYPE_PHONE_VERIFICATION:
-            {
+            case OBJECT_TYPE_PHONE_VERIFICATION: {
                 Object[] responseObj = new Object[2];
                 try {
                     JSONObject phoneVerificationJson = new JSONObject(responseString);
@@ -705,8 +705,7 @@ public class ParserClass implements ObjectTypes {
                 }
                 return response;
             }
-            case OBJECT_TYPE_PHONE_VERIFICATION_OTP:
-            {
+            case OBJECT_TYPE_PHONE_VERIFICATION_OTP: {
                 String response = "";
                 try {
                     JSONObject phoneVerificationJson = new JSONObject(responseString);
@@ -726,15 +725,15 @@ public class ParserClass implements ObjectTypes {
             case OBJECT_TYPE_NOTIFICATION_LIST_OBJ:
                 return AllNotifications.getsInstance().parseNotifListData(responseString);
             case OBJECT_TYPE_NOTIFICATION_COUNT:
-                AllNotifications.getsInstance().setNewNotificationCount(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(responseString),"notifications"));
+                AllNotifications.getsInstance().setNewNotificationCount(JSONUtils.getIntegerfromJSON(JSONUtils.getJSONObject(responseString), "notifications"));
                 return true;
             case OBJECT_TYPE_LATEST_BOOKKING_OBJ:
                 ArrayList<LatestBookingObject> latestBookingObjects = new ArrayList<LatestBookingObject>();
 
-                JSONArray latestBookingArr = JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString),"bookings");
+                JSONArray latestBookingArr = JSONUtils.getJSONArray(JSONUtils.getJSONObject(responseString), "bookings");
 
-                for(int i= 0 ; i < latestBookingArr.length() ; i++ ){
-                    latestBookingObjects.add(new Gson().fromJson(JSONUtils.getJSONObject(latestBookingArr,i).toString(),LatestBookingObject.class));
+                for (int i = 0; i < latestBookingArr.length(); i++) {
+                    latestBookingObjects.add(new Gson().fromJson(JSONUtils.getJSONObject(latestBookingArr, i).toString(), LatestBookingObject.class));
                 }
                 /*try {
                     JSONObject latestBookingJson = new JSONObject(responseString);
@@ -915,12 +914,14 @@ public class ParserClass implements ObjectTypes {
                 return responseString;
             case OBJECT_TYPE_CHANGE_PASSWORD:
                 try {
-                    return JSONUtils.getStringfromJSON(new JSONObject(responseString),"success");
+                    return JSONUtils.getStringfromJSON(new JSONObject(responseString), "success");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             case OBJECT_TYPE_NOTIFICATION_SWITCH:
                 return responseString;
+            case OBJECT_TYPE_OFFERS_REQUEST_OBJ:
+                return new Gson().fromJson(responseString, OffersObject.class);
             default:
                 return null;
         }

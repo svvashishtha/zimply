@@ -198,4 +198,6 @@
 
     <dimen name="z_filter_seekbar_text_margin">40dp</dimen>
 
+    <dimen name="products_list_fragment_offer_layout_height">250dp</dimen>
+
 </resources>

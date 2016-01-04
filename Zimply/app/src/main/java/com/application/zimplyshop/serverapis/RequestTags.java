@@ -31,6 +31,7 @@ public interface RequestTags {
     String BANNER_REQUEST_TAG = "bannerrequesttag";
     String LATEST_NOTIFICATION_COUNT_TAG = "latestnotifcounttext";
     String LATEST_BOOKINGS_TAG = "latestbookingtag";
+    String OFFERS_REQUEST_TAG = "offersrequesttag";
 
 
     String FAV_LIST_REQUEST_TAG = "favlistrequesttag";
