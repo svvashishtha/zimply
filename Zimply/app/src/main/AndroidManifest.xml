@@ -258,6 +258,9 @@
                     android:host="www.zimply.in"
                     android:pathPrefix="/shop-product/"
                     android:scheme="http" />
+                <data android:host="www.zimply.in"
+                    android:pathPrefix="/shop/"
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.managers.GcmNotificationManager;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.receivers.GcmBroadcastReceiver;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.JSONUtils;
@@ -67,27 +68,29 @@ public class GCMIntentService extends IntentService implements AppConstants {
     }
 
     private void sendNotification(Bundle bundle) {
-        GcmNotificationManager gcmNotificationManager = null;//.showUpdatedCustomNotification(notification_id);
+        if (AppPreferences.getNotificationEnabled(context)) {
+            GcmNotificationManager gcmNotificationManager = null;//.showUpdatedCustomNotification(notification_id);
 
-        JSONObject obj = JSONUtils.getJSONObject(bundle.getString("message"));
-        if (obj != null) {
-            String message = JSONUtils.getStringfromJSON(obj, "message");
-            String imageUrl = JSONUtils.getStringfromJSON(obj, "img");
-            System.out.println("GcmObject" + obj.toString());
-            int type = JSONUtils.getIntegerfromJSON(obj, "type");
-            int notificationType = JSONUtils.getIntegerfromJSON(obj, "expand");
-            String slug = JSONUtils.getStringfromJSON(obj, "slug");
-            if (gcmNotificationManager == null) {
-                gcmNotificationManager = new GcmNotificationManager(context);
-            }
-            if (notificationType == 1) {
-                gcmNotificationManager.showCustomNotification(message,
-                        type, slug);
-            } else {
-                gcmNotificationManager.showBigImageNotification(imageUrl,
-                        message, type, slug);
-            }
+            JSONObject obj = JSONUtils.getJSONObject(bundle.getString("message"));
+            if (obj != null) {
+                String message = JSONUtils.getStringfromJSON(obj, "message");
+                String imageUrl = JSONUtils.getStringfromJSON(obj, "img");
+                System.out.println("GcmObject" + obj.toString());
+                int type = JSONUtils.getIntegerfromJSON(obj, "type");
+                int notificationType = JSONUtils.getIntegerfromJSON(obj, "expand");
+                String slug = JSONUtils.getStringfromJSON(obj, "slug");
+                if (gcmNotificationManager == null) {
+                    gcmNotificationManager = new GcmNotificationManager(context);
+                }
+                if (notificationType == 1) {
+                    gcmNotificationManager.showCustomNotification(message,
+                            type, slug);
+                } else {
+                    gcmNotificationManager.showBigImageNotification(imageUrl,
+                            message, type, slug);
+                }
 
+            }
         }
 
 

@@ -21,7 +21,7 @@
             android:paddingBottom="@dimen/size20"
             android:paddingLeft="@dimen/size20"
             android:paddingTop="@dimen/size20"
-            android:text="Notification"
+            android:text="Notifications"
             android:textColor="@color/zdhl3"
             android:textSize="@dimen/size18" />
 

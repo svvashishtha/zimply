@@ -38,6 +38,7 @@ public class AppPreferences {
 	private static final String IS_PLP_TUTORIAL_SHOWN="isplptutorialshown";
 	private static final String IS_FIRST_BOOKING_DONE="isfirstbookingdone";
 	private static final String NOTIFICATION_COUNT="notificationcount";
+	private static final String NOTIFICATION_ENABLE="notificationenabled";
 
 
 
@@ -290,7 +291,7 @@ public class AppPreferences {
     public static String getSavedLocality(Context context) {
 
         SharedPreferences savedSession = context.getSharedPreferences(KEY,
-                Context.MODE_PRIVATE);
+				Context.MODE_PRIVATE);
         return savedSession.getString(USER_LOCATION, "");
     }
     public static void setSavedCityId(Context context, String text) {
@@ -410,5 +411,17 @@ public class AppPreferences {
 				.edit();
 		editor.putInt(NOTIFICATION_COUNT, notifCount);
 		editor.commit();
+	}
+
+	public static void setIsNotificationEnabled(Context context, boolean isNotifocation) {
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+		editor.putBoolean(NOTIFICATION_ENABLE, isNotifocation);
+		editor.commit();
+	}
+	public static boolean getNotificationEnabled(Context context) {
+
+		SharedPreferences savedSession = context.getSharedPreferences(KEY,
+				Context.MODE_PRIVATE);
+		return savedSession.getBoolean(NOTIFICATION_ENABLE, true);
 	}
 }

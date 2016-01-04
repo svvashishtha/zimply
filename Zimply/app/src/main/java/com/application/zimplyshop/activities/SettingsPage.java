@@ -258,6 +258,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
 
             try {
                 notificationSwitch = JSONUtils.getJSONObject((String) obj).getBoolean("status");
+                AppPreferences.setIsNotificationEnabled(SettingsPage.this,notificationSwitch);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -354,6 +355,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
                 String url = AppApplication.getInstance().getBaseUrl() + AppConstants.NOTIFICATION_SWITCH;
                 List<NameValuePair> nameValuePair = new ArrayList<>();
                 notificationSwitch = status;
+                AppPreferences.setIsNotificationEnabled(SettingsPage.this,status);
                 nameValuePair.add(new BasicNameValuePair("device_id", AppPreferences.getDeviceID(SettingsPage.this)));
                 nameValuePair.add(new BasicNameValuePair("status", status ? "1" : "0"));
                 UploadManager.getInstance().makeAyncRequest(url, NOTIFICATION_SWITCH_TAG_INT, "",
