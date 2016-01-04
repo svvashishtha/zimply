@@ -239,15 +239,14 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ImageView button = new ImageView(container.getContext());
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            button.setLayoutParams(params);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.products_list_fragment_offer_image_layout, container, false);
+            ImageView image = (ImageView) view.findViewById(R.id.offerimage);
 
             if (offersObject.getOffers().get(position).getImage() != null)
-                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(offersObject.getOffers().get(position).getImage(), button, "users", displayWidth, height, false, false);
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(offersObject.getOffers().get(position).getImage(), image, "users", displayWidth, height, false, false);
 
-            container.addView(button);
-            return button;
+            container.addView(view);
+            return view;
         }
 
         @Override
