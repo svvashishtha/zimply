@@ -59,7 +59,7 @@ public interface AppConstants {
     String LATEST_BOOKINGS = "ecommerce/latest-bookings/";
     String GET_ORDER_SUMMARY_URL = "ecommerce/order-summ/";
     String GET_CITY_FROM_PINCODE = "ecommerce/get-city/";
-    String GET_BANNER_REQUEST="explore/get-banner/";
+    String GET_BANNER_REQUEST = "explore/get-banner/";
 
     String FILTER_CATEGORY_FRAGMENT_TAG = "filtercategoryfragmenttag";
     String FILTER_SUBCATEGORY_FRAGMENT_TAG = "filtersubcategoryfragmenttag";
@@ -149,14 +149,15 @@ public interface AppConstants {
     String PHONE_VERIFICATION = "zimply-auth/mobile/";
     String PHONE_VERIFICATION_INPUT_DIALOG = "zimply-auth/mobile/";
 
+    String NOTIFICATION_SWITCH = "notification/check-notification";
+
     int CANCEL_ORDER = 2;
     int RETURN_ORDER = 6;
 
 
-
     int BANNER_TYPE_WEBVIEW = 1;
     int BANNER_TYPE_SCAN_OFFLINE = 2;
-    int BANNER_TYPE_PRODUCT_LISTING=3;
+    int BANNER_TYPE_PRODUCT_LISTING = 3;
     int BANNER_TYPE_PRODUCT_DETAIL = 4;
     int BANNER_TYPE_HOME = 5;
 

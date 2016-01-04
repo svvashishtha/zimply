@@ -919,6 +919,8 @@ public class ParserClass implements ObjectTypes {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            case OBJECT_TYPE_NOTIFICATION_SWITCH:
+                return responseString;
             default:
                 return null;
         }

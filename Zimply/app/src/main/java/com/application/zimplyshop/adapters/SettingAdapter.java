@@ -24,6 +24,7 @@ import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomButton;
+import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomEdittext;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 
@@ -41,6 +42,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
     private Timer timer;
     String otp;
     private boolean refreshView = false;
+    private boolean notificationSwitch;
 
     public SettingAdapter(Context context) {
         this.context = context;
@@ -64,13 +66,21 @@ public class SettingAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         if (position == 1)
             return 1;
+        else if (position == 2)
+            return 2;
         else return 0;
+    }
+
+    public void setNotificationStatus(boolean notificationSwitch) {
+        this.notificationSwitch = notificationSwitch;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == 0)
             return new ItemHolderPhone(LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_row, parent, false));
+        else if (viewType == 2)
+            return new ItemHolderNotification(LayoutInflater.from(parent.getContext()).inflate(R.layout.notifiaction_turn_off_row_layout, parent, false));
         else
             return new ItemHolderPassword(LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_row_password, parent, false));
     }
@@ -266,30 +276,30 @@ public class SettingAdapter extends RecyclerView.Adapter {
                                     itemHolderPassword.confirmPassword.getText().toString().trim().length() > 8) {
 
                                 if (itemHolderPassword.newPassword.getText().toString()
-                                    .equalsIgnoreCase(itemHolderPassword.confirmPassword.getText().toString())) {
-                                try {
-                                    CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                        .equalsIgnoreCase(itemHolderPassword.confirmPassword.getText().toString())) {
+                                    try {
+                                        CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
 
-                                //send request via activity
-                                mListener.sendPasswordRequest(itemHolderPassword.newPassword.getText().toString(),
-                                        itemHolderPassword.oldpassword.getText().toString());
+                                    //send request via activity
+                                    mListener.sendPasswordRequest(itemHolderPassword.newPassword.getText().toString(),
+                                            itemHolderPassword.oldpassword.getText().toString());
+                                } else {
+                                    Toast.makeText(context, "Passwords must match", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                Toast.makeText(context, "Passwords must match", Toast.LENGTH_SHORT).show();
-                            }
-                        }else {
                                 Toast.makeText(context, "Password must be 8 characters long.", Toast.LENGTH_SHORT).show();
                             }
 
@@ -301,6 +311,26 @@ public class SettingAdapter extends RecyclerView.Adapter {
             }
 
         } else if (position == 2) {
+            final ItemHolderNotification holderNotification = (ItemHolderNotification) holder;
+            holderNotification.nSwitch.setChecked(notificationSwitch);
+            holderNotification.nSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setCounter(1);
+                    notifyItemChanged(0);
+                    notifyItemChanged(1);
+
+                    notificationSwitch = !notificationSwitch;
+                    mListener.sendNotificationToggleRequest(notificationSwitch);
+                }
+            });
+            holderNotification.itemView.findViewById(R.id.number).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holderNotification.nSwitch.performClick();
+                }
+            });
+        } else if (position == 3) {
             //this view is constant. all other views will be minimised when this is selected
             final ItemHolderPhone itemHolder = (ItemHolderPhone) holder;
             itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
@@ -357,7 +387,16 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
+    }
+
+    class ItemHolderNotification extends RecyclerView.ViewHolder {
+        CustomCheckBox nSwitch;
+
+        public ItemHolderNotification(View itemView) {
+            super(itemView);
+            nSwitch = (CustomCheckBox) itemView.findViewById(R.id.notification_switch);
+        }
     }
 
     class ItemHolderPhone extends RecyclerView.ViewHolder {
@@ -397,6 +436,8 @@ public class SettingAdapter extends RecyclerView.Adapter {
         void sendPasswordRequest(String newPassword, String oldPassword);
 
         void verifyOtp(String otp);
+
+        void sendNotificationToggleRequest(boolean status);
     }
 
     int seconds = 60;
