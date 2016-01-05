@@ -28,4 +28,23 @@
         android:layout_marginTop="@dimen/margin_small"
         android:textColor="@color/heading_text_color"
         android:text="Order Id - 267236276"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="@dimen/margin_small">
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:textColor="@color/heading_text_color"
+            android:text="Total amount to be paid "/>
+
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:id="@+id/total_to_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:textColor="@color/accept_green_color"
+            android:text="Rs 500"/>
+    </LinearLayout>
 </LinearLayout>

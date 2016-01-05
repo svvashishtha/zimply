@@ -284,7 +284,7 @@ public class MyCartAdapter extends RecyclerView.Adapter {
         ImageView product_image, cancelCartItem,buyOfflineTag;
         View quantityView;
         CustomTextView subTotal,shippingPrice,totalPrice,isCocText,shortTotal;
-        LinearLayout shortSubTotalLayout,priceDescLayout,moveToWishlist,removeItem,productCard;
+        LinearLayout shortSubTotalLayout,priceDescLayout,moveToWishlist,removeItem,productCard,discountLayout;
 
 
         public CartItemHolder(View itemView) {
@@ -317,19 +317,23 @@ public class MyCartAdapter extends RecyclerView.Adapter {
             removeItem = (LinearLayout)itemView.findViewById(R.id.remove_item);
             productCard = (LinearLayout)itemView.findViewById(R.id.product_card);
             itemCount = (TextView)itemView.findViewById(R.id.item_count);
+            discountLayout = (LinearLayout)itemView.findViewById(R.id.applied_coupon_discount);
+            discountLayout.setVisibility(View.GONE);
         }
     }
 
 
     public class SummaryHolder extends RecyclerView.ViewHolder {
         TextView totalPayment, checkCoupon, shipping, totalSum;
-
+        LinearLayout discountLayout;
         public SummaryHolder(View itemView) {
             super(itemView);
             totalPayment = (TextView) itemView.findViewById(R.id.total_payment);
 
             shipping = (TextView) itemView.findViewById(R.id.shipping_charges);
             totalSum = (TextView) itemView.findViewById(R.id.total_sum);
+            discountLayout = (LinearLayout)itemView.findViewById(R.id.applied_coupon_discount);
+            discountLayout.setVisibility(View.GONE);
         }
     }
 }

@@ -20,6 +20,16 @@ public class CartProductDetail implements Serializable{
 
     int qty;
 
+    int couponDiscount;
+
+    public int getCouponDiscount() {
+        return couponDiscount;
+    }
+
+    public void setCouponDiscount(int couponDiscount) {
+        this.couponDiscount = couponDiscount;
+    }
+
     public int getQty() {
         return qty;
     }

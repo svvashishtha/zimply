@@ -574,56 +574,68 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                         }
                     });
                 }else{
-                    changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_down_black);
-                    ((ProductInfoHolder4)holder).descTitle.setText("Care");
-                    ((ProductInfoHolder4)holder).descLayout.setVisibility(View.GONE);
-                    if(isCareShown){
-                        changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_up_black);
-                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getProduct().getCare()));
-                        ((ProductInfoHolder4)holder).descText.setVisibility(View.VISIBLE);
-                    }else{
-                        changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_down_black);
-                        ((ProductInfoHolder4)holder).descText.setVisibility(View.GONE);
-                    }
-                    ((ProductInfoHolder4)holder).descTitle.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
 
-                            if(isCareShown){
-                                isCareShown = false;
-                            }else{
-                                isCareShown = true;
-                            }
-                            notifyItemChanged(position);
+                    if(obj.getProduct().getCare().trim().length()>0) {
+                        changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
+                        ((ProductInfoHolder4) holder).descTitle.setText("Care");
+                        ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
+                        if (isCareShown) {
+                            changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
+                            ((ProductInfoHolder4) holder).descText.setText(Html.fromHtml(obj.getProduct().getCare()));
+                            ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                        } else {
+                            changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
+                            ((ProductInfoHolder4) holder).descText.setVisibility(View.GONE);
                         }
-                    });
+                        ((ProductInfoHolder4) holder).descTitle.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                if (isCareShown) {
+                                    isCareShown = false;
+                                } else {
+                                    isCareShown = true;
+                                }
+                                notifyItemChanged(position);
+                            }
+                        });
+                    }else{
+                        ((ProductInfoHolder4) holder).descTitle.setVisibility(View.GONE);
+                        ((ProductInfoHolder4) holder).descText.setVisibility(View.GONE);
+                        ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
+                    }
                 }
             }else if(position == 6){
-                if(obj.getProduct().is_o2o()){
-                    ((ProductInfoHolder4)holder).descLayout.setVisibility(View.GONE);
-                    changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_down_black);
-                    ((ProductInfoHolder4)holder).descTitle.setText("Care");
-                    if(isCareShown){
-                        ((ProductInfoHolder4)holder).descText.setVisibility(View.VISIBLE);
-                        ((ProductInfoHolder4)holder).descText.setText(Html.fromHtml(obj.getProduct().getCare()));
-                        changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
-                    }else{
-                        ((ProductInfoHolder4)holder).descText.setVisibility(View.GONE);
+                if(obj.getProduct().is_o2o()) {
+                    if (obj.getProduct().getCare().trim().length() > 0){
+                        ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
-                    }
-                    ((ProductInfoHolder4)holder).descTitle.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            if(isCareShown){
-                                isCareShown = false;
-                            }else{
-                                isCareShown = true;
-                            }
-                            notifyItemChanged(position);
+                        ((ProductInfoHolder4) holder).descTitle.setText("Care");
+                        if (isCareShown) {
+                            ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                            ((ProductInfoHolder4) holder).descText.setText(Html.fromHtml(obj.getProduct().getCare()));
+                            changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
+                        } else {
+                            ((ProductInfoHolder4) holder).descText.setVisibility(View.GONE);
+                            changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
                         }
-                    });
+                        ((ProductInfoHolder4) holder).descTitle.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                if (isCareShown) {
+                                    isCareShown = false;
+                                } else {
+                                    isCareShown = true;
+                                }
+                                notifyItemChanged(position);
+                            }
+                        });
+                    }else{
+                        ((ProductInfoHolder4) holder).descText.setVisibility(View.GONE);
+                        ((ProductInfoHolder4) holder).descTitle.setVisibility(View.GONE);
+                        ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
+                    }
                 }else{
                     ((ProductInfoHolder4)holder).descLayout.setVisibility(View.GONE);
                     changeDrawableRight(((ProductInfoHolder4)holder).descTitle,R.drawable.ic_down_black);

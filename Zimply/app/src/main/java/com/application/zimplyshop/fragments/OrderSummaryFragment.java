@@ -174,10 +174,13 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         return s.toString();
     }
 
+    boolean isCouponApplied;
+
+    String couponCode;
+
     private void loadCartData() {
         requestTimeOrder = System.currentTimeMillis();
-        String url = AppApplication.getInstance().getBaseUrl() + GET_ORDER_SUMMARY_URL + "?src=mob&ids=" + productIds + "&quantity=" + quantity;
-
+        String url = AppApplication.getInstance().getBaseUrl() + GET_ORDER_SUMMARY_URL + "?ids=" + productIds + "&quantity=" + quantity +(isCouponApplied?"&coupon_code="+couponCode:"");
         GetRequestManager.getInstance().makeAyncRequest(url, GET_ORDER_SUMMARY, OBJECT_TYPE_CART);
     }
 
@@ -274,8 +277,10 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 showLoadingView();
                 changeViewVisiblity(mListView, View.GONE);
                 changeViewVisiblity(buyLayout, View.GONE);
+            }else if(isCouponApplied){
+                zProgressDialog= ProgressDialog.show(getActivity(),null,"Applying coupon. Please wait..");
             }else{
-                zProgressDialog= ProgressDialog.show(getActivity(),null,"Updating order Please wait");
+                zProgressDialog= ProgressDialog.show(getActivity(),null,"Updating order. Please wait..");
             }
             //view.findViewById(R.id.save).setVisibility(View.GONE);
         }
@@ -325,6 +330,10 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 showNullCaseView("No Items");
                 changeViewVisiblity(mListView, View.GONE);
                 changeViewVisiblity(buyLayout, View.GONE);
+            }
+            isCouponApplied = false;
+            if(((CartObject) obj).getCart().getError()!=null && ((CartObject) obj).getCart().getError().trim().length()>0){
+                Toast.makeText(getActivity(),((CartObject) obj).getCart().getError().trim(),Toast.LENGTH_LONG).show();
             }
 
         } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART)) {/*
@@ -555,6 +564,13 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 bundle.putBoolean("isBilling", false);
                 ((ProductCheckoutActivity) mActivity).setAddressSelectionFragmentWithBackstack(bundle);
             }
+
+            @Override
+            public void onApplyCoupon(String code) {
+                isCouponApplied=true;
+                couponCode = code;
+                loadCartData();
+            }
         });
         mListView.setAdapter(mAdapter);
         ((CustomTextViewBold) view.findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " + "<font color=#0093b8>" + getResources().getString(R.string.rs_text) + " " + cartObject.getCart().getTotal_price() + "</font>"));
@@ -702,6 +718,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         list.add(new BasicNameValuePair("src", "mob"));
         list.add(new BasicNameValuePair("ids", productIds));
         list.add(new BasicNameValuePair("quantity", quantity));
+        list.add(new BasicNameValuePair("coupon_code", cartObject.getCart().getCoupon_code()));
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
         list.add(new BasicNameValuePair("billing_address", shippingAddress.getName() + ", " + shippingAddress.getLine1() +
                 ", " + shippingAddress.getLine2() + ", " + shippingAddress.getCity() + ", " + shippingAddress.getPincode()));

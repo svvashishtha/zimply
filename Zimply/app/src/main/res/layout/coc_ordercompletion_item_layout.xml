@@ -129,7 +129,80 @@
           android:background="@color/separator_color"></View>
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
+                    android:paddingTop="@dimen/margin_small">
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/heading_text_color"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:text="Total"/>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/total_value"
+            android:layout_width="wrap_content"
+            android:textColor="@color/text_color1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:text="To Pay"/>
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/shipping_layout"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
+                    android:paddingTop="@dimen/margin_small">
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/heading_text_color"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:text="Shipping Charge"/>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/shipping_value"
+            android:layout_width="wrap_content"
+            android:textColor="@color/text_color1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:text="To Pay"/>
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/discount_layout"
+                    android:paddingLeft="@dimen/margin_small"
+                    android:paddingRight="@dimen/margin_small"
+                    android:paddingTop="@dimen/margin_small">
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/discount"
+            android:layout_width="wrap_content"
+            android:textColor="@color/heading_text_color"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:text="Discount"/>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/discount_value"
+            android:layout_width="wrap_content"
+            android:textColor="@color/text_color1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium"
+            android:text="To Pay"/>
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:padding="@dimen/margin_small">
+
         <com.application.zimplyshop.widgets.CustomTextViewBold
             android:id="@+id/to_pay"
             android:layout_width="wrap_content"

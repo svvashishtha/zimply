@@ -16,9 +16,39 @@ public class CartDetailObject implements Serializable{
 
     private int total_price;
 
+    private int total_discount;
+
+    private String error;
+
+    private String coupon_code;
+
+    public String getCoupon_code() {
+        return coupon_code;
+    }
+
+    public void setCoupon_code(String coupon_code) {
+        this.coupon_code = coupon_code;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     private ArrayList<CartProductDetail> detail;
 
     private int cart_id;
+
+    public int getTotal_discount() {
+        return total_discount;
+    }
+
+    public void setTotal_discount(int total_discount) {
+        this.total_discount = total_discount;
+    }
 
     public int getTotal_shipping() {
         return total_shipping;

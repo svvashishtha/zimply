@@ -22,12 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
+import com.application.zimplyshop.activities.ProductCheckoutActivity;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.baseobjects.CartObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
@@ -73,7 +73,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             return ITEM_TYPE_ADDRESS;
         else if (position <= (cartObject.getCart().getDetail().size()))
             return ITEM_TYPE_CART_ITEM;
-        else if(position <= (cartObject.getCart().getDetail().size())){
+        else if(position == (cartObject.getCart().getDetail().size()+1)){
             return ITEM_TYPE_APPLY_COUPON;
         } else return ITEM_TYPE_SUMMARY;
     }
@@ -173,14 +173,24 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
 
 
             holder.itemCount.setText("#Item "+(position));
+
+            if(cartObject.getCart().getDetail().get(position - 1).getCouponDiscount()==0){
+                holder.discountLayout.setVisibility(View.GONE);
+            }else{
+                holder.discountLayout.setVisibility(View.VISIBLE);
+                holder.discountApplied.setText("- "+context.getString(R.string.rs_text)+" "+(cartObject.getCart().getDetail().get(position - 1).getQty()*cartObject.getCart().getDetail().get(position - 1).getCouponDiscount()));
+            }
+
             holder.quantity.setText(cartObject.getCart().getDetail().get(position - 1).getQty()+"");
             holder.subTotal.setText(context.getResources().getString(R.string.Rs)+" " +(cartObject.getCart().getDetail().get(position - 1).getQty()* cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()));
             holder.shippingPrice.setText(cartObject.getCart().getDetail().get(position - 1).getShipping_charge()==0?"Free":
                     context.getString(R.string.rs_text)+" "+(cartObject.getCart().getDetail().get(position - 1).getQty()*cartObject.getCart().getDetail().get(position - 1).getShipping_charge()));
             holder.totalPrice.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position - 1).getShipping_charge() == 0 ?
-                    (cartObject.getCart().getDetail().get(position - 1).getQty()
-                            * cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()) :
-                    ((cartObject.getCart().getDetail().get(position - 1).getQty() * cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()) + (cartObject.getCart().getDetail().get(position - 1).getQty()*cartObject.getCart().getDetail().get(position - 1).getShipping_charge()))));
+                    ((cartObject.getCart().getDetail().get(position - 1).getQty()
+                            * cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice())
+                            -(cartObject.getCart().getDetail().get(position - 1).getQty()*(cartObject.getCart().getDetail().get(position - 1).getCouponDiscount()))) :
+                    ((cartObject.getCart().getDetail().get(position - 1).getQty()
+                            * cartObject.getCart().getDetail().get(position - 1).getProduct().getPrice()) -(cartObject.getCart().getDetail().get(position - 1).getQty()*(cartObject.getCart().getDetail().get(position - 1).getCouponDiscount()))+ (cartObject.getCart().getDetail().get(position - 1).getQty()*cartObject.getCart().getDetail().get(position - 1).getShipping_charge()))));
             if(cartObject.getCart().getDetail().get(position - 1).getProduct().is_cod()){
                 holder.isCocText.setVisibility(View.VISIBLE);
                 holder.isCocText.setText(Html.fromHtml("<b>Cash-on-Delivery"+"</b>" +"<font color=#B5CA01> Available"+"</font>"));
@@ -201,7 +211,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             }else{
                 holder.priceDescLayout.setVisibility(View.GONE);
                 holder.shortSubTotalLayout.setVisibility(View.VISIBLE);
-                holder.shortTotal.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position-1).getShipping_charge() == 0 ? (cartObject.getCart().getDetail().get(position-1).getQty() * cartObject.getCart().getDetail().get(position-1).getProduct().getPrice()) : ((cartObject.getCart().getDetail().get(position-1).getQty() * cartObject.getCart().getDetail().get(position-1).getProduct().getPrice()) + (cartObject.getCart().getDetail().get(position-1).getQty()*cartObject.getCart().getDetail().get(position-1).getShipping_charge()))));
+                holder.shortTotal.setText(context.getResources().getString(R.string.Rs) + " " + (cartObject.getCart().getDetail().get(position-1).getShipping_charge() == 0 ? ((cartObject.getCart().getDetail().get(position-1).getQty() * cartObject.getCart().getDetail().get(position-1).getProduct().getPrice())-(cartObject.getCart().getDetail().get(position-1).getQty() * cartObject.getCart().getDetail().get(position-1).getCouponDiscount())) : ((cartObject.getCart().getDetail().get(position-1).getQty() * cartObject.getCart().getDetail().get(position-1).getProduct().getPrice()) + (cartObject.getCart().getDetail().get(position-1).getQty()*cartObject.getCart().getDetail().get(position-1).getShipping_charge())-(cartObject.getCart().getDetail().get(position-1).getQty() * cartObject.getCart().getDetail().get(position-1).getCouponDiscount()))));
             }
 
             holder.shortSubTotalLayout.setOnClickListener(new View.OnClickListener() {
@@ -311,31 +321,43 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
                 }
             });
         } else if( position == (cartObject.getCart().getDetail().size()+1)){
-            CouponHolder couponHolder = (CouponHolder)defaultHolder;
-            if(isCouponsShown){
-                couponHolder.applyCouponHeader.setVisibility(View.GONE);
-                couponHolder.couponDescLayout.setVisibility(View.VISIBLE);
+            final CouponHolder couponHolder = (CouponHolder)defaultHolder;
+            couponHolder.couponDescLayout.setVisibility(View.VISIBLE);
+            if(cartObject.getCart().getCoupon_code()!=null && cartObject.getCart().getCoupon_code().trim().length()>0){
+                couponHolder.couponCode.setText(cartObject.getCart().getCoupon_code().trim());
             }else{
-
+                couponHolder.couponCode.setText("");
             }
-            couponHolder.applyCouponHeader.setOnClickListener(new View.OnClickListener() {
+            couponHolder.applyCpnBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    isCouponsShown=true;
-                    notifyItemChanged(position);
+                    if(couponHolder.couponCode.getText().toString().trim().length()>0){
+                        CommonLib.hideKeyBoard((ProductCheckoutActivity)context,couponHolder.couponCode);
+                        mListener.onApplyCoupon(couponHolder.couponCode.getText().toString().trim());
+                    }else{
+                        Toast.makeText(context,"Please enter a coupon code",Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
+            if(cartObject.getCart().getTotal_discount() == 0){
+                couponHolder.couponApplySuccess.setVisibility(View.GONE);
+
+            }else{
+                couponHolder.couponApplySuccess.setVisibility(View.VISIBLE);
+                couponHolder.couponApplySuccess.setText((cartObject.getCart().getCoupon_code().toUpperCase())+" coupon applied successfully");
+            }
         }else{
             SummaryHolder summaryHolder = (SummaryHolder) defaultHolder;
             totalPrice = cartObject.getCart().getTotal_price();
             float price = cartObject.getCart().getPrice();
+            summaryHolder.discountLayout.setVisibility(View.GONE);
             if (totalPrice == 0) {
                 summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs)+" " + cartObject.getCart().getPrice());
                 summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs) +" "+ cartObject.getCart().getTotal_price());
             }
             summaryHolder.totalSum.setText(context.getResources().getString(R.string.Rs)+" " + Math.round(price));
             summaryHolder.totalPayment.setText(context.getResources().getString(R.string.Rs)+" " + Math.round(totalPrice));
-            summaryHolder.shipping.setText((cartObject.getCart().getTotal_shipping()== 0) ? "Free" : (context.getResources().getString(R.string.Rs)+" " + cartObject.getCart().getTotal_shipping()));
+            summaryHolder.shipping.setText((cartObject.getCart().getTotal_shipping() == 0) ? "Free" : (context.getResources().getString(R.string.Rs) + " " + cartObject.getCart().getTotal_shipping()));
 
         }
     }
@@ -367,17 +389,19 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
         void changeAddressBilling();
 
         void changeAddressShipping();
+
+        void onApplyCoupon(String couponCode);
     }
 
     public class CartItemHolder extends RecyclerView.ViewHolder {
-        TextView  name, delivery_date, quantity,shortTotal,hideDetails,viewDetails,itemCount,productPrice,productDiscountedPrice,productDiscountFactor;
+        TextView  name, delivery_date, quantity,shortTotal,hideDetails,viewDetails,itemCount,productPrice,productDiscountedPrice,productDiscountFactor,discountApplied;
 
         ImageView product_image, cancelCartItem,buyOfflineTag;
         CustomTextView subTotal,shippingPrice,totalPrice,isCocText;
         //ImageButton positive, negative;
-        View quantityView,separator;
+        View quantityView,separator,lineSeparator;
 
-        LinearLayout shortSubTotalLayout,priceDescLayout,btnLayout,productCard;
+        LinearLayout shortSubTotalLayout,priceDescLayout,btnLayout,productCard,discountLayout;
 
         public CartItemHolder(View itemView) {
             super(itemView);
@@ -408,10 +432,14 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             hideDetails = (TextView)itemView.findViewById(R.id.hide_details);
             btnLayout= (LinearLayout)itemView.findViewById(R.id.btn_layout);
             btnLayout.setVisibility(View.GONE);
+            lineSeparator  = itemView.findViewById(R.id.separator);
+            lineSeparator.setVisibility(View.GONE);
             productCard = (LinearLayout)itemView.findViewById(R.id.product_card);
             separator = itemView.findViewById(R.id.btn_separator);
             separator.setVisibility(View.GONE);
             itemCount = (TextView)itemView.findViewById(R.id.item_count);
+            discountLayout = (LinearLayout)itemView.findViewById(R.id.applied_coupon_discount);
+            discountApplied = (TextView)itemView.findViewById(R.id.discount);
         }
     }
 
@@ -429,29 +457,31 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
     }
 
     public class SummaryHolder extends RecyclerView.ViewHolder {
-        TextView totalPayment, checkCoupon, shipping, totalSum;
+        TextView totalPayment, checkCoupon, shipping, totalSum,discountValue;
+        LinearLayout discountLayout;
 
         public SummaryHolder(View itemView) {
             super(itemView);
             totalPayment = (TextView) itemView.findViewById(R.id.total_payment);
-            //checkOut = (TextView) itemView.findViewById(R.id.check_out);
             shipping = (TextView) itemView.findViewById(R.id.shipping_charges);
             totalSum = (TextView) itemView.findViewById(R.id.total_sum);
+            discountLayout = (LinearLayout)itemView.findViewById(R.id.applied_coupon_discount);
+            discountValue = (TextView)itemView.findViewById(R.id.discount);
         }
     }
     public class CouponHolder extends RecyclerView.ViewHolder {
-        TextView applyCpnBtn ;
+        TextView applyCpnBtn ,couponApplySuccess;
         EditText couponCode;
-        RadioGroup availableCoupons;
-        LinearLayout applyCouponHeader,couponDescLayout;
+
+        LinearLayout couponDescLayout;
 
         public CouponHolder(View itemView) {
             super(itemView);
-            applyCouponHeader = (LinearLayout) itemView.findViewById(R.id.apply_coupon_header);
+            couponDescLayout = (LinearLayout)itemView.findViewById(R.id.coupon_desc_layout);
             applyCpnBtn = (TextView) itemView.findViewById(R.id.coupon_apply);
             couponCode = (EditText) itemView.findViewById(R.id.coupon_code);
-            availableCoupons = (RadioGroup)itemView.findViewById(R.id.available_coupons_layout);
-            couponDescLayout = (LinearLayout)itemView.findViewById(R.id.coupon_desc_layout);
+            couponApplySuccess = (TextView)itemView.findViewById(R.id.coupon_code_apply_text);
+
         }
     }
 }

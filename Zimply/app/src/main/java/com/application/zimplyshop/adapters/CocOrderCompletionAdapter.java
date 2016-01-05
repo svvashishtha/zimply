@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
@@ -97,16 +98,23 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
 
             }
 
-
-
-
             /*((ProductViewHolder)holder).productPrice.setText(mContext.getString(R.string.rs_text) + " " + cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice());*/
             ((ProductViewHolder)holder).productQty.setText("Qty: " + cartObj.getCart().getDetail().get(position - 1).getQty());
 
             new ImageLoaderManager((CashOnCounterOrderCompletionActivity)mContext).setImageFromUrl(cartObj.getCart().getDetail().get(position - 1).getProduct().getImage(),
                     ((ProductViewHolder) holder).productImage, "users", mContext.getResources().getDimensionPixelSize(R.dimen.pro_cover_img_height),
                     mContext.getResources().getDimensionPixelSize(R.dimen.pro_cover_img_height), false, false);
-            ((ProductViewHolder) holder).payAmount.setText(mContext.getString(R.string.rs_text)+" "+Math.round((cartObj.getCart().getDetail().get(position - 1).getQty() * cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice())));
+
+            ((ProductViewHolder) holder).totalValue.setText(mContext.getString(R.string.rs_text) + " " + (cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice()*cartObj.getCart().getDetail().get(position - 1).getQty()));
+            ((ProductViewHolder) holder).shippingValue.setText(cartObj.getCart().getDetail().get(position - 1).getShipping_charge()==0?"Free":mContext.getString(R.string.rs_text)+" "+(cartObj.getCart().getDetail().get(position - 1).getShipping_charge()*cartObj.getCart().getDetail().get(position - 1).getQty()));
+
+            if(cartObj.getCart().getDetail().get(position - 1).getCouponDiscount() == 0){
+                ((ProductViewHolder) holder).discountLayout.setVisibility(View.GONE);
+            }else{
+                ((ProductViewHolder) holder).discountLayout.setVisibility(View.VISIBLE);
+                ((ProductViewHolder) holder).discountValue.setText("- "+mContext.getString(R.string.rs_text)+" "+(cartObj.getCart().getDetail().get(position - 1).getCouponDiscount()*cartObj.getCart().getDetail().get(position - 1).getQty()));
+            }
+            ((ProductViewHolder) holder).payAmount.setText(mContext.getString(R.string.rs_text)+" "+((cartObj.getCart().getDetail().get(position - 1).getQty() * (cartObj.getCart().getDetail().get(position - 1).getProduct().getPrice()+cartObj.getCart().getDetail().get(position - 1).getShipping_charge()-cartObj.getCart().getDetail().get(position - 1).getCouponDiscount()))));
             if(isCoc){
                 ((ProductViewHolder) holder).paymentStatus.setVisibility(View.VISIBLE);
                 ((ProductViewHolder) holder).paymentStatus.setText("Cash-on-Delivery");
@@ -129,6 +137,7 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
             ((ProductViewHolder) holder).deliveryAddressLayout.setVisibility(View.VISIBLE);
             ((ProductViewHolder) holder).deliveryAddress.setText(address);
         }else{
+            ((HeaderViewHolder) holder).totalToPay.setText(mContext.getString(R.string.rs_text)+" "+cartObj.getCart().getTotal_price());
             ((HeaderViewHolder) holder).orderId.setText("Order id- "+orderId);
         }
     }
@@ -152,9 +161,10 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder{
-        TextView productName,productPrice,productQty,itemNum,payAmount,paymentStatus,deliveryAddress,deliverTime,payAtStore,toPay,productDiscountedPrice,productDiscountFactor;;
+        TextView productName,productPrice,productQty,itemNum,payAmount,paymentStatus,deliveryAddress,deliverTime,payAtStore,toPay,productDiscountedPrice,productDiscountFactor,discountValue,shippingValue ,totalValue;
         ImageView productImage;
         LinearLayout callLayout,directionLayout,deliveryAddressLayout,btnLayout;
+        RelativeLayout discountLayout,shippingLayout;
 
         public ProductViewHolder(View itemView) {
             super(itemView);
@@ -178,14 +188,21 @@ public class CocOrderCompletionAdapter extends RecyclerView.Adapter<RecyclerView
             deliverTime = (TextView)itemView.findViewById(R.id.delivery_time);
             payAtStore = (TextView)itemView.findViewById(R.id.pay_at_store);
             toPay = (TextView)itemView.findViewById(R.id.to_pay);
+            discountLayout = (RelativeLayout)itemView.findViewById(R.id.discount_layout);
+            discountValue = (TextView)itemView.findViewById(R.id.discount_value);
+            shippingValue = (TextView)itemView.findViewById(R.id.shipping_value);
+            shippingLayout= (RelativeLayout)itemView.findViewById(R.id.shipping_layout);
+            totalValue = (TextView)itemView.findViewById(R.id.total_value);
+
         }
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder{
-        TextView orderId;
+        TextView orderId,totalToPay;
         public HeaderViewHolder(View itemView) {
             super(itemView);
             orderId = (TextView)itemView.findViewById(R.id.order_id);
+            totalToPay = (TextView)itemView.findViewById(R.id.total_to_pay);
         }
     }
 }

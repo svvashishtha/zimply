@@ -41,6 +41,31 @@
             android:textSize="@dimen/font_medium" />
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/applied_coupon_discount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small">
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Discount"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/discount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="6.99"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
 
 
     <LinearLayout
