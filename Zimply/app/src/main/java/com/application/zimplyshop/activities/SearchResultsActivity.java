@@ -86,6 +86,7 @@ public class SearchResultsActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
+        PAGE_TYPE =AppConstants.PAGE_TYPE_PRODUCT;
         GetRequestManager.getInstance().addCallbacks(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         query = getIntent().getStringExtra("query");

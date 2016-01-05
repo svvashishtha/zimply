@@ -87,7 +87,7 @@ public class BaseActivity extends AppCompatActivity
     boolean isActivityRunning;
     String personName, personPhotoUrl, email, personId;
 
-    GifMovieView gifLoadingView ;
+    GifMovieView gifLoadingView;
 
     int PAGE_TYPE = -1;
 
@@ -175,7 +175,7 @@ public class BaseActivity extends AppCompatActivity
         nullcaseText = (TextView) findViewById(R.id.nullcase_text);
         retryLayout = (LinearLayout) findViewById(R.id.retry_layout);
         quoteText = (TextView) findViewById(R.id.quote);
-        nullCaseLayout = (RelativeLayout)findViewById(R.id.nullcase_layout);
+        nullCaseLayout = (RelativeLayout) findViewById(R.id.nullcase_layout);
     }
 
     public void setFilterVariables() {
@@ -251,21 +251,28 @@ public class BaseActivity extends AppCompatActivity
     }
 
     public void showNullCaseView(String text) {
-        if(PAGE_TYPE == AppConstants.PAGE_TYPE_WISHLIST||PAGE_TYPE == AppConstants.PAGE_TYPE_ORDER||PAGE_TYPE == AppConstants.PAGE_TYPE_BOOKINGS){
+        if (PAGE_TYPE == AppConstants.PAGE_TYPE_WISHLIST || PAGE_TYPE == AppConstants.PAGE_TYPE_ORDER || PAGE_TYPE == AppConstants.PAGE_TYPE_BOOKINGS
+                || PAGE_TYPE == AppConstants.PAGE_TYPE_NETWORK_NO_WIFI || PAGE_TYPE == AppConstants.PAGE_TYPE_PRODUCT || PAGE_TYPE == AppConstants.PAGE_TYPE_NOTIFICATION) {
             quoteText.setVisibility(View.GONE);
 
             gifLoadingView.setVisibility(View.GONE);
             retryLayout.setVisibility(View.GONE);
             nullCaseLayout.setVisibility(View.VISIBLE);
             findViewById(R.id.start_shopping).setVisibility(View.GONE);
-            if(PAGE_TYPE == AppConstants.PAGE_TYPE_WISHLIST) {
-                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_wishlist,getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
-            }else if(PAGE_TYPE == AppConstants.PAGE_TYPE_ORDER){
-                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_order,getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
-            }else if(PAGE_TYPE == AppConstants.PAGE_TYPE_BOOKINGS){
+            if (PAGE_TYPE == AppConstants.PAGE_TYPE_WISHLIST) {
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_wishlist, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_ORDER) {
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_order, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_BOOKINGS) {
                 ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_booking, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_NETWORK_NO_WIFI) {
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_navigation_refresh, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_PRODUCT) {
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_no_product, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_NOTIFICATION) {
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_notification, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
             }
-        }else {
+        } else {
             nullCaseLayout.setVisibility(View.GONE);
             nullcaseText.setVisibility(View.VISIBLE);
             nullcaseText.setText(text);
@@ -698,7 +705,7 @@ public class BaseActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-      //  GetRequestManager.getInstance().removeCallbacks(this);
+        //  GetRequestManager.getInstance().removeCallbacks(this);
         super.onDestroy();
 
     }

@@ -180,6 +180,11 @@ public interface AppConstants {
     int PAGE_TYPE_ORDER = 2;
     int PAGE_TYPE_WISHLIST = 3;
     int PAGE_TYPE_BOOKINGS = 4;
+    int PAGE_TYPE_NOTIFICATION = 5;
+    int PAGE_TYPE_PRODUCT = 6;
+    int PAGE_TYPE_NETWORK_NO_WIFI= 7;
+
+
 
 }
 
