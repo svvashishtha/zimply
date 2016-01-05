@@ -33,7 +33,7 @@
     <screenName name="com.application.zimplyshop.activities.ProductCheckoutActivity">Product
         checkout(order Summary,Select Address)
     </screenName>
-    <screenName name="com.application.zimplyshop.activities.ProductDetailsActivity">Product Description
+    <screenName name="com.application.zimplyshop.activities.NewProductDetailActivity">Product Description
         page
     </screenName>
     <screenName name="com.application.zimplyshop.activities.PurchaseListActivity">Order history

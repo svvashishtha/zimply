@@ -212,9 +212,17 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
                 public void onClick(View v) {
                     int pos;
                     if (obj.getLatest_bookings().size() > 0) {
-                        pos = getAdapterPosition() - 3;
+                        if(offersObject.getOffers()!=null && offersObject.getOffers().size()>0){
+                            pos = getAdapterPosition() - 3;
+                        }else {
+                            pos = getAdapterPosition() - 2;
+                        }
                     } else {
-                        pos = getAdapterPosition() - 1;
+                        if(offersObject.getOffers()!=null && offersObject.getOffers().size()>0) {
+                            pos = getAdapterPosition() - 1;
+                        }else{
+                            pos = getAdapterPosition();
+                        }
                     }
                     Intent intent = new Intent(mContext, ProductListingActivity.class);
                     intent.putExtra("category_id", obj.getProduct_category().get(pos).getId());
