@@ -71,7 +71,7 @@ public class ProductListingActivity extends BaseActivity implements
 
     //for the request time, we require the boolean to check whether the request was made with filters applied.
     boolean filterApplied;
-    int categoryId = 0, sortId = -1, discountId = -1;
+    int categoryId = 0, sortId = -1, discountId = -1,shopId=-1;
 
     long priceLte = 1, priceHigh = 500000;
 
@@ -115,6 +115,7 @@ public class ProductListingActivity extends BaseActivity implements
 
         // setProductsGrid();
         discountId = getIntent().getIntExtra("discount_id", -1);
+        shopId = getIntent().getIntExtra("shop_id",-1);
         url = getIntent().getStringExtra("url");
         isHideFilter = getIntent().getBooleanExtra("hide_filter", false);
         setStatusBarColor();
@@ -188,7 +189,7 @@ public class ProductListingActivity extends BaseActivity implements
         String finalUrl;
         if (nextUrl == null) {
             int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
-            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + ((discountId != -1) ? "&discount__id__in=" + discountId : "") + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
+            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + ((discountId != -1) ? "&discount__id__in=" + discountId : "") +((shopId != -1) ? "&shop__id__in=" + shopId : "") + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
                     + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + categoryId : "") + (isO2o ? "&is_o2o=" + 1 : "")
                     + ((subCategoryAdapter != null && subCategoryAdapter.getSubCategorIds().size() > 0) ? "&subcategory__id__in=" + getSubCategoryString() : "") + "&price__gte=" + priceLte + "&price__lte=" + priceHigh + (sortId != -1 ? "&low_to_high=" + sortId : "");
         } else {

@@ -265,7 +265,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
                     listIntent.putExtra("hide_filter", false);
                     listIntent.putExtra("category_name", offersObject.getOffers().get(position).getName());
                     listIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
-                    listIntent.putExtra("discount_id", Integer.parseInt(offersObject.getOffers().get(position).getSlug()));
+                    listIntent.putExtra("shop_id", Integer.parseInt(offersObject.getOffers().get(position).getSlug()));
                     mContext.startActivity(listIntent);
                 }
             });
