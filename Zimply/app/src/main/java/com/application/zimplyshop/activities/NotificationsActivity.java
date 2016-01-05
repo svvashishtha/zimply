@@ -55,6 +55,7 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         addToolbarView(toolbar);
+        PAGE_TYPE =AppConstants.PAGE_TYPE_NOTIFICATION;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

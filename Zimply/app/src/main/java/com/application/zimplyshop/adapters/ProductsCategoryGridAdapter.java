@@ -39,7 +39,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
     HomeProductCategoryNBookingObj obj;
     OffersObject offersObject;
-
+    int viewPagerHeight = 0;
 
     int displayWidth;
 
@@ -131,6 +131,8 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
             OffersViewHolder holder1 = (OffersViewHolder) holder;
             OffersPagerAdapter adapter = new OffersPagerAdapter();
             holder1.viewPager.setAdapter(adapter);
+            viewPagerHeight = (int) ((displayWidth * ((float) offersObject.getOffers().get(0).getHeight() / offersObject.getOffers().get(0).getWidth())));
+            holder1.viewPagerContainer.setLayoutParams(new FrameLayout.LayoutParams(displayWidth, viewPagerHeight));
             holder1.circlePageIndicator.setViewPager(holder1.viewPager);
         } else {
             ((TitleViewHolder) holder).customText.setText("Upcoming Visits");
@@ -210,9 +212,9 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
                 public void onClick(View v) {
                     int pos;
                     if (obj.getLatest_bookings().size() > 0) {
-                        pos = getAdapterPosition() - 2;
+                        pos = getAdapterPosition() - 3;
                     } else {
-                        pos = getAdapterPosition();
+                        pos = getAdapterPosition() - 1;
                     }
                     Intent intent = new Intent(mContext, ProductListingActivity.class);
                     intent.putExtra("category_id", obj.getProduct_category().get(pos).getId());
@@ -227,9 +229,11 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     public class OffersViewHolder extends RecyclerView.ViewHolder {
         ViewPager viewPager;
         CirclePageIndicator circlePageIndicator;
+        View viewPagerContainer;
 
         public OffersViewHolder(View v) {
             super(v);
+            viewPagerContainer = v.findViewById(R.id.view_pager_container);
             viewPager = (ViewPager) v.findViewById(R.id.viewpageroffers);
             circlePageIndicator = (CirclePageIndicator) v.findViewById(R.id.circlepageindicatorl);
         }
@@ -238,13 +242,25 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     class OffersPagerAdapter extends PagerAdapter {
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(ViewGroup container, final int position) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.products_list_fragment_offer_image_layout, container, false);
             ImageView image = (ImageView) view.findViewById(R.id.offerimage);
-
+           // viewPagerHeight = viewPagerHeight - (2 * (mContext.getResources().getDimensionPixelSize(R.dimen.margin_small)));
             if (offersObject.getOffers().get(position).getImage() != null)
-                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(offersObject.getOffers().get(position).getImage(), image, "users", displayWidth, height, false, false);
-
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(offersObject.getOffers().get(position).getImage(),
+                        image, "users", displayWidth, viewPagerHeight, false, false);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent listIntent = new Intent(mContext, ProductListingActivity.class);
+                    listIntent.putExtra("category_id", "0");
+                    listIntent.putExtra("hide_filter", false);
+                    listIntent.putExtra("category_name", offersObject.getOffers().get(position).getName());
+                    listIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
+                    listIntent.putExtra("discount_id", Integer.parseInt(offersObject.getOffers().get(position).getSlug()));
+                    mContext.startActivity(listIntent);
+                }
+            });
             container.addView(view);
             return view;
         }

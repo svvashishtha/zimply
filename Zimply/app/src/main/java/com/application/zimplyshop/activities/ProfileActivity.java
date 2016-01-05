@@ -127,6 +127,14 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
                 fillAddressView(addressObjectArrayList.get(0));
             } else {
                 addressView.setVisibility(View.GONE);
+                viewAll.setText("Add New Address");
+               /* viewAll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ProfileActivity.this, EditAddressActivity.class);
+                        startActivity(intent);
+                    }
+                });*/
                 mainView.invalidate();
             }
 
@@ -164,8 +172,14 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_all:
+                if(((CustomTextView)v).getText().toString().equalsIgnoreCase("Add New Address"))
+                {
+                    Intent intent = new Intent(ProfileActivity.this, EditAddressActivity.class);
+                    startActivity(intent);
+                }
+                else{
                 Intent intent = new Intent(ProfileActivity.this, AddressListActivity.class);
-                startActivity(intent);
+                startActivity(intent);}
                 break;
             case R.id.settings_view:
                 Intent settingIntent = new Intent(ProfileActivity.this, SettingsPage.class);

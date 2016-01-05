@@ -94,7 +94,7 @@ public class ProductListingActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
-
+        PAGE_TYPE =AppConstants.PAGE_TYPE_PRODUCT;
         filterFromTextView = (TextView) findViewById(R.id.tv_new_from_price_filter);
         filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
 
@@ -107,9 +107,7 @@ public class ProductListingActivity extends BaseActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         productList = (RecyclerView) findViewById(R.id.categories_list);
-
         productList.setLayoutManager(new GridLayoutManager(this, 2));
         productList.addItemDecoration(new SpaceGridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
