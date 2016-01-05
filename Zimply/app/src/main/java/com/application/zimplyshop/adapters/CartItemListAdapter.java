@@ -1,3 +1,4 @@
+
 package com.application.zimplyshop.adapters;
 
 import android.app.Activity;
@@ -17,9 +18,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +44,9 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
     //long shippingCharges = 0;
     float totalPrice = 0;
     AddressObject billingAddress, shippingAddress;
-    int ITEM_TYPE_CART_ITEM = 1, ITEM_TYPE_SUMMARY = 0, ITEM_TYPE_ADDRESS = 2;
+    int ITEM_TYPE_CART_ITEM = 1, ITEM_TYPE_SUMMARY = 0, ITEM_TYPE_ADDRESS = 2,ITEM_TYPE_APPLY_COUPON=3;
+
+    boolean isCouponsShown;
 
     public CartItemListAdapter(Context context, CartObject cartObject, AddressObject billingAddress,
                                AddressObject shippingAddress) {
@@ -68,7 +73,9 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             return ITEM_TYPE_ADDRESS;
         else if (position <= (cartObject.getCart().getDetail().size()))
             return ITEM_TYPE_CART_ITEM;
-        else return ITEM_TYPE_SUMMARY;
+        else if(position <= (cartObject.getCart().getDetail().size())){
+            return ITEM_TYPE_APPLY_COUPON;
+        } else return ITEM_TYPE_SUMMARY;
     }
 
     @Override
@@ -77,6 +84,8 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             return new CartItemHolder(LayoutInflater.from(context).inflate(R.layout.cart_item_layout, parent, false));
         else if (viewType == ITEM_TYPE_SUMMARY)
             return new SummaryHolder(LayoutInflater.from(context).inflate(R.layout.cart_summary_layout, parent, false));
+        else if (viewType == ITEM_TYPE_APPLY_COUPON)
+            return new CouponHolder(LayoutInflater.from(context).inflate(R.layout.cart_coupon_layout, parent, false));
         else
             return new AddressHolder(LayoutInflater.from(context).inflate(R.layout.deafult_address_snippet, parent, false));
     }
@@ -301,7 +310,22 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
-        } else {
+        } else if( position == (cartObject.getCart().getDetail().size()+1)){
+            CouponHolder couponHolder = (CouponHolder)defaultHolder;
+            if(isCouponsShown){
+                couponHolder.applyCouponHeader.setVisibility(View.GONE);
+                couponHolder.couponDescLayout.setVisibility(View.VISIBLE);
+            }else{
+
+            }
+            couponHolder.applyCouponHeader.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isCouponsShown=true;
+                    notifyItemChanged(position);
+                }
+            });
+        }else{
             SummaryHolder summaryHolder = (SummaryHolder) defaultHolder;
             totalPrice = cartObject.getCart().getTotal_price();
             float price = cartObject.getCart().getPrice();
@@ -325,7 +349,7 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
 
         if (cartObject.getCart().getDetail() != null)
-            return cartObject.getCart().getDetail().size() + 2;
+            return cartObject.getCart().getDetail().size() + 3;
         return 0;
     }
 
@@ -413,6 +437,21 @@ public class CartItemListAdapter extends RecyclerView.Adapter {
             //checkOut = (TextView) itemView.findViewById(R.id.check_out);
             shipping = (TextView) itemView.findViewById(R.id.shipping_charges);
             totalSum = (TextView) itemView.findViewById(R.id.total_sum);
+        }
+    }
+    public class CouponHolder extends RecyclerView.ViewHolder {
+        TextView applyCpnBtn ;
+        EditText couponCode;
+        RadioGroup availableCoupons;
+        LinearLayout applyCouponHeader,couponDescLayout;
+
+        public CouponHolder(View itemView) {
+            super(itemView);
+            applyCouponHeader = (LinearLayout) itemView.findViewById(R.id.apply_coupon_header);
+            applyCpnBtn = (TextView) itemView.findViewById(R.id.coupon_apply);
+            couponCode = (EditText) itemView.findViewById(R.id.coupon_code);
+            availableCoupons = (RadioGroup)itemView.findViewById(R.id.available_coupons_layout);
+            couponDescLayout = (LinearLayout)itemView.findViewById(R.id.coupon_desc_layout);
         }
     }
 }

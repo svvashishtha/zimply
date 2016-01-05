@@ -97,7 +97,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
             //((ProductsCategoryViewHolder) holder).categoryImg.setBackgroundResource(R.drawable.bg_dropshadow);
             if (obj.getProduct_category().get(newPos).getImg().getImage() != null) {
-                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(obj.getProduct_category().get(newPos).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", displayWidth, height, false, false);
+                new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(obj.getProduct_category().get(newPos).getImg().getImage(), ((ProductsCategoryViewHolder) holder).categoryImg, "users", (displayWidth), height, false, false);
             }
         } else if(getItemViewType(position) == TYPE_HEADER){
             ((HeaderViewHolder)holder).recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
