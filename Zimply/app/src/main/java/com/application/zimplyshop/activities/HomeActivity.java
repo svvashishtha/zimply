@@ -4,10 +4,8 @@ package com.application.zimplyshop.activities;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
@@ -64,7 +62,6 @@ import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.TimeUtils;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
-import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.utils.fab.FABControl;
 import com.application.zimplyshop.utils.fab.FABUnit;
 import com.application.zimplyshop.widgets.CircularImageView;
@@ -611,7 +608,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         startActivity(intent);
 
                         break;
-                    case 10:
+                    /*case 10:
                         ZTracker.logGAEvent(HomeActivity.this, "Home", "Logout", "");
                         final AlertDialog logoutDialog;
                         logoutDialog = new AlertDialog.Builder(HomeActivity.this)
@@ -631,7 +628,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                                             }
                                         }).create();
                         logoutDialog.show();
-                        break;
+                        break;*/
                 }
 
             }

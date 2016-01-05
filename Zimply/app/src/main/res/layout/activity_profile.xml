@@ -124,7 +124,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/z_grey_color" />
+                    android:background="@color/transparent_black_edittext_color" />
 
                 <com.application.zimplyshop.widgets.CustomTextViewBold
                     android:id="@+id/name_address"

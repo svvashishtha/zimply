@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:id="@+id/number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:paddingBottom="@dimen/size20"
+            android:paddingLeft="@dimen/size20"
+            android:paddingTop="@dimen/size20"
+            android:text="Notifications"
+            android:textColor="@color/zdhl3"
+            android:textSize="@dimen/size18" />
+
+        <com.application.zimplyshop.widgets.CustomCheckBox
+            android:id="@+id/notification_switch"
+            style="@style/CheckBoxStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_mini"
+            android:textColor="@color/zdhl3"
+            android:textSize="@dimen/size18" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/zhl_dark" />
+
+</LinearLayout>

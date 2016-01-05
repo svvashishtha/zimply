@@ -31,6 +31,7 @@ public interface RequestTags {
     String BANNER_REQUEST_TAG = "bannerrequesttag";
     String LATEST_NOTIFICATION_COUNT_TAG = "latestnotifcounttext";
     String LATEST_BOOKINGS_TAG = "latestbookingtag";
+    String OFFERS_REQUEST_TAG = "offersrequesttag";
 
 
     String FAV_LIST_REQUEST_TAG = "favlistrequesttag";
@@ -59,8 +60,8 @@ public interface RequestTags {
     int PHONE_VERIFICATION_INPUT_NUMBER = 0x0011;
     int PHONE_VERIFICATION_OTP = 0x0012;
     int CHANGE_PASSWORD = 0x0013;
-    int NOTIFY_ME_TAG=0x0014;
-
+    int NOTIFY_ME_TAG = 0x0014;
+    int NOTIFICATION_SWITCH_TAG_INT = 0x0015;
     String GET_PHOTO_SINGLE = "getSinglePhotoObject";
     String GET_CITY_FROM_LL = "getCityformLL";
     String REMOVE_FROM_CART = "removeFromCart";
@@ -69,5 +70,6 @@ public interface RequestTags {
     String GET_ORDER_SUMMARY = "getordersummary";
     String GET_CART_COMPUTATION = "getcartcomputation";
     String GET_CITY_FROM_PINCODE = "getCityFromPinCode";
+    String NOTIFICATION_SWITCH_TAG = "notification_switch";
     int SAVE_ADDRESS = 101;
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/products_list_fragment_offer_layout_height"
+    android:orientation="vertical">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpageroffers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/z_black_50_percent_transparent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <com.application.zimplyshop.widgets.CirclePageIndicator
+            android:id="@+id/circlepageindicatorl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/z_margin_small"
+            app:fillColor="@color/z_blue_color"
+            app:pageColor="@color/white"
+            app:radius="@dimen/z_margin_mini"
+            app:strokeColor="@android:color/transparent"
+            app:strokeWidth="0dp" />
+    </LinearLayout>
+
+</FrameLayout>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
@@ -84,6 +85,12 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
                         id = id.split("=")[1];
                         String slug = segments.get(1);
                         navigateToProduct(slug, id);
+                    } else if (firstSegment.contains("shop")) {
+                        String shopId = segments.get(1);
+                        String shopName = "";
+                        if (segments.size() >= 3)
+                            shopName = segments.get(2);
+                        navigateToShop(shopId, shopName);
                     } else {
                         navigateToTour();
                     }
@@ -100,10 +107,27 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
         }
     }
 
+    private void navigateToShop(String shopId, String shopName) {
+        if (shopId != null && shopId.length() > 0) {
+            Intent listIntent = new Intent(this, ProductListingActivity.class);
+            listIntent.putExtra("category_id", "0");
+            listIntent.putExtra("hide_filter", false);
+            if (shopName.length() > 0) {
+                shopName = shopName.replaceAll("-", " ");
+                listIntent.putExtra("category_name", shopName);
+            }
+            listIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
+            listIntent.putExtra("discount_id", Integer.parseInt(shopId)
+            );
+            UrlRouter.this.finish();
+            startActivity(listIntent);
+        }
+    }
+
     private void navigateToProduct(String slug, String id) {
         Intent intent = new Intent(UrlRouter.this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
-        intent.putExtra("is_shared",true);
+        intent.putExtra("is_shared", true);
         int pId = Integer.parseInt(id);
         intent.putExtra("id", pId);
         this.finish();
