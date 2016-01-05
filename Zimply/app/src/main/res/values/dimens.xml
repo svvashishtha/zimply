@@ -24,7 +24,7 @@
 
     <!-- App Dimensions -->
     <dimen name="product_img_size">150dp</dimen>
-    <dimen name="product_img_size_new">164dp</dimen>
+    <dimen name="product_img_size_new">200dp</dimen>
     <dimen name="product_card_img_height">215dp</dimen>
     <dimen name="pro_image_size">64dp</dimen>
     <dimen name="pro_img_margin_top_negative">-32dp</dimen>
