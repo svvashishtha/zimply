@@ -218,7 +218,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
                             pos = getAdapterPosition() - 2;
                         }
                     } else {
-                        if(offersObject.getOffers()!=null && offersObject.getOffers().size()>0) {
+                        if(offersObject !=null && offersObject.getOffers()!=null && offersObject.getOffers().size()>0) {
                             pos = getAdapterPosition() - 1;
                         }else{
                             pos = getAdapterPosition();
