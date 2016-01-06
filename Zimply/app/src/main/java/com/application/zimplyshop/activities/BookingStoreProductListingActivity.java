@@ -64,15 +64,15 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
     int width;
 
-    int vendorId = 0, sortId = 1;
-    long priceLte = 1, priceHigh = 50000;
+    int vendorId = 0, sortId = -1;
+    long priceLte = 1, priceHigh = 500000;
     long FROM_VALUE = 1;
     long TO_VALUE = 500000;
     boolean isRefreshData;
     Context context;
     TextView titleText;
 
-    boolean isNotification,isO2o;
+    boolean isNotification, isO2o;
 
     BaseProductListObject obj;
 
@@ -244,6 +244,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
     boolean isHideFilter;
     boolean isFiltersShown;
+
     public int getSelectedCatgeoryId(int categoryId) {
         if (AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category() != null) {
             for (int i = 0; i < AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category().size(); i++) {
@@ -269,10 +270,10 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
             int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
             /*finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
                     + "&width=" + width + "&vendor__id__in=" + vendorId;*/
-            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0"  + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
-                    + "&width=" + width  + (isO2o ? "&is_o2o=" + 1 : "")
+            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
+                    + "&width=" + width + (isO2o ? "&is_o2o=" + 1 : "")
                     + ((subCategoryAdapter != null && subCategoryAdapter.getSubCategorIds().size() > 0) ? "&subcategory__id__in=" +
-                    getSubCategoryString() : "") + "&price__gte=" + priceLte + "&price__lte=" + priceHigh + (sortId != -1 ? "&low_to_high=" + sortId : "")+
+                    getSubCategoryString() : "") + "&price__gte=" + priceLte + "&price__lte=" + priceHigh + (sortId != -1 ? "&low_to_high=" + sortId : "") +
                     "&vendor__id__in=" + vendorId;
 
         } else {
@@ -283,6 +284,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
                 PRODUCT_LIST_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_LIST_OBJECT);
     }
+
     public String getSubCategoryString() {
         String subCategory = "";
         for (int i = 0; i < subCategoryAdapter.getSubCategorIds().size(); i++) {
@@ -292,6 +294,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         }
         return subCategory;
     }
+
     private void setAdapterData(ArrayList<BaseProductListObject> objs) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
@@ -411,12 +414,14 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void showFilterSlideIn() {
         View view = findViewById(R.id.filter_layout);
         view.findViewById(R.id.close_filter).setOnClickListener(this);
         findViewById(R.id.reset_btn).setOnClickListener(this);
         animateViewRightIn(view);
     }
+
     public void animateViewRightIn(final View view) {
         isFiltersShown = true;
         view.setVisibility(View.VISIBLE);
@@ -477,6 +482,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         set.start();
 
     }
+
     public void showFilterContent() {
         if (AllCategories.getInstance().getPhotoCateogryObjs() == null) {
             if (!CommonLib.isNetworkAvailable(this))
@@ -508,7 +514,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
                             ? "&userid=" + AppPreferences.getUserID(BookingStoreProductListingActivity.this) : "");
 
                     isRefreshData = true;
-                    if (vendorId != 0 || sortId != 1 || priceHigh != 50000 || priceLte != 1)
+                    if (vendorId != 0 || sortId != 1 || priceHigh != TO_VALUE || priceLte != FROM_VALUE)
                         isFilterApplied = true;
                     else isFilterApplied = false;
                     if (vendorId != 0)
