@@ -20,7 +20,6 @@
 
             <com.application.zimplyshop.widgets.CustomRadioButton
                 android:id="@+id/use_this_address"
-                style="@style/RadioButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/edit"
@@ -37,7 +36,6 @@
                 android:text="Set as default"
 
                 android:textColor="@color/blue_button"
-                style="@style/CheckBoxStyle"
                 />
         </FrameLayout>
 

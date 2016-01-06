@@ -7,7 +7,6 @@
         android:id="@+id/sub_cat_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/CheckBoxStyle"
         android:textColor="@color/filter_item_text_selector"
         android:textSize="@dimen/font_small"
         android:padding="@dimen/margin_small"/>

@@ -24,7 +24,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,7 +86,7 @@ public class ProductListingActivity extends BaseActivity implements
     ArrayList<ShopSubCategoryObj> subCategories;
 
     TextView filterFromTextView, filterToTextView;
-    ArrayList<RadioButton> priceRadioButtonsArrayList;
+    ArrayList<CustomRadioButton> priceRadioButtonsArrayList;
     SubCategoryAdapter subCategoryAdapter;
 
     //    used to handle no items view when the user visits the screen for the first time without appliying any filters
@@ -618,11 +617,11 @@ public class ProductListingActivity extends BaseActivity implements
         pricesList[4][1] = priceHigh;
 
         priceRadioButtonsArrayList = new ArrayList<>();
-        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton1)));
-        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton2)));
-        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton3)));
-        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton4)));
-        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton5)));
+        priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton1)));
+        priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton2)));
+        priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton3)));
+        priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton4)));
+        priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton5)));
 
         for (int i = 0; i < priceRadioButtonsArrayList.size(); i++) {
             String radioButtonText = "₹" + pricesList[i][0] + " - ₹" + pricesList[i][1];
@@ -682,11 +681,11 @@ public class ProductListingActivity extends BaseActivity implements
             pricesList[4][1] = priceHigh;
 
             priceRadioButtonsArrayList = new ArrayList<>();
-            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton1)));
-            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton2)));
-            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton3)));
-            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton4)));
-            priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton5)));
+            priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton1)));
+            priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton2)));
+            priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton3)));
+            priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton4)));
+            priceRadioButtonsArrayList.add(((CustomRadioButton) findViewById(R.id.filterpriceradiobutton5)));
 
             for (int i = 0; i < priceRadioButtonsArrayList.size(); i++) {
                 String radioButtonText = "₹" + pricesList[i][0] + " - ₹" + pricesList[i][1];
@@ -841,7 +840,7 @@ public class ProductListingActivity extends BaseActivity implements
                 filterFromTextView.setText(minValue + "");
                 filterToTextView.setText(maxValue + "");
                 isFilterApplied = true;
-                for (RadioButton radioButton : priceRadioButtonsArrayList) {
+                for (CustomRadioButton radioButton : priceRadioButtonsArrayList) {
                     radioButton.setChecked(false);
                 }
             }
@@ -894,7 +893,7 @@ public class ProductListingActivity extends BaseActivity implements
         sortId = -1;
         isFilterApplied = false;
 
-        for (RadioButton radioButton : priceRadioButtonsArrayList) {
+        for (CustomRadioButton radioButton : priceRadioButtonsArrayList) {
             radioButton.setChecked(false);
         }
 
