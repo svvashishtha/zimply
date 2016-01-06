@@ -329,7 +329,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:background="@drawable/below_shadow_inverted" />
+            android:background="@drawable/above_shadow" />
 
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/apply_filter"

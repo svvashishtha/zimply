@@ -93,7 +93,7 @@
         <activity
             android:name=".activities.BookingStoreProductListingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/CheckboxAppTheme" />
         <activity
             android:name=".activities.ShopSubCategoriesActivity"
             android:screenOrientation="portrait"
@@ -119,7 +119,7 @@
         <activity
             android:name=".activities.SettingsPage"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/CheckboxAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".utils.ZWebView"
@@ -183,7 +183,7 @@
         <activity
             android:name=".activities.SearchResultsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppBaseTheme"
+            android:theme="@style/CheckboxAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activities.AppPaymentOptionsActivity"
@@ -323,9 +323,11 @@
         <activity
             android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".activities.AddressListActivity"></activity>
-        <activity android:name=".activities.EditAddressActivity"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.AddressListActivity"
+            android:theme="@style/CheckboxAppTheme" />
+        <activity android:name=".activities.EditAddressActivity" />
     </application>
 
 </manifest>
