@@ -52,7 +52,7 @@
             android:layout_toLeftOf="@id/clear_text_view_category"
             android:background="@color/white"
             android:clickable="true"
-            android:drawableLeft="@drawable/ic_action_action_search_menu"
+
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:hint="@string/search_category_hint"

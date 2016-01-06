@@ -451,6 +451,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     public void onRequestFailed(String requestTag, Object obj) {
         if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)){
             showNetworkErrorView();
+            isRequestFailed = true;
             showToast("Something went wrong. Please try again");
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(CHECKPINCODEREQUESTTAG) ) {
             if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
