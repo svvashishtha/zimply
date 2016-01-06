@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.application.zimplyshop" >
+    package="com.application.zimplyshop">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -42,7 +42,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_app_launcher_icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -66,7 +66,7 @@
             android:name=".activities.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -89,7 +89,7 @@
         <activity
             android:name=".activities.ProductListingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/CheckboxAppTheme" />
         <activity
             android:name=".activities.BookingStoreProductListingActivity"
             android:screenOrientation="portrait"
@@ -204,12 +204,10 @@
         <!-- PayU activity -->
         <activity
             android:name="com.payu.sdk.PaymentOptionsActivity"
-            android:configChanges="orientation|keyboard|screenSize" >
-        </activity>
+            android:configChanges="orientation|keyboard|screenSize"></activity>
         <activity
             android:name="com.payu.sdk.ProcessPaymentActivity"
-            android:configChanges="orientation|screenSize" >
-        </activity>
+            android:configChanges="orientation|screenSize"></activity>
         <activity
             android:name=".activities.ProductDemoActivity"
             android:screenOrientation="portrait"
@@ -228,7 +226,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -258,9 +256,10 @@
                     android:host="www.zimply.in"
                     android:pathPrefix="/shop-product/"
                     android:scheme="http" />
-                <data android:host="www.zimply.in"
+                <data
+                    android:host="www.zimply.in"
                     android:pathPrefix="/shop/"
-                    android:scheme="http"/>
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -283,7 +282,7 @@
         <!-- Receivers -->
         <receiver
             android:name=".receivers.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -305,8 +304,7 @@
 
         <service
             android:name=".services.ZFetchAddressIntentService"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
 
         <activity
             android:name=".activities.SelectCity"
@@ -314,11 +312,10 @@
         <activity
             android:name=".activities.PostPaymentThankYouActivity"
             android:label="@string/title_activity_post_payment_thank_you"
-            android:theme="@style/AppTheme" >
-        </activity>
+            android:theme="@style/AppTheme"></activity>
 
-        <receiver android:name=".receivers.IncomingSmsReceiver" >
-            <intent-filter android:priority="999" >
+        <receiver android:name=".receivers.IncomingSmsReceiver">
+            <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
@@ -326,12 +323,9 @@
         <activity
             android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme" >
-        </activity>
-        <activity android:name=".activities.AddressListActivity" >
-        </activity>
-        <activity android:name=".activities.EditAddressActivity" >
-        </activity>
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".activities.AddressListActivity"></activity>
+        <activity android:name=".activities.EditAddressActivity"></activity>
     </application>
 
 </manifest>
