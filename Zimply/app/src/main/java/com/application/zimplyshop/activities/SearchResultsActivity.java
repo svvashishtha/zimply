@@ -80,6 +80,7 @@ public class SearchResultsActivity extends BaseActivity implements
 
     TextView filterFromTextView, filterToTextView;
     ArrayList<RadioButton> priceRadioButtonsArrayList;
+    boolean setFilterDataToArbitraryDefaultsIfNoData;
 
 
     @Override
@@ -414,7 +415,7 @@ public class SearchResultsActivity extends BaseActivity implements
                             + (isO2o ? "&is_o2o=" + 1 : "");
 
                     isRefreshData = true;
-                    if (sortId == -1 && priceHigh == 500000 && priceLte == 1 && !isO2o) {
+                    if (sortId == -1 && priceHigh == TO_VALUE && priceLte == FROM_VALUE && !isO2o) {
                         isFilterApplied = false;
                     } else {
                         isFilterApplied = true;
@@ -492,6 +493,11 @@ public class SearchResultsActivity extends BaseActivity implements
                         || productList.getAdapter().getItemCount() == 1) {
                     showNullCaseView("No Products");
 
+                    if (!setFilterDataToArbitraryDefaultsIfNoData && !isFilterApplied) {
+                        setFilterDataToArbitraryDefaultsIfNoData = true;
+                        resetFiltersDataRadioButtonsValues();
+                    }
+
                 } else {
                     showToast("No more Products");
                     ((ProductsRecyclerViewGridAdapter) productList.getAdapter()).removeItem();
@@ -533,6 +539,62 @@ public class SearchResultsActivity extends BaseActivity implements
         }
 
 
+    }
+
+    private void resetFiltersDataRadioButtonsValues() {
+        priceLte = 1;
+        priceHigh = 10000;
+        FROM_VALUE = 1;
+        TO_VALUE = 10000;
+        final RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
+        seekBar.setRangeValues(priceLte, priceHigh);
+
+
+        filterFromTextView.setText(priceLte + "");
+        seekBar.setSelectedMinValue(priceLte);
+        filterToTextView.setText(priceHigh + "");
+        seekBar.setSelectedMaxValue(priceHigh);
+
+        long diff = priceHigh - priceLte;
+
+        final long[][] pricesList = new long[5][2];
+        pricesList[0][0] = priceLte;
+        pricesList[0][1] = (long) (priceLte + .10 * diff);
+        pricesList[1][0] = (long) (priceLte + .10 * diff);
+        pricesList[1][1] = (long) (priceLte + .25 * diff);
+        pricesList[2][0] = (long) (priceLte + .25 * diff);
+        pricesList[2][1] = (long) (priceLte + .50 * diff);
+        pricesList[3][0] = (long) (priceLte + .50 * diff);
+        pricesList[3][1] = (long) (priceLte + .80 * diff);
+        pricesList[4][0] = (long) (priceLte + .80 * diff);
+        pricesList[4][1] = priceHigh;
+
+        priceRadioButtonsArrayList = new ArrayList<>();
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton1)));
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton2)));
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton3)));
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton4)));
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton5)));
+
+        for (int i = 0; i < priceRadioButtonsArrayList.size(); i++) {
+            String radioButtonText = "₹" + pricesList[i][0] + " - ₹" + pricesList[i][1];
+            priceRadioButtonsArrayList.get(i).setText(radioButtonText);
+            priceRadioButtonsArrayList.get(i).setSelected(false);
+        }
+
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radiogroupfiltrprice);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int index = group.indexOfChild(findViewById(group.getCheckedRadioButtonId()));
+                seekBar.setSelectedMinValue(pricesList[index][0]);
+                seekBar.setSelectedMaxValue(pricesList[index][1]);
+                seekBar.setSelectedMinValue(pricesList[index][0]);
+
+                filterToTextView.setText(pricesList[index][1] + "");
+                filterFromTextView.setText(pricesList[index][0] + "");
+            }
+        });
     }
 
     private void setMinimumAndMaximumFilterPriceValues(ProductListObject obj) {
