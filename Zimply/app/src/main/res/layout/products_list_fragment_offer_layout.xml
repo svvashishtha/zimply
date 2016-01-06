@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/z_black_50_percent_transparent"
+        android:background="@drawable/gradient_upward_black"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -25,7 +25,7 @@
             android:id="@+id/circlepageindicatorl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/z_margin_small"
+            android:padding="@dimen/z_margin_medium"
             app:fillColor="@color/z_blue_color"
             app:pageColor="@color/white"
             app:radius="@dimen/z_margin_mini"
