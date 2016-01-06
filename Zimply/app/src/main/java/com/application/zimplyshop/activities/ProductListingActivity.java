@@ -71,7 +71,7 @@ public class ProductListingActivity extends BaseActivity implements
 
     //for the request time, we require the boolean to check whether the request was made with filters applied.
     boolean filterApplied;
-    int categoryId = 0, sortId = -1, discountId = -1,shopId=-1;
+    int categoryId = 0, sortId = -1, discountId = -1, shopId = -1;
 
     long priceLte = 1, priceHigh = 500000;
 
@@ -90,11 +90,14 @@ public class ProductListingActivity extends BaseActivity implements
     ArrayList<RadioButton> priceRadioButtonsArrayList;
     SubCategoryAdapter subCategoryAdapter;
 
+    //    used to handle no items view when the user visits the screen for the first time without appliying any filters
+    boolean setFilterDataToArbitraryDefaultsIfNoData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
-        PAGE_TYPE =AppConstants.PAGE_TYPE_PRODUCT;
+        PAGE_TYPE = AppConstants.PAGE_TYPE_PRODUCT;
         filterFromTextView = (TextView) findViewById(R.id.tv_new_from_price_filter);
         filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
 
@@ -115,7 +118,7 @@ public class ProductListingActivity extends BaseActivity implements
 
         // setProductsGrid();
         discountId = getIntent().getIntExtra("discount_id", -1);
-        shopId = getIntent().getIntExtra("shop_id",-1);
+        shopId = getIntent().getIntExtra("shop_id", -1);
         url = getIntent().getStringExtra("url");
         isHideFilter = getIntent().getBooleanExtra("hide_filter", false);
         setStatusBarColor();
@@ -189,7 +192,7 @@ public class ProductListingActivity extends BaseActivity implements
         String finalUrl;
         if (nextUrl == null) {
             int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
-            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + ((discountId != -1) ? "&discount__id__in=" + discountId : "") +((shopId != -1) ? "&shop__id__in=" + shopId : "") + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
+            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + ((discountId != -1) ? "&discount__id__in=" + discountId : "") + ((shopId != -1) ? "&shop__id__in=" + shopId : "") + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
                     + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + categoryId : "") + (isO2o ? "&is_o2o=" + 1 : "")
                     + ((subCategoryAdapter != null && subCategoryAdapter.getSubCategorIds().size() > 0) ? "&subcategory__id__in=" + getSubCategoryString() : "") + "&price__gte=" + priceLte + "&price__lte=" + priceHigh + (sortId != -1 ? "&low_to_high=" + sortId : "");
         } else {
@@ -434,7 +437,7 @@ public class ProductListingActivity extends BaseActivity implements
                             + (isO2o ? "&is_o2o=" + 1 : "");
 
                     isRefreshData = true;
-                    if (sortId == -1 && priceHigh == 500000 && priceLte == 1 && !isO2o) {
+                    if (sortId == -1 && priceHigh == TO_VALUE && priceLte == FROM_VALUE && !isO2o) {
                         isFilterApplied = false;
                     } else {
                         isFilterApplied = true;
@@ -528,6 +531,11 @@ public class ProductListingActivity extends BaseActivity implements
                         || productList.getAdapter().getItemCount() == 1) {
                     showNullCaseView("No Products");
 
+                    if (!setFilterDataToArbitraryDefaultsIfNoData && !isFilterApplied) {
+                        setFilterDataToArbitraryDefaultsIfNoData = true;
+                        resetFiltersDataRadioButtonsValues();
+                    }
+
                 } else {
                     showToast("No more Products");
                     ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
@@ -579,6 +587,62 @@ public class ProductListingActivity extends BaseActivity implements
 
         }
 
+    }
+
+    private void resetFiltersDataRadioButtonsValues() {
+        priceLte = 1;
+        priceHigh = 10000;
+        FROM_VALUE = 1;
+        TO_VALUE = 10000;
+        final RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
+        seekBar.setRangeValues(priceLte, priceHigh);
+
+
+        filterFromTextView.setText(priceLte + "");
+        seekBar.setSelectedMinValue(priceLte);
+        filterToTextView.setText(priceHigh + "");
+        seekBar.setSelectedMaxValue(priceHigh);
+
+        long diff = priceHigh - priceLte;
+
+        final long[][] pricesList = new long[5][2];
+        pricesList[0][0] = priceLte;
+        pricesList[0][1] = (long) (priceLte + .10 * diff);
+        pricesList[1][0] = (long) (priceLte + .10 * diff);
+        pricesList[1][1] = (long) (priceLte + .25 * diff);
+        pricesList[2][0] = (long) (priceLte + .25 * diff);
+        pricesList[2][1] = (long) (priceLte + .50 * diff);
+        pricesList[3][0] = (long) (priceLte + .50 * diff);
+        pricesList[3][1] = (long) (priceLte + .80 * diff);
+        pricesList[4][0] = (long) (priceLte + .80 * diff);
+        pricesList[4][1] = priceHigh;
+
+        priceRadioButtonsArrayList = new ArrayList<>();
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton1)));
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton2)));
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton3)));
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton4)));
+        priceRadioButtonsArrayList.add(((RadioButton) findViewById(R.id.filterpriceradiobutton5)));
+
+        for (int i = 0; i < priceRadioButtonsArrayList.size(); i++) {
+            String radioButtonText = "₹" + pricesList[i][0] + " - ₹" + pricesList[i][1];
+            priceRadioButtonsArrayList.get(i).setText(radioButtonText);
+            priceRadioButtonsArrayList.get(i).setSelected(false);
+        }
+
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radiogroupfiltrprice);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int index = group.indexOfChild(findViewById(group.getCheckedRadioButtonId()));
+                seekBar.setSelectedMinValue(pricesList[index][0]);
+                seekBar.setSelectedMaxValue(pricesList[index][1]);
+                seekBar.setSelectedMinValue(pricesList[index][0]);
+
+                filterToTextView.setText(pricesList[index][1] + "");
+                filterFromTextView.setText(pricesList[index][0] + "");
+            }
+        });
     }
 
     private void setMinimumAndMaximumFilterPriceValues(ProductListObject obj) {
@@ -784,7 +848,7 @@ public class ProductListingActivity extends BaseActivity implements
         });
 
         ListView subCategoriesListView = (ListView) findViewById(R.id.subcategory_list);
-        if(subCategories!=null && subCategories.size()>0) {
+        if (subCategories != null && subCategories.size() > 0) {
             (findViewById(R.id.sub_categories_header)).setVisibility(View.VISIBLE);
             if (subCategoryAdapter == null) {
                 subCategoryAdapter = new SubCategoryAdapter(this, subCategories);
@@ -792,7 +856,7 @@ public class ProductListingActivity extends BaseActivity implements
             }
             CommonLib.setListViewHeightBasedOnChildren(subCategoriesListView);
 
-        }else{
+        } else {
             (findViewById(R.id.sub_categories_header)).setVisibility(View.GONE);
         }
 
@@ -808,7 +872,7 @@ public class ProductListingActivity extends BaseActivity implements
                 filterApplied = true;
                 requestTime = System.currentTimeMillis();
                 loadData();
-                if ((subCategoryAdapter!=null &&subCategoryAdapter.getSubCategorIds().size() > 0 )|| isO2o || sortId == 1 || sortId == 2 || priceLte != FROM_VALUE || priceHigh != TO_VALUE) {
+                if ((subCategoryAdapter != null && subCategoryAdapter.getSubCategorIds().size() > 0) || isO2o || sortId == 1 || sortId == 2 || priceLte != FROM_VALUE || priceHigh != TO_VALUE) {
                     isFilterApplied = true;
                     filterApplied = true;
                 } else {
