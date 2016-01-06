@@ -304,15 +304,16 @@
 
         <service
             android:name=".services.ZFetchAddressIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity
             android:name=".activities.SelectCity"
-            android:label="@string/title_activity_select_city" />
+            android:label="@string/title_activity_select_city"
+            android:theme="@style/CheckboxAppTheme" />
         <activity
             android:name=".activities.PostPaymentThankYouActivity"
             android:label="@string/title_activity_post_payment_thank_you"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
         <receiver android:name=".receivers.IncomingSmsReceiver">
             <intent-filter android:priority="999">
