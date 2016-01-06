@@ -448,7 +448,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 switch (position) {
                     case 0:
                         intent = new Intent(HomeActivity.this, SelectCity.class);
-                        intent.putExtra("show_back", true);
+                        //intent.putExtra("show_back", true);
                         mDrawer.closeDrawers();
                         startActivity(intent);
                         break;
@@ -730,7 +730,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, SelectCity.class);
-                intent.putExtra("show_back", true);
+                //intent.putExtra("show_back", true);
                 startActivity(intent);
             }
         });

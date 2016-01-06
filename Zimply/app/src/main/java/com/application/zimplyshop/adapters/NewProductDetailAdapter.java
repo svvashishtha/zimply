@@ -392,7 +392,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     Intent bookIntent = new Intent(mContext, BookingStoreProductListingActivity.class);
-                    bookIntent.putExtra("hide_filter",true);
+                    bookIntent.putExtra("hide_filter",false);
                     bookIntent.putExtra("vendor_id", obj.getVendor().getId());
                     bookIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
                     bookIntent.putExtra("vendor_name", obj.getVendor().getName());

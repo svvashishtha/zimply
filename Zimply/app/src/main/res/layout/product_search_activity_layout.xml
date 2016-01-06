@@ -4,19 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/abc_action_bar_default_height_material"
-        android:background="@color/white"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:theme="@style/Toolbar_Theme" />
+        android:id="@+id/toolbar_container"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:background="@color/white"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:theme="@style/Toolbar_Theme" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/below_shadow" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/listview_container"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/toolbar_container"
         android:background="@color/zhl"
         android:visibility="gone"
         android:orientation="vertical">
@@ -47,7 +59,7 @@
         android:id="@+id/progress_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/toolbar_container"
         android:visibility="gone"
         android:background="@color/white">
 
