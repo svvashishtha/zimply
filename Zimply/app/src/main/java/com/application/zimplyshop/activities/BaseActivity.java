@@ -269,15 +269,16 @@ public class BaseActivity extends AppCompatActivity
 //                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_wishlist, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
                 ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.ic_empty_wishlist));
             } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_ORDER) {
-                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_order, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_order));
             } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_BOOKINGS) {
-                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_booking, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_booking));
             } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_NETWORK_NO_WIFI) {
-                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_navigation_refresh, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_navigation_refresh));
             } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_PRODUCT) {
-                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_no_product, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_no_product));
             } else if (PAGE_TYPE == AppConstants.PAGE_TYPE_NOTIFICATION) {
-                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_notification, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+//                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_notification, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+                ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_notification));
             }
         } else {
             nullCaseLayout.setVisibility(View.GONE);

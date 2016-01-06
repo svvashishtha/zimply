@@ -421,10 +421,17 @@ public class CommonLib {
 	 * Check if network is available.
 	 */
 	public static boolean isNetworkAvailable(Context c) {
-		ConnectivityManager connectivityManager = (ConnectivityManager) c
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+		try {
+			ConnectivityManager connectivityManager = (ConnectivityManager) c
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+			return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/**
