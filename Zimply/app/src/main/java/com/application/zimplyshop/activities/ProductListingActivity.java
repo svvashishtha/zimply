@@ -536,7 +536,7 @@ public class ProductListingActivity extends BaseActivity implements
                     }
 
                 } else {
-                    showToast("No more Products");
+                        showToast("No more Products");
                     ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                 }
