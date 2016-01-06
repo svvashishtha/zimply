@@ -282,7 +282,6 @@
                         android:id="@+id/filterpriceradiobutton5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:buttonTint="@color/z_blue_color"
                         android:gravity="center_vertical"
                         android:text="Low to High"
                         android:textColor="@color/filter_item_text_selector"
@@ -330,7 +329,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:background="@drawable/below_shadow" />
+            android:background="@drawable/below_shadow_inverted" />
 
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/apply_filter"
