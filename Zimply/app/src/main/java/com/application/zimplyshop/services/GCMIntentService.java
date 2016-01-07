@@ -74,6 +74,7 @@ public class GCMIntentService extends IntentService implements AppConstants {
             JSONObject obj = JSONUtils.getJSONObject(bundle.getString("message"));
             if (obj != null) {
                 String message = JSONUtils.getStringfromJSON(obj, "message");
+                String title = JSONUtils.getStringfromJSON(obj, "title");
                 String imageUrl = JSONUtils.getStringfromJSON(obj, "img");
                 System.out.println("GcmObject" + obj.toString());
                 int type = JSONUtils.getIntegerfromJSON(obj, "type");
@@ -84,10 +85,10 @@ public class GCMIntentService extends IntentService implements AppConstants {
                 }
                 if (notificationType == 1) {
                     gcmNotificationManager.showCustomNotification(message,
-                            type, slug);
+                            type, slug, title);
                 } else {
                     gcmNotificationManager.showBigImageNotification(imageUrl,
-                            message, type, slug);
+                            message, type, slug, title);
                 }
 
             }

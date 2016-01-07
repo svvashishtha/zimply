@@ -38,7 +38,6 @@ import io.fabric.sdk.android.Fabric;
  * Application class for the app
  *
  * @author Umesh
- *
  */
 public class AppApplication extends Application {
 
@@ -135,6 +134,7 @@ public class AppApplication extends Application {
         getTracker(CommonLib.TrackerName.GLOBAL_TRACKER);
 
     }
+
     public boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -161,8 +161,8 @@ public class AppApplication extends Application {
 
     public String getBaseUrl() {
         //		return "http://10.0.0.112/";
-           //return "http://api.zimply.in/";
-     return "http://test.zimply.in/";
+        return "http://api.zimply.in/";
+        //return "http://test.zimply.in/";
         // return "http://192.168.43.36:8000/";
         //	return "http://52.64.127.88/";
         //return "http://52.64.12.26/";//test IP
@@ -176,7 +176,7 @@ public class AppApplication extends Application {
     }
 
 	/*@Override
-	public void onTrimMemory(int level) {
+    public void onTrimMemory(int level) {
 		CommonLib.ZLog("Trim", "Trim down memory : " +level);
 		if ( level == TRIM_MEMORY_RUNNING_MODERATE || level == TRIM_MEMORY_BACKGROUND ) {
 //			cache.clear();
@@ -223,7 +223,7 @@ public class AppApplication extends Application {
 
     public void interruptLocationTimeout() {
         //checkLocationTimeoutThread.interrupt();
-        if(checkLocationTimeoutThread != null)
+        if (checkLocationTimeoutThread != null)
             checkLocationTimeoutThread.interrupt = false;
     }
 
@@ -231,7 +231,7 @@ public class AppApplication extends Application {
 
         int result = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
-        if(result == ConnectionResult.SUCCESS) {
+        if (result == ConnectionResult.SUCCESS) {
             zll.getFusedLocation(this);
         } else {
             getAndroidLocation();
@@ -245,26 +245,26 @@ public class AppApplication extends Application {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
 
-        if(providers != null) {
-            for (String providerName:providers) {
+        if (providers != null) {
+            for (String providerName : providers) {
                 if (providerName.equals(LocationManager.GPS_PROVIDER))
                     isGpsProviderEnabled = true;
-                if(providerName.equals(LocationManager.NETWORK_PROVIDER))
+                if (providerName.equals(LocationManager.NETWORK_PROVIDER))
                     isNetworkProviderEnabled = true;
             }
         }
 
-        if( isNetworkProviderEnabled ||  isGpsProviderEnabled ) {
+        if (isNetworkProviderEnabled || isGpsProviderEnabled) {
 
             state = CommonLib.LOCATION_DETECTION_RUNNING;
 
-            if(isGpsProviderEnabled)
+            if (isGpsProviderEnabled)
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, zll);
-            if(isNetworkProviderEnabled)
+            if (isNetworkProviderEnabled)
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 500.0f, zll);
 
 
-            if(checkLocationTimeoutThread != null) {
+            if (checkLocationTimeoutThread != null) {
                 checkLocationTimeoutThread.interrupt = false;
             }
 
@@ -319,7 +319,7 @@ public class AppApplication extends Application {
 
         @Override
         protected void onPostExecute(Void arg) {
-            if(interrupt) {
+            if (interrupt) {
                 zll.interruptProcess();
             }
         }

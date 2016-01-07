@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
+import android.text.SpannableString;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -46,8 +47,9 @@ public class GcmNotificationManager implements AppConstants {
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void showBigImageNotification(String imageUrl, String message, int type, String slug) {
-        final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext).setContentTitle("Zimply")
+    public void showBigImageNotification(String imageUrl, String message, int type, String slug, String title) {
+        final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext).
+                setContentTitle(title != null && title.trim().length() > 0 ? title : "Zimply")
                 .setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
                 .setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setColor(Color.parseColor("#bbbbbb"));
         BitmapDrawable bitmapDrawable_large_logo = (BitmapDrawable) mContext.getResources()
@@ -56,9 +58,13 @@ public class GcmNotificationManager implements AppConstants {
         mBuilder.setLargeIcon(bitmap_large_logo);
 
         // BigPictureStyle
+
         final NotificationCompat.BigPictureStyle mBigPictureStyle = new NotificationCompat.BigPictureStyle();
-        mBigPictureStyle.setBigContentTitle("Zimply");
-        mBigPictureStyle.setSummaryText(message);
+        if (title != null && title.trim().length() > 0)
+            mBigPictureStyle.setBigContentTitle(title);
+        else
+            mBigPictureStyle.setBigContentTitle("Zimply");
+        mBigPictureStyle.setSummaryText(new SpannableString(message));
 
         CommonLib.ZLog("GcmNotificationManager", imageUrl);
         Bitmap bitmap = getBitmapFromURL(imageUrl);
@@ -68,10 +74,10 @@ public class GcmNotificationManager implements AppConstants {
         // TaskBuilder
         if (type == NOTIFICATION_TYPE_SHOP_LISTING) {
             notificationIntent = new Intent(mContext, ProductListingActivity.class);
-            notificationIntent .putExtra("category_id", "0");
+            notificationIntent.putExtra("category_id", "0");
             notificationIntent.putExtra("hide_filter", false);
-            notificationIntent .putExtra("category_name", message);
-            notificationIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST);
+            notificationIntent.putExtra("category_name", message);
+            notificationIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
             notificationIntent.putExtra("discount_id", Integer.parseInt(slug));
             notificationIntent.putExtra("nType", NOTIFICATION_TYPE_SHOP_LISTING);
             notificationIntent.putExtra("is_notification", true);
@@ -80,13 +86,13 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent = new Intent(mContext, ZWebView.class);
             notificationIntent.putExtra("nType", NOTIFICATION_TYPE_WEBVIEW);
             notificationIntent.putExtra("is_notification", true);
-            notificationIntent.putExtra("title",message );
+            notificationIntent.putExtra("title", message);
             notificationIntent.putExtra("url", slug);
             notificationIntent.setAction("Big Offer Notification");
         } else if (type == NOTIFICATION_TYPE_PRODUCT_DETAIL) {
             notificationIntent = new Intent(mContext, NewProductDetailActivity.class);
             notificationIntent.putExtra("slug", slug);
-            notificationIntent.putExtra("nType",NOTIFICATION_TYPE_PRODUCT_DETAIL);
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_PRODUCT_DETAIL);
             notificationIntent.putExtra("message", message);
             notificationIntent.putExtra("is_shared", true);
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
@@ -100,7 +106,7 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent.setAction("Big Offer Notification");
         }
 
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(pendingIntent);
@@ -132,7 +138,7 @@ public class GcmNotificationManager implements AppConstants {
         mId++;
     }
 
-    public void showCustomNotification(String message, int type, String slug) {
+    public void showCustomNotification(String message, int type, String slug, String title) {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).setSmallIcon(R.drawable.ic_ticker)
                 .setTicker(message).setAutoCancel(true).setDefaults(Notification.DEFAULT_ALL).setColor(Color.parseColor("#bbbbbb"));
@@ -145,7 +151,12 @@ public class GcmNotificationManager implements AppConstants {
         remoteViews.setImageViewResource(R.id.iv_notification_logo, R.drawable.ic_app_launcher_icon);
         remoteViews.setImageViewResource(R.id.iv_notification_right_small_logo, R.drawable.ic_action_favorite_red);
         // Locate and set the Text into customnotificationtext.xml TextViews
-        remoteViews.setTextViewText(R.id.tv_notification_title, mContext.getString(R.string.app_name));
+        if (title != null && title.trim().length() > 0) {
+
+            remoteViews.setTextViewText(R.id.tv_notification_title, title);
+        } else {
+            remoteViews.setTextViewText(R.id.tv_notification_title, mContext.getString(R.string.app_name));
+        }
         remoteViews.setTextViewText(R.id.tv_notification_text, message);
         remoteViews.setTextViewText(R.id.tv_notification_time, TimeUtils.getNotificationDateTime());
 
@@ -154,10 +165,10 @@ public class GcmNotificationManager implements AppConstants {
 
         if (type == NOTIFICATION_TYPE_SHOP_LISTING) {
             notificationIntent = new Intent(mContext, ProductListingActivity.class);
-            notificationIntent .putExtra("category_id", "0");
+            notificationIntent.putExtra("category_id", "0");
             notificationIntent.putExtra("hide_filter", false);
-            notificationIntent .putExtra("category_name", message);
-            notificationIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST);
+            notificationIntent.putExtra("category_name", message);
+            notificationIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
             notificationIntent.putExtra("discount_id", Integer.parseInt(slug));
             notificationIntent.putExtra("nType", NOTIFICATION_TYPE_SHOP_LISTING);
             notificationIntent.putExtra("is_notification", true);
@@ -166,13 +177,13 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent = new Intent(mContext, ZWebView.class);
             notificationIntent.putExtra("nType", NOTIFICATION_TYPE_WEBVIEW);
             notificationIntent.putExtra("is_notification", true);
-            notificationIntent.putExtra("title",message );
+            notificationIntent.putExtra("title", message);
             notificationIntent.putExtra("url", slug);
             notificationIntent.setAction("Big Offer Notification");
         } else if (type == NOTIFICATION_TYPE_PRODUCT_DETAIL) {
             notificationIntent = new Intent(mContext, NewProductDetailActivity.class);
             notificationIntent.putExtra("slug", slug);
-            notificationIntent.putExtra("nType",NOTIFICATION_TYPE_PRODUCT_DETAIL);
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_PRODUCT_DETAIL);
             notificationIntent.putExtra("message", message);
             notificationIntent.putExtra("is_shared", true);
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
