@@ -193,7 +193,7 @@ public class SplashActivity extends BaseActivity implements RequestTags, GetRequ
         appConfig();
 
         try {
-            imageView.setImageResource(R.drawable.ic_splash);
+           // imageView.setImageResource(R.drawable.ic_splash);
             imageView.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_splash, width, height));
         } catch (OutOfMemoryError e) {
             imageView.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_splash, width, height));

@@ -81,7 +81,6 @@ public class PhoneVerificationFragment extends BaseFragment implements UploadMan
                 List<NameValuePair> nameValuePair = new ArrayList<>();
                 nameValuePair.add(new BasicNameValuePair("mobile", mobile));
                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
-
                 UploadManager.getInstance().makeAyncRequest(url, RequestTags.PHONE_VERIFICATION_INPUT_NUMBER, "", ObjectTypes.OBJECT_TYPE_PHONE_VERIFICATION_INPUT, null, nameValuePair, null);
 
                 //show loader till the response is completed
