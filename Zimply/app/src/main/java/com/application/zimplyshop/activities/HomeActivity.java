@@ -452,7 +452,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                         mDrawer.closeDrawers();
                         startActivity(intent);
                         break;
-                    case 1:
+                    case 2:
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
                             intent = new Intent(HomeActivity.this, BookedForReviewActivity.class);
                             mDrawer.closeDrawers();
@@ -481,7 +481,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                             startActivity(intent);
                         }
                         break;
-                    case 2:
+                    case 1:
                         if (AppPreferences.isUserLogIn(HomeActivity.this)) {
                             intent = new Intent(HomeActivity.this, PurchaseListActivity.class);
                             intent.putExtra("fromHome", true);
