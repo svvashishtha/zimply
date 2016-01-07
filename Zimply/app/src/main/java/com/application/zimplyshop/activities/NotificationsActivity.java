@@ -66,6 +66,7 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
 
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
+        findViewById(R.id.null_case_image).setOnClickListener(this);
         GetRequestManager.getInstance().addCallbacks(this);
         ((CustomTextView)findViewById(R.id.cart_item_true)).setVisibility(View.GONE);
         AppPreferences.setNotifModDateTime(this,System.currentTimeMillis());
@@ -245,6 +246,7 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
     @Override
     public void onClick(View v) {
         switch(v.getId()){
+            case R.id.null_case_image:
             case R.id.retry_layout:
                 if(isRequestFailed){
                     loadData();

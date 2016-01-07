@@ -66,6 +66,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
 
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
+        findViewById(R.id.null_case_image).setOnClickListener(this);
         //register receviers
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mNotificationReceived, new IntentFilter(CommonLib.LOCAL_SMS_BROADCAST));
 
@@ -378,6 +379,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.null_case_image:
             case R.id.retry_layout:
                 loadData();
         }

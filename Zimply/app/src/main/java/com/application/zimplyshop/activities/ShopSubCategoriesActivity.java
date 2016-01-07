@@ -53,6 +53,8 @@ public class ShopSubCategoriesActivity extends BaseActivity implements
 		setLoadingVariables();
 		setToolbarHeight();
 		loadData();
+		findViewById(R.id.null_case_image).setOnClickListener(this);
+		retryLayout.setOnClickListener(this);
 	}
 
 	private void loadData() {
@@ -125,6 +127,7 @@ public class ShopSubCategoriesActivity extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+			case R.id.null_case_image:
 		case R.id.retry_layout:
 			if (isRequestFailed) {
 				loadData();

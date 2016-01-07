@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class EditAddressActivity extends BaseActivity implements RequestTags, UploadManagerCallback, GetRequestListener {
+public class EditAddressActivity extends BaseActivity implements RequestTags, UploadManagerCallback, GetRequestListener, View.OnClickListener {
     AddressObject addressObject;
     private EditText phone, emailEdittext, name, addLine1, addLine2, city, state, pinCode;
     Context context;
@@ -91,6 +91,8 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
         state.setKeyListener(null);
         pinCode = (EditText) findViewById(R.id.pincode);
 
+        setLoadingVariables();
+        retryLayout.setOnClickListener(this);
 
         addressObject = (AddressObject) getIntent().getSerializableExtra("addressObject");
         if (addressObject != null) {
@@ -323,6 +325,16 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
             if (zProgressDialog != null) {
                 zProgressDialog.dismiss();
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.retry_layout:
+                findViewById(R.id.save).performClick();
+                break;
         }
     }
 }

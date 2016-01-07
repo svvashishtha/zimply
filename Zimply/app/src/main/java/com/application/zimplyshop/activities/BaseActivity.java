@@ -249,11 +249,11 @@ public class BaseActivity extends AppCompatActivity
         retryLayout.setVisibility(View.VISIBLE);
         retryLayout.setBackgroundResource(R.drawable.ic_navigation_refresh);
         nullCaseLayout.setVisibility(View.GONE);
-        if (PAGE_TYPE == AppConstants.PAGE_TYPE_NETWORK_NO_WIFI) {
-            ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_navigation_refresh, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+        //if (PAGE_TYPE == AppConstants.PAGE_TYPE_NETWORK_NO_WIFI) {
+            ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.ic_no_wifi));
             nullCaseLayout.setVisibility(View.VISIBLE);
             retryLayout.setVisibility(View.GONE);
-        }
+        //}
     }
 
     public void showNullCaseView(String text) {

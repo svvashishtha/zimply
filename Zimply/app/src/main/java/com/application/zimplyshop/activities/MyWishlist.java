@@ -72,7 +72,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
         setStatusBarColor();
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
-
+        findViewById(R.id.null_case_image).setOnClickListener(this);
         width = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
                 .getDimension(R.dimen.font_small))) / 2;
         loadData();
@@ -220,6 +220,7 @@ public class MyWishlist extends BaseActivity implements GetRequestListener,View.
     @Override
     public void onClick(View v) {
         switch(v.getId()){
+            case R.id.null_case_image:
             case R.id.retry_layout:
                 if(isRequestFailed){
                     loadData();

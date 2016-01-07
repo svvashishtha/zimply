@@ -77,6 +77,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         setContentView(R.layout.new_product_detail_activity);
         isShared = getIntent().getBooleanExtra("is_shared", false);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        PAGE_TYPE = AppConstants.PAGE_TYPE_NETWORK_NO_WIFI;
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,7 +102,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         buyNow = (TextView)findViewById(R.id.buy_now);
         buyNow.setOnClickListener(this);
         setLoadingVariables();
-
+        retryLayout.setOnClickListener(this);
+        findViewById(R.id.null_case_image).setOnClickListener(this);
         GetRequestManager.getInstance().addCallbacks(this);
         UploadManager.getInstance().addCallback(this);
         loadData();
@@ -738,6 +740,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     @Override
     public void onClick(View v) {
         switch(v.getId()){
+            case R.id.null_case_image:
             case R.id.retry_layout:
                 if(isRequestFailed){
                     loadData();

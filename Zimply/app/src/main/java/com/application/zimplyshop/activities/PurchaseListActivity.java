@@ -75,6 +75,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
         UploadManager.getInstance().addCallback(this);
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
+        findViewById(R.id.null_case_image).setOnClickListener(this);
         loadData();
     }
 
@@ -296,6 +297,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.null_case_image:
             case R.id.retry_layout:
                 if(isRequestFailed)
                     loadData();
