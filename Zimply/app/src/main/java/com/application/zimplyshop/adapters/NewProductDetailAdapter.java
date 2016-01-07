@@ -371,7 +371,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     if (((ProductInfoHolder3) holder).pincode.getText().toString().length() == 6) {
-                        mListener.onCheckPincodeClicked(true, ((ProductInfoHolder3) holder).pincode.getText().toString());
+                        mListener.onCheckPincodeClicked(true, ((ProductInfoHolder3) holder).pincode.getText().toString(),position);
                     } else {
                         // showToast("Please enter a valid pincode");
                         //  Toast.makeText(ProductDetailsActivity.this, "Please enter a valid pincode", Toast.LENGTH_SHORT).show();
@@ -545,6 +545,30 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             linLayout.setPadding(mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small), mContext.getResources().getDimensionPixelSize(R.dimen.margin_small));
+
+                            if (obj.getProduct().getSku() != null && obj.getProduct().getSku().length() > 0) {
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                LinearLayout layout = new LinearLayout(mContext);
+                                layout.setOrientation(LinearLayout.HORIZONTAL);
+                                layout.setLayoutParams(params);
+                                layout.setPadding(0, 0, 0, mContext.getResources().getDimensionPixelSize(R.dimen.margin_small));
+                                CustomTextView unit = new CustomTextView(mContext);
+                                unit.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT));
+                                ((LinearLayout.LayoutParams) unit.getLayoutParams()).weight = 1;
+                                unit.setTextColor(mContext.getResources().getColor(R.color.text_color1));
+                                unit.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimensionPixelSize(R.dimen.font_medium));
+                                unit.setText(Html.fromHtml("<font color=#535353>" + "Product Code" + "</font>"));
+                                CustomTextView value = new CustomTextView(mContext);
+                                value.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT));
+                                ((LinearLayout.LayoutParams) value.getLayoutParams()).weight = 1;
+                                value.setTextColor(mContext.getResources().getColor(R.color.text_color1));
+                                value.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimensionPixelSize(R.dimen.font_medium));
+                                value.setText(Html.fromHtml("<font color=#535353>" + obj.getProduct().getSku() + "</font>"));
+                                layout.addView(unit);
+                                layout.addView(value);
+                                linLayout.addView(layout);
+                            }
+
                             for (ProductAttribute attribute : obj.getProduct().getAttribute()) {
 
                                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -622,6 +646,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                         });
                     } else {
                         ((ProductInfoHolder4) holder).descTitle.setVisibility(View.GONE);
+                        ((ProductInfoHolder4) holder).separator.setVisibility(View.GONE);
                         ((ProductInfoHolder4) holder).descText.setVisibility(View.GONE);
                         ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
                     }
@@ -889,10 +914,10 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     boolean isShowAvailableText;
 
-    public void setIsAvailableAtPincode(boolean isAvailableAtPincode) {
+    public void setIsAvailableAtPincode(boolean isAvailableAtPincode , int position) {
         this.isAvailableAtPincode = isAvailableAtPincode;
         this.isShowAvailableText = true;
-        notifyItemChanged(3);
+        notifyItemChanged(position);
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
@@ -978,9 +1003,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     public class ProductInfoHolder4 extends RecyclerView.ViewHolder {
         TextView descTitle, descText;
         LinearLayout descLayout;
+        View separator;
 
         public ProductInfoHolder4(View itemView) {
             super(itemView);
+            separator = itemView.findViewById(R.id.separator);
             descText = (TextView) itemView.findViewById(R.id.description_text);
             descTitle = (TextView) itemView.findViewById(R.id.description_title);
             descLayout = (LinearLayout) itemView.findViewById(R.id.desc_lin_layout);
@@ -995,7 +1022,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public interface OnViewsClickedListener {
 
-        void onCheckPincodeClicked(boolean isShowProgress, String pincode);
+        void onCheckPincodeClicked(boolean isShowProgress, String pincode,int position);
 
         void markReviewRequest(ProductInfoHolder2 holder);
 
