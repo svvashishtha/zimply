@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:background="@color/white"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
     <com.application.zimplyshop.widgets.CustomTextViewBold
         android:id="@+id/description_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_small"
         android:background="@color/white"
         android:drawableRight="@drawable/ic_down_black"
         android:gravity="center_vertical"
+        android:padding="@dimen/margin_small"
         android:text="@string/description"
         android:textColor="@color/heading_text_color"
         android:textSize="@dimen/font_large"
@@ -21,23 +22,24 @@
         android:id="@+id/description_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_small"
-        android:gravity="center_vertical"
         android:background="@color/white"
-        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:padding="@dimen/margin_small"
         android:textColor="@color/text_color1"
         android:textSize="@dimen/font_medium"
-        />
-    <LinearLayout android:layout_width="match_parent"
-                  android:id="@+id/desc_lin_layout"
-                  android:layout_height="wrap_content"
-                  android:background="@color/white"
-                  android:visibility="gone"
-                  android:orientation="vertical">
-    </LinearLayout>
-    <View android:layout_width="match_parent"
-          android:layout_height="1dp"
-          android:background="@color/separator_color">
+        android:visibility="gone" />
 
-    </View>
+    <LinearLayout
+        android:id="@+id/desc_lin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone"/>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color"/>
 </LinearLayout>

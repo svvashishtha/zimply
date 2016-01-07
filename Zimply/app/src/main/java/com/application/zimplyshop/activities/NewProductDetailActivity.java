@@ -69,6 +69,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     TextView addToCart,buyNow;
 
     boolean isShared;
+    private int picncodePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,10 +221,10 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             }
             if (((boolean) obj)) {
                 if(adapter!=null){
-                    adapter.setIsAvailableAtPincode(true);
+                    adapter.setIsAvailableAtPincode(true,picncodePosition);
                 }
             } else {
-                adapter.setIsAvailableAtPincode(false);
+                adapter.setIsAvailableAtPincode(false,picncodePosition);
                 /*findViewById(R.id.is_available_pincode).setVisibility(View.VISIBLE);
                 ((TextView) findViewById(R.id.is_available_pincode)).setTextColor(getResources().getColor(R.color.red_text_color));
                 ((TextView) findViewById(R.id.is_available_pincode)).setText("Not available at selected pincode");*/
@@ -238,8 +239,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         productDetailList.setAdapter(adapter);
         adapter.setOnViewsClickedListener(new NewProductDetailAdapter.OnViewsClickedListener() {
             @Override
-            public void onCheckPincodeClicked(boolean isShowProgress, String pincode) {
+            public void onCheckPincodeClicked(boolean isShowProgress, String pincode,int position) {
                 checkPincodeAvailability(isShowProgress, pincode);
+                picncodePosition = position;
             }
 
             @Override

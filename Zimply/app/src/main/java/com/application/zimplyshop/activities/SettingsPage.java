@@ -119,18 +119,22 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
         if (requestType == RequestTags.PHONE_VERIFICATION_INPUT_NUMBER) {
             if (status) {
                 if (!cancelled) {
-                    mAdapter.setCounter(3);
-                    mAdapter.notifyItemChanged(0);
-                    mAdapter.notifyItemChanged(1);
-                    mAdapter.resetTimer(true);
+                    if (mAdapter != null) {
+                        mAdapter.setCounter(3);
+                        mAdapter.notifyItemChanged(0);
+                        mAdapter.notifyItemChanged(1);
+                        mAdapter.resetTimer(true);
+                    }
 
                 }
             } else {
                 if (!cancelled) {
-                    mAdapter.setCounter(2);
-                    mAdapter.notifyItemChanged(0);
-                    mAdapter.notifyItemChanged(1);
-                    showToast("Something went wrong in the phone verification. Please try after some time.");
+                    if (mAdapter != null) {
+                        mAdapter.setCounter(2);
+                        mAdapter.notifyItemChanged(0);
+                        mAdapter.notifyItemChanged(1);
+                        showToast("Something went wrong in the phone verification. Please try after some time.");
+                    }
                 }
             }
 //            mAdapter.notifyDataSetChanged();
@@ -194,9 +198,8 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
         if (!destroyed && requestType == CHANGE_PASSWORD) {
             progressDialog = ProgressDialog.show(SettingsPage.this, "Changing Password", "Please wait");
-        }
-        else if (!destroyed && requestType == NOTIFICATION_SWITCH_TAG_INT) {
-            progressDialog = ProgressDialog.show(SettingsPage.this,"", "Turning Notifications" + (!notificationSwitch?" off":" on"));
+        } else if (!destroyed && requestType == NOTIFICATION_SWITCH_TAG_INT) {
+            progressDialog = ProgressDialog.show(SettingsPage.this, "", "Turning Notifications" + (!notificationSwitch ? " off" : " on"));
         }
     }
 
@@ -258,7 +261,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
 
             try {
                 notificationSwitch = JSONUtils.getJSONObject((String) obj).getBoolean("status");
-                AppPreferences.setIsNotificationEnabled(SettingsPage.this,notificationSwitch);
+                AppPreferences.setIsNotificationEnabled(SettingsPage.this, notificationSwitch);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -355,7 +358,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
                 String url = AppApplication.getInstance().getBaseUrl() + AppConstants.NOTIFICATION_SWITCH;
                 List<NameValuePair> nameValuePair = new ArrayList<>();
                 notificationSwitch = status;
-                AppPreferences.setIsNotificationEnabled(SettingsPage.this,status);
+                AppPreferences.setIsNotificationEnabled(SettingsPage.this, status);
                 nameValuePair.add(new BasicNameValuePair("device_id", AppPreferences.getDeviceID(SettingsPage.this)));
                 nameValuePair.add(new BasicNameValuePair("status", status ? "1" : "0"));
                 UploadManager.getInstance().makeAyncRequest(url, NOTIFICATION_SWITCH_TAG_INT, "",
@@ -374,8 +377,7 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
 
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.retry_layout:
                 loadData();
         }
