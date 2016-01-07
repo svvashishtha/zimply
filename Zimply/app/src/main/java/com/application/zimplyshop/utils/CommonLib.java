@@ -490,7 +490,7 @@ public class CommonLib {
 		BitmapFactory.decodeResource(mContext.getResources(), resId, options);
 		options.inSampleSize = CommonLib.calculateInSampleSize(options, width, height);
 		options.inJustDecodeBounds = false;
-		options.inPreferredConfig = Bitmap.Config.RGB_565;
+		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
 		if (!CommonLib.isAndroidL())
 			options.inPurgeable = true;

@@ -401,6 +401,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         } else {
 
             if (position == 3) {
+                ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descTitle.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).separator.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descLayout.setVisibility(View.VISIBLE);
+
                 ((ProductInfoHolder4) holder).descTitle.setText("Summary");
 
                 if (isDescShown) {
@@ -425,6 +430,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 });
             } else if (position == 4) {
+                ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descTitle.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).separator.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descLayout.setVisibility(View.VISIBLE);
+
                 if (obj.getProduct().is_o2o()) {
                     ((ProductInfoHolder4) holder).descTitle.setText("Summary");
 
@@ -534,6 +544,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     });
                 }
             } else if (position == 5) {
+                ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descTitle.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).separator.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descLayout.setVisibility(View.VISIBLE);
+
                 if (obj.getProduct().is_o2o()) {
                     ((ProductInfoHolder4) holder).descTitle.setText("Specifications");
                     if (isSpecsShown) {
@@ -619,7 +634,6 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                         }
                     });
                 } else {
-
                     if (obj.getProduct().getCare().trim().length() > 0) {
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
                         ((ProductInfoHolder4) holder).descTitle.setText("Care");
@@ -652,6 +666,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 }
             } else if (position == 6) {
+                ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descTitle.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).separator.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descLayout.setVisibility(View.VISIBLE);
+
                 if (obj.getProduct().is_o2o()) {
                     if (obj.getProduct().getCare().trim().length() > 0) {
                         ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
@@ -680,9 +699,14 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     } else {
                         ((ProductInfoHolder4) holder).descText.setVisibility(View.GONE);
                         ((ProductInfoHolder4) holder).descTitle.setVisibility(View.GONE);
+                        ((ProductInfoHolder4) holder).separator.setVisibility(View.GONE);
                         ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
                     }
                 } else {
+                    ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder4) holder).descTitle.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder4) holder).separator.setVisibility(View.VISIBLE);
+                    ((ProductInfoHolder4) holder).descLayout.setVisibility(View.VISIBLE);
                     ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
                     changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
                     ((ProductInfoHolder4) holder).descTitle.setText("Return & Damage Policy");
@@ -710,6 +734,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     });
                 }
             } else if (position == 7) {
+                ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descTitle.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).separator.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descLayout.setVisibility(View.VISIBLE);
+
                 if (obj.getProduct().is_o2o()) {
                     ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
                     changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
@@ -766,6 +795,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     });
                 }
             } else if (position == 8) {
+                ((ProductInfoHolder4) holder).descText.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descTitle.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).separator.setVisibility(View.VISIBLE);
+                ((ProductInfoHolder4) holder).descLayout.setVisibility(View.VISIBLE);
+
                 ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
                 changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_down_black);
                 ((ProductInfoHolder4) holder).descTitle.setText("FAQ's");
