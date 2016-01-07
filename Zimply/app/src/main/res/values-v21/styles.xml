@@ -29,7 +29,6 @@
     <style name="CheckboxAppTheme" parent="AppBaseTheme">
         <item name="colorPrimary">@color/app_primary_color</item>
         <item name="colorPrimaryDark">@color/app_primary_color_dark</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
         <item name="colorAccent">@color/z_blue_color</item>

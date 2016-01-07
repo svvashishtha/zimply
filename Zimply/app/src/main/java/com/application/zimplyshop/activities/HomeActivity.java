@@ -201,11 +201,11 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
                 }
             });
-        }else{
+        } else {
             loadBanner();
         }
         boolean isNotification = getIntent().getBooleanExtra("is_notification", false);
-        if(isNotification ){
+        if (isNotification) {
             if (AppPreferences.isUserLogIn(this)) {
                 loadUserData();
             } else {
@@ -559,7 +559,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     case 7:
                         intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("application/octet-stream");
-                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"care@zimply.in"});
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"support@zimply.in"});
                         intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.support_email_subject));
                         mDrawer.closeDrawers();
                         try {
@@ -872,8 +872,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
 
     boolean isLoadingBanner;
+
     private void loadBanner() {
-        if(!isLoadingBanner) {
+        if (!isLoadingBanner) {
             isLoadingBanner = true;
             String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_BANNER_REQUEST;
             GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.BANNER_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_BANNER_OBJECT);
@@ -1076,7 +1077,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             }
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(BANNER_REQUEST_TAG)) {
             if (((BannerObject) obj).getType() != 0) {
-                isLoadingBanner=false;
+                isLoadingBanner = false;
                 showBanner((BannerObject) obj);
             }
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(RequestTags.PHONE_VERIFICATION)) {
@@ -1097,9 +1098,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             } else {
                 ((TextView) findViewById(R.id.notification_count)).setText(AllNotifications.getsInstance().getNewNotificationCount() + "");
                 findViewById(R.id.notification_count).setVisibility(View.VISIBLE);
-                if(AllNotifications.getsInstance().getNewNotificationCount()!=AppPreferences.getPreviousNotificationCount(this) ){
+                if (AllNotifications.getsInstance().getNewNotificationCount() != AppPreferences.getPreviousNotificationCount(this)) {
 
-                    AppPreferences.setPreviousNotificationCount(this,AllNotifications.getsInstance().getNewNotificationCount());
+                    AppPreferences.setPreviousNotificationCount(this, AllNotifications.getsInstance().getNewNotificationCount());
                     (findViewById(R.id.notif_tut)).setVisibility(View.VISIBLE);
                     (findViewById(R.id.notif_tut)).setOnClickListener(new OnClickListener() {
                         @Override
@@ -1107,7 +1108,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                             (findViewById(R.id.notif_tut)).setVisibility(View.GONE);
                         }
                     });
-                }else{
+                } else {
                     (findViewById(R.id.notif_tut)).setVisibility(View.GONE);
                 }
             }
@@ -1136,8 +1137,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         if (!isDestroyed && requestTag.equalsIgnoreCase(HOME_PAGE_REQUEST_TAG)) {
             showNetworkErrorView();
             changeViewVisiblity(parentScrollView, View.GONE);
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(BANNER_REQUEST_TAG)){
-            isLoadingBanner=false;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(BANNER_REQUEST_TAG)) {
+            isLoadingBanner = false;
         }
     }
 
