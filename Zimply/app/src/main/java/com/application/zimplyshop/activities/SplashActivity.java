@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -191,16 +190,6 @@ public class SplashActivity extends BaseActivity implements RequestTags, GetRequ
 
         //
         appConfig();
-
-        try {
-           // imageView.setImageResource(R.drawable.ic_splash);
-            imageView.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_splash, width, height));
-        } catch (OutOfMemoryError e) {
-            imageView.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_splash, width, height));
-        }
-
-        imageView.setVisibility(View.VISIBLE);
-
     }
 
     @Override

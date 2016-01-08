@@ -543,6 +543,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                             intent = new Intent(HomeActivity.this, BaseLoginSignupActivity.class);
                             isToLoginPage = true;
                             intent.putExtra("inside", true);
+                            intent.putExtra("inside", true);
                             startActivity(intent);
                         }
                         break;
