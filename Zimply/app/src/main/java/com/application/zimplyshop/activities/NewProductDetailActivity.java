@@ -206,8 +206,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 addAdapterData(product);
                 showView();
                 changeViewVisiblity(productDetailList, View.VISIBLE);
+
                 //log GA event of Product View
-                ZTracker.logGaProductEvent(NewProductDetailActivity.this,product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSku());
+                ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Product Description", product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSku());
             } else {
                 showNullCaseView("No Info Available");
             }

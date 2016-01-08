@@ -28,16 +28,22 @@ public class ZTracker {
 
     }
 
-    public static void logGaProductEvent(Context ctx, String name, String category, String sku) {
-        if (CommonLib.LogGAEvent) {
-            Tracker t = ((AppApplication) ctx.getApplicationContext()).getTracker(
-                    CommonLib.TrackerName.APPLICATION_TRACKER);
-            t.send(new HitBuilders.EventBuilder()
-                    .setCategory("Product Views")
-                    .setAction(name + category)
-                    .setLabel(sku)
-                    .build());
-        }
+    public static void logGaCustomEvent(Context ctx, String pageType, String name, String category, String sku) {
+        //if (CommonLib.LogGAEvent) {
+            try {
+                Tracker t = ((AppApplication) ctx.getApplicationContext()).getTracker(
+                        CommonLib.TrackerName.APPLICATION_TRACKER);
+                /*t.send(new HitBuilders.EventBuilder()
+                        .setCategory(pageType + " Views")
+                        .setAction(name + category)
+                        .setLabel(sku)
+                        .build());*/
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+      //  }
     }
 
     // Google Analytics Screen View

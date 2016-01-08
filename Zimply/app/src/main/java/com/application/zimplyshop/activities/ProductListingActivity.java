@@ -49,6 +49,7 @@ import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
 import com.application.zimplyshop.widgets.RangeSeekBar;
@@ -91,6 +92,7 @@ public class ProductListingActivity extends BaseActivity implements
 
     //    used to handle no items view when the user visits the screen for the first time without appliying any filters
     boolean setFilterDataToArbitraryDefaultsIfNoData;
+    private String categoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,7 +280,8 @@ public class ProductListingActivity extends BaseActivity implements
                 R.layout.common_toolbar_text_layout, null);
         titleText = (TextView) view.findViewById(R.id.title_textview);
         if (getIntent().getStringExtra("category_name") != null) {
-            titleText.setText(getIntent().getStringExtra("category_name"));
+            categoryName = getIntent().getStringExtra("category_name");
+            titleText.setText(categoryName);
         } else {
             titleText.setText("Products");
         }
@@ -548,7 +551,15 @@ public class ProductListingActivity extends BaseActivity implements
                     setMinimumAndMaximumFilterPriceValues(((ProductListObject) obj));
                 }
                 setAdapterData(((ProductListObject) obj).getProducts());
+                try {
+                    //log ga event for product listing activity
 
+                    ZTracker.logGaCustomEvent(ProductListingActivity.this, "Product Listing",
+                            categoryName != null ? categoryName : "category name not available", categoryId + "", "");
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 nextUrl = ((ProductListObject) obj).getNext_url();
                 subCategories = ((ProductListObject) obj).getSubcategory();
                 showView();
