@@ -120,6 +120,7 @@ public class SearchResultsActivity extends BaseActivity implements
         // setFilterVariables();
         // setFiltersClick();
         retryLayout.setOnClickListener(this);
+        findViewById(R.id.null_case_image).setOnClickListener(this);
         width = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
                 .getDimension(R.dimen.font_small))) / 2;
         homeProductObjs = new ArrayList<>();
@@ -449,6 +450,7 @@ public class SearchResultsActivity extends BaseActivity implements
             case R.id.sort_filter_layout:
 
                 break;
+            case R.id.null_case_image:
             case R.id.retry_layout:
                 if (isRequestFailed) {
                     loadData();

@@ -70,6 +70,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
         UploadManager.getInstance().addCallback(this);
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
+        findViewById(R.id.null_case_image).setOnClickListener(this);
 
         loadData();
     }
@@ -331,6 +332,7 @@ public class BookedForReviewActivity extends BaseActivity implements GetRequestL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.null_case_image:
             case R.id.retry_layout:
                 if (isRequestFailed) {
                     loadData();

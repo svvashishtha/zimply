@@ -114,6 +114,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         setStatusBarColor();
         setLoadingVariables();
         retryLayout.setOnClickListener(this);
+        findViewById(R.id.null_case_image).setOnClickListener(this);
         // setFilterVariables();
         // setFiltersClick();
         width = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
@@ -546,6 +547,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
             case R.id.sort_filter_layout:
 
                 break;
+            case R.id.null_case_image:
             case R.id.retry_layout:
                 if (isRequestFailed) {
                     loadData();

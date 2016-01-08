@@ -147,7 +147,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
             ((ImageViewHolder) holder).productNewImage.setLayoutParams(lp);
             ((ImageViewHolder) holder).productNewImage.setTag(0);
-            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrlNew(obj.getProduct().getImages().get(0), ((ImageViewHolder) holder).productNewImage, "photo_details", displayWidth / 2, displayHeight / 20, false,
+            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrlNew(obj.getProduct().getImages().get(0), ((ImageViewHolder) holder).productNewImage, "photo_details", displayWidth / 2,/* displayHeight / 20*/displayWidth / 2, false,
                     false, new ImageLoaderManager.ImageLoaderCallback() {
                         @Override
                         public void loadingStarted() {
@@ -175,7 +175,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrl(obj.getProduct().getThumbs().get(pos), ((ImageViewHolder) holder).productImg, "users", displayWidth / 2, displayHeight / 20, false,
                                     false);
 
-                            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrlNew(obj.getProduct().getImages().get(pos), ((ImageViewHolder) holder).productNewImage, "photo_details", displayWidth / 2, displayHeight / 20, false,
+                            new ImageLoaderManager((NewProductDetailActivity) mContext).setImageFromUrlNew(obj.getProduct().getImages().get(pos), ((ImageViewHolder) holder).productNewImage, "photo_details", displayWidth / 2, /*displayHeight / 20*/displayWidth / 2, false,
                                     false, new ImageLoaderManager.ImageLoaderCallback() {
                                         @Override
                                         public void loadingStarted() {
@@ -185,6 +185,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                         @Override
                                         public void loadingFinished(Bitmap bitmap) {
                                             ((ImageViewHolder) holder).productImg.setVisibility(View.GONE);
+
+
                                         }
                                     });
                         }

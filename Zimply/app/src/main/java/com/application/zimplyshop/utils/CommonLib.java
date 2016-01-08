@@ -130,7 +130,7 @@ public class CommonLib {
 	/**
 	 * Log control
 	 */
-	public final static boolean ZimplyLog = false;
+	public final static boolean ZimplyLog = true;
 	/**
 	 * GA event control
 	 */
