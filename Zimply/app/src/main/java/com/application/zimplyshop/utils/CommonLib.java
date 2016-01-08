@@ -130,11 +130,11 @@ public class CommonLib {
 	/**
 	 * Log control
 	 */
-	public final static boolean ZimplyLog = false;
+	public final static boolean ZimplyLog = true;
 	/**
 	 * GA event control
 	 */
-	public final static boolean LogGAEvent = true;
+	public final static boolean LogGAEvent = false;
 	/**
 	 * GCM Sender ID
 	 */
