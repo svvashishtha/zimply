@@ -30,6 +30,7 @@ import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
+import com.application.zimplyshop.baseobjects.SimilarProductsListObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -64,13 +65,15 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     boolean isScannedProduct;
 
-    int width, height;
+    int width, height, widthSimilarProducts;
     double requestTime;
     int spaceHeight;
     TextView addToCart, buyNow;
 
     boolean isShared;
     private int picncodePosition;
+
+    boolean isSimilarProductsLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             isScannedProduct = getIntent().getExtras().getBoolean("is_scanned");
         }
         width = getDisplayMetrics().widthPixels;
+        widthSimilarProducts = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
+                .getDimension(R.dimen.font_small))) / 2;
         height = getDisplayMetrics().heightPixels;
         productDetailList = (RecyclerView) findViewById(R.id.categories_list);
         productDetailList.setLayoutManager(new ScrollCustomizedLayoutManager(this));
@@ -111,7 +116,6 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
 
     }
-
 
 
     TextView toolbarTitle;
@@ -173,6 +177,13 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL);
     }
 
+    public void loadSimilarProductsRequest() {
+        String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_SIMILAR_PRODUCTS_URL + "?id=" + productId
+                + "&width=" + widthSimilarProducts + "&size=10&page=1";
+        GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG,
+                ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL_SIMILAR_PRODUCTS);
+    }
+
     @Override
     public void onRequestStarted(String requestTag) {
         if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)) {
@@ -207,7 +218,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 showView();
                 changeViewVisiblity(productDetailList, View.VISIBLE);
                 //log GA event of Product View
-                ZTracker.logGaProductEvent(NewProductDetailActivity.this,product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSku());
+                ZTracker.logGaProductEvent(NewProductDetailActivity.this, product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSku());
+                loadSimilarProductsRequest();
             } else {
                 showNullCaseView("No Info Available");
             }
@@ -241,6 +253,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 ((TextView) findViewById(R.id.is_available_pincode)).setText("Not available at selected pincode");*/
             }
             CommonLib.hideKeyBoard(this, findViewById(R.id.pincode));
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+            isSimilarProductsLoaded = true;
+            if (adapter != null) {
+                SimilarProductsListObject similar = (SimilarProductsListObject) obj;
+                adapter.addSimilarProducts(((SimilarProductsListObject) obj).getProducts());
+            }
         }
     }
 
@@ -872,6 +890,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         } else {
             cartCount.setVisibility(View.GONE);
         }
+    }
+
+    public void openSimilarProductsActivity() {
+        Intent i = new Intent(this, SimilarProductsActivity.class);
+        i.putExtra("productid", productId);
+        startActivity(i);
     }
 
     public class MyPagerAdapter extends PagerAdapter {

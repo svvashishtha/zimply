@@ -113,7 +113,7 @@ public class AppApplication extends Application {
             firstLaunch = prefs.getBoolean("firstLaunch", true);
         }
 
-        new ThirdPartyInitAsync().execute();
+//        new ThirdPartyInitAsync().execute();
 
         // run the cache cleaner service
         try {
@@ -161,8 +161,8 @@ public class AppApplication extends Application {
 
     public String getBaseUrl() {
         //		return "http://10.0.0.112/";
-        //return "http://api.zimply.in/";
-        return "http://test.zimply.in/";
+        return "http://api.zimply.in/";
+//        return "http://test.zimply.in/";
         // return "http://192.168.43.36:8000/";
         //	return "http://52.64.127.88/";
         //return "http://52.64.12.26/";//test IP

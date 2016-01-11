@@ -28,6 +28,7 @@ public interface AppConstants {
     String EXPERT_PHOTO_REQUETS_URL = "explore/expert-photo-list/";
     String FORGOT_PASSWORD = "zimply-auth/new-forget-password/";
     String PRODUCT_DESCRIPTION_REQUETS_URL = "ecommerce/product-detail/";
+    String PRODUCT_DESCRIPTION_SIMILAR_PRODUCTS_URL = "ecommerce/product-recom/";
 
     String MARK_FAVOURITE_URL = "zimply-auth/add-item-in-favourite/";
     String MARK_UNFAVOURITE_URL = "zimply-auth/delete-item-from-favourite/";
@@ -182,8 +183,7 @@ public interface AppConstants {
     int PAGE_TYPE_BOOKINGS = 4;
     int PAGE_TYPE_NOTIFICATION = 5;
     int PAGE_TYPE_PRODUCT = 6;
-    int PAGE_TYPE_NETWORK_NO_WIFI= 7;
-
+    int PAGE_TYPE_NETWORK_NO_WIFI = 7;
 
 
 }

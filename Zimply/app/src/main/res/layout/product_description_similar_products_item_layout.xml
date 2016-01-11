@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/z_margin_large">
+
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/similar_products_text"
+            android:textColor="@color/heading_text_color"
+            android:textSize="@dimen/font_large"
+            android:textStyle="bold" />
+
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/view_all_similarl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:includeFontPadding="false"
+            android:padding="@dimen/z_margin_small"
+            android:text="View All"
+            android:textColor="@color/z_blue_color"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/simiilarproductslist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false" />
 
 </LinearLayout>

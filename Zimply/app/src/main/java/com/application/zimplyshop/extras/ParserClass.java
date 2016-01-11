@@ -16,6 +16,7 @@ import com.application.zimplyshop.baseobjects.MyWishListObject;
 import com.application.zimplyshop.baseobjects.OffersObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
+import com.application.zimplyshop.baseobjects.SimilarProductsListObject;
 import com.application.zimplyshop.objects.AllCategories;
 import com.application.zimplyshop.objects.AllCities;
 import com.application.zimplyshop.objects.AllHomeObjects;
@@ -922,6 +923,8 @@ public class ParserClass implements ObjectTypes {
                 return responseString;
             case OBJECT_TYPE_OFFERS_REQUEST_OBJ:
                 return new Gson().fromJson(responseString, OffersObject.class);
+            case OBJECT_TYPE_PRODUCT_DETAIL_SIMILAR_PRODUCTS:
+                return new Gson().fromJson(responseString, SimilarProductsListObject.class);
             default:
                 return null;
         }

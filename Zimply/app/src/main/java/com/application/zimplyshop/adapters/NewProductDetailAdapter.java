@@ -34,6 +34,7 @@ import com.application.zimplyshop.activities.BookingStoreProductListingActivity;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.activities.ProductPhotoZoomActivity;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.extras.AppConstants;
@@ -42,6 +43,7 @@ import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.ProductThumbListItemDecorator;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -56,6 +58,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     int TYPE_PRODUCT_INFO_2 = 2;
     int TYPE_PRODUCT_INFO_3 = 3;
     int TYPE_PRODUCT_INFO_4 = 4;
+    int TYPE_SIMILAR_PRODUCTS = 5;
 
     int BOOK_BTN_CLICK = 1;
     int PROGRESS_TIME_COMPLETE = 2;
@@ -74,12 +77,21 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     boolean isAvailableAtPincode;
 
+    ArrayList<BaseProductListObject> similarProducts;
+    int similarProductsItemHeight, similarProductsRecyclerHeight, similarProductsItemWidth;
+    int similarProductsitemMargin;
+
 
     public NewProductDetailAdapter(Context context, int displayWidth, int displayHeight, HomeProductObj obj) {
         this.mContext = context;
         this.displayHeight = displayHeight;
         this.displayWidth = displayWidth;
         this.obj = obj;
+        similarProductsItemHeight = (mContext.getResources().getDisplayMetrics().widthPixels - 3 * ((int) mContext.getResources()
+                .getDimension(R.dimen.margin_mini))) / 2;
+        similarProductsRecyclerHeight = similarProductsItemHeight + mContext.getResources().getDimensionPixelSize(R.dimen.product_description_similar_recycler_additional_height);
+        similarProductsItemWidth = (int) ((mContext.getResources()).getDisplayMetrics().widthPixels / 2.3);
+        similarProductsitemMargin = mContext.getResources().getDimensionPixelSize(R.dimen.z_margin_mini);
     }
 
 
@@ -103,6 +115,9 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         } else if (viewType == TYPE_PRODUCT_INFO_3) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_product_info_layout_3, parent, false);
             holder = new ProductInfoHolder3(view);
+        } else if (viewType == TYPE_SIMILAR_PRODUCTS) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_description_similar_products_item_layout, parent, false);
+            holder = new ProductSimilarProductsHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_product_info_layout_desc, parent, false);
             holder = new ProductInfoHolder4(view);
@@ -373,7 +388,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     if (((ProductInfoHolder3) holder).pincode.getText().toString().length() == 6) {
-                        mListener.onCheckPincodeClicked(true, ((ProductInfoHolder3) holder).pincode.getText().toString(),position);
+                        mListener.onCheckPincodeClicked(true, ((ProductInfoHolder3) holder).pincode.getText().toString(), position);
                     } else {
                         // showToast("Please enter a valid pincode");
                         //  Toast.makeText(ProductDetailsActivity.this, "Please enter a valid pincode", Toast.LENGTH_SHORT).show();
@@ -398,6 +413,24 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     bookIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
                     bookIntent.putExtra("vendor_name", obj.getVendor().getName());
                     mContext.startActivity(bookIntent);
+                }
+            });
+        } else if (getItemViewType(position) == TYPE_SIMILAR_PRODUCTS) {
+            ProductSimilarProductsHolder holderPro = (ProductSimilarProductsHolder) holder;
+            LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+            holderPro.recyclerView.setLayoutManager(layoutManager);
+
+            SimilarProductsRecyclerAdapter adapter = new SimilarProductsRecyclerAdapter();
+            holderPro.recyclerView.setAdapter(adapter);
+
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holderPro.recyclerView.getLayoutParams();
+            params.height = similarProductsRecyclerHeight;
+            holderPro.recyclerView.setLayoutParams(params);
+
+            holderPro.viewAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((NewProductDetailActivity) mContext).openSimilarProductsActivity();
                 }
             });
         } else {
@@ -441,7 +474,6 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((ProductInfoHolder4) holder).descTitle.setText("Summary");
 
                     if (isDescShown) {
-
                         changeDrawableRight(((ProductInfoHolder4) holder).descTitle, R.drawable.ic_up_black);
                         ((ProductInfoHolder4) holder).descText.setText(obj.getProduct().getDescription());
                         ((ProductInfoHolder4) holder).descLayout.setVisibility(View.GONE);
@@ -859,13 +891,28 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.isSpecsShown = isSpecsShown;
     }
 
+
+    public void addSimilarProducts(ArrayList<BaseProductListObject> objs) {
+        this.similarProducts = new ArrayList<>();
+        this.similarProducts.addAll(objs);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         if (obj != null) {
             if (obj.getProduct().is_o2o()) {
-                return 9;
+                if (similarProducts == null || similarProducts.size() == 0) {
+                    return 9;
+                } else {
+                    return 10;
+                }
             } else {
-                return 8;
+                if (similarProducts == null || similarProducts.size() == 0) {
+                    return 8;
+                } else {
+                    return 9;
+                }
             }
         }
         return 0;
@@ -889,6 +936,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             } else {
                 return TYPE_PRODUCT_INFO_4;
             }
+        } else if (position == getItemCount() - 1 && similarProducts != null && similarProducts.size() > 0) {
+            return TYPE_SIMILAR_PRODUCTS;
         } else {
             return TYPE_PRODUCT_INFO_4;
         }
@@ -950,7 +999,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     boolean isShowAvailableText;
 
-    public void setIsAvailableAtPincode(boolean isAvailableAtPincode , int position) {
+    public void setIsAvailableAtPincode(boolean isAvailableAtPincode, int position) {
         this.isAvailableAtPincode = isAvailableAtPincode;
         this.isShowAvailableText = true;
         notifyItemChanged(position);
@@ -1050,6 +1099,18 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    public class ProductSimilarProductsHolder extends RecyclerView.ViewHolder {
+
+        RecyclerView recyclerView;
+        TextView viewAll;
+
+        public ProductSimilarProductsHolder(View v) {
+            super(v);
+            recyclerView = (RecyclerView) v.findViewById(R.id.simiilarproductslist);
+            viewAll = (CustomTextView) v.findViewById(R.id.view_all_similarl);
+        }
+    }
+
     OnViewsClickedListener mListener;
 
     public void setOnViewsClickedListener(OnViewsClickedListener listener) {
@@ -1058,7 +1119,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public interface OnViewsClickedListener {
 
-        void onCheckPincodeClicked(boolean isShowProgress, String pincode,int position);
+        void onCheckPincodeClicked(boolean isShowProgress, String pincode, int position);
 
         void markReviewRequest(ProductInfoHolder2 holder);
 
@@ -1175,6 +1236,115 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         isCancelBookingShown = false;
         notifyDataSetChanged();
         // slideViewsLeftToRight(holder.bookingConfirmCard,holder.bookStoreVisit,BOOK_BTN_CLICK);
+    }
+
+    class SimilarProductsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.product_grid_item_layout, parent, false);
+            SimilarProductHolder holder = new SimilarProductHolder(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            RecyclerView.LayoutParams paramsContainer = (RecyclerView.LayoutParams) ((SimilarProductHolder) holder).container.getLayoutParams();
+            paramsContainer.leftMargin = similarProductsitemMargin;
+            paramsContainer.rightMargin = similarProductsitemMargin;
+            ((SimilarProductHolder) holder).container.setLayoutParams(paramsContainer);
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    similarProductsItemWidth, similarProductsItemHeight);
+            ((SimilarProductHolder) holder).img.setLayoutParams(lp);
+            if (similarProducts.get(position).getImage() != null) {
+                if (((SimilarProductHolder) holder).img.getTag() == null
+                        || !(((String) ((SimilarProductHolder) holder).img
+                        .getTag()).equalsIgnoreCase(similarProducts.get(position)
+                        .getImage()))) {
+
+                    new ImageLoaderManager(((NewProductDetailActivity) mContext)).setImageFromUrl(
+                            similarProducts.get(position).getImage(),
+                            ((SimilarProductHolder) holder).img, "users", similarProductsItemHeight,
+                            similarProductsItemHeight, true, false);
+
+                    ((SimilarProductHolder) holder).img.setTag(similarProducts.get(position)
+                            .getImage());
+                }
+            }
+            if (similarProducts.get(position).is_o2o()) {
+                ((SimilarProductHolder) holder).buyOfflineTag.setVisibility(View.VISIBLE);
+            } else {
+                ((SimilarProductHolder) holder).buyOfflineTag.setVisibility(View.GONE);
+            }
+            ((SimilarProductHolder) holder).productName.setText(similarProducts.get(position)
+                    .getName());
+
+            ((SimilarProductHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+            try {
+                if (similarProducts.get(position).getMrp() != similarProducts.get(position).getPrice()) {
+                    ((SimilarProductHolder) holder).productDiscountedPrice
+                            .setText(mContext.getString(R.string.Rs) + " "
+                                    + similarProducts.get(position).getPrice());
+                    ((SimilarProductHolder) holder).productPrice.setVisibility(View.VISIBLE);
+                    ((SimilarProductHolder) holder).productPrice.setText(mContext
+                            .getString(R.string.Rs)
+                            + " "
+                            + similarProducts.get(position).getMrp());
+                    ((SimilarProductHolder) holder).productPrice
+                            .setPaintFlags(((SimilarProductHolder) holder).productPrice
+                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    ((SimilarProductHolder) holder).productDiscountFactor.setVisibility(View.VISIBLE);
+                    ((SimilarProductHolder) holder).productDiscountFactor.setText(similarProducts.get(position).getDiscount() + "% OFF");
+                } else {
+                    ((SimilarProductHolder) holder).productDiscountedPrice
+                            .setText(mContext.getString(R.string.Rs) + " "
+                                    + Math.round(similarProducts.get(position).getPrice()));
+
+                    ((SimilarProductHolder) holder).productPrice.setVisibility(View.GONE);
+                    ((SimilarProductHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+                }
+            } catch (NumberFormatException e) {
+
+            }
+
+            ((SimilarProductHolder) holder).img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, NewProductDetailActivity.class);
+                    intent.putExtra("slug", similarProducts.get(position).getSlug());
+                    intent.putExtra("id", similarProducts.get(position).getId());
+                    intent.putExtra("title", similarProducts.get(position).getName());
+                    mContext.startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return similarProducts.size();
+        }
+
+        class SimilarProductHolder extends RecyclerView.ViewHolder {
+
+            ImageView img, buyOfflineTag;
+            TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
+            LinearLayout container;
+
+            public SimilarProductHolder(View view) {
+                super(view);
+                img = (ImageView) view.findViewById(R.id.product_img);
+                productName = (TextView) view.findViewById(R.id.product_name);
+                productDiscountedPrice = (TextView) view
+                        .findViewById(R.id.product_disounted_price);
+                productPrice = (TextView) view
+                        .findViewById(R.id.product_price);
+                productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
+                buyOfflineTag = (ImageView) view.findViewById(R.id.buy_offline_tag);
+                container = (LinearLayout) view.findViewById(R.id.productgriditemcoontainerlayout);
+            }
+        }
     }
 }
 

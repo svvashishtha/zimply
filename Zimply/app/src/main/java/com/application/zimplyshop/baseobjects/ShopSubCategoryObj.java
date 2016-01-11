@@ -2,25 +2,25 @@ package com.application.zimplyshop.baseobjects;
 
 public class ShopSubCategoryObj {
 
-	private String name;
+    private String name;
 
-	private int id;
+    private int id;
 
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }
