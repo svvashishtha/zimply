@@ -114,7 +114,7 @@
         <activity
             android:name=".activities.PurchaseListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/CheckboxAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activities.SettingsPage"
@@ -129,7 +129,7 @@
         <activity
             android:name=".activities.ProductDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ProductPageTheme" />
+            android:theme="@style/CheckboxAppTheme" />
         <activity
             android:name=".activities.FilterFiltersLayout"
             android:screenOrientation="portrait"
@@ -219,7 +219,7 @@
         <activity
             android:name=".activities.NewProductDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/CheckboxAppTheme" />
         <activity
             android:name=".activities.UrlRouter"
             android:excludeFromRecents="true"

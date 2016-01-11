@@ -337,7 +337,7 @@
             android:layout_height="@dimen/z_item_height_48"
             android:background="?attr/selectableItemBackground"
             android:gravity="center"
-            android:text="Apply Filter"
+            android:text="APPLY"
             android:textColor="@color/z_blue_color"
             android:textSize="@dimen/font_large" />
     </LinearLayout>
