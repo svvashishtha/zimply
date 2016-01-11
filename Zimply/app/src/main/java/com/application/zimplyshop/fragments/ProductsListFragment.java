@@ -23,6 +23,7 @@ import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
             }
         });
         loadData();
-
+        ZTracker.logGAScreen(getActivity(),"Product Category Page");
     }
 
     boolean isSecondTime, isBookingsLoading;
@@ -176,7 +177,7 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
     }
 
     public void loadOffersData() {
-        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.OFFERS_LIST_URL + "?userid=" + AppPreferences.getUserID(getActivity());
+        String url = AppApplication.getInstance().getBaseUrl() + AppConstants.OFFERS_LIST_URL + (AppPreferences.isUserLogIn(getActivity())?"?userid=" + AppPreferences.getUserID(getActivity()):"");
         GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.OFFERS_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_OFFERS_REQUEST_OBJ);
     }
 

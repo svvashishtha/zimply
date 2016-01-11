@@ -108,8 +108,6 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         GetRequestManager.getInstance().addCallbacks(this);
         UploadManager.getInstance().addCallback(this);
         loadData();
-
-
     }
 
 
@@ -837,7 +835,6 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         intent.putExtra("inside", true);
                         startActivity(intent);
                     }
-
                 } else {
                     showToast("No network available");
                     //Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();

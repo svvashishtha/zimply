@@ -35,6 +35,7 @@ import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
 
@@ -97,8 +98,10 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
         UploadManager.getInstance().addCallback(this);
         GetRequestManager.getInstance().addCallbacks(this);
-
+        ZTracker.logGAScreen(getActivity(),getClass().getSimpleName());
     }
+
+
 
     public String getProductQuantityString(ArrayList<NonLoggedInCartObj> objs) {
         StringBuilder s = new StringBuilder();

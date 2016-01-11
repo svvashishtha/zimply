@@ -56,6 +56,8 @@ public class BaseFragment extends Fragment {
         toast.show();
     }
 
+
+
     /**
      * Show Loading for all activities
      */
