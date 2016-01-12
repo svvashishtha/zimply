@@ -164,8 +164,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             params.put(PayU.FIRSTNAME,name);
             params.put(PayU.EMAIL, email);
 
-
-            PayU.getInstance(this).startPaymentProcess(cartObj.getCart().getTotal_price()
+//cartObj.getCart().getTotal_price()
+            PayU.getInstance(this).startPaymentProcess(1
                     , params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
                     PayU.PaymentMode.NB, PayU.PaymentMode.DC,
                     PayU.PaymentMode.EMI,
@@ -225,6 +225,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                 paymentSuccess = false;
                 sendPaymentSuccessFullRequest();
             }
+            PayU.setINSTANCE();
         }
     }
 

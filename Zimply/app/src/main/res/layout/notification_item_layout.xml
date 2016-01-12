@@ -10,31 +10,42 @@
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:paddingTop="@dimen/margin_small"
-        android:paddingBottom="@dimen/margin_small"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/z_item_height_48"
-        android:paddingRight="@dimen/margin_small"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <com.application.zimplyshop.widgets.CustomTextView
-            android:id="@+id/notif_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/font_medium"
-            android:paddingLeft="@dimen/margin_small"
-            android:textColor="@color/text_color1"
-            android:paddingRight="@dimen/margin_small"
-            android:text="Checkout some items "/>
+        android:padding="@dimen/margin_small"
+        android:orientation="vertical">
 
+
+            <com.application.zimplyshop.widgets.CustomTextViewBold
+                android:id="@+id/notif_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/heading_text_color"
+                android:text="Checkout some items "/>
+
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/notif_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_small"
+            android:textColor="@color/text_color2"
+            android:text="Checkout some items "/>
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/notif_subtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_small"
+            android:textColor="@color/text_color2"
+            android:text="Checkout some items "/>
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/notif_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_small"
+            android:textSize="@dimen/font_mini"
             android:textColor="@color/transparent_grey_color"
             android:text="Friday, 22 feb"/>
     </LinearLayout>

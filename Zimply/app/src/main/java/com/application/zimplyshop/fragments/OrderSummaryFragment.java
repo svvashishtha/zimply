@@ -450,7 +450,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             intent.putExtra("is_cod_not_available", isCodNotAvailable());
             intent.putExtra("is_all_online", isAllOnline());
             intent.putExtra("cart_obj", cartObject);
-            startActivity(intent);
+            getActivity().startActivity(intent);
 
 
         }

@@ -23,6 +23,7 @@ import android.widget.RemoteViews;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
+import com.application.zimplyshop.activities.ProductCheckoutActivity;
 import com.application.zimplyshop.activities.ProductListingActivity;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.utils.CommonLib;
@@ -47,7 +48,7 @@ public class GcmNotificationManager implements AppConstants {
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void showBigImageNotification(String imageUrl, String message, int type, String slug, String title) {
+    public void showBigImageNotification(String imageUrl, String message, int type, String slug, String title,String subtext) {
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext).
                 setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
                 .setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setColor(Color.parseColor("#bbbbbb"));
@@ -97,6 +98,10 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
             notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
             notificationIntent.setAction("Big Offer Notification");
+        }else if(type == NOTIFICATION_TYPE_CART_PAGE){
+            notificationIntent = new Intent(mContext, ProductCheckoutActivity.class);
+            notificationIntent.putExtra("OrderSummaryFragment", false);
+            notificationIntent.putExtra("is_notification", true);
         } else {
             notificationIntent = new Intent(mContext, HomeActivity.class);
             notificationIntent.putExtra("slug", slug);
@@ -137,10 +142,10 @@ public class GcmNotificationManager implements AppConstants {
         mId++;
     }
 
-    public void showCustomNotification(String message, int type, String slug, String title,String imageUrl) {
+    public void showCustomNotification(String message, int type, String slug, String title,String imageUrl,String subText) {
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).
-                setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
+                setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message).setStyle(new NotificationCompat.BigTextStyle())
                 .setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setColor(Color.parseColor("#bbbbbb"));
         BitmapDrawable bitmapDrawable_large_logo = (BitmapDrawable) mContext.getResources()
                 .getDrawable(R.drawable.ic_app_launcher_icon);
@@ -149,7 +154,7 @@ public class GcmNotificationManager implements AppConstants {
         // Using RemoteViews to bind custom layouts into Notification
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.gcm_custom_notification);
         remoteViews.setImageViewResource(R.id.iv_notification_logo, R.drawable.ic_app_launcher_icon);
-      //  remoteViews.setImageViewResource(R.id.iv_notification_right_small_logo, R.drawable.ic_action_favorite_red);
+        //  remoteViews.setImageViewResource(R.id.iv_notification_right_small_logo, R.drawable.ic_action_favorite_red);
         if(imageUrl!=null && imageUrl.length()>0) {
             Bitmap bitmap = getBitmapFromURL(imageUrl);
             remoteViews.setImageViewBitmap(R.id.notif_image, bitmap);
@@ -157,7 +162,7 @@ public class GcmNotificationManager implements AppConstants {
             remoteViews.setImageViewResource(R.id.notif_image, R.drawable.notif_search_image);
         }
         // Locate and set the Text into customnotificationtext.xml TextViews
-            remoteViews.setTextViewText(R.id.tv_notification_title, title);
+        remoteViews.setTextViewText(R.id.tv_notification_title, title);
 
         remoteViews.setTextViewText(R.id.tv_notification_text, message);
         remoteViews.setTextViewText(R.id.tv_notification_time, TimeUtils.getNotificationDateTime());
@@ -191,6 +196,10 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
             notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
             notificationIntent.setAction("Big Offer Notification");
+        }else if(type == NOTIFICATION_TYPE_CART_PAGE){
+            notificationIntent = new Intent(mContext, ProductCheckoutActivity.class);
+            notificationIntent.putExtra("OrderSummaryFragment", false);
+            notificationIntent.putExtra("is_notification", true);
         } else {
             notificationIntent = new Intent(mContext, HomeActivity.class);
             notificationIntent.putExtra("slug", slug);
@@ -205,12 +214,80 @@ public class GcmNotificationManager implements AppConstants {
 
         builder.setContentIntent(pendingNotificationIntent);
 
-        builder.setContent(remoteViews);
+        //builder.setContent(remoteViews);
 
-        // Create Notification Manager
+        builder.setContent(remoteViews);
         NotificationManager notificationmanager = (NotificationManager) mContext
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationmanager.notify(mId, builder.build());
+
+        mId++;
+    }
+
+    public void showCustomNotificationSmall(String message, int type, String slug, String title,String imageUrl,String subtext) {
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).
+                setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message).setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setColor(Color.parseColor("#bbbbbb"));
+        BitmapDrawable bitmapDrawable_large_logo = (BitmapDrawable) mContext.getResources()
+                .getDrawable(R.drawable.ic_app_launcher_icon);
+        Bitmap bitmap_large_logo = bitmapDrawable_large_logo.getBitmap();
+        builder.setLargeIcon(bitmap_large_logo);
+        // Using RemoteViews to bind custom layouts into Notification
+
+        // on tapping notification
+        Intent notificationIntent;
+
+        if (type == NOTIFICATION_TYPE_SHOP_LISTING) {
+            notificationIntent = new Intent(mContext, ProductListingActivity.class);
+            notificationIntent.putExtra("category_id", "0");
+            notificationIntent.putExtra("hide_filter", false);
+            notificationIntent.putExtra("category_name", message);
+            notificationIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
+            notificationIntent.putExtra("discount_id", Integer.parseInt(slug));
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_SHOP_LISTING);
+            notificationIntent.putExtra("is_notification", true);
+            notificationIntent.setAction("Big Offer Notification");
+        } else if (type == NOTIFICATION_TYPE_WEBVIEW) {
+            notificationIntent = new Intent(mContext, ZWebView.class);
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_WEBVIEW);
+            notificationIntent.putExtra("is_notification", true);
+            notificationIntent.putExtra("title", message);
+            notificationIntent.putExtra("url", slug);
+            notificationIntent.setAction("Big Offer Notification");
+        } else if (type == NOTIFICATION_TYPE_PRODUCT_DETAIL) {
+            notificationIntent = new Intent(mContext, NewProductDetailActivity.class);
+            notificationIntent.putExtra("slug", slug);
+            notificationIntent.putExtra("nType", NOTIFICATION_TYPE_PRODUCT_DETAIL);
+            notificationIntent.putExtra("message", message);
+            notificationIntent.putExtra("is_shared", true);
+            notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
+            notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
+            notificationIntent.setAction("Big Offer Notification");
+        } else if(type == NOTIFICATION_TYPE_CART_PAGE){
+            notificationIntent = new Intent(mContext, ProductCheckoutActivity.class);
+            notificationIntent.putExtra("OrderSummaryFragment", false);
+            notificationIntent.putExtra("is_notification", true);
+        }else{
+            notificationIntent = new Intent(mContext, HomeActivity.class);
+            notificationIntent.putExtra("slug", slug);
+            notificationIntent.putExtra("message", message);
+            notificationIntent.putExtra("is_notification", true);
+            notificationIntent.setAction("Big Offer Notification");
+        }
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
+
+        builder.setContentIntent(pendingNotificationIntent);
+
+        //builder.setContent(remoteViews);
+
+        NotificationManager notificationmanager = (NotificationManager) mContext
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationmanager.notify(mId, builder.build());
+
         mId++;
     }
 

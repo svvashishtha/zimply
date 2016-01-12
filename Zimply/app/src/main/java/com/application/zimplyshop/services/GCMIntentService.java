@@ -81,18 +81,21 @@ public class GCMIntentService extends IntentService implements AppConstants {
                 int type = JSONUtils.getIntegerfromJSON(obj, "type");
                 int notificationType = JSONUtils.getIntegerfromJSON(obj, "expand");
                 String slug = JSONUtils.getStringfromJSON(obj, "slug");
-
+                String subText = JSONUtils.getStringfromJSON(obj,"subtext");
                 ZTracker.logGaCustomEvent(context,"GCM-Received",message,"","");
 
                 if (gcmNotificationManager == null) {
                     gcmNotificationManager = new GcmNotificationManager(context);
                 }
                 if (notificationType == 1) {
-                    gcmNotificationManager.showCustomNotification(message,
-                            type, slug, title,imageUrl);
-                } else {
+                    gcmNotificationManager.showCustomNotificationSmall(message,
+                            type, slug, title, imageUrl,subText);
+                } else if(notificationType == 2){
                     gcmNotificationManager.showBigImageNotification(imageUrl,
-                            message, type, slug, title);
+                            message, type, slug, title,subText);
+                }else{
+                    gcmNotificationManager.showCustomNotification(message,
+                            type, slug, title, imageUrl,subText);
                 }
 
             }

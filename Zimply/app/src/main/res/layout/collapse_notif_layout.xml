@@ -6,23 +6,29 @@
               android:background="@drawable/ic_card_bg"
               android:padding="@dimen/margin_small"
               android:layout_height="match_parent">
-    <com.application.zimplyshop.widgets.CustomTextView
+    <com.application.zimplyshop.widgets.CustomTextViewBold
         android:id="@+id/notification_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/heading_text_color"
-        android:textSize="@dimen/font_large"/>
+        android:textSize="@dimen/font_medium"/>
 
     <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/notification_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_color1"
-        android:textSize="@dimen/font_medium"/>
+        android:textColor="@color/text_color2"
+        android:textSize="@dimen/font_small"/>
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:id="@+id/notif_subtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_small"
+        android:textColor="@color/text_color2"/>
     <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/notification_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/transparent_grey_color"
-        android:textSize="@dimen/font_small"/>
+        android:textSize="@dimen/font_mini"/>
 </LinearLayout>
