@@ -164,8 +164,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             params.put(PayU.FIRSTNAME,name);
             params.put(PayU.EMAIL, email);
 
-//cartObj.getCart().getTotal_price()
-            PayU.getInstance(this).startPaymentProcess(1
+
+            PayU.getInstance(this).startPaymentProcess(cartObj.getCart().getTotal_price()
                     , params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
                     PayU.PaymentMode.NB, PayU.PaymentMode.DC,
                     PayU.PaymentMode.EMI,

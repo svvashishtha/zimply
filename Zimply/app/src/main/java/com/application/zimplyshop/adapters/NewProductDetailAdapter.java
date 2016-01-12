@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -40,6 +41,7 @@ import com.application.zimplyshop.baseobjects.ProductAttribute;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.preferences.AppPreferences;
+import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.ProductThumbListItemDecorator;
 
@@ -1279,10 +1281,11 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((SimilarProductHolder) holder).buyOfflineTag.setVisibility(View.INVISIBLE);
             }
 
-
-            ((SimilarProductHolder) holder).productDiscountFactor.setVisibility(View.INVISIBLE);
+            ((SimilarProductHolder) holder).productName.setText(similarProducts.get(position)
+                    .getName());
             try {
                 if (similarProducts.get(position).getMrp() != similarProducts.get(position).getPrice()) {
+                    ((SimilarProductHolder) holder).productDiscountedPrice.setVisibility(View.VISIBLE);
                     ((SimilarProductHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
                                     + similarProducts.get(position).getPrice());
@@ -1291,6 +1294,9 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             .getString(R.string.Rs)
                             + " "
                             + similarProducts.get(position).getMrp());
+                    ((SimilarProductHolder) holder).productPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.font_small));
+                    ((SimilarProductHolder) holder).productPrice.setTextColor(mContext.getResources().getColor(R.color.zdhl5));
+                    ((SimilarProductHolder) holder).productPrice.setTypeface(CommonLib.getTypeface(mContext, CommonLib.REGULAR_FONT), Typeface.NORMAL);
                     ((SimilarProductHolder) holder).productPrice
                             .setPaintFlags(((SimilarProductHolder) holder).productPrice
                                     .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -1299,21 +1305,21 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     /*((SimilarProductHolder) holder).productName.setSingleLine(true);
                     ((SimilarProductHolder) holder).productName.setMaxLines(1);
                     ((SimilarProductHolder) holder).productName.requestLayout();*/
-                    ((SimilarProductHolder) holder).productName.setText(similarProducts.get(position)
-                            .getName());
+
 
                 } else {
-                    ((SimilarProductHolder) holder).productDiscountedPrice
-                            .setText(mContext.getString(R.string.Rs) + " "
-                                    + Math.round(similarProducts.get(position).getPrice()));
-
-                    ((SimilarProductHolder) holder).productPrice.setVisibility(View.GONE);
+                    ((SimilarProductHolder) holder).productDiscountedPrice.setVisibility(View.INVISIBLE);
+                    ((SimilarProductHolder) holder).productPrice.setTextColor(mContext.getResources().getColor(R.color.heading_text_color));
+                    ((SimilarProductHolder) holder).productPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.font_medium));
+                    ((SimilarProductHolder) holder).productPrice.setTypeface(CommonLib.getTypeface(mContext, CommonLib.BOLD_FONT), Typeface.BOLD);
+                    ((SimilarProductHolder) holder).productPrice.setPaintFlags(0);
+                    ((SimilarProductHolder) holder).productPrice.setText(mContext.getString(R.string.Rs) + " "
+                            + Math.round(similarProducts.get(position).getPrice()));
                     ((SimilarProductHolder) holder).productDiscountFactor.setVisibility(View.GONE);
-                    ((SimilarProductHolder) holder).productName.setSingleLine(false);
+                    //((SimilarProductHolder) holder).productName.setSingleLine(false);
                     // ((SimilarProductHolder) holder).productName.setMaxLines(2);
                     // ((SimilarProductHolder) holder).productName.requestLayout();
-                    ((SimilarProductHolder) holder).productName.setText(similarProducts.get(position)
-                            .getName());
+
                 }
             } catch (NumberFormatException e) {
 
