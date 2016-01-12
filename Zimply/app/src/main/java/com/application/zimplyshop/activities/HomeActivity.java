@@ -66,6 +66,7 @@ import com.application.zimplyshop.utils.fab.FABControl;
 import com.application.zimplyshop.utils.fab.FABUnit;
 import com.application.zimplyshop.widgets.CircularImageView;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -654,7 +655,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
 
                 productId = JSONUtils.getIntegerfromJSON(obj, "id");
                 slug = JSONUtils.getStringfromJSON(obj, "slug");
-                moveToProductDetail(productId, slug);
+                moveToProductDetail(productId, slug, "Scan Product Result");
 
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
@@ -666,7 +667,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         if (AppPreferences.isUserLogIn(this)) {
             if (AllProducts.getInstance().cartContains((int) id)) {
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
-                moveToProductDetail(id, slug);
+                moveToProductDetail(id, slug, "Add Scanned Object To Cart");
             } else {
 
                 String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
@@ -694,16 +695,19 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
             }
-            moveToProductDetail(id, slug);
+            moveToProductDetail(id, slug, "Add Scanned Object To Cart");
 
         }
     }
 
-    public void moveToProductDetail(int productId, String slug) {
+    public void moveToProductDetail(int productId, String slug, String productActionListName) {
         Intent intent = new Intent(this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
         intent.putExtra("is_scanned", true);
+        intent.putExtra("productActionListName", productActionListName);
+        intent.putExtra("screenName", "HomeActivity");
+        intent.putExtra("actionPerformed", ProductAction.ACTION_DETAIL);
         startActivity(intent);
     }
 
@@ -1183,7 +1187,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                 if (message != null) {
                     AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) productId, 1));
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
-                    moveToProductDetail(productId, slug);
+                    moveToProductDetail(productId, slug, "Add To Cart");
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
 
                     message = jsonObject.getString("error");

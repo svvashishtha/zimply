@@ -114,7 +114,7 @@ public class AppApplication extends Application {
         }
 
 
-      //  new ThirdPartyInitAsync().execute();
+        //  new ThirdPartyInitAsync().execute();
 
 
         // run the cache cleaner service

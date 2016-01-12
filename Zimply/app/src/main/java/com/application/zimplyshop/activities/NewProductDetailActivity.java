@@ -75,6 +75,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     boolean isSimilarProductsLoaded;
 
+    //    Google analytics ecommerce
+    String productActionListName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
