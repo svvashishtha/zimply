@@ -29,6 +29,7 @@ import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.JSONUtils;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.json.JSONObject;
 
@@ -72,14 +73,14 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
 
-                if(input.length() >= 2) {
+                if (input.length() >= 2) {
                     actionBarView.findViewById(R.id.clear_text_view_category).setVisibility(View.VISIBLE);
-                    if(mAsyncRunning != null)
+                    if (mAsyncRunning != null)
                         mAsyncRunning.cancel(true);
                     loadData(input);
                 } else {
                     actionBarView.findViewById(R.id.clear_text_view_category).setVisibility(View.GONE);
-                    if( input.length() == 0 ) {
+                    if (input.length() == 0) {
                         findViewById(R.id.listview_container).setVisibility(View.GONE);
                     }
                 }
@@ -87,7 +88,7 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
             }
         };
 
-        ((TextView)actionBarView.findViewById(R.id.search_category)).addTextChangedListener(textWatcher);
+        ((TextView) actionBarView.findViewById(R.id.search_category)).addTextChangedListener(textWatcher);
 
     }
 
@@ -101,7 +102,7 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
                 /*Intent intent = new Intent("com.google.zxing.client.android.SCAN");
                 intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
                 startActivityForResult(intent, 0);*/
-                Intent intent = new Intent(SearchProductsActivity.this,BarcodeScannerActivity.class);
+                Intent intent = new Intent(SearchProductsActivity.this, BarcodeScannerActivity.class);
                 startActivity(intent);
             }
         });
@@ -112,7 +113,7 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
             }
         });
 
-        ((EditText)actionBarView.findViewById(R.id.search_category)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        ((EditText) actionBarView.findViewById(R.id.search_category)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -129,11 +130,11 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
     private void performSearch(String query) {
         Intent intent = new Intent(this, SearchResultsActivity.class);
 
-        if(query == null || query.length() < 1)
+        if (query == null || query.length() < 1)
             return;
         String[] params = query.split(" ");
         String builder = "";
-        for ( String pam:params ) {
+        for (String pam : params) {
             builder += (pam + "+");
         }
         builder = builder.substring(0, builder.length() - 1);
@@ -159,7 +160,7 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
     @Override
     public void onRequestStarted(String requestTag) {
         if (requestTag.equals(RequestTags.SEARCHED_PRODUCTS_REQUEST_TAG)) {
-            if (!destroyed){
+            if (!destroyed) {
                 findViewById(R.id.progress_container).setVisibility(View.VISIBLE);
             }
         }
@@ -170,18 +171,18 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
         if (requestTag.equals(RequestTags.SEARCHED_PRODUCTS_REQUEST_TAG)) {
             mAsyncRunning = null;
             if (!destroyed && obj != null && obj instanceof ParentCategory) {
-                products = ((ParentCategory)obj).getSubCategories();
+                products = ((ParentCategory) obj).getSubCategories();
                 products.addAll(((ParentCategory) obj).getCategories());
 
                 ArrayList<CategoryObject> objects = new ArrayList<CategoryObject>();
 
 //                Collections.copy(objects, products);
 
-                for(CategoryObject dups: products ) {
+                for (CategoryObject dups : products) {
                     objects.add(new CategoryObject(dups));
                 }
 
-                for(CategoryObject dups: objects ) {
+                for (CategoryObject dups : objects) {
                     dups.setDupType(CommonLib.DUP_TYPE_TRUE);
                 }
 
@@ -192,7 +193,7 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
                 findViewById(R.id.progress_container).setVisibility(View.GONE);
 
                 //if products size is 0, display recent
-                if(products != null && products.size() > 0) {
+                if (products != null && products.size() > 0) {
                     findViewById(R.id.listview_container).setVisibility(View.VISIBLE);
                 } else {//else display products
                     findViewById(R.id.listview_container).setVisibility(View.GONE);
@@ -211,13 +212,13 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
         }
     }
 
-    private void loadData (String param) {
+    private void loadData(String param) {
         //remove all spaces
-        if(param == null)
+        if (param == null)
             return;
         String[] params = param.split(" ");
         String builder = "";
-        for ( String pam:params ) {
+        for (String pam : params) {
             builder += (pam + "+");
         }
         builder = builder.substring(0, builder.length() - 1);
@@ -261,8 +262,8 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
                 v.setTag(viewHolder);
             }
 
-            final String name = ((TextView)actionBarView.findViewById(R.id.search_category)).getText().toString();
-            if(product.getDupType() == CommonLib.DUP_TYPE_TRUE) {
+            final String name = ((TextView) actionBarView.findViewById(R.id.search_category)).getText().toString();
+            if (product.getDupType() == CommonLib.DUP_TYPE_TRUE) {
                 viewHolder.text.setTypeface(null, Typeface.NORMAL);
                 viewHolder.text.setText("\"" + name + "\"" + " in " + product.getName());
             } else {
@@ -277,22 +278,22 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
                     intent.putExtra("type", product.getType());
                     intent.putExtra("id", product.getId());
                     intent.putExtra("dup_type", product.getDupType());
-                    if(product.getName() == null)
+                    if (product.getName() == null)
                         return;
                     intent.putExtra("category_name", product.getName());
                     String[] params1 = product.getName().split(" ");
                     String name1 = "";
-                    for ( String pam:params1 ) {
+                    for (String pam : params1) {
                         name1 += (pam + "+");
                     }
                     name1 = name1.substring(0, name1.length() - 1);
                     intent.putExtra("name", name1);
 
-                    if(name == null)
+                    if (name == null)
                         return;
                     String[] params = name.split(" ");
                     String builder = "";
-                    for ( String pam:params ) {
+                    for (String pam : params) {
                         builder += (pam + "+");
                     }
                     builder = builder.substring(0, builder.length() - 1);
@@ -322,8 +323,14 @@ public class SearchProductsActivity extends BaseActivity implements GetRequestLi
                 JSONObject obj = JSONUtils.getJSONObject(contents);
                 Intent workintent = new Intent(this, NewProductDetailActivity.class);
                 intent.putExtra("slug", JSONUtils.getIntegerfromJSON(obj, "slug"));
-                workintent .putExtra("id", (long)JSONUtils.getIntegerfromJSON(obj, "id"));
-                startActivity(workintent );
+                workintent.putExtra("id", (long) JSONUtils.getIntegerfromJSON(obj, "id"));
+
+                //        GA Ecommerce
+                intent.putExtra("productActionListName", "Scan Product Result");
+                intent.putExtra("screenName", "Search Products Activity");
+                intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
+                startActivity(workintent);
                 // Handle successful scan
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel

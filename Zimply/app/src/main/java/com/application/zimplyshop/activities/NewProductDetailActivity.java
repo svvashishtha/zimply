@@ -61,7 +61,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     String productSlug;
 
-    long productId;
+    public long productId;
 
     boolean isScannedProduct;
 
@@ -76,12 +76,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     boolean isSimilarProductsLoaded;
 
     //    Google analytics ecommerce
-    String productActionListName;
+    String productActionListName, screenName, actionPerformed;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_product_detail_activity);
+
         isShared = getIntent().getBooleanExtra("is_shared", false);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         PAGE_TYPE = AppConstants.PAGE_TYPE_NETWORK_NO_WIFI;
@@ -105,6 +107,15 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         productDetailList = (RecyclerView) findViewById(R.id.categories_list);
         productDetailList.setLayoutManager(new ScrollCustomizedLayoutManager(this));
         productDetailList.setBackgroundColor(getResources().getColor(R.color.pager_bg));
+
+        //        GA Ecommerce
+        if (getIntent().hasExtra("productActionListName"))
+            productActionListName = getIntent().getExtras().getString("productActionListName");
+        if (getIntent().hasExtra("screenName"))
+            screenName = getIntent().getExtras().getString("screenName");
+        if (getIntent().hasExtra("actionPerformed"))
+            actionPerformed = getIntent().getExtras().getString("actionPerformed");
+        position = getIntent().getExtras().getInt("position", -1);
 
         addToCart = (TextView) findViewById(R.id.add_to_cart);
         addToCart.setOnClickListener(this);
@@ -224,6 +235,10 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Product Description", product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSku());
 
                 //   ZTracker.logGaProductEvent(NewProductDetailActivity.this, product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSku());
+
+//                GA Ecommerce
+                ZTracker.logGAEcommerceProductClickAction(this, screenName, product.getProduct().getId() + "", product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSlug(), null, position, product.getProduct().getPrice(), productActionListName, actionPerformed);
+
                 loadSimilarProductsRequest();
 
             } else {

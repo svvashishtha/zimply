@@ -42,6 +42,7 @@ import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.ProductThumbListItemDecorator;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -1326,6 +1327,12 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     intent.putExtra("slug", similarProducts.get(position).getSlug());
                     intent.putExtra("id", similarProducts.get(position).getId());
                     intent.putExtra("title", similarProducts.get(position).getName());
+
+                    //        GA Ecommerce
+                    intent.putExtra("productActionListName", "Similar Product Click on Product ID " + ((NewProductDetailActivity) mContext).productId);
+                    intent.putExtra("screenName", "Product Detail Activity");
+                    intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
                     mContext.startActivity(intent);
                 }
             });

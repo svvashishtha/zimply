@@ -38,6 +38,7 @@ import com.application.zimplyshop.utils.NoSwipeViewPager;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.widgets.ZPagerSlidingTabStrip;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -47,7 +48,7 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabStrip.OnTabClickListener ,AppConstants,RequestTags,UploadManagerCallback{
+public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabStrip.OnTabClickListener, AppConstants, RequestTags, UploadManagerCallback {
 
     private boolean destroyed = false;
     View actionBarView;
@@ -84,7 +85,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             @Override
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
-                if(input.length() >= 2) {
+                if (input.length() >= 2) {
                     actionBarView.findViewById(R.id.clear_text_view_category).setVisibility(View.VISIBLE);
                     //send the api call to the fragment
                     if (fragments.get(FRAGMENT_PRODUCT_SEARCH) != null || fragments.get(FRAGMENT_EXPERT_SEARCH) != null) {
@@ -111,7 +112,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             }
         };
 
-        ((TextView)actionBarView.findViewById(R.id.search_category)).addTextChangedListener(textWatcher);
+        ((TextView) actionBarView.findViewById(R.id.search_category)).addTextChangedListener(textWatcher);
 
         // Search tabs
         homePager = (NoSwipeViewPager) findViewById(R.id.home_pager);
@@ -119,11 +120,11 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         homePager.setOffscreenPageLimit(1);
 
         homePager.setSwipeable(true);
-        if(getIntent()!=null){
-            int position = getIntent().getIntExtra("position",0);
-            if(position == 2){
+        if (getIntent() != null) {
+            int position = getIntent().getIntExtra("position", 0);
+            if (position == 2) {
                 homePager.setCurrentItem(FRAGMENT_EXPERT_SEARCH);
-            }else{
+            } else {
                 homePager.setCurrentItem(FRAGMENT_PRODUCT_SEARCH);
             }
         }
@@ -139,7 +140,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
     @Override
     public void onBackPressed() {
 
-        if( actionBarView != null )
+        if (actionBarView != null)
             CommonLib.hideKeyBoard(this, actionBarView.findViewById(R.id.search_category));
         super.onBackPressed();
     }
@@ -161,7 +162,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                 } else {
                     showToast("Barcode scanner is not available in your device");
                 }*/
-                Intent intent = new Intent(NewSearchActivity.this,BarcodeScannerActivity.class);
+                Intent intent = new Intent(NewSearchActivity.this, BarcodeScannerActivity.class);
                 startActivityForResult(intent, AppConstants.REQUEST_TYPE_FROM_SEARCH);
             }
         });
@@ -184,7 +185,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             }
         });
 
-        ((EditText)actionBarView.findViewById(R.id.search_category)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        ((EditText) actionBarView.findViewById(R.id.search_category)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -195,18 +196,18 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             }
         });
 
-        ((TextView)actionBarView.findViewById(R.id.search_category)).setHint(getResources().getString(R.string.search_products_hint));
+        ((TextView) actionBarView.findViewById(R.id.search_category)).setHint(getResources().getString(R.string.search_products_hint));
         toolbar.addView(actionBarView);
     }
 
     private void performSearch(String query) {
         Intent intent = new Intent(this, SearchResultsActivity.class);
 
-        if(query == null || query.length() < 1)
+        if (query == null || query.length() < 1)
             return;
         String[] params = query.split(" ");
         String builder = "";
-        for ( String pam:params ) {
+        for (String pam : params) {
             builder += (pam + "+");
         }
         builder = builder.substring(0, builder.length() - 1);
@@ -309,8 +310,8 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                 if (message != null) {
                     AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) productId, 1));
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
-                   // moveToCartActivity();
-                    moveToProductDetail(productId,slug);
+                    // moveToCartActivity();
+                    moveToProductDetail(productId, slug, "Add To Cart");
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
 
                     message = jsonObject.getString("error");
@@ -324,19 +325,26 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         }
     }
 
-    public void moveToCartActivity(){
+    public void moveToCartActivity() {
         Intent intent = new Intent(this, ProductCheckoutActivity.class);
         intent.putExtra("OrderSummaryFragment", false);
         startActivity(intent);
     }
 
-    public void moveToProductDetail(int productId , String slug){
+    public void moveToProductDetail(int productId, String slug, String productActionListName) {
         Intent intent = new Intent(this, NewProductDetailActivity.class);
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
-        intent.putExtra("is_scanned",true);
+        intent.putExtra("is_scanned", true);
+
+        //        GA Ecommerce
+        intent.putExtra("productActionListName", productActionListName);
+        intent.putExtra("screenName", "Search Activity");
+        intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
         startActivity(intent);
     }
+
     ProgressDialog progressDialog;
 
     int productId;
@@ -383,8 +391,8 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
             return 1;
         }
 
-        private String[] ids = { getResources().getString(R.string.products_title),
-                getResources().getString(R.string.experts_title) };
+        private String[] ids = {getResources().getString(R.string.products_title),
+                getResources().getString(R.string.experts_title)};
 
         public String getPageTitle(int pos) {
             return ids[pos];
@@ -402,7 +410,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
 
                 productId = JSONUtils.getIntegerfromJSON(obj, "id");
                 slug = JSONUtils.getStringfromJSON(obj, "slug");
-                moveToProductDetail(productId, slug);
+                moveToProductDetail(productId, slug, "Scan Product Result");
 
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
@@ -410,29 +418,29 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         }
     }
 
-    public void addScannedObjToCart(int id,String slug){
+    public void addScannedObjToCart(int id, String slug) {
         if (AppPreferences.isUserLogIn(this)) {
-            if(AllProducts.getInstance().cartContains((int)id)){
+            if (AllProducts.getInstance().cartContains((int) id)) {
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
                 //moveToCartActivity();
-                moveToProductDetail(id,slug);
-            }else {
+                moveToProductDetail(id, slug, "Add Scanned Product To Cart");
+            } else {
                 String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
                 List<NameValuePair> nameValuePair = new ArrayList<>();
 
-                nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_OFFLINE+""));
+                nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_OFFLINE + ""));
                 nameValuePair.add(new BasicNameValuePair("product_id", id + ""));
                 nameValuePair.add(new BasicNameValuePair("quantity", "1"));
                 nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
                 UploadManager.getInstance().addCallback(this);
                 UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_SEARCH, slug, ObjectTypes.OBJECT_ADD_TO_CART, null, nameValuePair, null);
             }
-        }else{
+        } else {
             ArrayList<NonLoggedInCartObj> oldObj = ((ArrayList<NonLoggedInCartObj>) GetRequestManager.Request(AppPreferences.getDeviceID(this), RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT));
             if (oldObj == null) {
                 oldObj = new ArrayList<NonLoggedInCartObj>();
             }
-            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1,BUYING_CHANNEL_OFFLINE);
+            NonLoggedInCartObj item = new NonLoggedInCartObj(id + "", 1, BUYING_CHANNEL_OFFLINE);
             if (oldObj.contains(item)) {
                 Toast.makeText(this, "Already added to cart", Toast.LENGTH_SHORT).show();
             } else {
@@ -442,11 +450,10 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
                 GetRequestManager.Update(AppPreferences.getDeviceID(this), oldObj, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 Toast.makeText(this, "Successfully added to cart", Toast.LENGTH_SHORT).show();
             }
-           // moveToCartActivity();
-            moveToProductDetail(id,slug);
+            // moveToCartActivity();
+            moveToProductDetail(id, slug, "Add Scanned Product To Cart");
         }
     }
-
 
 
 }

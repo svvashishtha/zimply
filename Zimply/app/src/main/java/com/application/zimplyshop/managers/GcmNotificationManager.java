@@ -29,6 +29,7 @@ import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.TimeUtils;
 import com.application.zimplyshop.utils.ZWebView;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,6 +97,12 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent.putExtra("is_shared", true);
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
             notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
+
+            //        GA Ecommerce
+            notificationIntent.putExtra("productActionListName", "Big Offer GCM Notification");
+            notificationIntent.putExtra("screenName", "GCM Notification");
+            notificationIntent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
             notificationIntent.setAction("Big Offer Notification");
         } else {
             notificationIntent = new Intent(mContext, HomeActivity.class);
@@ -137,7 +144,7 @@ public class GcmNotificationManager implements AppConstants {
         mId++;
     }
 
-    public void showCustomNotification(String message, int type, String slug, String title,String imageUrl) {
+    public void showCustomNotification(String message, int type, String slug, String title, String imageUrl) {
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).
                 setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
@@ -149,15 +156,15 @@ public class GcmNotificationManager implements AppConstants {
         // Using RemoteViews to bind custom layouts into Notification
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.gcm_custom_notification);
         remoteViews.setImageViewResource(R.id.iv_notification_logo, R.drawable.ic_app_launcher_icon);
-      //  remoteViews.setImageViewResource(R.id.iv_notification_right_small_logo, R.drawable.ic_action_favorite_red);
-        if(imageUrl!=null && imageUrl.length()>0) {
+        //  remoteViews.setImageViewResource(R.id.iv_notification_right_small_logo, R.drawable.ic_action_favorite_red);
+        if (imageUrl != null && imageUrl.length() > 0) {
             Bitmap bitmap = getBitmapFromURL(imageUrl);
             remoteViews.setImageViewBitmap(R.id.notif_image, bitmap);
-        }else{
+        } else {
             remoteViews.setImageViewResource(R.id.notif_image, R.drawable.notif_search_image);
         }
         // Locate and set the Text into customnotificationtext.xml TextViews
-            remoteViews.setTextViewText(R.id.tv_notification_title, title);
+        remoteViews.setTextViewText(R.id.tv_notification_title, title);
 
         remoteViews.setTextViewText(R.id.tv_notification_text, message);
         remoteViews.setTextViewText(R.id.tv_notification_time, TimeUtils.getNotificationDateTime());
@@ -190,6 +197,12 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent.putExtra("is_shared", true);
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
             notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
+
+            //        GA Ecommerce
+            notificationIntent.putExtra("productActionListName", "Custom Offer GCM Notification");
+            notificationIntent.putExtra("screenName", "GCM Notification");
+            notificationIntent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
             notificationIntent.setAction("Big Offer Notification");
         } else {
             notificationIntent = new Intent(mContext, HomeActivity.class);

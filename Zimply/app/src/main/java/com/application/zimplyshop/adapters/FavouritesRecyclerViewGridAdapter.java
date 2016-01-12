@@ -18,6 +18,7 @@ import com.application.zimplyshop.baseobjects.FavouriteObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.util.ArrayList;
 
@@ -148,7 +149,7 @@ public class FavouritesRecyclerViewGridAdapter extends
             ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
             ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
             try {
-                if (objs.get(position).getProduct().getMrp()!= objs.get(position).getProduct().getPrice()) {
+                if (objs.get(position).getProduct().getMrp() != objs.get(position).getProduct().getPrice()) {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
                                     + objs.get(position).getProduct().getPrice());
@@ -209,6 +210,12 @@ public class FavouritesRecyclerViewGridAdapter extends
                     intent.putExtra("slug", objs.get(position).getProduct().getSlug());
                     intent.putExtra("id", objs.get(position).getProduct().getId());
                     intent.putExtra("title", objs.get(position).getProduct().getName());
+
+                    //        GA Ecommerce
+                    intent.putExtra("productActionListName", "Favourite List Item Click");
+                    intent.putExtra("screenName", "Favourites List Activity");
+                    intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
                     mContext.startActivity(intent);
                 }
             });
