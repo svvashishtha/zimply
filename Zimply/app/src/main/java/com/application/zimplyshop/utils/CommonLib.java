@@ -122,11 +122,11 @@ public class CommonLib {
 	/**
 	 * Version string
 	 */
-	public static final String VERSION_STRING = "1.0.6";
+	public static final String VERSION_STRING = "1.0.7";
 	/**
 	 * Crashlytics version string
 	 */
-	public static final String CRASHLYTICS_VERSION_STRING = "1.0.6 Live";
+	public static final String CRASHLYTICS_VERSION_STRING = "1.0.7 Live";
 	/**
 	 * Log control
 	 */
@@ -134,7 +134,7 @@ public class CommonLib {
 	/**
 	 * GA event control
 	 */
-	public final static boolean LogGAEvent = false;
+	public final static boolean LogGAEvent = true;
 	/**
 	 * GCM Sender ID
 	 */
