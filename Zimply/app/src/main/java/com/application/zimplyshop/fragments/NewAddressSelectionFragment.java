@@ -20,6 +20,7 @@ import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ public class NewAddressSelectionFragment extends ZFragment implements GetRequest
         GetRequestManager.getInstance().addCallbacks(this);
         // loadData();
         setAdapterData();
+        ZTracker.logGAScreen(getActivity(), "Address Selection");
     }
 
     public void loadData(){

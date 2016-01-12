@@ -49,8 +49,7 @@ public class GcmNotificationManager implements AppConstants {
 
     public void showBigImageNotification(String imageUrl, String message, int type, String slug, String title) {
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext).
-                setContentTitle(title != null && title.trim().length() > 0 ? title : "Zimply")
-                .setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
+                setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
                 .setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setColor(Color.parseColor("#bbbbbb"));
         BitmapDrawable bitmapDrawable_large_logo = (BitmapDrawable) mContext.getResources()
                 .getDrawable(R.drawable.ic_app_launcher_icon);
@@ -138,10 +137,11 @@ public class GcmNotificationManager implements AppConstants {
         mId++;
     }
 
-    public void showCustomNotification(String message, int type, String slug, String title) {
+    public void showCustomNotification(String message, int type, String slug, String title,String imageUrl) {
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).setSmallIcon(R.drawable.ic_ticker)
-                .setTicker(message).setAutoCancel(true).setDefaults(Notification.DEFAULT_ALL).setColor(Color.parseColor("#bbbbbb"));
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).
+                setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
+                .setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setColor(Color.parseColor("#bbbbbb"));
         BitmapDrawable bitmapDrawable_large_logo = (BitmapDrawable) mContext.getResources()
                 .getDrawable(R.drawable.ic_app_launcher_icon);
         Bitmap bitmap_large_logo = bitmapDrawable_large_logo.getBitmap();
@@ -149,14 +149,16 @@ public class GcmNotificationManager implements AppConstants {
         // Using RemoteViews to bind custom layouts into Notification
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.gcm_custom_notification);
         remoteViews.setImageViewResource(R.id.iv_notification_logo, R.drawable.ic_app_launcher_icon);
-        remoteViews.setImageViewResource(R.id.iv_notification_right_small_logo, R.drawable.ic_action_favorite_red);
-        // Locate and set the Text into customnotificationtext.xml TextViews
-        if (title != null && title.trim().length() > 0) {
-
-            remoteViews.setTextViewText(R.id.tv_notification_title, title);
-        } else {
-            remoteViews.setTextViewText(R.id.tv_notification_title, mContext.getString(R.string.app_name));
+      //  remoteViews.setImageViewResource(R.id.iv_notification_right_small_logo, R.drawable.ic_action_favorite_red);
+        if(imageUrl!=null && imageUrl.length()>0) {
+            Bitmap bitmap = getBitmapFromURL(imageUrl);
+            remoteViews.setImageViewBitmap(R.id.notif_image, bitmap);
+        }else{
+            remoteViews.setImageViewResource(R.id.notif_image, R.drawable.notif_search_image);
         }
+        // Locate and set the Text into customnotificationtext.xml TextViews
+            remoteViews.setTextViewText(R.id.tv_notification_title, title);
+
         remoteViews.setTextViewText(R.id.tv_notification_text, message);
         remoteViews.setTextViewText(R.id.tv_notification_time, TimeUtils.getNotificationDateTime());
 
@@ -202,17 +204,6 @@ public class GcmNotificationManager implements AppConstants {
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
 
         builder.setContentIntent(pendingNotificationIntent);
-        // On tap heart
-        /*
-         * Intent heartTapIntent = new Intent(mContext, ZHomeActivity.class);
-		 * heartTapIntent.putExtra("is_notification", true);
-		 * heartTapIntent.putExtra("notification_id", mId); PendingIntent
-		 * heartTapPendingIntent = PendingIntent.getBroadcast( mContext, 0,
-		 * heartTapIntent, 0);
-		 * 
-		 * remoteViews.setOnClickPendingIntent(
-		 * R.id.iv_notification_right_small_logo, heartTapPendingIntent);
-		 */
 
         builder.setContent(remoteViews);
 
@@ -223,45 +214,6 @@ public class GcmNotificationManager implements AppConstants {
         mId++;
     }
 
-    // public static void showUpdatedCustomNotification(int update_id) {
-    //
-    // NotificationCompat.Builder builder = new NotificationCompat.Builder(
-    // mContext).setSmallIcon(R.drawable.ic_action_info_outline)
-    // .setTicker("ticker string").setAutoCancel(true);
-    //
-    // // Using RemoteViews to bind custom layouts into Notification
-    // RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(),
-    // R.layout.gcm_custom_notification);
-    // remoteViews.setImageViewResource(R.id.iv_notification_logo,
-    // R.drawable.ic_launcher);
-    // remoteViews.setImageViewResource(R.id.iv_notification_right_small_logo,
-    // R.drawable.ic_action_favorite_normal);
-    // // Locate and set the Text into customnotificationtext.xml TextViews
-    // remoteViews.setTextViewText(R.id.tv_notification_title, "Title");
-    // remoteViews.setTextViewText(R.id.tv_notification_text,
-    // "Tap Heart to see the offer");
-    //
-    // // On tap heart
-    // Intent intent = new Intent(mContext, NotificationsActivity.class);
-    // PendingIntent pIntent = PendingIntent.getBroadcast(mContext, 0, intent,
-    // PendingIntent.FLAG_UPDATE_CURRENT);
-    //
-    // remoteViews.setOnClickPendingIntent(
-    // R.id.iv_notification_right_small_logo, pIntent);
-    // builder.setContent(remoteViews);
-    // // Create Notification Manager
-    // NotificationManager notificationmanager = (NotificationManager) mContext
-    // .getSystemService(mContext.NOTIFICATION_SERVICE);
-    // notificationmanager.notify(update_id, builder.build());
-    // }
-
-    // private class TapHeartReciever extends BroadcastReceiver {
-    // @Override
-    // public void onReceive(Context context, Intent intent) {
-    // int notification_id = intent.getIntExtra("notification_id", 0);
-    // showUpdatedCustomNotification(notification_id);
-    // }
-    // }
 
     private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width,
                                        int height, boolean useDiskCache) {

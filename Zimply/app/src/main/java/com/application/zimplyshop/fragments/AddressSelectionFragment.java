@@ -26,6 +26,7 @@ import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.ZTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +87,9 @@ public class AddressSelectionFragment extends BaseFragment implements GetRequest
         GetRequestManager.getInstance().addCallbacks(this);
         setLoadingVariables();
         refreshView();
+
+
+
     }
 
     @Override

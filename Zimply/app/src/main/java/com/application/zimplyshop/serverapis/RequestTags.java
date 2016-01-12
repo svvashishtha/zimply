@@ -16,6 +16,7 @@ public interface RequestTags {
     String GET_ADDRESS_REQUEST_TAG = "getAddressRequestTag";
     String EXPERT_DETAIL_REQUEST_TAG = "expertdetailrequesttag";
     String PRODUCT_DETAIL_REQUEST_TAG = "productdetailrequesttag";
+    String PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG = "productdetailsimilarproductsrequesttag";
     String PRODUCT_CATEGORY_REQUEST_TAG = "productCategories";
     String SEARCHED_PRODUCTS_REQUEST_TAG = "searchedProducts";
     String SEARCHED_EXPERTS_REQUEST_TAG = "searchedExperts";

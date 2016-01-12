@@ -30,6 +30,7 @@ import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
+import com.application.zimplyshop.baseobjects.SimilarProductsListObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -64,13 +65,15 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     boolean isScannedProduct;
 
-    int width, height;
+    int width, height, widthSimilarProducts;
     double requestTime;
     int spaceHeight;
     TextView addToCart, buyNow;
 
     boolean isShared;
     private int picncodePosition;
+
+    boolean isSimilarProductsLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             isScannedProduct = getIntent().getExtras().getBoolean("is_scanned");
         }
         width = getDisplayMetrics().widthPixels;
+        widthSimilarProducts = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
+                .getDimension(R.dimen.font_small))) / 2;
         height = getDisplayMetrics().heightPixels;
         productDetailList = (RecyclerView) findViewById(R.id.categories_list);
         productDetailList.setLayoutManager(new ScrollCustomizedLayoutManager(this));
@@ -109,7 +114,6 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         UploadManager.getInstance().addCallback(this);
         loadData();
     }
-
 
 
     TextView toolbarTitle;
@@ -171,6 +175,13 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL);
     }
 
+    public void loadSimilarProductsRequest() {
+        String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_SIMILAR_PRODUCTS_URL + "?id=" + productId
+                + "&width=" + widthSimilarProducts + "&size=10&page=1";
+        GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG,
+                ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL_SIMILAR_PRODUCTS);
+    }
+
     @Override
     public void onRequestStarted(String requestTag) {
         if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_REQUEST_TAG)) {
@@ -206,7 +217,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 changeViewVisiblity(productDetailList, View.VISIBLE);
 
                 //log GA event of Product View
+
                 ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Product Description", product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSku());
+
+                //   ZTracker.logGaProductEvent(NewProductDetailActivity.this, product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSku());
+                loadSimilarProductsRequest();
+
             } else {
                 showNullCaseView("No Info Available");
             }
@@ -240,6 +256,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 ((TextView) findViewById(R.id.is_available_pincode)).setText("Not available at selected pincode");*/
             }
             CommonLib.hideKeyBoard(this, findViewById(R.id.pincode));
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+            isSimilarProductsLoaded = true;
+            if (adapter != null) {
+                SimilarProductsListObject similar = (SimilarProductsListObject) obj;
+                adapter.addSimilarProducts(((SimilarProductsListObject) obj).getProducts());
+            }
         }
     }
 
@@ -455,6 +477,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     NewProductDetailAdapter.ProductInfoHolder2 holder;
 
     public void makeProductPreviewRequest() {
+        ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Book-Store-Visit", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
         String url = AppApplication.getInstance().getBaseUrl() + MARK_PRODUCT_REVIEW_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("product_id", adapter.getObj().getProduct().getId() + ""));
@@ -609,6 +632,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
      * Request for marking favourite
      */
     public void makeLikeRequest() {
+        ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Add-To-Wishlist", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
         String url = AppApplication.getInstance().getBaseUrl() + MARK_FAVOURITE_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("item_type", ITEM_TYPE_PRODUCT + ""));
@@ -819,6 +843,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     showToast("No network available");
                     // Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
                 }
+                ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Add-To-Cart", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
                 break;
             case R.id.buy_now:
 
@@ -839,6 +864,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     showToast("No network available");
                     //Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
                 }
+                ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Buy-Now", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
                 break;
             case R.id.share_product:
                 if (adapter != null && adapter.getObj() != null) {
@@ -853,6 +879,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 } else {
                     Toast.makeText(this, "Please wait while loading...", Toast.LENGTH_SHORT).show();
                 }
+                ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Share-Product", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
                 break;
             case R.id.cart_icon:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
@@ -870,6 +897,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         } else {
             cartCount.setVisibility(View.GONE);
         }
+    }
+
+    public void openSimilarProductsActivity() {
+        Intent i = new Intent(this, SimilarProductsActivity.class);
+        i.putExtra("productid", productId);
+        startActivity(i);
     }
 
     public class MyPagerAdapter extends PagerAdapter {

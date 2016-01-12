@@ -35,6 +35,7 @@ import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CartSpaceItemDecoration;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.payu.sdk.PayU;
@@ -153,6 +154,8 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             showView();
             changeViewVisiblity(mListView, View.VISIBLE);*/
         //   }
+
+        ZTracker.logGAScreen(getActivity(),"Order Summary");
     }
 
     private void loadAddressData() {

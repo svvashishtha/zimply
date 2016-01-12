@@ -157,7 +157,9 @@ public class ProductListingActivity extends BaseActivity implements
         }
         loadData();
 
-
+        if(isNotification){
+            ZTracker.logGaCustomEvent(this,"GCM-Click",getIntent().getStringExtra("category_name"),"","");
+        }
     }
 
 

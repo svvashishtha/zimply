@@ -11,6 +11,7 @@ import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.receivers.GcmBroadcastReceiver;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.JSONUtils;
+import com.application.zimplyshop.utils.ZTracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.json.JSONObject;
@@ -80,12 +81,15 @@ public class GCMIntentService extends IntentService implements AppConstants {
                 int type = JSONUtils.getIntegerfromJSON(obj, "type");
                 int notificationType = JSONUtils.getIntegerfromJSON(obj, "expand");
                 String slug = JSONUtils.getStringfromJSON(obj, "slug");
+
+                ZTracker.logGaCustomEvent(context,"GCM-Received",message,"","");
+
                 if (gcmNotificationManager == null) {
                     gcmNotificationManager = new GcmNotificationManager(context);
                 }
                 if (notificationType == 1) {
                     gcmNotificationManager.showCustomNotification(message,
-                            type, slug, title);
+                            type, slug, title,imageUrl);
                 } else {
                     gcmNotificationManager.showBigImageNotification(imageUrl,
                             message, type, slug, title);

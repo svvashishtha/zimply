@@ -9,6 +9,8 @@ public class NotificationListObj implements Serializable{
 
     private String title;
 
+    private String message;
+
     private String image;
 
     private String created_on;
@@ -16,6 +18,24 @@ public class NotificationListObj implements Serializable{
     private int type;
 
     private String slug;
+
+    private int expand;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getExpand() {
+        return expand;
+    }
+
+    public void setExpand(int expand) {
+        this.expand = expand;
+    }
 
     public String getTitle() {
         return title;

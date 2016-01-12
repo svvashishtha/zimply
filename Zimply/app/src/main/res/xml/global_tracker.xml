@@ -19,7 +19,7 @@
     <!--Product Detail-->
     <screenName name="com.application.zimplyshop.activities.NewProductDetailActivity">Product Description page</screenName>
 
-    
+
 
     <screenName name="com.application.zimplyshop.activities.AboutUsPage">AboutUs</screenName>
     <screenName name="com.application.zimplyshop.activities.BaseLoginSignupActivity">Base Login Signup</screenName>
@@ -50,6 +50,7 @@
     <screenName name="com.application.zimplyshop.activities.SettingsPage">Settings Page</screenName>
     <screenName name="com.application.zimplyshop.activities.MyWishlist">Wishlist Page</screenName>
     <screenName name="com.application.zimplyshop.activities.AddressListActivity">User Addresses</screenName>
+    <screenName name="com.application.zimplyshop.activities.SimilarProductsActivity">Similar Products</screenName>
 
 
 

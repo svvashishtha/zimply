@@ -36,6 +36,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     int TYPE_LOADER = 1;
 
+    int TYPE_COLLAPSE_NOTIF = 2;
+
     public NotificationsAdapter(Context context , int height , int width){
         this.mContext = context;
         this.height = height;
@@ -55,6 +57,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (itemType == TYPE_DATA) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_item_layout, parent, false);
             holder = new NotificationsViewHolder(view);
+        }else if(itemType == TYPE_COLLAPSE_NOTIF){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.collapse_notif_layout, parent,
+                    false);
+            holder = new CollapseNotificationsViewHolder(view);
         }else{
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_footer_layout, parent,
                     false);
@@ -76,7 +82,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((NotificationsViewHolder) holder).notifImage.setLayoutParams(lp);
 
                 ((NotificationsViewHolder) holder).notifDate.setText(TimeUtils.getTimeStampDate(objs.get(position).getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
-                ((NotificationsViewHolder) holder).notifText.setText(objs.get(position).getTitle());
+                ((NotificationsViewHolder) holder).notifText.setText(objs.get(position).getMessage());
                 new ImageLoaderManager((NotificationsActivity) mContext).setImageFromUrl(objs.get(position).getImage(), ((NotificationsViewHolder) holder).notifImage, "users", width, height, false, false);
                 ((NotificationsViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -87,6 +93,18 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 });
 
+            }else if(getItemViewType(position) == TYPE_COLLAPSE_NOTIF){
+                ((CollapseNotificationsViewHolder) holder).notifDate.setText(TimeUtils.getTimeStampDate(objs.get(position).getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
+                ((CollapseNotificationsViewHolder) holder).notifText.setText(objs.get(position).getMessage());
+                ((CollapseNotificationsViewHolder) holder).notifTitle.setText(objs.get(position).getTitle());
+                ((CollapseNotificationsViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mListener != null) {
+                            mListener.onItemClick(position);
+                        }
+                    }
+                });
             }else{
 
             }
@@ -121,6 +139,18 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         }
     }
+    public class CollapseNotificationsViewHolder extends RecyclerView.ViewHolder{
+
+        TextView notifText,notifDate,notifTitle;
+        LinearLayout parent;
+        public CollapseNotificationsViewHolder(View view) {
+            super(view);
+            notifText = (TextView )view.findViewById(R.id.notification_text);
+            notifDate = (TextView)view.findViewById(R.id.notification_time);
+            notifTitle = (TextView)view.findViewById(R.id.notification_title);
+            parent = (LinearLayout)view.findViewById(R.id.parent);
+        }
+    }
 
     public void removePreviousData() {
         if(objs!=null)
@@ -134,7 +164,11 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (position == objs.size()) {
             return TYPE_LOADER;
         } else {
-            return TYPE_DATA;
+            if(objs.get(position).getExpand() == 2){
+                return TYPE_DATA;
+            }else {
+                return TYPE_COLLAPSE_NOTIF;
+            }
         }
 
     }

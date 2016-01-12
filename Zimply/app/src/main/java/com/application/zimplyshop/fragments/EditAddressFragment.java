@@ -31,6 +31,7 @@ import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
+import com.application.zimplyshop.utils.ZTracker;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -186,6 +187,7 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
         setListeners();
         UploadManager.getInstance().addCallback(this);
         GetRequestManager.getInstance().addCallbacks(this);
+        ZTracker.logGAScreen(getActivity(), "Edit Address Page");
     }
 
     @Override
