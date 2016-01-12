@@ -38,6 +38,8 @@ import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CartSpaceItemDecoration;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 import com.payu.sdk.PayU;
 
 import org.apache.http.NameValuePair;
@@ -328,6 +330,24 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 if (!AppPreferences.isUserLogIn(getActivity()))
                     GetRequestManager.Update(AppPreferences.getDeviceID(getActivity()), null, RequestTags.NON_LOGGED_IN_CART_CACHE, GetRequestManager.CONSTANT);
                 setAdapterData();
+                for (int i = 0; i < cartObject.getCart().getDetail().size(); i++) {
+                    try {
+                        if (CommonLib.isNetworkAvailable(getActivity())) {
+                            Product product = new Product()
+                                    .setId(cartObject.getCart().getDetail().get(i).getProduct().getId() + "")
+                                    .setName(cartObject.getCart().getDetail().get(i).getProduct().getName())
+                                    .setPrice(cartObject.getCart().getDetail().get(i).getProduct().getPrice())
+                                    .setQuantity(cartObject.getCart().getDetail().get(i).getQty());
+// Add the step number and additional info about the checkout to the action.
+                            ProductAction productAction = new ProductAction(ProductAction.ACTION_CHECKOUT)
+                                    .setCheckoutStep(4)
+                                    .setCheckoutOptions("CheckOut order page");
+                            ZTracker.checkOutGaEvents(productAction, product, getActivity());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 // AllProducts.getInstance().setCartCount(getCartQuantity());
             } else {
                 showNullCaseView("No Items");
@@ -338,7 +358,6 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             if(((CartObject) obj).getCart().getError()!=null && ((CartObject) obj).getCart().getError().trim().length()>0){
                 Toast.makeText(getActivity(),((CartObject) obj).getCart().getError().trim(),Toast.LENGTH_LONG).show();
             }
-
         } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART)) {/*
             JSONObject jsonObject = (JSONObject) obj;
             try {
@@ -738,7 +757,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PLACE_ORDER_SUCCESS_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
-        list.add(new BasicNameValuePair("total_price", cartObject.getCart().getTotal_price() + ""));
+        list.add(new BasicNameValuePair("total_price", cartObject.getCart().getTotal_price()+ ""));
         list.add(new BasicNameValuePair("order_id", orderId));
         list.add(new BasicNameValuePair("transaction_id", transactionId));
         list.add(new BasicNameValuePair("payment_status", ((paymentSuccess) ? 1 : 3) + ""));

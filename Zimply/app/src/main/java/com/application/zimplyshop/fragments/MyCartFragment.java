@@ -38,6 +38,8 @@ import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -98,9 +100,8 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
         UploadManager.getInstance().addCallback(this);
         GetRequestManager.getInstance().addCallbacks(this);
-        ZTracker.logGAScreen(getActivity(),getClass().getSimpleName());
+        ZTracker.logGAScreen(getActivity(), getClass().getSimpleName());
     }
-
 
 
     public String getProductQuantityString(ArrayList<NonLoggedInCartObj> objs) {
@@ -196,13 +197,31 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
         if (requestTag.equalsIgnoreCase(GET_CART_DETAILS) || requestTag.equalsIgnoreCase(RequestTags.GET_CART_COMPUTATION)) {
             if (((CartObject) obj).getCart().getDetail() != null && ((CartObject) obj).getCart().getDetail().size() > 0) {
                 CommonLib.ZLog("Request Time", "Cart Detail Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
-                CommonLib.writeRequestData("Cart Detail Page Request :" +   (System.currentTimeMillis() - requestTime) + " mS");
+                CommonLib.writeRequestData("Cart Detail Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
 
                 showView();
                 changeViewVisiblity(buyLayout, View.VISIBLE);
                 changeViewVisiblity(cartList, View.VISIBLE);
                 cartObject = (CartObject) obj;
                 setAdapterData(cartObject);
+                for (int i = 0; i < cartObject.getCart().getDetail().size(); i++) {
+                    try {
+                        if (CommonLib.isNetworkAvailable(getActivity())) {
+                            Product product = new Product()
+                                    .setId(cartObject.getCart().getDetail().get(i).getProduct().getId() + "")
+                                    .setName(cartObject.getCart().getDetail().get(i).getProduct().getName())
+                                    .setPrice(cartObject.getCart().getDetail().get(i).getProduct().getPrice())
+                                    .setQuantity(cartObject.getCart().getDetail().get(i).getQty());
+// Add the step number and additional info about the checkout to the action.
+                            ProductAction productAction = new ProductAction(ProductAction.ACTION_CHECKOUT)
+                                    .setCheckoutStep(3)
+                                    .setCheckoutOptions("View cart");
+                            ZTracker.checkOutGaEvents(productAction, product, getActivity());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 AllProducts.getInstance().setCartCount(getCartQuantity());
             } else {
                 showNullCaseView("No Items in cart");
@@ -227,6 +246,22 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
 
                 Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
                 // loadData();
+                    try {
+                        if (CommonLib.isNetworkAvailable(getActivity())) {
+                            Product product = new Product()
+                                    .setId(cartObject.getCart().getDetail().get(quantityUpdatePosition).getProduct().getId() + "")
+                                    .setName(cartObject.getCart().getDetail().get(quantityUpdatePosition).getProduct().getName())
+                                    .setPrice(cartObject.getCart().getDetail().get(quantityUpdatePosition).getProduct().getPrice())
+                                    .setQuantity(cartObject.getCart().getDetail().get(quantityUpdatePosition).getQty());
+// Add the step number and additional info about the checkout to the action.
+                            ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
+                                    .setCheckoutStep(2)
+                                    .setCheckoutOptions("Remove product from cart");
+                            ZTracker.checkOutGaEvents(productAction, product, getActivity());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 cartObject.getCart().setPrice(cartObject.getCart().getPrice() -
                         (cartObject.getCart().getDetail().get(quantityUpdatePosition).getProduct().getPrice()
                                 * cartObject.getCart().getDetail().get(quantityUpdatePosition).getQty()));
