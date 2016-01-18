@@ -1334,6 +1334,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
 
                     mContext.startActivity(intent);
+                    ((NewProductDetailActivity) mContext).finish();
                 }
             });
         }
