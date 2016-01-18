@@ -150,7 +150,7 @@ public class SimilarProductsActivity extends BaseActivity implements
         View view = LayoutInflater.from(this).inflate(
                 R.layout.common_toolbar_text_layout, null);
         titleText = (TextView) view.findViewById(R.id.title_textview);
-        titleText.setText("You May Also Like");
+        titleText.setText("You Might Also Like");
         toolbar.addView(view);
     }
 

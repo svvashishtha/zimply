@@ -25,11 +25,15 @@ import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 import com.payu.sdk.PayU;
 
 import org.apache.http.NameValuePair;
@@ -305,6 +309,29 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                     intent.putExtra("order_id",orderId);
                     intent.putExtra("address_obj",addressObj);
                     intent.putExtra("is_coc",(paymentType == PAYMENT_TYPE_CASH));
+                    try {
+                        for (int i = 0; i < cartObj.getCart().getDetail().size(); i++) {
+                            try {
+                                if (CommonLib.isNetworkAvailable(AppPaymentOptionsActivity.this)) {
+                                    Product product = new Product()
+                                            .setId(cartObj.getCart().getDetail().get(i).getProduct().getId() + "")
+                                            .setName(cartObj.getCart().getDetail().get(i).getProduct().getName())
+                                            .setPrice(cartObj.getCart().getDetail().get(i).getProduct().getPrice())
+                                            .setQuantity(cartObj.getCart().getDetail().get(i).getQty());
+// Add the step number and additional info about the checkout to the action.
+                                    ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
+                                            .setCheckoutStep(5)
+                                            .setCheckoutOptions("Purchase Product with" + (paymentType == PAYMENT_TYPE_CASH? " COD":" Online payment"));
+                                    ZTracker.checkOutGaEvents(productAction, product, AppPaymentOptionsActivity.this);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                     startActivity(intent);
 
 

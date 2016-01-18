@@ -134,7 +134,7 @@ public class CommonLib {
 	/**
 	 * GA event control
 	 */
-	public final static boolean LogGAEvent = true;
+	public final static boolean LogGAEvent = false;
 	/**
 	 * GCM Sender ID
 	 */

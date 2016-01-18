@@ -771,6 +771,7 @@ public class BaseActivity extends AppCompatActivity
     public static void logOutUserFromApp(Context context, Class classToOpenAfterLogout) {
         AppPreferences.setIsUserLogin(context, false);
         AppPreferences.setUserID(context, "");
+        AppPreferences.setIsPasswordSet(context, false);
         AllProducts.getInstance().setCartCount(0);
         AllProducts.getInstance().setCartObjs(null);
         AllUsers.getInstance().setObjs(null);

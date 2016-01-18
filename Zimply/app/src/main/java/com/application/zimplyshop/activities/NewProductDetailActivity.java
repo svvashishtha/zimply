@@ -44,6 +44,8 @@ import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.ScrollCustomizedLayoutManager;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -74,6 +76,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     private int picncodePosition;
 
     boolean isSimilarProductsLoaded;
+
+    //    Google analytics ecommerce
+    String productActionListName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -581,6 +586,21 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
                     cartCount.setVisibility(View.VISIBLE);
                     cartCount.setText(AllProducts.getInstance().getCartCount() + "");
+
+                    if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
+                        Product product = new Product()
+                                .setId(adapter.getObj().getProduct().getId() + "")
+                                .setName(adapter.getObj().getProduct().getName())
+                                .setCategory(adapter.getObj().getProduct().getCategory())
+                                .setBrand(adapter.getObj().getVendor().getName())
+                                .setPrice(adapter.getObj().getProduct().getPrice())
+                                .setQuantity(1);
+// Add the step number and additional info about the checkout to the action.
+                        ProductAction productAction = new ProductAction(ProductAction.ACTION_ADD)
+                                .setCheckoutStep(1)
+                                .setCheckoutOptions("Add to cart");
+                    ZTracker.checkOutGaEvents(productAction,product,NewProductDetailActivity.this);
+                    }
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
                 }
@@ -808,6 +828,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                             intent.putExtra("OrderSummaryFragment", false);
                             intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
                             startActivity(intent);
+
                         }
 
                     } else {
@@ -849,6 +870,21 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
                 if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
 
+// Add the step number and additional info about the checkout to the action.
+
+
+                    Product product = new Product()
+                            .setId(adapter.getObj().getProduct().getId() + "")
+                            .setName(adapter.getObj().getProduct().getName())
+                            .setCategory(adapter.getObj().getProduct().getCategory())
+                            .setBrand(adapter.getObj().getVendor().getName())
+                            .setPrice(adapter.getObj().getProduct().getPrice())
+                            .setQuantity(1);
+// Add the step number and additional info about the checkout to the action.
+                    ProductAction productAction = new ProductAction(ProductAction.ACTION_ADD)
+                            .setCheckoutStep(2)
+                            .setCheckoutOptions("Buy Now");
+                    ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
                     if (AppPreferences.isUserLogIn(NewProductDetailActivity.this)) {
                         Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                         intent.putExtra("OrderSummaryFragment", true);
