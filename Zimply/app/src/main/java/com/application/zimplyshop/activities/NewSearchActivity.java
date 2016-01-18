@@ -200,6 +200,7 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
     }
 
     private void performSearch(String query) {
+       // RecentProductsDBWrapper.addProduct(query);
         Intent intent = new Intent(this, SearchResultsActivity.class);
 
         if(query == null || query.length() < 1)

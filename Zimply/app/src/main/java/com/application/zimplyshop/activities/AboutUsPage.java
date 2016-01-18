@@ -99,7 +99,7 @@ public class AboutUsPage extends BaseActivity {
 
 				Intent intent = new Intent(AboutUsPage.this, ZWebView.class);
 				intent.putExtra("title", getResources().getString(R.string.about_us_faq));
-				intent.putExtra("url", "http://www.zimply.co/faq");
+				intent.putExtra("url", "http://www.zimply.co/faq/");
 				startActivity(intent);
 
 			}

@@ -1,7 +1,6 @@
 package com.application.zimplyshop.fragments;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
 import com.application.zimplyshop.extras.AppConstants;
+import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.UiUtils;
 import com.application.zimplyshop.utils.gif.GifMovieView;
 
@@ -156,8 +156,8 @@ public class BaseFragment extends Fragment {
             gifLoadingView.setVisibility(View.GONE);
             retryLayout.setVisibility(View.GONE);
             nullCaseLayout.setVisibility(View.VISIBLE);
-//            ((ImageView)view.findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(getActivity(), R.drawable.ic_empty_cart, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
-            ((ImageView)view.findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_cart));
+            ((ImageView)view.findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(getActivity(), R.drawable.ic_empty_cart, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+//            ((ImageView)view.findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_cart));
             ((TextView) view.findViewById(R.id.start_shopping)).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.start_shopping)).setOnClickListener(new View.OnClickListener() {
                 @Override

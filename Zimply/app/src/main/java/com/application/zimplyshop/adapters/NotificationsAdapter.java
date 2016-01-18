@@ -81,9 +81,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
 
                 ((NotificationsViewHolder) holder).notifImage.setLayoutParams(lp);
-
+                ((NotificationsViewHolder) holder).notifTitle.setText(objs.get(position).getTitle());
                 ((NotificationsViewHolder) holder).notifDate.setText(TimeUtils.getTimeStampDate(objs.get(position).getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
-                ((NotificationsViewHolder) holder).notifText.setText(objs.get(position).getMessage());
+                ((NotificationsViewHolder) holder).notifMessage.setText(objs.get(position).getMessage());
                 if(objs.get(position).getSubtext()!=null && objs.get(position).getSubtext().length()>0){
                     ((NotificationsViewHolder) holder).notifSubText.setVisibility(View.VISIBLE);
                     ((NotificationsViewHolder) holder).notifSubText.setText(Html.fromHtml(objs.get(position).getSubtext()));
@@ -140,18 +140,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class NotificationsViewHolder extends RecyclerView.ViewHolder{
 
-        TextView notifText,notifDate,notifSubText;
+        TextView notifMessage ,notifDate,notifSubText,notifTitle;
 
         ImageView notifImage;
 
         LinearLayout parent ;
         public NotificationsViewHolder(View view) {
             super(view);
-            notifText = (TextView )view.findViewById(R.id.notif_text);
+            notifMessage = (TextView )view.findViewById(R.id.notif_message);
             notifDate = (TextView)view.findViewById(R.id.notif_date);
             notifImage = (ImageView)view.findViewById(R.id.notif_img);
             parent = (LinearLayout)view.findViewById(R.id.parent);
             notifSubText = (TextView)view.findViewById(R.id.notif_subtext);
+            notifTitle = (TextView)view.findViewById(R.id.notification_title);
         }
     }
 
