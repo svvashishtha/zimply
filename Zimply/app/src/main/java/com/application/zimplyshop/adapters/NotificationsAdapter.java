@@ -2,6 +2,7 @@ package com.application.zimplyshop.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 ((NotificationsViewHolder) holder).notifDate.setText(TimeUtils.getTimeStampDate(objs.get(position).getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
                 ((NotificationsViewHolder) holder).notifText.setText(objs.get(position).getMessage());
+                if(objs.get(position).getSubtext()!=null && objs.get(position).getSubtext().length()>0){
+                    ((NotificationsViewHolder) holder).notifSubText.setVisibility(View.VISIBLE);
+                    ((NotificationsViewHolder) holder).notifSubText.setText(Html.fromHtml(objs.get(position).getSubtext()));
+                }else{
+                    ((NotificationsViewHolder) holder).notifSubText.setVisibility(View.GONE);
+                }
                 new ImageLoaderManager((NotificationsActivity) mContext).setImageFromUrl(objs.get(position).getImage(), ((NotificationsViewHolder) holder).notifImage, "users", width, height, false, false);
                 ((NotificationsViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -97,6 +104,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((CollapseNotificationsViewHolder) holder).notifDate.setText(TimeUtils.getTimeStampDate(objs.get(position).getCreated_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
                 ((CollapseNotificationsViewHolder) holder).notifText.setText(objs.get(position).getMessage());
                 ((CollapseNotificationsViewHolder) holder).notifTitle.setText(objs.get(position).getTitle());
+                if(objs.get(position).getSubtext()!=null && objs.get(position).getSubtext().length()>0){
+                    ((CollapseNotificationsViewHolder) holder).notifSubText.setVisibility(View.VISIBLE);
+                    System.getProperty("line.separator");
+                    ((CollapseNotificationsViewHolder) holder).notifSubText.setText(Html.fromHtml(objs.get(position).getSubtext()));
+                }else{
+                    ((CollapseNotificationsViewHolder) holder).notifSubText.setVisibility(View.GONE);
+                }
+
                 ((CollapseNotificationsViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -125,7 +140,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class NotificationsViewHolder extends RecyclerView.ViewHolder{
 
-        TextView notifText,notifDate;
+        TextView notifText,notifDate,notifSubText;
 
         ImageView notifImage;
 
@@ -136,12 +151,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
             notifDate = (TextView)view.findViewById(R.id.notif_date);
             notifImage = (ImageView)view.findViewById(R.id.notif_img);
             parent = (LinearLayout)view.findViewById(R.id.parent);
-
+            notifSubText = (TextView)view.findViewById(R.id.notif_subtext);
         }
     }
+
     public class CollapseNotificationsViewHolder extends RecyclerView.ViewHolder{
 
-        TextView notifText,notifDate,notifTitle;
+        TextView notifText,notifDate,notifTitle,notifSubText;
         LinearLayout parent;
         public CollapseNotificationsViewHolder(View view) {
             super(view);
@@ -149,6 +165,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
             notifDate = (TextView)view.findViewById(R.id.notification_time);
             notifTitle = (TextView)view.findViewById(R.id.notification_title);
             parent = (LinearLayout)view.findViewById(R.id.parent);
+            notifSubText = (TextView)view.findViewById(R.id.notif_subtext);
         }
     }
 

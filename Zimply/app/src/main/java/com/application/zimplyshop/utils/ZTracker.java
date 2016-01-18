@@ -90,4 +90,21 @@ public class ZTracker {
         }
     }
 
+    public static void checkOutGaEvents(ProductAction productAction, Product product, Context context) {
+        if (CommonLib.LogGAEvent) {
+            try {
+                HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder()
+                        .addProduct(product)
+                        .setProductAction(productAction);
+
+                Tracker t = ((AppApplication) context).getTracker(
+                        CommonLib.TrackerName.APPLICATION_TRACKER);
+
+                t.send(builder.build());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

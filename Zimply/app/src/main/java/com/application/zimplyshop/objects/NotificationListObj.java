@@ -21,6 +21,16 @@ public class NotificationListObj implements Serializable{
 
     private int expand;
 
+    private String subtext;
+
+    public String getSubtext() {
+        return subtext;
+    }
+
+    public void setSubtext(String subtext) {
+        this.subtext = subtext;
+    }
+
     public String getMessage() {
         return message;
     }
