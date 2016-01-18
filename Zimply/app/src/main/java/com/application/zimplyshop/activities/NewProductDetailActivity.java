@@ -884,7 +884,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     ProductAction productAction = new ProductAction(ProductAction.ACTION_ADD)
                             .setCheckoutStep(2)
                             .setCheckoutOptions("Buy Now");
-                    ZTracker.checkOutGaEvents(productAction, product, NewProductDetailActivity.this);
+                    ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
                     if (AppPreferences.isUserLogIn(NewProductDetailActivity.this)) {
                         Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                         intent.putExtra("OrderSummaryFragment", true);
