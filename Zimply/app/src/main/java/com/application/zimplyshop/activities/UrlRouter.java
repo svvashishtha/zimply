@@ -13,6 +13,7 @@ import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.net.URL;
 import java.util.List;
@@ -131,6 +132,12 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
         int pId = Integer.parseInt(id);
         intent.putExtra("id", pId);
         this.finish();
+
+        //        GA Ecommerce
+        intent.putExtra("productActionListName", "Navigate To Product Through Slug");
+        intent.putExtra("screenName", "URLRouter Activity");
+        intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
         startActivity(intent);
 
     }

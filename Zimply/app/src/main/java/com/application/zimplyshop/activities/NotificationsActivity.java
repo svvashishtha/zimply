@@ -27,6 +27,7 @@ import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.ZWebView;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.SpaceItemDecoration;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.json.JSONObject;
 
@@ -35,17 +36,17 @@ import java.util.ArrayList;
 /**
  * Created by Umesh Lohani on 11/19/2015.
  */
-public class NotificationsActivity extends BaseActivity implements GetRequestListener,AppConstants,View.OnClickListener,RequestTags{
+public class NotificationsActivity extends BaseActivity implements GetRequestListener, AppConstants, View.OnClickListener, RequestTags {
 
     RecyclerView categoriesList;
 
     boolean isDestroyed;
 
-    int visibleItemCount,pastVisiblesItems,totalItemCount;
+    int visibleItemCount, pastVisiblesItems, totalItemCount;
 
     boolean isLoading;
 
-    boolean isRefreshData,isRequestAllowed;
+    boolean isRefreshData, isRequestAllowed;
 
     String nextUrl;
 
@@ -53,17 +54,17 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
 
         //PAGE_TYPE = AppConstants.PAGE_TYPE_NETWORK_NO_WIFI;
 
-        PAGE_TYPE =AppConstants.PAGE_TYPE_NOTIFICATION;
+        PAGE_TYPE = AppConstants.PAGE_TYPE_NOTIFICATION;
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        categoriesList = (RecyclerView)findViewById(R.id.categories_list);
+        categoriesList = (RecyclerView) findViewById(R.id.categories_list);
         categoriesList.setLayoutManager(new LinearLayoutManager(this));
         categoriesList.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small)));
 
@@ -71,14 +72,14 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
         retryLayout.setOnClickListener(this);
         findViewById(R.id.null_case_image).setOnClickListener(this);
         GetRequestManager.getInstance().addCallbacks(this);
-        ((CustomTextView)findViewById(R.id.cart_item_true)).setVisibility(View.GONE);
-        AppPreferences.setNotifModDateTime(this,System.currentTimeMillis());
+        ((CustomTextView) findViewById(R.id.cart_item_true)).setVisibility(View.GONE);
+        AppPreferences.setNotifModDateTime(this, System.currentTimeMillis());
         loadData();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             this.finish();
         }
         return super.onOptionsItemSelected(item);
@@ -91,10 +92,10 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
         toolbar.addView(view);
     }
 
-    public void loadData(){
+    public void loadData() {
         String finalUrl;
         if (nextUrl == null) {
-            finalUrl = AppApplication.getInstance().getBaseUrl() + NOTIFICATIONS_LIST ;
+            finalUrl = AppApplication.getInstance().getBaseUrl() + NOTIFICATIONS_LIST;
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
@@ -102,9 +103,9 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
                 ObjectTypes.OBJECT_TYPE_NOTIFICATION_LIST_OBJ);
     }
 
-    public void setAdapterData(ArrayList<NotificationListObj> objs){
+    public void setAdapterData(ArrayList<NotificationListObj> objs) {
         int height = (3 * getDisplayMetrics().heightPixels) / 10;
-        if(categoriesList.getAdapter() == null) {
+        if (categoriesList.getAdapter() == null) {
             NotificationsAdapter adapter = new NotificationsAdapter(this, height, (int) (getDisplayMetrics().widthPixels - (2 * getResources().getDimension(R.dimen.margin_medium))));
             categoriesList.setAdapter(adapter);
             categoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -132,7 +133,7 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
 
                 @Override
                 public void onItemClick(int pos) {
-                    NotificationListObj obj = (NotificationListObj)((NotificationsAdapter)categoriesList.getAdapter()).getItem(pos);
+                    NotificationListObj obj = (NotificationListObj) ((NotificationsAdapter) categoriesList.getAdapter()).getItem(pos);
                     manageNotifClick(obj);
                 }
 
@@ -142,32 +143,37 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
 
     }
 
-    public void manageNotifClick(NotificationListObj obj){
-        switch(obj.getType()){
+    public void manageNotifClick(NotificationListObj obj) {
+        switch (obj.getType()) {
             case AppConstants.NOTIFICATION_TYPE_PRODUCT_DETAIL:
                 JSONObject jsonObj = JSONUtils.getJSONObject(obj.getSlug());
-                Intent intent = new Intent(this , NewProductDetailActivity.class);
-                intent.putExtra("slug", JSONUtils.getStringfromJSON(jsonObj,"slug"));
-                intent.putExtra("id",Integer.parseInt(JSONUtils.getStringfromJSON(jsonObj, "id")));
+                Intent intent = new Intent(this, NewProductDetailActivity.class);
+                intent.putExtra("slug", JSONUtils.getStringfromJSON(jsonObj, "slug"));
+                intent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(jsonObj, "id")));
+
+                //        GA Ecommerce
+                intent.putExtra("productActionListName", "Notification Click");
+                intent.putExtra("screenName", "Notifications Activity");
+                intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
                 startActivity(intent);
                 break;
             case NOTIFICATION_TYPE_PRODUCT_LIST:
                 Intent listIntent = new Intent(this, ProductListingActivity.class);
-                listIntent .putExtra("category_id", "0");
+                listIntent.putExtra("category_id", "0");
                 listIntent.putExtra("hide_filter", false);
-                listIntent .putExtra("category_name", obj.getTitle());
-                listIntent .putExtra("url", AppConstants.GET_PRODUCT_LIST);
-                listIntent.putExtra("discount_id",Integer.parseInt(obj.getSlug()));
+                listIntent.putExtra("category_name", obj.getTitle());
+                listIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
+                listIntent.putExtra("discount_id", Integer.parseInt(obj.getSlug()));
                 startActivity(listIntent);
                 break;
             case NOTIFICATION_TYPE_WEBVIEW:
-                Intent  notificationIntent = new Intent(this, ZWebView.class);
-                notificationIntent.putExtra("title",obj.getTitle() );
+                Intent notificationIntent = new Intent(this, ZWebView.class);
+                notificationIntent.putExtra("title", obj.getTitle());
                 notificationIntent.putExtra("url", obj.getSlug());
                 startActivity(notificationIntent);
                 break;
             case NOTIFICATION_TYPE_HOME_PAGE:
-                Intent  homeIntent = new Intent(this, HomeActivity.class);
+                Intent homeIntent = new Intent(this, HomeActivity.class);
                 startActivity(homeIntent);
                 break;
 
@@ -248,10 +254,10 @@ public class NotificationsActivity extends BaseActivity implements GetRequestLis
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.null_case_image:
             case R.id.retry_layout:
-                if(isRequestFailed){
+                if (isRequestFailed) {
                     loadData();
                 }
                 break;

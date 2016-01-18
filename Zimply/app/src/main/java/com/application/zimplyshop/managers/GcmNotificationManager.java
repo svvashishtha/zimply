@@ -30,6 +30,7 @@ import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.TimeUtils;
 import com.application.zimplyshop.utils.ZWebView;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,6 +98,12 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent.putExtra("is_shared", true);
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
             notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
+
+            //        GA Ecommerce
+            notificationIntent.putExtra("productActionListName", "Big Offer GCM Notification");
+            notificationIntent.putExtra("screenName", "GCM Notification");
+            notificationIntent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
             notificationIntent.setAction("Big Offer Notification");
         }else if(type == NOTIFICATION_TYPE_CART_PAGE){
             notificationIntent = new Intent(mContext, ProductCheckoutActivity.class);
@@ -145,7 +152,7 @@ public class GcmNotificationManager implements AppConstants {
     public void showCustomNotification(String message, int type, String slug, String title,String imageUrl,String subText) {
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext).
-                setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message).setStyle(new NotificationCompat.BigTextStyle())
+                setContentTitle(title).setContentText(message).setSmallIcon(R.drawable.ic_ticker).setTicker(message)
                 .setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setColor(Color.parseColor("#bbbbbb"));
         BitmapDrawable bitmapDrawable_large_logo = (BitmapDrawable) mContext.getResources()
                 .getDrawable(R.drawable.ic_app_launcher_icon);
@@ -158,7 +165,7 @@ public class GcmNotificationManager implements AppConstants {
         if(imageUrl!=null && imageUrl.length()>0) {
             Bitmap bitmap = getBitmapFromURL(imageUrl);
             remoteViews.setImageViewBitmap(R.id.notif_image, bitmap);
-        }else{
+        } else {
             remoteViews.setImageViewResource(R.id.notif_image, R.drawable.notif_search_image);
         }
         // Locate and set the Text into customnotificationtext.xml TextViews
@@ -195,6 +202,12 @@ public class GcmNotificationManager implements AppConstants {
             notificationIntent.putExtra("is_shared", true);
             notificationIntent.putExtra("slug", JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "slug"));
             notificationIntent.putExtra("id", Integer.parseInt(JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(slug), "id")));
+
+            //        GA Ecommerce
+            notificationIntent.putExtra("productActionListName", "Custom Offer GCM Notification");
+            notificationIntent.putExtra("screenName", "GCM Notification");
+            notificationIntent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
             notificationIntent.setAction("Big Offer Notification");
         }else if(type == NOTIFICATION_TYPE_CART_PAGE){
             notificationIntent = new Intent(mContext, ProductCheckoutActivity.class);

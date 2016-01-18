@@ -18,6 +18,7 @@ import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.util.ArrayList;
 
@@ -179,6 +180,12 @@ public class ProductsRecyclerViewGridAdapter extends
                     intent.putExtra("slug", objs.get(position).getSlug());
                     intent.putExtra("id", objs.get(position).getId());
                     intent.putExtra("title", objs.get(position).getName());
+
+                    //        GA Ecommerce
+                    intent.putExtra("productActionListName", "Product List Item Click");
+                    intent.putExtra("screenName", "Product List Activity");
+                    intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
                     mContext.startActivity(intent);
                 }
             });

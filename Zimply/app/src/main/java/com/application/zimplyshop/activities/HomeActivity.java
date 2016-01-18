@@ -705,9 +705,11 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         intent.putExtra("slug", slug);
         intent.putExtra("id", productId);
         intent.putExtra("is_scanned", true);
+
+//        GA Ecommerce
         intent.putExtra("productActionListName", productActionListName);
-        intent.putExtra("screenName", "HomeActivity");
-        intent.putExtra("actionPerformed", ProductAction.ACTION_DETAIL);
+        intent.putExtra("screenName", "Home Activity");
+        intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
         startActivity(intent);
     }
 

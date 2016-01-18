@@ -4,4 +4,6 @@
     <integer name="viewfinder_border_length">60</integer>
     <integer name="viewfinder_border_width">4</integer>
 
+    <integer name="z_tag_position_recycler_view">0</integer>
+
 </resources>

@@ -20,13 +20,14 @@ import com.application.zimplyshop.baseobjects.OrderItemObj;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.utils.TimeUtils;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.util.ArrayList;
 
 /**
  * Created by Umesh Lohani on 10/9/2015.
  */
-public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
 
     ArrayList<OrderItemObj> objs;
@@ -37,19 +38,19 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private int TYPE_DATA = 1;
 
 
-    public OrderListAdapter(Context context){
+    public OrderListAdapter(Context context) {
         this.mContext = context;
         objs = new ArrayList<>();
     }
 
 
-    public void changeStatus(int position,int orderId,int status){
-        for(IndividualOrderItemObj obj :objs.get(position).getOrderitem()){
-            if(obj.getId() == orderId){
-                if(status == AppConstants.CANCEL_ORDER){
+    public void changeStatus(int position, int orderId, int status) {
+        for (IndividualOrderItemObj obj : objs.get(position).getOrderitem()) {
+            if (obj.getId() == orderId) {
+                if (status == AppConstants.CANCEL_ORDER) {
                     obj.setStatus("Cancelled");
                     obj.setCancel_orderitem(false);
-                }else{
+                } else {
                     obj.setStatus("Return in process");
                     obj.setReturn_orderitem(false);
                 }
@@ -73,12 +74,12 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
-        if(viewType == TYPE_DATA) {
+        if (viewType == TYPE_DATA) {
 
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item_parent, parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item_parent, parent, false);
             holder = new OrderItemHolder(view);
-        }else{
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_footer_layout, parent,false);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_footer_layout, parent, false);
             holder = new LoadingViewHolder(view);
         }
         return holder;
@@ -86,10 +87,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if(getItemViewType(position) == TYPE_DATA) {
+        if (getItemViewType(position) == TYPE_DATA) {
             ((OrderItemHolder) holder).orderPrice.setText(mContext.getString(R.string.rs_text) + " " + objs.get(position).getTotal_price());
-            ((OrderItemHolder) holder).orderDate.setText("Placed on "+ TimeUtils.getTimeStampDate(objs.get(position).getOrdered_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
-            ((OrderItemHolder) holder).orderId.setText("Order Id: "+objs.get(position).getOrder_id());
+            ((OrderItemHolder) holder).orderDate.setText("Placed on " + TimeUtils.getTimeStampDate(objs.get(position).getOrdered_on(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
+            ((OrderItemHolder) holder).orderId.setText("Order Id: " + objs.get(position).getOrder_id());
            /* ((OrderItemHolder) holder).orderAddress.setText(objs.get(position).getShipping_address().getName() + "\n" +
                     objs.get(position).getShipping_address().getLine1() + "\n" +
                     objs.get(position).getShipping_address().getPhone());*/
@@ -99,33 +100,39 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 View view = LayoutInflater.from(mContext).inflate(R.layout.order_list_order_item_layout, null);
                 new ImageLoaderManager((PurchaseListActivity) mContext).setImageFromUrl(obj.getProduct().getImage(), ((ImageView) view.findViewById(R.id.product_img)), "", mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), mContext.getResources().getDimensionPixelSize(R.dimen.pro_image_size), false, false);
                 ((TextView) view.findViewById(R.id.product_name)).setText(obj.getProduct().getName());
-                ((TextView) view.findViewById(R.id.product_price)).setText(mContext.getString(R.string.rs_text) + " " +obj.getItem_price());
+                ((TextView) view.findViewById(R.id.product_price)).setText(mContext.getString(R.string.rs_text) + " " + obj.getItem_price());
                 ((TextView) view.findViewById(R.id.product_qty)).setText(Html.fromHtml("Qty: " + "<font color=#76b082>" + obj.getQty() + "</font>"));
                 ((TextView) view.findViewById(R.id.product_status)).setText(obj.getStatus());
-                ((TextView) view.findViewById(R.id.product_delivery_date)).setText("Delivery by:"+TimeUtils.getTimeStampDate(obj.getEstimated_delivery(),TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
+                ((TextView) view.findViewById(R.id.product_delivery_date)).setText("Delivery by:" + TimeUtils.getTimeStampDate(obj.getEstimated_delivery(), TimeUtils.DATE_TYPE_DAY_MON_DD_YYYY));
                 //((TextView)view.findViewById(R.id.product_delivery_date)).setText(Html.fromHtml("Delivery By: "+));
-                ((RelativeLayout)view.findViewById(R.id.item_info_parent)).setOnClickListener(new View.OnClickListener() {
+                ((RelativeLayout) view.findViewById(R.id.item_info_parent)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, NewProductDetailActivity.class);
-                        intent.putExtra("slug",obj.getProduct().getSlug());
+                        intent.putExtra("slug", obj.getProduct().getSlug());
                         intent.putExtra("id", obj.getProduct().getId());
-                        intent.putExtra("title",obj.getProduct().getName());
+                        intent.putExtra("title", obj.getProduct().getName());
+
+                        //        GA Ecommerce
+                        intent.putExtra("productActionListName", "Order List Item Click");
+                        intent.putExtra("screenName", "Order List Activity");
+                        intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
                         mContext.startActivity(intent);
                     }
                 });
                 //  ((TextView) view.findViewById(R.id.product_status)).setBackgroundColor(Color.parseColor(obj.getColor()));
                 ((OrderItemHolder) holder).orderItemContainer.addView(view);
-                if(obj.isCancel_orderitem()){
+                if (obj.isCancel_orderitem()) {
                     view.findViewById(R.id.status_btn).setVisibility(View.VISIBLE);
                     ((TextView) view.findViewById(R.id.status_btn)).setText("Cancel");
-                }else if(obj.isReturn_orderitem()){
+                } else if (obj.isReturn_orderitem()) {
                     view.findViewById(R.id.status_btn).setVisibility(View.VISIBLE);
                     ((TextView) view.findViewById(R.id.status_btn)).setText("Return");
-                }else if(!obj.getStatus().equalsIgnoreCase("Cancelled")){
+                } else if (!obj.getStatus().equalsIgnoreCase("Cancelled")) {
                     view.findViewById(R.id.status_btn).setVisibility(View.GONE);
                     //((TextView) view.findViewById(R.id.status_btn)).setText("Track");
-                }else{
+                } else {
                     view.findViewById(R.id.status_btn).setVisibility(View.GONE);
                 }
 
@@ -161,7 +168,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 //((TextView)view.findViewById(R.id.status_btn)).setText(obj);
                 ((OrderItemHolder) holder).orderItemContainer.addView(view);
             }*/
-        }else{
+        } else {
 
         }
     }
@@ -188,16 +195,17 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    public class OrderItemHolder extends RecyclerView.ViewHolder{
-        TextView orderId , orderDate,orderPrice,orderAddress;
+    public class OrderItemHolder extends RecyclerView.ViewHolder {
+        TextView orderId, orderDate, orderPrice, orderAddress;
         LinearLayout orderItemContainer;
+
         public OrderItemHolder(View itemView) {
             super(itemView);
-            orderId = (TextView)itemView.findViewById(R.id.order_number);
-            orderDate = (TextView)itemView.findViewById(R.id.order_date);
-            orderAddress = (TextView)itemView.findViewById(R.id.order_address);
-            orderPrice = (TextView)itemView.findViewById(R.id.order_price);
-            orderItemContainer = (LinearLayout)itemView.findViewById(R.id.order_items);
+            orderId = (TextView) itemView.findViewById(R.id.order_number);
+            orderDate = (TextView) itemView.findViewById(R.id.order_date);
+            orderAddress = (TextView) itemView.findViewById(R.id.order_address);
+            orderPrice = (TextView) itemView.findViewById(R.id.order_price);
+            orderItemContainer = (LinearLayout) itemView.findViewById(R.id.order_items);
         }
     }
 
@@ -210,12 +218,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     OnItemClickListener mListener;
 
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
 
-    public interface OnItemClickListener{
-        void onCancelClick(int position,int childPos);
-        void onReturnClick(int position,int childPos);
+    public interface OnItemClickListener {
+        void onCancelClick(int position, int childPos);
+
+        void onReturnClick(int position, int childPos);
     }
 }
