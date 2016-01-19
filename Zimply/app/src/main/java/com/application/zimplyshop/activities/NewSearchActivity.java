@@ -37,6 +37,7 @@ import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.NoSwipeViewPager;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.ZPagerSlidingTabStrip;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
 
@@ -66,7 +67,11 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_search_activity);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        try {
+            ZTracker.logGAEvent(NewSearchActivity.this, "Search Icon Clicked", "Entered Search products view", "NewSearchActivity");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

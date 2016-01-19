@@ -926,11 +926,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     shareIntent.putExtra("item_name", adapter.getObj().getProduct().getName());
                     shareIntent.putExtra("product_url", "/shop-product/");
                     shareIntent.putExtra("short_url", "www.zimply.in/shop-product/" + productSlug + "?pid=" + productId);
+                    ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Share-Product", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
                     startActivity(shareIntent);
                 } else {
                     Toast.makeText(this, "Please wait while loading...", Toast.LENGTH_SHORT).show();
                 }
-                ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Share-Product", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
                 break;
             case R.id.cart_icon:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);

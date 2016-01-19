@@ -29,6 +29,7 @@ import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.ZTracker;
 
 import java.util.ArrayList;
 
@@ -88,16 +89,16 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
     }
 
     public void performSearch(String input) {
-        if(input == null)
+        if (input == null)
             return;
 
-        if(input.trim().length() >= 2) {
-            if(mAsyncRunning != null)
+        if (input.trim().length() >= 2) {
+            if (mAsyncRunning != null)
                 mAsyncRunning.cancel(true);
             loadData(input.trim(), false);
         } else {
-            if( input.trim().length() == 0 ) {
-                if(mAsyncRunning != null)
+            if (input.trim().length() == 0) {
+                if (mAsyncRunning != null)
                     mAsyncRunning.cancel(true);
                 getView.findViewById(R.id.recent_searches_container).setVisibility(View.VISIBLE);
                 getView.findViewById(R.id.listview_container).setVisibility(View.GONE);
@@ -107,7 +108,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
         }
     }
 
-    private void loadData (String param, boolean loadFromCache) {
+    private void loadData(String param, boolean loadFromCache) {
         if (loadFromCache) {
             mAsyncRunning = new GetDataFromCache().execute();
         } else {
@@ -119,7 +120,12 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             for (String pam : params) {
                 builder += (pam + "+");
             }
-            if(builder.length()>0) {
+            try {
+                ZTracker.logGAEvent(getActivity(), "Search Terms", builder, "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (builder.length() > 0) {
                 requestTime = System.currentTimeMillis();
                 builder = builder.substring(0, builder.length() - 1);
                 String url = AppApplication.getInstance().getBaseUrl() + AppConstants.GET_SEARCHED_PRODUCTS_LIST + "?q=" + builder;
@@ -149,7 +155,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
     @Override
     public void onRequestStarted(String requestTag) {
         if (requestTag.equals(RequestTags.SEARCHED_PRODUCTS_REQUEST_TAG)) {
-            if (!destroyed){
+            if (!destroyed) {
                 getView.findViewById(R.id.progress_container).setVisibility(View.VISIBLE);
                 getView.findViewById(R.id.progress_recent).setVisibility(View.GONE);
             }
@@ -163,18 +169,18 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             if (!destroyed && obj != null && obj instanceof ParentCategory) {
                 CommonLib.ZLog("Request Time", "Product search(Suggestion) Request :" + (System.currentTimeMillis() - requestTime) + " mS");
                 CommonLib.writeRequestData("Product search(Suggestion) Request :" + (System.currentTimeMillis() - requestTime) + " mS");
-                products = ((ParentCategory)obj).getSubCategories();
+                products = ((ParentCategory) obj).getSubCategories();
                 products.addAll(((ParentCategory) obj).getCategories());
 
                 ArrayList<CategoryObject> objects = new ArrayList<CategoryObject>();
 
 //                Collections.copy(objects, products);
 
-                for(CategoryObject dups: products ) {
+                for (CategoryObject dups : products) {
                     objects.add(new CategoryObject(dups));
                 }
 
-                for(CategoryObject dups: objects ) {
+                for (CategoryObject dups : objects) {
                     dups.setDupType(CommonLib.DUP_TYPE_TRUE);
                 }
 
@@ -185,7 +191,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 getView.findViewById(R.id.progress_container).setVisibility(View.GONE);
 
                 //if products size is 0, display recent
-                if(products != null && products.size() > 0) {
+                if (products != null && products.size() > 0) {
                     getView.findViewById(R.id.listview_container).setVisibility(View.VISIBLE);
                     mListView.setVisibility(View.VISIBLE);
                     recentSearchesListView.setVisibility(View.GONE);
@@ -243,8 +249,8 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 v.setTag(viewHolder);
             }
 
-            final String name = ((TextView)((NewSearchActivity)activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
-            if(product.getDupType() == CommonLib.DUP_TYPE_TRUE) {
+            final String name = ((TextView) ((NewSearchActivity) activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
+            if (product.getDupType() == CommonLib.DUP_TYPE_TRUE) {
                 viewHolder.text.setTypeface(null, Typeface.NORMAL);
                 viewHolder.text.setText("\"" + name + "\"" + " in " + product.getName());
             } else {
@@ -259,22 +265,22 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                     intent.putExtra("type", product.getType());
                     intent.putExtra("id", product.getId());
                     intent.putExtra("dup_type", product.getDupType());
-                    if(product.getName() == null)
+                    if (product.getName() == null)
                         return;
                     intent.putExtra("category_name", product.getName());
                     String[] params1 = product.getName().split(" ");
                     String name1 = "";
-                    for ( String pam:params1 ) {
+                    for (String pam : params1) {
                         name1 += (pam + "+");
                     }
                     name1 = name1.substring(0, name1.length() - 1);
                     intent.putExtra("name", name1);
 
-                    if(name == null)
+                    if (name == null)
                         return;
                     String[] params = name.split(" ");
                     String builder = "";
-                    for ( String pam:params ) {
+                    for (String pam : params) {
                         builder += (pam + "+");
                     }
                     builder = builder.substring(0, builder.length() - 1);
@@ -327,7 +333,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 v.setTag(viewHolder);
             }
 
-            final String name = ((TextView)((NewSearchActivity)activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
+            final String name = ((TextView) ((NewSearchActivity) activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
             viewHolder.text.setTypeface(null, Typeface.BOLD);
             viewHolder.text.setText(product.getProduct().getName());
 
@@ -357,7 +363,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             try {
                 int userId = Integer.parseInt(AppPreferences.getUserID(activity));
                 result = RecentProductsDBWrapper.getProducts(userId);
-            } catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 result = RecentProductsDBWrapper.getProducts(1);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -367,8 +373,8 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
 
         @Override
         protected void onPostExecute(Object result) {
-            if(!destroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0 ) {
-                recentSearchesAdapter = new RecentProductListAdapter(activity, R.layout.simple_list_item, (ArrayList<HomeProductObj>)result);
+            if (!destroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0) {
+                recentSearchesAdapter = new RecentProductListAdapter(activity, R.layout.simple_list_item, (ArrayList<HomeProductObj>) result);
                 recentSearchesListView.setAdapter(recentSearchesAdapter);
                 getView.findViewById(R.id.recent_searches_container).setVisibility(View.VISIBLE);
                 getView.findViewById(R.id.progress_recent).setVisibility(View.GONE);
@@ -376,9 +382,6 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
         }
 
     }
-
-
-
 
 
 }
