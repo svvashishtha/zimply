@@ -12,15 +12,15 @@
         android:background="@color/zhl"
         android:clickable="true"
         android:orientation="vertical">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/orders_listview"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_above="@id/save"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/pro_image_size"
-        />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/orders_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_above="@id/save"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/pro_image_size" />
 
         <!--<CustomTextView
             android:id="@+id/save"
@@ -38,35 +38,38 @@
             android:textColor="@color/white"
             android:textSize="@dimen/size18" />-->
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/payment_layout"
         android:layout_width="match_parent"
-        android:visibility="gone"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="center_vertical"
         android:background="@drawable/bottom_dropshadow"
-        android:padding="@dimen/margin_small"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:padding="@dimen/margin_small"
+        android:visibility="gone">
+
         <com.application.zimplyshop.widgets.CustomTextViewBold
             android:id="@+id/total_amount"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_medium"
+            android:layout_weight="1"
             android:textColor="@color/heading_text_color"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/font_medium"
+            android:textStyle="bold" />
+
         <com.application.zimplyshop.widgets.CustomTextViewBold
             android:id="@+id/buy_btn"
             android:layout_width="wrap_content"
+            android:layout_height="@dimen/z_item_height_48"
+            android:background="@drawable/orange_btn_bg"
             android:gravity="center"
             android:paddingLeft="@dimen/margin_xxlarge"
             android:paddingRight="@dimen/margin_xxlarge"
-            android:layout_height="@dimen/z_item_height_48"
-            android:background="@drawable/orange_btn_bg"
             android:text="Buy"
-            android:textSize="@dimen/font_large"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
     </LinearLayout>
 
     <include layout="@layout/progress_layout" />

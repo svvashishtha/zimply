@@ -191,6 +191,11 @@
             android:theme="@style/AppBaseTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".activities.NewAppPaymentOptionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".activities.NewSearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"

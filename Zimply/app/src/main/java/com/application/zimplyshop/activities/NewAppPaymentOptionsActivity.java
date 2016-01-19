@@ -2,21 +2,17 @@ package com.application.zimplyshop.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.adapters.NewAppPaymentOptionsActivityListAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.baseobjects.CartObject;
@@ -31,7 +27,6 @@ import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
-import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.google.android.gms.analytics.ecommerce.Product;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
 import com.payu.sdk.PayU;
@@ -47,7 +42,7 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 11/6/2015.
  */
-public class AppPaymentOptionsActivity extends BaseActivity implements View.OnClickListener, RequestTags, UploadManagerCallback {
+public class NewAppPaymentOptionsActivity extends BaseActivity implements View.OnClickListener, RequestTags, UploadManagerCallback {
 
 
     String name, orderId, email;
@@ -57,8 +52,6 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     int PAYMENT_TYPE_CASH = 1;
     int PAYMENT_TYPE_CARD = 2;
-//    int PAYMENT_TYPE_COD = 2;
-
 
     int buyingChannel;
 
@@ -66,10 +59,18 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     CartObject cartObj;
 
+    RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
+    NewAppPaymentOptionsActivityListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.payment_options_layout);
+        setContentView(R.layout.new_payment_options_layout);
+
+        recyclerView = (RecyclerView) findViewById(R.id.apppaymentoptions);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         if (getIntent() != null) {
             orderId = getIntent().getStringExtra("order_id");
@@ -87,65 +88,17 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       /* if(buyingChannel == AppConstants.BUYING_CHANNEL_ONLINE) {
-            ((CustomTextView)findViewById(R.id.pay_cash_counter)).setVisibility(View.GONE);
-        }else{
-            ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
-        }*/
 
-        if (totalPrice > 20000) {
-            SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
-            string.setSpan(new RelativeSizeSpan(0.8f), 18, string.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() - 1, 0);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setText(string);
-            //((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setEnabled(false);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
-
-
-        } else if (isCodNotAvailable) {
-            SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
-            string.setSpan(new RelativeSizeSpan(0.8f), 18, string.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() - 1, 0);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setText(string);
-            //((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setEnabled(false);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setText("*One or more item(s) in your cart is not eligible for COD. Use online payment mode.");
-            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
-
-        } else {
-            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.GONE);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setEnabled(true);
-            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setOnClickListener(this);
-        }
-
-        ((CustomTextView) findViewById(R.id.pay_online)).setOnClickListener(this);
-        LinearLayout buyLayout = (LinearLayout) findViewById(R.id.payment_layout);
-        buyLayout.setVisibility(View.VISIBLE);
-        ((CustomTextViewBold) findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " + "<font color=#0093b8>" + getResources().getString(R.string.rs_text) + " " + Math.round(totalPrice) + "</font>"));
-        ((CustomTextViewBold) findViewById(R.id.buy_btn)).setText("Place Order");
-        ((CustomTextViewBold) findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                makePaymentRequest();
-            }
-        });
         UploadManager.getInstance().addCallback(this);
 
-        paymentType = PAYMENT_TYPE_CARD;
-        findViewById(R.id.pay_online).setSelected(true);
-        //findViewById(R.id.pay_cash_counter).setSelected(false);
-        /*if( isAllOnline ){
-            ((CustomTextView)findViewById(R.id.pay_cash_counter)).setVisibility(View.GONE);
-        }*/
+        adapter = new NewAppPaymentOptionsActivityListAdapter(this);
+        recyclerView.setAdapter(adapter);
     }
 
     public void addToolbarView(Toolbar toolbar) {
         View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar, false);
         CustomTextView textView = (CustomTextView) view.findViewById(R.id.title_textview);
-        textView.setText("Choose Payment Type");
+        textView.setText("Complete Your Payment");
         toolbar.addView(view);
     }
 
@@ -173,13 +126,6 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                     PayU.PaymentMode.NB, PayU.PaymentMode.DC,
                     PayU.PaymentMode.EMI,
                     PayU.PaymentMode.STORED_CARDS});
-//totalPrice
-               /* PayU.getInstance(this).startPaymentProcess(
-                        1, params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
-                                PayU.PaymentMode.NB, PayU.PaymentMode.DC,
-                                PayU.PaymentMode.EMI,
-                                PayU.PaymentMode.STORED_CARDS});*/
-
         }
     }
 
@@ -311,7 +257,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                     try {
                         for (int i = 0; i < cartObj.getCart().getDetail().size(); i++) {
                             try {
-                                if (CommonLib.isNetworkAvailable(AppPaymentOptionsActivity.this)) {
+                                if (CommonLib.isNetworkAvailable(NewAppPaymentOptionsActivity.this)) {
                                     Product product = new Product()
                                             .setId(cartObj.getCart().getDetail().get(i).getProduct().getId() + "")
                                             .setName(cartObj.getCart().getDetail().get(i).getProduct().getName())
@@ -321,7 +267,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                                     ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
                                             .setCheckoutStep(5)
                                             .setCheckoutOptions("Purchase Product with" + (paymentType == PAYMENT_TYPE_CASH ? " COD" : " Online payment"));
-                                    ZTracker.checkOutGaEvents(productAction, product, AppPaymentOptionsActivity.this);
+                                    ZTracker.checkOutGaEvents(productAction, product, NewAppPaymentOptionsActivity.this);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
