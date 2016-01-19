@@ -14,7 +14,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Net amount to be paid"
+            android:text="Net amount to be paid : "
             android:textColor="@color/z_text_color_dark" />
 
         <com.application.zimplyshop.widgets.CustomTextViewBold
@@ -24,6 +24,131 @@
             android:textColor="@color/z_text_color_dark"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/orderdetailslauout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/z_margin_large"
+        android:paddingRight="@dimen/z_margin_large">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_small">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Sum"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/total_sum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="10000"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/applied_coupon_discount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Discount"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/discount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="6.99"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Shipping Charges"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/shipping_charges"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="6.99"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Payment"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/total_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="6.99"
+                android:textColor="@color/blue_button"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/view_orderdetailsbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="@dimen/z_margin_large"
+        android:text="View Details"
+        android:textColor="@color/z_blue_color" />
 
     <View
         android:layout_width="match_parent"
@@ -113,17 +238,19 @@
                 android:paddingRight="@dimen/z_margin_large"
                 android:paddingTop="@dimen/z_margin_small">
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <com.application.zimplyshop.widgets.CustomEdittext
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_selector_background"
-                    android:hint="CVV"
-                    android:inputType="numberPassword"
-                    android:padding="@dimen/z_margin_mini"
-                    android:textColor="@color/z_text_color_dark"
-                    android:textColorHint="@color/z_text_color_light"
-                    android:typeface="normal" />
+
+                    <com.application.zimplyshop.widgets.CustomEdittext
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:hint="CVV"
+                        android:inputType="numberPassword"
+                        android:textColor="@color/z_text_color_dark"
+                        android:textColorHint="@color/z_text_color_light" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <FrameLayout

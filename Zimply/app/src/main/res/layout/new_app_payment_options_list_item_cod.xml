@@ -60,6 +60,7 @@
                 android:padding="@dimen/z_margin_large"
                 android:text="Pay Securely"
                 android:textColor="@android:color/white"
+                android:textSize="@dimen/font_large"
                 android:textStyle="bold" />
         </FrameLayout>
     </LinearLayout>

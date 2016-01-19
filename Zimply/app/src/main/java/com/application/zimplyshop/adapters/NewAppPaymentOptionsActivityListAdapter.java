@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 
@@ -25,6 +26,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
     int currentOpenPosition = 0;
 
     MyClickListener clickListener;
+    boolean isOrderdetailShown;
 
     public NewAppPaymentOptionsActivityListAdapter(Context context) {
         this.context = context;
@@ -94,6 +96,13 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
             holder.paymentModeTextLayout.setTag(position);
             holder.paymentModeTextLayout.setOnClickListener(clickListener);
+
+            if (isOrderdetailShown)
+                holder.orderDetailsLayout.setVisibility(View.VISIBLE);
+            else
+                holder.orderDetailsLayout.setVisibility(View.GONE);
+
+            holder.viewOrderDetailsButton.setOnClickListener(clickListener);
         } else if (getItemViewType(position) == TYPE_NET_BANKING) {
             NetBankingHolder holder = (NetBankingHolder) holderCom;
             if (currentOpenPosition == position) {
@@ -149,12 +158,15 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
     class SavedCardsHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout layoutHideContent, paymentModeTextLayout;
+        LinearLayout layoutHideContent, paymentModeTextLayout, orderDetailsLayout;
+        TextView viewOrderDetailsButton;
 
         public SavedCardsHolder(View v) {
             super(v);
             layoutHideContent = (LinearLayout) v.findViewById(R.id.hidethispaymentlayut);
             paymentModeTextLayout = (LinearLayout) v.findViewById(R.id.creditcardpaymentoptiontext);
+            viewOrderDetailsButton = (TextView) v.findViewById(R.id.view_orderdetailsbutton);
+            orderDetailsLayout = (LinearLayout) v.findViewById(R.id.orderdetailslauout);
         }
     }
 
@@ -227,6 +239,10 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                         currentOpenPosition = pos;
                         notifyItemChanged(pos);
                     }
+                    break;
+                case R.id.view_orderdetailsbutton:
+                    isOrderdetailShown = !isOrderdetailShown;
+                    notifyItemChanged(0);
                     break;
             }
         }

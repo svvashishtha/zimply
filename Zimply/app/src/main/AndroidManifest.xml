@@ -193,7 +193,7 @@
         <activity
             android:name=".activities.NewAppPaymentOptionsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppBaseTheme"
+            android:theme="@style/CheckboxAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activities.NewSearchActivity"

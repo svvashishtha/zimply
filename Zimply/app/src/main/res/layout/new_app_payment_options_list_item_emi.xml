@@ -54,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textSize="@dimen/font_large"
                 android:padding="@dimen/z_margin_large"
                 android:text="Pay Securely"
                 android:textColor="@android:color/white"
