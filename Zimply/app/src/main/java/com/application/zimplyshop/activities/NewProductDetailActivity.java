@@ -149,7 +149,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         if (adapter != null && adapter.getObj() != null && AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
         } else {
-            addToCart.setText("Add to cart");
+            addToCart.setText(getResources().getString(R.string.add_to_cart));
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -378,7 +378,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         if (AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
         } else {
-            addToCart.setText("Add to cart");
+            addToCart.setText(getResources().getString(R.string.add_to_cart));
         }
         if (AllProducts.getInstance().vendorIdsContains(adapter.getObj().getVendor().getId())) {
             adapter.setIsCancelBookingShown(true);
@@ -614,7 +614,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         ProductAction productAction = new ProductAction(ProductAction.ACTION_ADD)
                                 .setCheckoutStep(1)
                                 .setCheckoutOptions("Add to cart");
-                    ZTracker.checkOutGaEvents(productAction,product,NewProductDetailActivity.this);
+                    ZTracker.checkOutGaEvents(productAction,product,getApplicationContext());
                     }
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
@@ -879,7 +879,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     showToast("No network available");
                     // Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
                 }
-                ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Add-To-Cart", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
+                try {
+                    ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Add-To-Cart", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.buy_now:
 

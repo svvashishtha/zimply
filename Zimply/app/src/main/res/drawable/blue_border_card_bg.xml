@@ -4,6 +4,6 @@
     <solid android:color="@color/white" />
     <stroke
         android:width="0.5dp"
-        android:color="@color/blue_button" />
+        android:color="@color/z_rate_btn_blue_pressed_color" />
 
 </shape>
