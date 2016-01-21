@@ -2,6 +2,7 @@ package com.application.zimplyshop.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,20 +30,33 @@ import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.Product;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
-import com.payu.sdk.PayU;
+import com.payu.india.Model.PaymentParams;
+import com.payu.india.Model.PayuConfig;
+import com.payu.india.Model.PayuHashes;
+import com.payu.india.Model.PostData;
+import com.payu.india.Payu.PayuConstants;
+import com.payu.india.Payu.PayuErrors;
+import com.payu.india.PostParams.PaymentPostParams;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Umesh Lohani on 11/6/2015.
  */
-public class NewAppPaymentOptionsActivity extends BaseActivity implements View.OnClickListener, RequestTags, UploadManagerCallback {
+public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback {
 
 
     String name, orderId, email;
@@ -62,6 +76,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements View.O
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     NewAppPaymentOptionsActivityListAdapter adapter;
+    PaymentParams mPaymentParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +106,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements View.O
 
         UploadManager.getInstance().addCallback(this);
 
-        adapter = new NewAppPaymentOptionsActivityListAdapter(this);
+        adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj);
         recyclerView.setAdapter(adapter);
     }
 
@@ -102,90 +117,174 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements View.O
         toolbar.addView(view);
     }
 
-
-    public void makePaymentRequest() {
-        if (paymentType == PAYMENT_TYPE_CASH) {
-            sendPaymentSuccessFullCashRequest();
-
-        } else {
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("furl",
-                    "https://dl.dropboxusercontent.com/s/z69y7fupciqzr7x/furlWithParams.html");
-            params.put("surl",
-                    "https://dl.dropboxusercontent.com/s/dtnvwz5p4uymjvg/success.html");
-            transactionId = "0nf7" + System.currentTimeMillis();
-            params.put(PayU.TXNID, transactionId);
-            params.put(PayU.USER_CREDENTIALS, "test:test");
-            params.put(PayU.PRODUCT_INFO, "My Product");
-            params.put(PayU.FIRSTNAME, name);
-            params.put(PayU.EMAIL, email);
-
-
-            PayU.getInstance(this).startPaymentProcess(cartObj.getCart().getTotal_price()
-                    , params, new PayU.PaymentMode[]{PayU.PaymentMode.CC,
-                    PayU.PaymentMode.NB, PayU.PaymentMode.DC,
-                    PayU.PaymentMode.EMI,
-                    PayU.PaymentMode.STORED_CARDS});
-        }
-    }
-
     String transactionId;
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.pay_online:
-                paymentType = PAYMENT_TYPE_CARD;
-                findViewById(R.id.pay_online).setSelected(true);
-                findViewById(R.id.cash_on_delivery).setSelected(false);
-                break;
-            case R.id.cash_on_delivery:
-                paymentType = PAYMENT_TYPE_CASH;
-                findViewById(R.id.pay_online).setSelected(false);
-                findViewById(R.id.cash_on_delivery).setSelected(true);
-                break;
-        }
-    }
-
     boolean paymentSuccess;
+    int paymentType;
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PayU.RESULT) {
-            if (resultCode == RESULT_OK) {
-                // success
-                if (data != null) {
-                    Toast.makeText(this,
-                            "Success:  " + data.getStringExtra("result"),
-                            Toast.LENGTH_LONG).show();
+    PaymentParams getPayUPaymentParamsObject() {
+        transactionId = "0nf7" + System.currentTimeMillis();
 
+        PaymentParams mPaymentParams = new PaymentParams();
+        mPaymentParams.setKey("fzuAdL");
+        mPaymentParams.setAmount(Integer.toString(totalPrice));
+        mPaymentParams.setProductInfo("My Product");
+        mPaymentParams.setFirstName(name);
+        mPaymentParams.setEmail(email);
+        mPaymentParams.setTxnId(transactionId);
+        mPaymentParams.setSurl("httpss://payu.herokuapp.com/success");
+        mPaymentParams.setFurl("httpss://payu.herokuapp.com/failure");
+        mPaymentParams.setUdf1("");
+        mPaymentParams.setUdf2("");
+        mPaymentParams.setUdf3("");
+        mPaymentParams.setUdf4("");
+        mPaymentParams.setUdf5("");
+        return mPaymentParams;
+    }
 
-                    paymentSuccess = true;
-                    sendPaymentSuccessFullRequest();
+    public void openPayUWebViewForCreditCard(String cardNumber, String cardName, String expiryMonth, String expiryYear, String cvv) {
+        mPaymentParams = getPayUPaymentParamsObject();
+        mPaymentParams.setCardNumber(cardNumber);
+        mPaymentParams.setCardName(cardName);
+        mPaymentParams.setNameOnCard(cardName);
+        mPaymentParams.setExpiryMonth(expiryMonth);// MM
+        mPaymentParams.setExpiryYear(expiryYear);// YYYY
+        mPaymentParams.setCvv(cvv);
+        mPaymentParams.setUserCredentials("fzuAdL:user_id");
+
+        generateHashFromServer(mPaymentParams);
+    }
+
+    public void generateHashFromServer(PaymentParams mPaymentParams) {
+        StringBuffer postParamsBuffer = new StringBuffer();
+        postParamsBuffer.append(concatParams(PayuConstants.KEY, mPaymentParams.getKey()));
+        postParamsBuffer.append(concatParams(PayuConstants.AMOUNT, mPaymentParams.getAmount()));
+        postParamsBuffer.append(concatParams(PayuConstants.TXNID, mPaymentParams.getTxnId()));
+        postParamsBuffer.append(concatParams(PayuConstants.EMAIL, null == mPaymentParams.getEmail() ? "" : mPaymentParams.getEmail()));
+        postParamsBuffer.append(concatParams(PayuConstants.PRODUCT_INFO, mPaymentParams.getProductInfo()));
+        postParamsBuffer.append(concatParams(PayuConstants.FIRST_NAME, null == mPaymentParams.getFirstName() ? "" : mPaymentParams.getFirstName()));
+        postParamsBuffer.append(concatParams(PayuConstants.UDF1, mPaymentParams.getUdf1() == null ? "" : mPaymentParams.getUdf1()));
+        postParamsBuffer.append(concatParams(PayuConstants.UDF2, mPaymentParams.getUdf2() == null ? "" : mPaymentParams.getUdf2()));
+        postParamsBuffer.append(concatParams(PayuConstants.UDF3, mPaymentParams.getUdf3() == null ? "" : mPaymentParams.getUdf3()));
+        postParamsBuffer.append(concatParams(PayuConstants.UDF4, mPaymentParams.getUdf4() == null ? "" : mPaymentParams.getUdf4()));
+        postParamsBuffer.append(concatParams(PayuConstants.UDF5, mPaymentParams.getUdf5() == null ? "" : mPaymentParams.getUdf5()));
+        postParamsBuffer.append(concatParams(PayuConstants.USER_CREDENTIALS, mPaymentParams.getUserCredentials() == null ? PayuConstants.DEFAULT : mPaymentParams.getUserCredentials()));
+
+        if (null != mPaymentParams.getOfferKey())
+            postParamsBuffer.append(concatParams(PayuConstants.OFFER_KEY, mPaymentParams.getOfferKey()));
+
+        String postParams = postParamsBuffer.charAt(postParamsBuffer.length() - 1) == '&' ? postParamsBuffer.substring(0, postParamsBuffer.length() - 1) : postParamsBuffer.toString();
+        GetHashesFromServerTask getHashesFromServerTask = new GetHashesFromServerTask();
+        getHashesFromServerTask.execute(postParams);
+    }
+
+    protected String concatParams(String key, String value) {
+        return key + "=" + value + "&";
+    }
+
+    class GetHashesFromServerTask extends AsyncTask<String, String, PayuHashes> {
+
+        @Override
+        protected PayuHashes doInBackground(String... postParams) {
+            PayuHashes payuHashes = new PayuHashes();
+            try {
+                URL url = new URL("https://payu.herokuapp.com/get_hash");
+
+                String postParam = postParams[0];
+
+                byte[] postParamsByte = postParam.getBytes("UTF-8");
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.setRequestProperty("Content-Length", String.valueOf(postParamsByte.length));
+                conn.setDoOutput(true);
+                conn.getOutputStream().write(postParamsByte);
+
+                InputStream responseInputStream = conn.getInputStream();
+                StringBuffer responseStringBuffer = new StringBuffer();
+                byte[] byteContainer = new byte[1024];
+                for (int i; (i = responseInputStream.read(byteContainer)) != -1; ) {
+                    responseStringBuffer.append(new String(byteContainer, 0, i));
                 }
 
-            } else if (resultCode == RESULT_CANCELED) {
-                // failed
-                if (data != null) {
-                    Toast.makeText(this,
-                            "Failed:  " + data.getStringExtra("result"),
-                            Toast.LENGTH_LONG).show();
-                    System.out.println("Payu Data::"
-                            + data.getStringExtra("result"));
+                JSONObject response = new JSONObject(responseStringBuffer.toString());
+
+                Iterator<String> payuHashIterator = response.keys();
+                while (payuHashIterator.hasNext()) {
+                    String key = payuHashIterator.next();
+                    switch (key) {
+                        case "payment_hash":
+                            payuHashes.setPaymentHash(response.getString(key));
+                            break;
+                        case "get_merchant_ibibo_codes_hash": //
+                            payuHashes.setMerchantIbiboCodesHash(response.getString(key));
+                            break;
+                        case "vas_for_mobile_sdk_hash":
+                            payuHashes.setVasForMobileSdkHash(response.getString(key));
+                            break;
+                        case "payment_related_details_for_mobile_sdk_hash":
+                            payuHashes.setPaymentRelatedDetailsForMobileSdkHash(response.getString(key));
+                            break;
+                        case "delete_user_card_hash":
+                            payuHashes.setDeleteCardHash(response.getString(key));
+                            break;
+                        case "get_user_cards_hash":
+                            payuHashes.setStoredCardsHash(response.getString(key));
+                            break;
+                        case "edit_user_card_hash":
+                            payuHashes.setEditCardHash(response.getString(key));
+                            break;
+                        case "save_user_card_hash":
+                            payuHashes.setSaveCardHash(response.getString(key));
+                            break;
+                        case "check_offer_status_hash":
+                            payuHashes.setCheckOfferStatusHash(response.getString(key));
+                            break;
+                        case "check_isDomestic_hash":
+                            payuHashes.setCheckIsDomesticHash(response.getString(key));
+                            break;
+                        default:
+                            break;
+                    }
                 }
-                paymentSuccess = false;
-                sendPaymentSuccessFullRequest();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            PayU.setINSTANCE();
+            return payuHashes;
+        }
+
+        @Override
+        protected void onPostExecute(PayuHashes payuHashes) {
+            super.onPostExecute(payuHashes);
+            launchCreditCardWebView(payuHashes);
         }
     }
 
+    private void launchCreditCardWebView(PayuHashes payuHashes) {
+        mPaymentParams.setHash(payuHashes.getPaymentHash());
+        mPaymentParams.setHash(transactionId);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        PostData postData = new PaymentPostParams(mPaymentParams, PayuConstants.CC).getPaymentPostParams();
+        if (postData.getCode() == PayuErrors.NO_ERROR) {
+            // launch webview
+            PayuConfig payuConfig = new PayuConfig();
+            payuConfig.setEnvironment(PayuConstants.PRODUCTION_ENV);
+            payuConfig.setData(postData.getResult());
+            Intent intent = new Intent(this, PayUWebViewActivity.class);
+            intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
+            startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
+        } else {
+            // something went wrong
+            Toast.makeText(this, postData.getResult(), Toast.LENGTH_LONG).show();
+        }
     }
 
-    int paymentType;
 
     public void sendPaymentSuccessFullRequest() {
         paymentType = PAYMENT_TYPE_CARD;
@@ -222,14 +321,12 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements View.O
 
     boolean isDestroyed;
 
-
     @Override
     protected void onDestroy() {
         isDestroyed = true;
         UploadManager.getInstance().removeCallback(this);
         super.onDestroy();
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

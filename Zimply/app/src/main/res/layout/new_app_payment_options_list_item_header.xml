@@ -18,6 +18,7 @@
             android:textColor="@color/z_text_color_dark" />
 
         <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:id="@+id/paymentheaderpricetext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rs. 5000"
@@ -178,7 +179,14 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:gravity="center_vertical"
             android:padding="@dimen/z_margin_large">
+
+            <ImageView
+                android:layout_width="@dimen/z_payment_options_drawableleftwidth"
+                android:layout_height="@dimen/z_payment_options_drawableleftwidth"
+                android:layout_marginRight="@dimen/z_margin_medium"
+                android:src="@drawable/ic_saved_card" />
 
             <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:layout_width="wrap_content"
@@ -238,40 +246,34 @@
                 android:paddingRight="@dimen/z_margin_large"
                 android:paddingTop="@dimen/z_margin_small">
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.application.zimplyshop.widgets.CustomEdittext
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_selector_background_light"
+                    android:hint="CVV"
+                    android:inputType="numberPassword"
+                    android:padding="@dimen/z_margin_small"
+                    android:textColor="@color/z_text_color_dark"
+                    android:textColorHint="@color/z_text_color_light"
+                    android:textSize="@dimen/font_medium"
+                    android:typeface="normal" />
 
-
-                    <com.application.zimplyshop.widgets.CustomEdittext
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:hint="CVV"
-                        android:inputType="numberPassword"
-                        android:textColor="@color/z_text_color_dark"
-                        android:textColorHint="@color/z_text_color_light" />
-                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:src="@drawable/ic_cvv" />
             </LinearLayout>
 
-            <FrameLayout
+            <Button
+                android:id="@+id/paysecurely__codcod"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/z_margin_large"
-                android:background="@color/z_blue_color"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
-
-                <com.application.zimplyshop.widgets.CustomTextViewBold
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/z_margin_large"
-                    android:text="Pay Securely"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/font_large"
-                    android:textStyle="bold" />
-            </FrameLayout>
+                android:layout_height="56dp"
+                android:layout_marginBottom="@dimen/z_margin_mini"
+                android:layout_marginTop="@dimen/z_margin_mini"
+                android:text="Pay Securely"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>

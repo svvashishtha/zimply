@@ -18,10 +18,19 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/z_margin_large">
 
+        <ImageView
+            android:id="@+id/crefitcardimagel"
+            android:layout_width="@dimen/z_payment_options_drawableleftwidth"
+            android:layout_height="@dimen/z_payment_options_drawableleftwidth"
+            android:layout_marginRight="@dimen/z_margin_medium"
+            android:src="@drawable/ic_credit_card" />
+
         <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:id="@+id/creditcardtext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Credit Card"
@@ -50,14 +59,17 @@
                 android:textColor="@color/z_text_color_light" />
 
             <com.application.zimplyshop.widgets.CustomEdittext
+                android:id="@+id/cardNumberEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/z_margin_mini"
-                android:background="@drawable/edittext_selector_background"
+                android:background="@drawable/edittext_selector_background_light"
                 android:hint="Card Number"
+                android:inputType="number"
                 android:padding="@dimen/z_margin_small"
                 android:textColor="@color/z_text_color_dark"
-                android:textColorHint="@color/z_text_color_light" />
+                android:textColorHint="@color/z_text_color_light"
+                android:textSize="@dimen/font_medium" />
 
             <com.application.zimplyshop.widgets.CustomTextView
                 android:layout_width="match_parent"
@@ -67,14 +79,16 @@
                 android:textColor="@color/z_text_color_light" />
 
             <com.application.zimplyshop.widgets.CustomEdittext
+                android:id="@+id/nameOnCardEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/z_margin_mini"
-                android:background="@drawable/edittext_selector_background"
+                android:background="@drawable/edittext_selector_background_light"
                 android:hint="Name on card"
                 android:padding="@dimen/z_margin_small"
                 android:textColor="@color/z_text_color_dark"
-                android:textColorHint="@color/z_text_color_light" />
+                android:textColorHint="@color/z_text_color_light"
+                android:textSize="@dimen/font_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -123,17 +137,32 @@
                 android:text="Enter CVV No."
                 android:textColor="@color/z_text_color_light" />
 
-            <com.application.zimplyshop.widgets.CustomEdittext
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/z_margin_mini"
-                android:background="@drawable/edittext_selector_background"
-                android:hint="CVV No."
-                android:inputType="numberPassword"
-                android:padding="@dimen/z_margin_small"
-                android:textColor="@color/z_text_color_dark"
-                android:textColorHint="@color/z_text_color_light"
-                android:typeface="normal" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.application.zimplyshop.widgets.CustomEdittext
+                    android:id="@+id/cvvEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_selector_background_light"
+                    android:hint="CVV No."
+                    android:inputType="numberPassword"
+                    android:padding="@dimen/z_margin_small"
+                    android:textColor="@color/z_text_color_dark"
+                    android:textColorHint="@color/z_text_color_light"
+                    android:textSize="@dimen/font_medium"
+                    android:typeface="normal" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:src="@drawable/ic_cvv" />
+            </LinearLayout>
 
             <com.application.zimplyshop.widgets.CustomCheckBox
                 android:layout_width="match_parent"
@@ -143,26 +172,15 @@
                 android:text="Save this card for faster checkout" />
         </LinearLayout>
 
-
-        <FrameLayout
+        <Button
+            android:id="@+id/paysecurely__codcod"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/z_margin_large"
-            android:background="@color/z_blue_color"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground">
-
-            <com.application.zimplyshop.widgets.CustomTextViewBold
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/z_margin_large"
-                android:text="Pay Securely"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/font_large"
-                android:textStyle="bold" />
-        </FrameLayout>
+            android:layout_height="56dp"
+            android:layout_marginBottom="@dimen/z_margin_mini"
+            android:layout_marginTop="@dimen/z_margin_mini"
+            android:text="Pay Securely"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </LinearLayout>

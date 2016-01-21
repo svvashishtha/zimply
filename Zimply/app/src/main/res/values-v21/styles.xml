@@ -32,7 +32,7 @@
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
         <item name="colorAccent">@color/z_blue_color</item>
-
+        <item name="android:colorButtonNormal">@color/z_blue_color</item>
     </style>
 
 </resources>
