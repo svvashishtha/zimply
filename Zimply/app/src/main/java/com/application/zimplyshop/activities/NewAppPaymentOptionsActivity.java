@@ -30,13 +30,18 @@ import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.Product;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
+import com.payu.india.Interfaces.PaymentRelatedDetailsListener;
+import com.payu.india.Model.MerchantWebService;
 import com.payu.india.Model.PaymentParams;
 import com.payu.india.Model.PayuConfig;
 import com.payu.india.Model.PayuHashes;
+import com.payu.india.Model.PayuResponse;
 import com.payu.india.Model.PostData;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
+import com.payu.india.PostParams.MerchantWebServicePostParams;
 import com.payu.india.PostParams.PaymentPostParams;
+import com.payu.india.Tasks.GetPaymentRelatedDetailsTask;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -56,7 +61,7 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 11/6/2015.
  */
-public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback {
+public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback, PaymentRelatedDetailsListener {
 
 
     String name, orderId, email;
@@ -77,6 +82,15 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     LinearLayoutManager layoutManager;
     NewAppPaymentOptionsActivityListAdapter adapter;
     PaymentParams mPaymentParams;
+    PayuConfig payuConfig;
+    PayuHashes payuHashes;
+    PayuResponse payuResponse;
+
+    String transactionId;
+    boolean paymentSuccess;
+    int paymentType;
+
+    final String PAYU_KEY_MANDATORY = "0MQaQP";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +113,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
             cartObj = (CartObject) getIntent().getSerializableExtra("cart_obj");
             isCodNotAvailable = getIntent().getBooleanExtra("is_cod_not_available", false);
         }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
@@ -106,8 +121,9 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
 
         UploadManager.getInstance().addCallback(this);
 
-        adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj);
-        recyclerView.setAdapter(adapter);
+        setInitialDataForPaymentParamsObj();
+
+        generateHashFromServer();
     }
 
     public void addToolbarView(Toolbar toolbar) {
@@ -117,15 +133,10 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         toolbar.addView(view);
     }
 
-    String transactionId;
-    boolean paymentSuccess;
-    int paymentType;
-
-    PaymentParams getPayUPaymentParamsObject() {
+    void setInitialDataForPaymentParamsObj() {
         transactionId = "0nf7" + System.currentTimeMillis();
-
-        PaymentParams mPaymentParams = new PaymentParams();
-        mPaymentParams.setKey("fzuAdL");
+        mPaymentParams = new PaymentParams();
+        mPaymentParams.setKey(PAYU_KEY_MANDATORY);
         mPaymentParams.setAmount(Integer.toString(totalPrice));
         mPaymentParams.setProductInfo("My Product");
         mPaymentParams.setFirstName(name);
@@ -138,23 +149,22 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         mPaymentParams.setUdf3("");
         mPaymentParams.setUdf4("");
         mPaymentParams.setUdf5("");
-        return mPaymentParams;
+
+        payuConfig = new PayuConfig();
+        payuConfig.setEnvironment(PayuConstants.PRODUCTION_ENV);
     }
 
     public void openPayUWebViewForCreditCard(String cardNumber, String cardName, String expiryMonth, String expiryYear, String cvv) {
-        mPaymentParams = getPayUPaymentParamsObject();
         mPaymentParams.setCardNumber(cardNumber);
         mPaymentParams.setCardName(cardName);
         mPaymentParams.setNameOnCard(cardName);
         mPaymentParams.setExpiryMonth(expiryMonth);// MM
         mPaymentParams.setExpiryYear(expiryYear);// YYYY
         mPaymentParams.setCvv(cvv);
-        mPaymentParams.setUserCredentials("fzuAdL:user_id");
-
-        generateHashFromServer(mPaymentParams);
+        mPaymentParams.setUserCredentials(PAYU_KEY_MANDATORY + ":user_id");
     }
 
-    public void generateHashFromServer(PaymentParams mPaymentParams) {
+    public void generateHashFromServer() {
         StringBuffer postParamsBuffer = new StringBuffer();
         postParamsBuffer.append(concatParams(PayuConstants.KEY, mPaymentParams.getKey()));
         postParamsBuffer.append(concatParams(PayuConstants.AMOUNT, mPaymentParams.getAmount()));
@@ -181,6 +191,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         return key + "=" + value + "&";
     }
 
+
     class GetHashesFromServerTask extends AsyncTask<String, String, PayuHashes> {
 
         @Override
@@ -188,9 +199,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
             PayuHashes payuHashes = new PayuHashes();
             try {
                 URL url = new URL("https://payu.herokuapp.com/get_hash");
-
                 String postParam = postParams[0];
-
                 byte[] postParamsByte = postParam.getBytes("UTF-8");
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -262,19 +271,42 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         @Override
         protected void onPostExecute(PayuHashes payuHashes) {
             super.onPostExecute(payuHashes);
-            launchCreditCardWebView(payuHashes);
+            NewAppPaymentOptionsActivity.this.payuHashes = payuHashes;
+            mPaymentParams.setHash(payuHashes.getPaymentHash());
+
+            getSavedCardsAndNetBanksInfo();
         }
     }
 
-    private void launchCreditCardWebView(PayuHashes payuHashes) {
-        mPaymentParams.setHash(payuHashes.getPaymentHash());
-        mPaymentParams.setHash(transactionId);
+    private void getSavedCardsAndNetBanksInfo() {
+        MerchantWebService merchantWebService = new MerchantWebService();
+        merchantWebService.setKey(mPaymentParams.getKey());
+        merchantWebService.setCommand(PayuConstants.PAYMENT_RELATED_DETAILS_FOR_MOBILE_SDK);
+        merchantWebService.setVar1(mPaymentParams.getUserCredentials() == null ? "default" : mPaymentParams.getUserCredentials());
 
+        merchantWebService.setHash(payuHashes.getPaymentRelatedDetailsForMobileSdkHash());
+
+        PostData postData = new MerchantWebServicePostParams(merchantWebService).getMerchantWebServicePostParams();
+        if (postData.getCode() == PayuErrors.NO_ERROR) {
+            payuConfig.setData(postData.getResult());
+
+            GetPaymentRelatedDetailsTask task = new GetPaymentRelatedDetailsTask(this);
+            task.execute(payuConfig);
+        } else
+            Toast.makeText(this, postData.getResult(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPaymentRelatedDetailsResponse(PayuResponse res) {
+        payuResponse = res;
+        adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj, payuResponse);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void launchCreditCardWebView() {
         PostData postData = new PaymentPostParams(mPaymentParams, PayuConstants.CC).getPaymentPostParams();
         if (postData.getCode() == PayuErrors.NO_ERROR) {
             // launch webview
-            PayuConfig payuConfig = new PayuConfig();
-            payuConfig.setEnvironment(PayuConstants.PRODUCTION_ENV);
             payuConfig.setData(postData.getResult());
             Intent intent = new Intent(this, PayUWebViewActivity.class);
             intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);

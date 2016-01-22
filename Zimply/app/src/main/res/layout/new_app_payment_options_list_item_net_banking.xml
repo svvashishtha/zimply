@@ -128,6 +128,7 @@
             android:textColor="@color/z_text_color_light" />
 
         <Spinner
+            android:id="@+id/netbankingbankslist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/z_margin_large" />

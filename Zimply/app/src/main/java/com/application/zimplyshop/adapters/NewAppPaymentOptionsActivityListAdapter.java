@@ -2,18 +2,31 @@ package com.application.zimplyshop.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewAppPaymentOptionsActivity;
 import com.application.zimplyshop.baseobjects.CartObject;
+import com.payu.india.Model.PaymentDetails;
+import com.payu.india.Model.PayuResponse;
+import com.payu.india.Payu.PayuConstants;
+import com.payu.india.Payu.PayuUtils;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Ashish Goel on 1/18/2016.
@@ -35,10 +48,19 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
     CartObject cartObject;
 
-    public NewAppPaymentOptionsActivityListAdapter(Context context, CartObject cartObject) {
+    private PayuUtils payuUtils;
+    private String issuer;
+
+    boolean toShowEmiItem = false;
+
+    PayuResponse payuResponse;
+
+    public NewAppPaymentOptionsActivityListAdapter(Context context, CartObject cartObject, PayuResponse payuResponse) {
         this.context = context;
         this.cartObject = cartObject;
         clickListener = new MyClickListener();
+        payuUtils = new PayuUtils();
+        this.payuResponse = payuResponse;
     }
 
     @Override
@@ -48,13 +70,19 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         } else if (position == 1) {
             return TYPE_NET_BANKING;
         } else if (position == 2) {
-            return TYPE_CREDIT_CARD;
-        } else if (position == 3) {
             return TYPE_DEBIT_CARD;
-        } else if (position == 4) {
-            return TYPE_EMI;
-        } else if (position == 5) {
-            return TYPE_COD;
+        } else if (position == 3) {
+            return TYPE_CREDIT_CARD;
+        } else {
+            if (toShowEmiItem) {
+                if (position == 4) {
+                    return TYPE_EMI;
+                } else if (position == 5) {
+                    return TYPE_COD;
+                }
+            } else {
+                return TYPE_COD;
+            }
         }
         return -1;
     }
@@ -144,6 +172,8 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
+
+            setDataForNetbankingBanks(holder.netBankingBanksList);
         } else if (getItemViewType(position) == TYPE_DEBIT_CARD) {
             CreditCardHolder holder = (CreditCardHolder) holderCom;
             if (currentOpenPosition == position) {
@@ -161,6 +191,10 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
+
+            addFunctionalityForCardNumberTextChanged(holder.cardNumber, holder.cartNumberTypeImage, holder.cvv);
+
+            addFunctionalityForSpinners(holder.monthSpinner, holder.yearSpinner);
         } else if (getItemViewType(position) == TYPE_CREDIT_CARD) {
             CreditCardHolder holder = (CreditCardHolder) holderCom;
             if (currentOpenPosition == position) {
@@ -178,6 +212,10 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
+
+            addFunctionalityForCardNumberTextChanged(holder.cardNumber, holder.cartNumberTypeImage, holder.cvv);
+
+            addFunctionalityForSpinners(holder.monthSpinner, holder.yearSpinner);
         } else if (getItemViewType(position) == TYPE_EMI) {
             EmiHolder holder = (EmiHolder) holderCom;
             if (currentOpenPosition == position) {
@@ -206,6 +244,173 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
+        }
+    }
+
+    private void setDataForNetbankingBanks(Spinner netBankingBanksList) {
+        ArrayList<String> banks = new ArrayList<>();
+        for (PaymentDetails details : payuResponse.getNetBanks()) {
+            banks.add(details.getBankName());
+        }
+
+        ArrayAdapter<String> adapterMonth = new ArrayAdapter<>(context, R.layout.simple_spinner_item_custom, banks);
+        adapterMonth.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
+        netBankingBanksList.setAdapter(adapterMonth);
+    }
+
+    private void addFunctionalityForSpinners(Spinner monthSpinner, Spinner yearSpinner) {
+        String[] months = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
+        ArrayAdapter<String> adapterMonth = new ArrayAdapter<>(context, R.layout.simple_spinner_item_custom, months);
+        adapterMonth.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
+        monthSpinner.setAdapter(adapterMonth);
+
+        List<Integer> yearsList = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        for (int i = currentYear; i < currentYear + 50; i++) {
+            yearsList.add(i);
+        }
+        ArrayAdapter<Integer> adapterYear = new ArrayAdapter<>(context, R.layout.simple_spinner_item_custom, yearsList);
+        adapterYear.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
+        yearSpinner.setAdapter(adapterYear);
+    }
+
+    private void addFunctionalityForCardNumberTextChanged(final EditText cardNumber, final ImageView cartNumberTypeImage, final EditText cvv) {
+        cardNumber.addTextChangedListener(new TextWatcher() {
+            int image;
+            int cardLength = 20;
+            private String ccNumber = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() > 6) {
+                    // to confirm rupay card we need min 6 digit.
+                    if (null == issuer)
+                        issuer = payuUtils.getIssuer(charSequence.toString().replace(" ", ""));
+                    if (issuer != null && issuer.length() > 1) {
+                        image = getIssuerImage(issuer);
+                        cartNumberTypeImage.setImageResource(image);
+                        if (issuer == "AMEX")
+                            cvv.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                        else
+                            cvv.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+
+                        if (issuer == "SMAE" || issuer == "MAES") {
+                            cardNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(23)});
+                            cardLength = 23;
+                        } else if (issuer == "AMEX") {
+                            cardNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(18)});
+                            cardLength = 18;
+                        } else if (issuer == "DINR") {
+                            cardNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(17)});
+                            cardLength = 17;
+                        } else {
+                            cardNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(19)});
+                            cardLength = 20;
+                        }
+                    }
+                } else {
+                    issuer = null;
+                    cartNumberTypeImage.setImageResource(R.drawable.icon_card);
+                    cvv.getText().clear();
+                }
+
+//                if (charSequence.length() == 7) {
+//                    if (valueAddedHashMap.get(charSequence.toString().replace(" ", "")) != null) {
+//                        int statusCode = valueAddedHashMap.get(charSequence.toString().replace(" ", "")).getStatusCode();
+//
+//                        if (statusCode == 0) {
+//                            issuingBankDown.setVisibility(View.VISIBLE);
+//                            issuingBankDown.setText(valueAddedHashMap.get(charSequence.toString().replace(" ", "")).getBankName() + " is temporarily down");
+//                        } else {
+//                            issuingBankDown.setVisibility(View.GONE);
+//                        }
+//                    }
+//                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String temp = s.toString();
+                int flag = 0;
+                if (ccNumber.length() < s.length()) {
+                    switch (s.length()) {
+                        case 5:
+                            temp = s.toString().substring(0, 4) + " " + s.toString().substring(4);
+                            flag = 1;
+                            break;
+                        case 10:
+                            flag = 1;
+                            temp = s.toString().substring(0, 9) + " " + s.toString().substring(9);
+                            break;
+                        case 15:
+                            flag = 1;
+                            temp = s.toString().substring(0, 14) + " " + s.toString().substring(14);
+                            break;
+                        case 17:
+                            if (issuer == "DINR") {
+                                cardValidation(cardNumber, cartNumberTypeImage, cvv);
+                            }
+                            break;
+                        case 18:
+                            if (issuer == "AMEX") {
+                                cardValidation(cardNumber, cartNumberTypeImage, cvv);
+                            }
+                            break;
+                        case 20:
+                            temp = s.toString().substring(0, 19) + " " + s.toString().substring(19);
+                            flag = 1;
+                            break;
+                        case 19:
+                            cardValidation(cardNumber, cartNumberTypeImage, cvv);
+                            break;
+                        case 23:
+                            cardValidation(cardNumber, cartNumberTypeImage, cvv);
+                            break;
+                    }
+                } else if (ccNumber.length() >= s.length()) {
+                    switch (s.length()) {
+                        case 5:
+                            temp = s.toString().substring(0, 4);
+                            flag = 1;
+                            break;
+                        case 10:
+                            temp = s.toString().substring(0, 9);
+                            flag = 1;
+                            break;
+                        case 15:
+                            temp = s.toString().substring(0, 14);
+                            flag = 1;
+                            break;
+                        case 20:
+                            temp = s.toString().substring(0, 19);
+                            flag = 1;
+                            break;
+                    }
+                }
+
+                ccNumber = s.toString();
+
+                if (flag == 1) {
+                    flag = 0;
+                    cardNumber.setText(temp);
+                    cardNumber.setSelection(cardNumber.length());
+                }
+            }
+
+        });
+    }
+
+    public void cardValidation(EditText cardNumber, ImageView cardNumberTypeImage, EditText cvv) {
+        if (!(payuUtils.validateCardNumber(cardNumber.getText().toString().replace(" ", ""))) && cardNumber.length() > 0) {
+            cardNumberTypeImage.setImageResource(R.drawable.error_icon);
+//            isCardNumberValid = false;
+        } else {
+//            isCardNumberValid = true;
         }
     }
 
@@ -250,12 +455,14 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
         LinearLayout layoutHideContent, paymentModeTextLayout;
         Button paySecurely;
+        Spinner netBankingBanksList;
 
         public NetBankingHolder(View v) {
             super(v);
             layoutHideContent = (LinearLayout) v.findViewById(R.id.hidethispaymentlayut);
             paymentModeTextLayout = (LinearLayout) v.findViewById(R.id.creditcardpaymentoptiontext);
             paySecurely = (Button) v.findViewById(R.id.paysecurely__codcod);
+            netBankingBanksList = (Spinner) v.findViewById(R.id.netbankingbankslist);
         }
     }
 
@@ -277,10 +484,13 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
     class CreditCardHolder extends RecyclerView.ViewHolder {
 
         LinearLayout layoutHideContent, paymentModeTextLayout;
-        TextView creditCardOrDebitCard;ImageView crediTordebitImage;
+        TextView creditCardOrDebitCard;
+        ImageView crediTordebitImage;
         Button paySecurely;
+        ImageView cartNumberTypeImage;
 
         EditText cardNumber, cardName, cvv;
+        Spinner monthSpinner, yearSpinner;
 
         public CreditCardHolder(View v) {
             super(v);
@@ -291,13 +501,18 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             cardName = (EditText) v.findViewById(R.id.nameOnCardEditText);
             cardNumber = (EditText) v.findViewById(R.id.cardNumberEditText);
             cvv = (EditText) v.findViewById(R.id.cvvEditText);
-            crediTordebitImage=(ImageView)v.findViewById(R.id.crefitcardimagel);
+            crediTordebitImage = (ImageView) v.findViewById(R.id.crefitcardimagel);
+            cartNumberTypeImage = (ImageView) v.findViewById(R.id.cartNumberTypeImage);
+            monthSpinner = (Spinner) v.findViewById(R.id.monthspinnercreditcard);
+            yearSpinner = (Spinner) v.findViewById(R.id.yearspinnercreditcard);
         }
     }
 
     @Override
     public int getItemCount() {
-        return 6;
+        if (toShowEmiItem)
+            return 6;
+        else return 5;
     }
 
     class MyClickListener implements View.OnClickListener {
@@ -335,6 +550,61 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                     }
                     break;
             }
+        }
+    }
+
+    private int getIssuerImage(String issuer) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            switch (issuer) {
+                case PayuConstants.VISA:
+                    return R.drawable.logo_visa;
+                case PayuConstants.LASER:
+                    return R.drawable.laser;
+                case PayuConstants.DISCOVER:
+                    return R.drawable.discover;
+                case PayuConstants.MAES:
+                    return R.drawable.mas_icon;
+                case PayuConstants.MAST:
+                    return R.drawable.mc_icon;
+                case PayuConstants.AMEX:
+                    return R.drawable.amex;
+                case PayuConstants.DINR:
+                    return R.drawable.diner;
+                case PayuConstants.JCB:
+                    return R.drawable.jcb;
+                case PayuConstants.SMAE:
+                    return R.drawable.maestro;
+                case PayuConstants.RUPAY:
+                    return R.drawable.rupay;
+//                TODO ask Franklin for rupay regex
+            }
+            return 0;
+        } else {
+
+            switch (issuer) {
+                case PayuConstants.VISA:
+                    return R.drawable.logo_visa;
+                case PayuConstants.LASER:
+                    return R.drawable.laser;
+                case PayuConstants.DISCOVER:
+                    return R.drawable.discover;
+                case PayuConstants.MAES:
+                    return R.drawable.mas_icon;
+                case PayuConstants.MAST:
+                    return R.drawable.mc_icon;
+                case PayuConstants.AMEX:
+                    return R.drawable.amex;
+                case PayuConstants.DINR:
+                    return R.drawable.diner;
+                case PayuConstants.JCB:
+                    return R.drawable.jcb;
+                case PayuConstants.SMAE:
+                    return R.drawable.maestro;
+                case PayuConstants.RUPAY:
+                    return R.drawable.rupay;
+                //TODO ask Franklin
+            }
+            return 0;
         }
     }
 }
