@@ -1,6 +1,7 @@
 package com.application.zimplyshop.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -10,14 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.activities.NewSearchActivity;
 import com.application.zimplyshop.activities.ProductDetailsActivity;
 import com.application.zimplyshop.activities.SearchResultsActivity;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ParentCategory;
@@ -30,6 +34,7 @@ import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.ZTracker;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.util.ArrayList;
 
@@ -53,6 +58,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
     double requestTime;
     private ListView recentSearchesListView;
     private RecentProductListAdapter recentSearchesAdapter;
+    private NewProductListAdapter newProductListAdapter;
 
 
     @Override
@@ -185,9 +191,9 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 }
 
                 products.addAll(objects);
-
+                newProductListAdapter = new NewProductListAdapter((ParentCategory) obj, activity);
                 adapter1 = new ProductListAdapter(activity, R.layout.simple_list_item, products);
-                mListView.setAdapter(adapter1);
+                mListView.setAdapter(newProductListAdapter);
                 getView.findViewById(R.id.progress_container).setVisibility(View.GONE);
 
                 //if products size is 0, display recent
@@ -297,6 +303,141 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             TextView text;
         }
 
+    }
+
+    private class NewProductListAdapter extends BaseAdapter {
+        ParentCategory parentCategory;
+        Context mContext;
+        ArrayList<CategoryObject> wishes;
+
+        public NewProductListAdapter(ParentCategory parentCategory, Context mContext) {
+            this.parentCategory = parentCategory;
+            this.mContext = mContext;
+            wishes = new ArrayList<>();
+            wishes = parentCategory.getSubCategories();
+            wishes.addAll(parentCategory.getCategories());
+
+            ArrayList<CategoryObject> objects = new ArrayList<CategoryObject>();
+
+//                Collections.copy(objects, products);
+
+            for (CategoryObject dups : wishes) {
+                objects.add(new CategoryObject(dups));
+            }
+
+            for (CategoryObject dups : objects) {
+                dups.setDupType(CommonLib.DUP_TYPE_TRUE);
+            }
+
+            //  wishes.addAll(objects);
+        }
+
+        @Override
+        public int getCount() {
+            if (parentCategory == null)
+                return 0;
+            else
+                return wishes.size() + (parentCategory.getProducts() != null ? parentCategory.getProducts().size() : 0);
+        }
+
+        @Override
+        public Object getItem(int position) {
+            if (position < wishes.size())
+                return wishes.get(position);
+            else
+                return parentCategory.getProducts().get(position - wishes.size());
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null || convertView.findViewById(R.id.list_root) == null) {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.simple_list_item, null);
+            }
+
+            ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+            if (viewHolder == null) {
+                viewHolder = new ViewHolder();
+                viewHolder.text = (TextView) convertView.findViewById(R.id.text1);
+                convertView.setTag(viewHolder);
+            }
+
+            if (position < wishes.size()) {
+                final CategoryObject product = wishes.get(position);
+                final String name = ((TextView) ((NewSearchActivity) activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
+                if (product.getDupType() == CommonLib.DUP_TYPE_TRUE) {
+                    viewHolder.text.setTypeface(null, Typeface.NORMAL);
+                    viewHolder.text.setText("\"" + name + "\"" + " in " + product.getName());
+                } else {
+                    viewHolder.text.setTypeface(null, Typeface.BOLD);
+                    viewHolder.text.setText(product.getName());
+                }
+
+                viewHolder.text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, SearchResultsActivity.class);
+                        intent.putExtra("type", product.getType());
+                        intent.putExtra("id", product.getId());
+                        intent.putExtra("dup_type", product.getDupType());
+                        if (product.getName() == null)
+                            return;
+                        intent.putExtra("category_name", product.getName());
+                        String[] params1 = product.getName().split(" ");
+                        String name1 = "";
+                        for (String pam : params1) {
+                            name1 += (pam + "+");
+                        }
+                        name1 = name1.substring(0, name1.length() - 1);
+                        intent.putExtra("name", name1);
+
+                        if (name == null)
+                            return;
+                        String[] params = name.split(" ");
+                        String builder = "";
+                        for (String pam : params) {
+                            builder += (pam + "+");
+                        }
+                        builder = builder.substring(0, builder.length() - 1);
+
+                        intent.putExtra("query", builder);
+                        intent.putExtra("url", AppConstants.GET_SEARCH_RESULTS);
+                        startActivity(intent);
+                    }
+                });
+            } else {
+                final BaseProductListObject productListObject = parentCategory.getProducts().get(position - products.size());
+                viewHolder.text.setTypeface(null, Typeface.BOLD);
+                viewHolder.text.setText(productListObject.getName());
+                viewHolder.text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, NewProductDetailActivity.class);
+                        intent.putExtra("slug", productListObject.getSlug());
+                        intent.putExtra("id", productListObject.getId());
+                        intent.putExtra("title", productListObject.getName());
+
+                        //        GA Ecommerce
+                        intent.putExtra("productActionListName", "Product Name Click");
+                        intent.putExtra("screenName", "Search Results Activity");
+                        intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
+                        mContext.startActivity(intent);
+                    }
+                });
+
+
+            }
+            return convertView;
+        }
+
+        protected class ViewHolder {
+            TextView text;
+        }
     }
 
     private class RecentProductListAdapter extends ArrayAdapter<HomeProductObj> {

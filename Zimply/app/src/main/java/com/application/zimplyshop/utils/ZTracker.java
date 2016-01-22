@@ -3,9 +3,7 @@ package com.application.zimplyshop.utils;
 import android.content.Context;
 
 import com.application.zimplyshop.application.AppApplication;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.analytics.ecommerce.Product;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
@@ -101,7 +99,7 @@ public class ZTracker {
 
                 Tracker t = ((AppApplication) context).getTracker(
                         CommonLib.TrackerName.APPLICATION_TRACKER);
-                GoogleAnalytics.getInstance(context).getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+               // GoogleAnalytics.getInstance(context).getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
                 t.send(builder.build());
             } catch (Exception e) {
                 e.printStackTrace();
