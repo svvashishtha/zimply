@@ -37,7 +37,7 @@ public class ProductPhotoZoomActivity extends BaseActivity {
     static final int MIN_DISTANCE = 150;
     ViewPager imagePager;
     private RecyclerView thumbList;
-
+int oldPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -55,6 +55,7 @@ public class ProductPhotoZoomActivity extends BaseActivity {
         });
         if (getIntent() != null && getIntent().getSerializableExtra("product_obj") != null) {
             final int position = getIntent().getIntExtra("position", 0);
+            oldPosition = position;
             product = (ProductObject) getIntent().getSerializableExtra("product_obj");
             final int width = getDisplayMetrics().widthPixels;
             final int height = getDisplayMetrics().heightPixels;
@@ -95,6 +96,9 @@ public class ProductPhotoZoomActivity extends BaseActivity {
                 public void onPageSelected(int position) {
                     adapter.setSelectedPos(position);
                     //pagerAdapter.notifyItemChanged(position);
+                    ((TouchImageView)pagerAdapter.pagerViews.get(oldPosition).findViewById(R.id.zoom_imageview)).resetZoom();
+                    ((TouchImageView)pagerAdapter.pagerViews.get(oldPosition).findViewById(R.id.zoom_imageview_new)).resetZoom();
+                    oldPosition = position;
                 }
 
                 @Override
@@ -144,6 +148,7 @@ public class ProductPhotoZoomActivity extends BaseActivity {
             View view = LayoutInflater.from(context).inflate(R.layout.zoom_image_layout, null);
             zoomImage = (TouchImageView) view.findViewById(R.id.zoom_imageview);
             zoomImageNew = (TouchImageView) view.findViewById(R.id.zoom_imageview_new);
+            pagerViews.put(position, view);
             new ImageLoaderManager(ProductPhotoZoomActivity.this).setImageFromUrl(product.getThumbs().get(position), zoomImage, "users", width / 2, height / 20, false,
                     false);
 
@@ -157,7 +162,7 @@ public class ProductPhotoZoomActivity extends BaseActivity {
                         @Override
                         public void loadingFinished(Bitmap bitmap) {
                             CommonLib.ZLog("ProductPhotoZoomActivity", position + "");
-                            zoomImage.setVisibility(View.GONE);
+                            pagerViews.get(position).findViewById(R.id.zoom_imageview).setVisibility(View.GONE);
                             //notifyDataSetChanged();
                         }
                     });
@@ -271,7 +276,7 @@ public class ProductPhotoZoomActivity extends BaseActivity {
                 }
             });
             ((ViewPager) container).addView(view, 0);
-            pagerViews.put(position, view);
+
             return view;
         }
 
