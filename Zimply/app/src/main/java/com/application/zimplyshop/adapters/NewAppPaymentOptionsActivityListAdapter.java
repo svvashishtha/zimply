@@ -337,7 +337,10 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         });
     }
 
-    private void selectSpinnerItemFromNetBank(NetBankingHolder holder, int pos) {
+    private void selectSpinnerItemFromNetBank(NetBankingHolder holder, int pos, View check) {
+        CustomRadioButton checkBox = (CustomRadioButton) check;
+        checkBox.setChecked(true);
+
         int positionToSelect = -1;
         for (int i = 0; i < payuResponse.getNetBanks().size(); i++) {
             if (payuResponse.getNetBanks().get(i).getBankCode().equalsIgnoreCase(bankCodesFixed[pos])) {
@@ -667,27 +670,27 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                     break;
                 case R.id.icicibank:
                     NetBankingHolder holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 2);
+                    selectSpinnerItemFromNetBank(holder, 2, v);
                     break;
                 case R.id.hdfcbank:
                     holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 1);
+                    selectSpinnerItemFromNetBank(holder, 1, v);
                     break;
                 case R.id.statebankofindia:
                     holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 0);
+                    selectSpinnerItemFromNetBank(holder, 0, v);
                     break;
                 case R.id.axisbank:
                     holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 3);
+                    selectSpinnerItemFromNetBank(holder, 3, v);
                     break;
                 case R.id.kotakmahindrabank:
                     holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 4);
+                    selectSpinnerItemFromNetBank(holder, 4, v);
                     break;
                 case R.id.yesbank:
                     holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 5);
+                    selectSpinnerItemFromNetBank(holder, 5, v);
                     break;
             }
         }
