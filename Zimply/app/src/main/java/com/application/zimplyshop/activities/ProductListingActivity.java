@@ -22,9 +22,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +32,10 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
 import com.application.zimplyshop.adapters.SubCategoryAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
+import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ProductListObject;
 import com.application.zimplyshop.baseobjects.ShopSubCategoryObj;
 import com.application.zimplyshop.extras.AppConstants;
@@ -47,6 +49,7 @@ import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
 import com.application.zimplyshop.widgets.RangeSeekBar;
@@ -68,7 +71,7 @@ public class ProductListingActivity extends BaseActivity implements
 
     //for the request time, we require the boolean to check whether the request was made with filters applied.
     boolean filterApplied;
-    int categoryId = 0, sortId = -1;
+    int categoryId = 0, sortId = -1, discountId = -1, shopId = -1;
 
     long priceLte = 1, priceHigh = 500000;
 
@@ -81,14 +84,24 @@ public class ProductListingActivity extends BaseActivity implements
     Context context;
     TextView titleText;
 
-    boolean isNotification, isO2o;
-
+    boolean isNotification, isO2o, isCartChecked;
     ArrayList<ShopSubCategoryObj> subCategories;
+    TextView filterFromTextView, filterToTextView;
+    public boolean isRecyclerViewInLongItemMode = false;
+    GridLayoutManager gridLayoutManager;
+    boolean setFilterDataToArbitraryDefaultsIfNoData;
+    private String categoryName;
+    private ArrayList<CustomRadioButton> priceRadioButtonsArrayList;
+    SubCategoryAdapter subCategoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
+
+        filterFromTextView = (TextView) findViewById(R.id.tv_new_from_price_filter);
+        filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
+        PAGE_TYPE = AppConstants.PAGE_TYPE_PRODUCT;
         context = getApplicationContext();
         if (getIntent().getStringExtra("category_id") != null)
             categoryId = Integer.parseInt(getIntent().getStringExtra("category_id"));
@@ -102,7 +115,7 @@ public class ProductListingActivity extends BaseActivity implements
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
 
-        productList.setLayoutManager(new GridLayoutManager(this, 2));
+        gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
             @Override
@@ -116,6 +129,7 @@ public class ProductListingActivity extends BaseActivity implements
                 }
             }
         });
+        productList.setLayoutManager(gridLayoutManager);
         productList.addItemDecoration(new SpaceGridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
                 (int) getResources().getDimension(R.dimen.margin_mini)));
@@ -157,35 +171,26 @@ public class ProductListingActivity extends BaseActivity implements
                         }
                     });
                 }
-            },5000);
+            }, 5000);
         }
         loadData();
 
-        if(isNotification){
-            ZTracker.logGaCustomEvent(this,"GCM-Click",getIntent().getStringExtra("category_name"),"","");
+        if (isNotification) {
+            ZTracker.logGaCustomEvent(this, "GCM-Click", getIntent().getStringExtra("category_name"), "", "");
         }
     }
 
 
-    public void showFilterTut(){
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+    public void showFilterTut() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-                }
-            },500);
+            }
+        }, 500);
     }
 
-    public void switchRecyclerViewLayoutManager() {
-        if (isRecyclerViewInLongItemMode) {
-            productList.setLayoutManager(gridLayoutManager);
-            productList.getAdapter().notifyDataSetChanged();
-        } else {
-            productList.setLayoutManager(new LinearLayoutManager(this));
-            productList.getAdapter().notifyDataSetChanged();
-        }
-        isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
-    }
+
 
     boolean isHideFilter;
     /*public int getSelectedCatgeoryId(int categoryId) {
@@ -210,12 +215,10 @@ public class ProductListingActivity extends BaseActivity implements
     private void loadData() {
         String finalUrl;
         if (nextUrl == null) {
-
             int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
-            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
+            finalUrl = AppApplication.getInstance().getBaseUrl() + url + "?filter=0" + ((discountId != -1) ? "&discount__id__in=" + discountId : "") + ((shopId != -1) ? "&shop__id__in=" + shopId : "") + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "")
                     + "&width=" + width + ((categoryId != 0) ? "&category__id__in=" + categoryId : "") + (isO2o ? "&is_o2o=" + 1 : "")
-                    + (subCategoryId.size() > 0 ? "&subcategory__id__in=" + getSubCategoryString() : "") + "&price__gte=" + priceLte + "&price__lte=" + priceHigh + (sortId != -1 ? "&low_to_high=" + sortId : "");
-
+                    + ((subCategoryAdapter != null && subCategoryAdapter.getSubCategorIds().size() > 0) ? "&subcategory__id__in=" + getSubCategoryString() : "") + "&price__gte=" + priceLte + "&price__lte=" + priceHigh + (sortId != -1 ? "&low_to_high=" + sortId : "");
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
@@ -228,20 +231,68 @@ public class ProductListingActivity extends BaseActivity implements
 
     public String getSubCategoryString() {
         String subCategory = "";
-        for (int i = 0; i < subCategoryId.size(); i++) {
-            subCategory += subCategoryId.get(i);
-            if (i != subCategoryId.size() - 1)
+        for (int i = 0; i < subCategoryAdapter.getSubCategorIds().size(); i++) {
+            subCategory += subCategoryAdapter.getSubCategorIds().get(i);
+            if (i != subCategoryAdapter.getSubCategorIds().size() - 1)
                 subCategory += ".";
         }
         return subCategory;
     }
 
-    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
+    private void setAdapterData(ProductListObject productListObject) {
+        ArrayList<BaseProductListObject> objs = productListObject.getProducts();
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
             ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                @Override
+                public int getSpanSize(int position) {
+                    if (position == 0)
+                        return 2;
+                    else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
+                        return 2;
+
+                    } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
+                        return 2;
+                    } else return 1;
+                }
+            });
+            productList.setLayoutManager(gridLayoutManager);
+            adapter.setCheckLayoutOptionListener(new ProductsRecyclerViewGridAdapter.CheckLayoutOptions() {
+                @Override
+                public boolean checkIsRecyclerViewInLongItemMode() {
+                    return isRecyclerViewInLongItemMode;
+                }
+
+                @Override
+                public void switchRecyclerViewLayoutManager() {
+                    if (isRecyclerViewInLongItemMode) {
+                        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                            @Override
+                            public int getSpanSize(int position) {
+                                if (position == 0)
+                                    return 2;
+                                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
+                                    return 2;
+
+                                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
+                                    return 2;
+                                } else return 1;
+                            }
+                        });
+                        productList.setLayoutManager(gridLayoutManager);
+                        productList.getAdapter().notifyDataSetChanged();
+                    } else {
+                        productList.setLayoutManager(new LinearLayoutManager(ProductListingActivity.this));
+                        productList.getAdapter().notifyDataSetChanged();
+                    }
+                    isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
+                }
+            });
             productList.setAdapter(adapter);
             productList
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -292,6 +343,7 @@ public class ProductListingActivity extends BaseActivity implements
         }
         ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
                 .addData(objs);
+        ((ProductsRecyclerViewGridAdapter) productList.getAdapter()).setCount(productListObject.getCount());
     }
 
     private void addToolbarView(Toolbar toolbar) {
@@ -538,13 +590,10 @@ public class ProductListingActivity extends BaseActivity implements
     public void onRequestCompleted(String requestTag, Object obj) {
         if (!isDestroyed
                 && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 1)) {
-            if (!filterApplied)
-            {
+            if (!filterApplied) {
                 CommonLib.ZLog("Request Time", "Product Listing Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
                 CommonLib.writeRequestData("Product Listing Page Request :" + (System.currentTimeMillis() - requestTime) + " mS");
-            }
-            else
-            {
+            } else {
                 CommonLib.ZLog("Request Time", "Product Listing Page with filters Request :" + (System.currentTimeMillis() - requestTime) + " mS");
                 CommonLib.writeRequestData("Product Listing Page with filters Request :" + (System.currentTimeMillis() - requestTime) + " mS");
             }
@@ -569,14 +618,13 @@ public class ProductListingActivity extends BaseActivity implements
                 if (productList.getAdapter() == null) {
                     setMinimumAndMaximumFilterPriceValues(((ProductListObject) obj));
                 }
-                setAdapterData(((ProductListObject) obj).getProducts());
+                setAdapterData(((ProductListObject) obj));
                 try {
                     //log ga event for product listing activity
 
                     ZTracker.logGaCustomEvent(ProductListingActivity.this, "Product Listing",
                             categoryName != null ? categoryName : "category name not available", categoryId + "", "");
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 nextUrl = ((ProductListObject) obj).getNext_url();
@@ -860,8 +908,8 @@ public class ProductListingActivity extends BaseActivity implements
             }
         });*/
         //Add Logic for price
-        ((EditText) findViewById(R.id.from_price)).setText(priceLte + "");
-        ((EditText) findViewById(R.id.to_price)).setText(priceHigh + "");
+        filterFromTextView.setText(priceLte + "");
+        filterToTextView.setText(priceHigh + "");
 
         RangeSeekBar seekBar = (RangeSeekBar<Integer>) findViewById(R.id.range_seekbar);
         seekBar.setNotifyWhileDragging(true);
@@ -886,31 +934,37 @@ public class ProductListingActivity extends BaseActivity implements
                 subCategoryAdapter = new SubCategoryAdapter(this, subCategories);
                 subCategoriesListView.setAdapter(subCategoryAdapter);
             }
-        });
+            CommonLib.setListViewHeightBasedOnChildren(subCategoriesListView);
 
-        ListView subCategoriesListView = (ListView) findViewById(R.id.subcategory_list);
-        final SubCategoryAdapter subCategoryAdapter = new SubCategoryAdapter(this, subCategories, subCategoryId);
-        subCategoriesListView.setAdapter(subCategoryAdapter);
-        CommonLib.setListViewHeightBasedOnChildren(subCategoriesListView);
+        } else {
+            (findViewById(R.id.sub_categories_header)).setVisibility(View.GONE);
+        }
+
         findViewById(R.id.apply_filter).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                subCategoryId = new ArrayList<Integer>(subCategoryAdapter.getSubCategorIds());
                 isO2o = ((CheckBox) findViewById(R.id.zi_experience_tag)).isChecked();
-                priceLte = Long.parseLong(((EditText) findViewById(R.id.from_price)).getText().toString());
-                priceHigh = Long.parseLong(((EditText) findViewById(R.id.to_price)).getText().toString());
+                priceLte = Long.parseLong(filterFromTextView.getText().toString());
+                priceHigh = Long.parseLong(filterToTextView.getText().toString());
                 nextUrl = null;
                 isRefreshData = true;
                 animateViewRightOut(findViewById(R.id.filter_layout));
                 filterApplied = true;
                 requestTime = System.currentTimeMillis();
                 loadData();
+                if ((subCategoryAdapter != null && subCategoryAdapter.getSubCategorIds().size() > 0) || isO2o || sortId == 1 || sortId == 2 || priceLte != FROM_VALUE || priceHigh != TO_VALUE) {
+                    isFilterApplied = true;
+                    filterApplied = true;
+                } else {
+                    isFilterApplied = false;
+                }
             }
         });
     }
 
+
     public void addMaxInputFilter() {
-        //((EditText)findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax( Long.parseLong((((EditText) findViewById(R.id.from_price)).getText()).toString()) + "",(TO_VALUE) + "")});
+//        ((EditText)findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax( Long.parseLong((((EditText) findViewById(R.id.from_price)).getText()).toString()) + "",(TO_VALUE) + "")});
     }
 
     public void addMinInputFilter() {
