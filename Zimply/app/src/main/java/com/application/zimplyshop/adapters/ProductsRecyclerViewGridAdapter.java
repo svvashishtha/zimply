@@ -199,13 +199,14 @@ public class ProductsRecyclerViewGridAdapter extends
             }
 
 
+            final int finalPosition = position;
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(AppPreferences.isUserLogIn(mContext)){
 
                     }else{
-                        RecentProductsDBWrapper.addProduct(objs.get(position),1,System.currentTimeMillis());
+                        RecentProductsDBWrapper.addProduct(objs.get(positionTemp),1,System.currentTimeMillis());
                     }
 
                     Intent intent = new Intent(mContext, NewProductDetailActivity.class);

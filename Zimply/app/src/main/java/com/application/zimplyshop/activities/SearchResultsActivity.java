@@ -172,30 +172,7 @@ public class SearchResultsActivity extends BaseActivity implements
         sortByLayout.setOnClickListener(this);
     }
 
-    public void switchRecyclerViewLayoutManager() {
-        if (isRecyclerViewInLongItemMode) {
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
-                @Override
-                public int getSpanSize(int position) {
-                    if (position == 0)
-                        return 2;
-                    else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
-                        return 2;
-
-                    } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
-                        return 2;
-                    } else return 1;
-                }
-            });
-            productList.setLayoutManager(gridLayoutManager);
-            productList.getAdapter().notifyDataSetChanged();
-        } else {
-            productList.setLayoutManager(new LinearLayoutManager(this));
-            productList.getAdapter().notifyDataSetChanged();
-        }
-        isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
-    }
 
     private void loadData() {
         String finalUrl;

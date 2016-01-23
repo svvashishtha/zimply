@@ -47,6 +47,9 @@ public class RecentProductsActivity extends BaseActivity implements
     long productId;
 
     long timeStamp;
+    private boolean isRecyclerViewInLongItemMode;
+    private GridLayoutManager gridLayoutManager;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,24 @@ public class RecentProductsActivity extends BaseActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         productList = (RecyclerView) findViewById(R.id.categories_list);
-        productList.setLayoutManager(new GridLayoutManager(this, 2));
+        gridLayoutManager = new GridLayoutManager(this, 2);
+
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+            @Override
+            public int getSpanSize(int position) {
+                if (position == 0)
+                    return 2;
+                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
+                    return 2;
+
+                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
+                    return 2;
+                } else return 1;
+            }
+        });
+
+        productList.setLayoutManager(gridLayoutManager);
         productList.addItemDecoration(new SpaceGridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
                 (int) getResources().getDimension(R.dimen.margin_mini)));
@@ -74,9 +94,9 @@ public class RecentProductsActivity extends BaseActivity implements
         width = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
                 .getDimension(R.dimen.font_small))) / 2;
         //productId = getIntent().getExtras().getLong("productid");
-        if(AppPreferences.isUserLogIn(this)) {
+        if (AppPreferences.isUserLogIn(this)) {
             loadData();
-        }else{
+        } else {
             timeStamp = System.currentTimeMillis();
             new GetDataFromCache().execute();
         }
@@ -98,12 +118,47 @@ public class RecentProductsActivity extends BaseActivity implements
                 ObjectTypes.OBJECT_TYPE_PRODUCT_LIST_OBJECT);
     }
 
-    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs, int count) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
             ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
+
+            adapter.setCheckLayoutOptionListener(new ProductsRecyclerViewGridAdapter.CheckLayoutOptions() {
+                @Override
+                public boolean checkIsRecyclerViewInLongItemMode() {
+                    return isRecyclerViewInLongItemMode;
+                }
+
+                @Override
+                public void switchRecyclerViewLayoutManager() {
+                    if (isRecyclerViewInLongItemMode) {
+                        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                            @Override
+                            public int getSpanSize(int position) {
+                                if (position == 0)
+                                    return 2;
+                                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
+                                    return 2;
+
+                                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
+                                    return 2;
+                                } else return 1;
+                            }
+                        });
+                        productList.setLayoutManager(gridLayoutManager);
+                        productList.getAdapter().notifyDataSetChanged();
+                    } else {
+                        productList.setLayoutManager(new LinearLayoutManager(RecentProductsActivity.this));
+                        productList.getAdapter().notifyDataSetChanged();
+                    }
+                    isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
+                }
+            });
+            adapter.setCount(count);
+
             productList.setAdapter(adapter);
             productList
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -121,9 +176,9 @@ public class RecentProductsActivity extends BaseActivity implements
 
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
                                     && !isLoading && isRequestAllowed) {
-                                if(AppPreferences.isUserLogIn(RecentProductsActivity.this)) {
+                                if (AppPreferences.isUserLogIn(RecentProductsActivity.this)) {
                                     loadData();
-                                }else{
+                                } else {
                                     new GetDataFromCache().execute();
                                 }
                             }
@@ -139,21 +194,7 @@ public class RecentProductsActivity extends BaseActivity implements
                             super.onScrollStateChanged(recyclerView, newState);
                         }
                     });
-            ((GridLayoutManager) productList.getLayoutManager())
-                    .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                        @Override
-                        public int getSpanSize(int position) {
-                            switch (productList
-                                    .getAdapter().getItemViewType(position)) {
-                                case 0:
-                                    return 1;
-                                case 1:
-                                    return 2;
-                                default:
-                                    return -1;
-                            }
-                        }
-                    });
+
 
         }
         ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
@@ -222,7 +263,7 @@ public class RecentProductsActivity extends BaseActivity implements
                 }
                 isRequestAllowed = false;
             } else {
-                setAdapterData(((ProductListObject) obj).getProducts());
+                setAdapterData(((ProductListObject) obj).getProducts(), ((ProductListObject) obj).getCount());
 
                 nextUrl = ((ProductListObject) obj).getNext_url();
                 showView();
@@ -293,7 +334,9 @@ public class RecentProductsActivity extends BaseActivity implements
                 int userId = Integer.parseInt(AppPreferences.getUserID(RecentProductsActivity.this));
                 result = RecentProductsDBWrapper.getProducts(userId,timeStamp,10);
             } catch(NumberFormatException e) {*/
-            result = RecentProductsDBWrapper.getProducts(1,timeStamp,10);
+            if (count == 0)
+                count = RecentProductsDBWrapper.getProductsCount(1);
+            result = RecentProductsDBWrapper.getProducts(1, timeStamp, 10);
             /*} catch (Exception e) {
                 e.printStackTrace();
             }*/
@@ -302,18 +345,18 @@ public class RecentProductsActivity extends BaseActivity implements
 
         @Override
         protected void onPostExecute(Object result) {
-            if(!isDestroyed && result != null) {
+            if (!isDestroyed && result != null) {
 
                 timeStamp = ((CacheProductListObject) result).getTimeStamp();
-                setAdapterData(((CacheProductListObject) result).getObjects());
+                setAdapterData(((CacheProductListObject) result).getObjects(),count);
                 showView();
                 changeViewVisiblity(productList, View.VISIBLE);
-                if(((CacheProductListObject) result).getObjects().size()!=10){
+                if (((CacheProductListObject) result).getObjects().size() != 10) {
                     isRequestAllowed = false;
-                    if(productList.getAdapter()!=null)
+                    if (productList.getAdapter() != null)
                         ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
                                 .removeItem();
-                }else{
+                } else {
                     isRequestAllowed = true;
                 }
             }

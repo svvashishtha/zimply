@@ -216,7 +216,51 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
     }
 
 
+    public int getProductCount(int userId) {
+       int count=0;
 
+        BaseProductListObject location;
+        this.getReadableDatabase();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        ArrayList<BaseProductListObject> queries = new ArrayList<BaseProductListObject>();
+
+        try{
+            db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
+            cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, USERID,TIMESTAMP,TYPE,BUNDLE }, null,
+                    null, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                count = cursor.getCount();
+            }
+            cursor.close();
+            db.close();
+            this.close();
+            return count;
+        }
+        catch (SQLiteException e) {
+
+            this.close();
+        }
+        catch(Exception E)
+        {
+            try {
+                cursor.close();
+                db.close();
+                this.close();
+            }
+            catch(Exception ec) {
+                try {
+                    db.close();
+                }
+                catch (Exception e) {
+                    this.close();
+                }
+                this.close();
+            }
+        }
+        return count;
+    }
 
     public int removeUsers(int userId) {
 
