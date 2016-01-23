@@ -132,6 +132,18 @@ public class BookedStoreProductListAdapter extends
 
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, height);
+
+            if (mListener.checkIsRecyclerViewInLongItemMode()) {
+                holder.priceContainer.setOrientation(LinearLayout.HORIZONTAL);
+                holder.productDiscountedPrice.setPadding(0,0, (int) mContext.getResources().getDimension(R.dimen.margin_small),0);
+
+            } else {
+                holder.priceContainer.setOrientation(LinearLayout.VERTICAL);
+                holder.productDiscountedPrice.setPadding((int) mContext.getResources().getDimension(R.dimen.margin_small), 0,
+                        (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
+            }
+
+
             holder.img.setLayoutParams(lp);
             if (objs.get(position).getImage() != null) {
                 if (holder.img.getTag() == null
@@ -258,6 +270,7 @@ public class BookedStoreProductListAdapter extends
     public class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView img, buyOfflineTag;
         TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
+        LinearLayout priceContainer;
 
         public ProductViewHolder(View view) {
             super(view);
@@ -269,6 +282,7 @@ public class BookedStoreProductListAdapter extends
                     .findViewById(R.id.product_price);
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
             buyOfflineTag = (ImageView) view.findViewById(R.id.buy_offline_tag);
+            priceContainer = (LinearLayout) view.findViewById(R.id.price_container);
         }
     }
 

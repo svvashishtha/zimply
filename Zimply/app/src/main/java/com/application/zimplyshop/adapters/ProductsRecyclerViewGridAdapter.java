@@ -129,6 +129,18 @@ public class ProductsRecyclerViewGridAdapter extends
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, height);
             holder.img.setLayoutParams(lp);
+
+            if (mListener.checkIsRecyclerViewInLongItemMode()) {
+                holder.priceContainer.setOrientation(LinearLayout.HORIZONTAL);
+                holder.productDiscountedPrice.setPadding(0,0, (int) mContext.getResources().getDimension(R.dimen.margin_small),0);
+
+            } else {
+                holder.priceContainer.setOrientation(LinearLayout.VERTICAL);
+                holder.productDiscountedPrice.setPadding((int) mContext.getResources().getDimension(R.dimen.margin_small), 0,
+                        (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
+            }
+
+
             if (objs.get(position).getImage() != null) {
                 if (holder.img.getTag() == null
                         || !(((String) holder.img
@@ -206,7 +218,8 @@ public class ProductsRecyclerViewGridAdapter extends
             final HeaderViewHolder holder = (HeaderViewHolder) holderCom;
             holder.productCount.setText(count + " Products");
             if (mListener.checkIsRecyclerViewInLongItemMode()) {
-                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),R.drawable.list_long_icon));
+                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.list_long_icon));
+
             } else {
                 holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.grid_icon));
             }
@@ -252,6 +265,7 @@ public class ProductsRecyclerViewGridAdapter extends
     public class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView img, buyOfflineTag;
         TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
+        LinearLayout priceContainer;
 
         public ProductViewHolder(View view) {
             super(view);
@@ -263,6 +277,7 @@ public class ProductsRecyclerViewGridAdapter extends
                     .findViewById(R.id.product_price);
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
             buyOfflineTag = (ImageView) view.findViewById(R.id.buy_offline_tag);
+            priceContainer = (LinearLayout) view.findViewById(R.id.price_container);
         }
     }
 
@@ -288,12 +303,14 @@ public class ProductsRecyclerViewGridAdapter extends
             gridIconContainer = (LinearLayout) v.findViewById(R.id.gridbuttonswitcher);
         }
     }
-    public void setCheckLayoutOptionListener(CheckLayoutOptions mListener)
-    {
+
+    public void setCheckLayoutOptionListener(CheckLayoutOptions mListener) {
         this.mListener = mListener;
     }
-    public interface CheckLayoutOptions{
+
+    public interface CheckLayoutOptions {
         boolean checkIsRecyclerViewInLongItemMode();
+
         void switchRecyclerViewLayoutManager();
     }
 }
