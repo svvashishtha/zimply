@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/recent_searches_container"
@@ -11,22 +11,39 @@
         android:layout_marginTop="@dimen/size_30"
         android:visibility="gone"
         android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="@dimen/z_item_height_48"
+                      android:id="@+id/recent_searches_head"
+                      android:layout_alignParentTop="true"
+                      android:gravity="center_vertical"
+                      android:orientation="horizontal">
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/recent_searches_header"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="@string/recent_searches"
+                android:textColor="@color/font_color"
+                android:layout_margin="@dimen/size10"
+                android:textSize="@dimen/size14"/>
 
-        <TextView
-            android:id="@+id/recent_searches_header"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/recent_searches"
-            android:textColor="@color/font_color"
-            android:layout_alignParentTop="true"
-            android:layout_margin="@dimen/size10"
-            android:textSize="@dimen/size14"/>
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/clear_searches"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="CLEAR"
+                android:textAllCaps="true"
+                android:background="@drawable/action_bar_item_bg"
+                android:textColor="@color/font_color"
+                android:layout_margin="@dimen/size10"
+                android:textSize="@dimen/size12"/>
+        </LinearLayout>
 
         <View
             android:id="@+id/separator"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/recent_searches_header"
+            android:layout_below="@id/recent_searches_head"
             android:background="@color/zhl_dark"/>
 
         <ListView

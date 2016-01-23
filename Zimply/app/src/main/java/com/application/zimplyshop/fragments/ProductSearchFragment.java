@@ -10,18 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewSearchActivity;
-import com.application.zimplyshop.activities.ProductDetailsActivity;
 import com.application.zimplyshop.activities.SearchResultsActivity;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.CategoryObject;
-import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ParentCategory;
-import com.application.zimplyshop.db.RecentProductsDBWrapper;
+import com.application.zimplyshop.db.RecentSearchesDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -99,7 +98,22 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             if( input.trim().length() == 0 ) {
                 if(mAsyncRunning != null)
                     mAsyncRunning.cancel(true);
+
+                recentSearchesListView.setVisibility(View.VISIBLE);
                 getView.findViewById(R.id.recent_searches_container).setVisibility(View.VISIBLE);
+                getView.findViewById(R.id.clear_searches).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(recentSearchesAdapter!=null)
+                        recentSearchesAdapter.clear();
+                        try {
+                            int userId = Integer.parseInt(AppPreferences.getUserID(activity));
+                            RecentSearchesDBWrapper.removeProducts(userId);
+                        } catch (Exception e) {
+                            RecentSearchesDBWrapper.removeProducts(1);
+                        }
+                    }
+                });
                 getView.findViewById(R.id.listview_container).setVisibility(View.GONE);
                 getView.findViewById(R.id.progress_container).setVisibility(View.GONE);
                 getView.findViewById(R.id.progress_recent).setVisibility(View.GONE);
@@ -190,8 +204,22 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                     mListView.setVisibility(View.VISIBLE);
                     recentSearchesListView.setVisibility(View.GONE);
                 } else {//else display products
+                    recentSearchesListView.setVisibility(View.VISIBLE);
                     getView.findViewById(R.id.listview_container).setVisibility(View.GONE);
                     getView.findViewById(R.id.recent_searches_container).setVisibility(View.VISIBLE);
+                    getView.findViewById(R.id.clear_searches).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(recentSearchesAdapter!=null)
+                            recentSearchesAdapter.clear();
+                            try {
+                                int userId = Integer.parseInt(AppPreferences.getUserID(activity));
+                                RecentSearchesDBWrapper.removeProducts(userId);
+                            } catch (Exception e) {
+                                RecentSearchesDBWrapper.removeProducts(1);
+                            }
+                        }
+                    });
                     getView.findViewById(R.id.progress_container).setVisibility(View.GONE);
                     getView.findViewById(R.id.progress_recent).setVisibility(View.GONE);
                 }
@@ -240,9 +268,10 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             if (viewHolder == null) {
                 viewHolder = new ViewHolder();
                 viewHolder.text = (TextView) v.findViewById(R.id.text1);
+                viewHolder.editSearch = (ImageView)v.findViewById(R.id.edit_recent_search);
                 v.setTag(viewHolder);
             }
-
+            viewHolder.editSearch.setVisibility(View.GONE);
             final String name = ((TextView)((NewSearchActivity)activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
             if(product.getDupType() == CommonLib.DUP_TYPE_TRUE) {
                 viewHolder.text.setTypeface(null, Typeface.NORMAL);
@@ -289,16 +318,17 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
 
         protected class ViewHolder {
             TextView text;
+            ImageView editSearch;
         }
 
     }
 
-    private class RecentProductListAdapter extends ArrayAdapter<HomeProductObj> {
+    private class RecentProductListAdapter extends ArrayAdapter<String> {
 
-        private ArrayList<HomeProductObj> wishes;
+        private ArrayList<String> wishes;
         private Activity mContext;
 
-        public RecentProductListAdapter(Activity context, int resourceId, ArrayList<HomeProductObj> wishes) {
+        public RecentProductListAdapter(Activity context, int resourceId, ArrayList<String> wishes) {
             super(context.getApplicationContext(), resourceId, wishes);
             mContext = context;
             this.wishes = wishes;
@@ -315,7 +345,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
 
         @Override
         public View getView(final int position, View v, ViewGroup parent) {
-            final HomeProductObj product = wishes.get(position);
+            final String product = wishes.get(position);
             if (v == null || v.findViewById(R.id.list_root) == null) {
                 v = LayoutInflater.from(mContext).inflate(R.layout.simple_list_item, null);
             }
@@ -324,19 +354,36 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             if (viewHolder == null) {
                 viewHolder = new ViewHolder();
                 viewHolder.text = (TextView) v.findViewById(R.id.text1);
+                viewHolder.editSearch = (ImageView)v.findViewById(R.id.edit_recent_search);
                 v.setTag(viewHolder);
             }
 
             final String name = ((TextView)((NewSearchActivity)activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
             viewHolder.text.setTypeface(null, Typeface.BOLD);
-            viewHolder.text.setText(product.getProduct().getName());
+            viewHolder.text.setText(product);
 
+            viewHolder.editSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((NewSearchActivity)getActivity()).setSearchEditTextValue(product);
+                }
+            });
             viewHolder.text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, ProductDetailsActivity.class);
-                    intent.putExtra("slug", product.getProduct().getSlug());
-                    intent.putExtra("id", product.getProduct().getId());
+                    Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
+
+                    if (product == null || product.length() < 1)
+                        return;
+                    String[] params = product.split(" ");
+                    String builder = "";
+                    for (String pam : params) {
+                        builder += (pam + "+");
+                    }
+                    builder = builder.substring(0, builder.length() - 1);
+
+                    intent.putExtra("query", builder);
+                    intent.putExtra("url", AppConstants.GET_SEARCH_RESULTS);
                     startActivity(intent);
                 }
             });
@@ -345,6 +392,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
 
         protected class ViewHolder {
             TextView text;
+            ImageView editSearch;
         }
 
     }
@@ -353,12 +401,12 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
 
         @Override
         protected Object doInBackground(Void... params) {
-            ArrayList<HomeProductObj> result = null;
+            ArrayList<String> result = null;
             try {
                 int userId = Integer.parseInt(AppPreferences.getUserID(activity));
-                result = RecentProductsDBWrapper.getProducts(userId);
+                result = RecentSearchesDBWrapper.getProducts(userId);
             } catch(NumberFormatException e) {
-                result = RecentProductsDBWrapper.getProducts(1);
+                result = RecentSearchesDBWrapper.getProducts(1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -368,9 +416,22 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
         @Override
         protected void onPostExecute(Object result) {
             if(!destroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0 ) {
-                recentSearchesAdapter = new RecentProductListAdapter(activity, R.layout.simple_list_item, (ArrayList<HomeProductObj>)result);
+                recentSearchesAdapter = new RecentProductListAdapter(activity, R.layout.simple_list_item, (ArrayList<String>)result);
                 recentSearchesListView.setAdapter(recentSearchesAdapter);
                 getView.findViewById(R.id.recent_searches_container).setVisibility(View.VISIBLE);
+                getView.findViewById(R.id.clear_searches).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(recentSearchesAdapter!=null)
+                        recentSearchesAdapter.clear();
+                        try {
+                            int userId = Integer.parseInt(AppPreferences.getUserID(activity));
+                            RecentSearchesDBWrapper.removeProducts(userId);
+                        } catch (Exception e) {
+                            RecentSearchesDBWrapper.removeProducts(1);
+                        }
+                    }
+                });
                 getView.findViewById(R.id.progress_recent).setVisibility(View.GONE);
             }
         }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BaseLoginSignupActivity;
+import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
@@ -385,6 +386,8 @@ public class SettingAdapter extends RecyclerView.Adapter {
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+
+                                                RecentProductsDBWrapper.removeProducts(Integer.parseInt(AppPreferences.getUserID(context)));
                                                 AppPreferences.setIsUserLogin(context, false);
                                                 AppPreferences.setUserID(context, "");
                                                 AppPreferences.setIsPasswordSet(context, false);

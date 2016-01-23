@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.db.RecentProductsDBWrapper;
+import com.application.zimplyshop.db.RecentSearchesDBWrapper;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.utils.CacheCleanerService;
 import com.application.zimplyshop.utils.CommonLib;
@@ -113,7 +114,7 @@ public class AppApplication extends Application {
             firstLaunch = prefs.getBoolean("firstLaunch", true);
         }
 
-        new ThirdPartyInitAsync().execute();
+   //     new ThirdPartyInitAsync().execute();
 
         // run the cache cleaner service
         try {
@@ -129,6 +130,7 @@ public class AppApplication extends Application {
         }
 
         RecentProductsDBWrapper.Initialize(getApplicationContext());
+        RecentSearchesDBWrapper.Initialize(getApplicationContext());
         UploadManager.getInstance().setContext(getApplicationContext());
         GetRequestManager.getInstance().setContext(getApplicationContext());
         getTracker(CommonLib.TrackerName.GLOBAL_TRACKER);

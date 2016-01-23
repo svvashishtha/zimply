@@ -24,6 +24,7 @@ import com.application.zimplyshop.baseobjects.OffersObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.widgets.CirclePageIndicator;
+import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     int TYPE_HEADER = 1;
     int TYPE_CATEGORY = 2;
     int TYPE_OFFERS = 3;
+    int TYPE_RECENTLY_VIEWED_PRODUCTS=4;
 
     HomeProductCategoryNBookingObj obj;
     OffersObject offersObject;
@@ -43,13 +45,22 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
 
     int displayWidth;
 
+
+    int similarProductsItemHeight, similarProductsRecyclerHeight, similarProductsItemWidth,similarProductsitemMargin;
+
     public ProductsCategoryGridAdapter(Context context, int height, int displayWidth) {
         obj = new HomeProductCategoryNBookingObj();
 
         this.height = height;
         this.mContext = context;
         this.displayWidth = displayWidth;
+        similarProductsItemHeight = (mContext.getResources().getDisplayMetrics().widthPixels - 3 * ((int) mContext.getResources()
+                .getDimension(R.dimen.margin_mini))) / 2;
+        similarProductsRecyclerHeight = similarProductsItemHeight + mContext.getResources().getDimensionPixelSize(R.dimen.product_description_similar_recycler_additional_height);
+        similarProductsItemWidth = (int) ((mContext.getResources()).getDisplayMetrics().widthPixels / 2.3);
+        similarProductsitemMargin = mContext.getResources().getDimensionPixelSize(R.dimen.z_margin_mini);
     }
+
 
     public void addCategoryData(ArrayList<CategoryObject> objs) {
         obj.setProduct_category(objs);
@@ -82,7 +93,10 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         } else if (viewType == TYPE_OFFERS) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.products_list_fragment_offer_layout, parent, false);
             holder = new OffersViewHolder(view);
-        } else {
+        } else if(viewType == TYPE_RECENTLY_VIEWED_PRODUCTS){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_description_similar_products_item_layout, parent, false);
+            holder = new ProductRecentProductsHolder(view);
+        }else{
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_category_title_layout, parent, false);
             holder = new TitleViewHolder(view);
         }
@@ -144,15 +158,19 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
     public int getItemCount() {
         if (obj != null) {
             if (obj.getLatest_bookings().size() > 0) {
-                if (offersObject == null || offersObject.getOffers().size() == 0)
+                if (offersObject == null || offersObject.getOffers().size() == 0) {
                     return obj.getProduct_category().size() + 2;
-                else
+                }else {
                     return obj.getProduct_category().size() + 2 + 1;
+                }
             } else {
-                if (offersObject == null || offersObject.getOffers().size() == 0)
+                if (offersObject == null || offersObject.getOffers().size() == 0) {
+
                     return obj.getProduct_category().size();
-                else
+
+                }else{
                     return obj.getProduct_category().size() + 1;
+                }
             }
         }
         return 0;
@@ -178,7 +196,9 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
                     return TYPE_CATEGORY;
                 }
             }
+
         } else if (obj.getLatest_bookings().size() > 0) {
+
             if (position == 0) {
                 return TYPE_TITLE;
             } else if (position == 1) {
@@ -186,6 +206,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
             } else {
                 return TYPE_CATEGORY;
             }
+
         } else {
             return TYPE_CATEGORY;
         }
@@ -253,7 +274,7 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         public Object instantiateItem(ViewGroup container, final int position) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.products_list_fragment_offer_image_layout, container, false);
             ImageView image = (ImageView) view.findViewById(R.id.offerimage);
-           // viewPagerHeight = viewPagerHeight - (2 * (mContext.getResources().getDimensionPixelSize(R.dimen.margin_small)));
+            // viewPagerHeight = viewPagerHeight - (2 * (mContext.getResources().getDimensionPixelSize(R.dimen.margin_small)));
             if (offersObject.getOffers().get(position).getImage() != null)
                 new ImageLoaderManager((HomeActivity) mContext).setImageFromUrl(offersObject.getOffers().get(position).getImage(),
                         image, "users", displayWidth, viewPagerHeight, false, false);
@@ -305,6 +326,19 @@ public class ProductsCategoryGridAdapter extends RecyclerView.Adapter<RecyclerVi
         public TitleViewHolder(View itemView) {
             super(itemView);
             customText = (TextView) itemView.findViewById(R.id.header_footer);
+        }
+    }
+
+    public class ProductRecentProductsHolder extends RecyclerView.ViewHolder {
+
+        RecyclerView recyclerView;
+        TextView viewAll,recentProductsTag;
+
+        public ProductRecentProductsHolder(View v) {
+            super(v);
+            recyclerView = (RecyclerView) v.findViewById(R.id.simiilarproductslist);
+            viewAll = (CustomTextView) v.findViewById(R.id.view_all_similarl);
+            recentProductsTag = (TextView)v.findViewById(R.id.recent_products_tag);
         }
     }
 
