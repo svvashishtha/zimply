@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+              android:id="@+id/list_root"
+              android:layout_width="match_parent"
+              android:gravity="center_vertical"
+              android:background="@drawable/whitebuttoncustomback"
+              android:layout_height="@dimen/z_item_height_48"
+              android:orientation="horizontal" >
 
-    <TextView
+    <com.application.zimplyshop.widgets.CustomTextView
         android:id="@+id/text1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:padding="@dimen/size16"
-        android:background="@drawable/whitebuttoncustomback"
-        android:textColor="@color/text_color1" />
 
+        android:textColor="@color/text_color1" />
+    <ImageView
+        android:id="@+id/edit_recent_search"
+        android:layout_width="@dimen/z_item_height_48"
+        android:scaleType="center"
+        android:src="@drawable/ic_communication_call_made"
+        android:background="@drawable/action_bar_item_bg"
+        android:layout_height="@dimen/z_item_height_48"/>
 </LinearLayout>

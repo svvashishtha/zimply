@@ -149,7 +149,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         if (adapter != null && adapter.getObj() != null && AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
         } else {
-            addToCart.setText(getResources().getString(R.string.add_to_cart));
+            addToCart.setText("Add to cart");
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -159,7 +159,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 }
             }
         }, 500);
-
+        if(adapter!=null && !AppPreferences.isUserLogIn(this)){
+            new GetDataFromCache().execute();
+        }
     }
 
     public int getStatusBarHeight() {
@@ -186,7 +188,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     public void loadData() {
         requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_REQUETS_URL + "?id=" + productId
-                + "&width=" + width + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
+                + "&width=" + (width/2) + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
         GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL);
     }
@@ -204,6 +206,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             showLoadingView();
             (findViewById(R.id.bottom_action_container)).setVisibility(View.GONE);
             changeViewVisiblity(productDetailList, View.GONE);
+        }else if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)){
+            isLoading=true;
         }
 
     }
@@ -241,7 +245,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 //                GA Ecommerce
                 ZTracker.logGAEcommerceProductClickAction(this, screenName, product.getProduct().getId() + "", product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSlug(), null, position, product.getProduct().getPrice(), productActionListName, actionPerformed);
 
-                loadSimilarProductsRequest();
+                // loadSimilarProductsRequest();
 
             } else {
                 showNullCaseView("No Info Available");
@@ -279,13 +283,26 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
             isSimilarProductsLoaded = true;
             if (adapter != null) {
-                SimilarProductsListObject similar = (SimilarProductsListObject) obj;
                 adapter.addSimilarProducts(((SimilarProductsListObject) obj).getProducts());
+            }
+            if(AppPreferences.isUserLogIn(this)) {
+                loadRecentlyViewed();
+            }else{
+                new GetDataFromCache().execute();
+            }
+            isLoading=false;
+        }else if(!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)){
+
+            if(adapter!=null){
+                adapter.addRecentlyViewed(((SimilarProductsListObject)obj).getProducts());
+                adapter.setIsFooterRemoved(true);
             }
         }
     }
 
     NewProductDetailAdapter adapter;
+
+    boolean isLoading,isRequestAllowed;
 
     public void addAdapterData(HomeProductObj obj) {
         toolbarTitle.setText(obj.getProduct().getName());
@@ -333,6 +350,22 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     recyclerView.canScrollVertically(0);
                     Toast.makeText(NewProductDetailActivity.this,"Header reached",Toast.LENGTH_SHORT).show();
                 }*/
+
+                visibleItemCount = productDetailList.getLayoutManager()
+                        .getChildCount();
+                totalItemCount = productDetailList.getLayoutManager()
+                        .getItemCount();
+                pastVisiblesItems = ((LinearLayoutManager) productDetailList
+                        .getLayoutManager())
+                        .findFirstVisibleItemPosition();
+
+                if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
+                        && !isLoading ) {
+                    if(!isSimilarProductsLoaded) {
+                        loadSimilarProductsRequest();
+                    }
+                }
+
                 if (adapter.getRefernceHolder() != null) {
 
                     System.out.println("Scroll Position::" + adapter.getRefernceHolder().mapParent.getTop());
@@ -343,8 +376,6 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     } else {
                         super.onScrolled(recyclerView, dx, dy);
                     }
-
-
                 } else {
                     super.onScrolled(recyclerView, dx, dy);
                 }
@@ -393,6 +424,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
 
     }
+
+
+    public void loadRecentlyViewed(){
+        int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
+        String finalUrl = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_RECENT_PRODUCTS_URL + "?userid=" + AppPreferences.getUserID(this)
+                + "&width=" + width + "&size=5&page=1";
+        GetRequestManager.getInstance().makeAyncRequest(finalUrl,RECENT_PRODUCT_REQUEST,
+                ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL_SIMILAR_PRODUCTS);
+    }
+
 
     private boolean checkEmailFormat(CharSequence target) {
 
@@ -522,6 +563,18 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
             if (progressDialog != null) {
                 progressDialog.dismiss();
+            }
+        }else if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)){
+            if(AppPreferences.isUserLogIn(this)) {
+                loadRecentlyViewed();
+            }else{
+                new GetDataFromCache().execute();
+            }
+            isLoading=false;
+        }else if(!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)){
+
+            if(adapter!=null){
+                adapter.setIsFooterRemoved(true);
             }
         }
     }
@@ -961,6 +1014,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         startActivity(i);
     }
 
+    public void openRecentlyViewed() {
+        Intent i = new Intent(this, RecentProductsActivity.class);
+
+        startActivity(i);
+    }
+
     public class MyPagerAdapter extends PagerAdapter {
 
         int[] resId = {R.drawable.book_tut2, R.drawable.book_tut1, R.drawable.book_tut3};
@@ -1012,4 +1071,33 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             super.onBackPressed();
         }
     }
+
+    public class GetDataFromCache extends AsyncTask<Void, Void, Object> {
+
+        @Override
+        protected Object doInBackground(Void... params) {
+            ArrayList<BaseProductListObject> result = null;
+            try {
+                int userId = 1;
+                result = RecentProductsDBWrapper.getProducts(userId);
+            } catch(NumberFormatException e) {
+                result = RecentProductsDBWrapper.getProducts(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            if(!isDestroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0 ) {
+                adapter.addRecentlyViewed((ArrayList<BaseProductListObject>) result);
+
+            }
+            if(adapter!=null)
+                adapter.setIsFooterRemoved(true);
+        }
+
+    }
+
 }

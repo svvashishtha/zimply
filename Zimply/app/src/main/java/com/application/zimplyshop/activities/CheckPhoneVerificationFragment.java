@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.fragments.BaseFragment;
@@ -185,7 +186,11 @@ public class CheckPhoneVerificationFragment extends BaseFragment implements Uplo
                     CommonLib.hideKeyBoard(getActivity(), getView.findViewById(R.id.verification_code));
                     getActivity().finish();
                 } else {
-                    showToast("Something went wrong in the phone verification. Please try after some time.");
+                    if(response != null){
+                        showToast(((ErrorObject)response).getErrorMessage());
+                    }else {
+                        showToast("Something went wrong in the phone verification. Please try after some time.");
+                    }
                 }
             }
 

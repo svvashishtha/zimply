@@ -164,9 +164,12 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
                 }
                 productsCategoryGridAdapter.addLatestBookingsData(AllProducts.getInstance().getHomeProCatNBookingObj().getLatest_bookings());
                 cateoryList.smoothScrollToPosition(0);
+
+
             } else {
                 productsCategoryGridAdapter.addLatestBookingsData(null);
             }
+
             isBookingsLoading = false;
         } else if (!destroyed && requestTag != null && requestTag.equalsIgnoreCase(RequestTags.OFFERS_REQUEST_TAG)) {
             OffersObject offersData = (OffersObject) obj;
@@ -201,4 +204,6 @@ public class ProductsListFragment extends BaseFragment implements GetRequestList
             isOffersLoading = false;
         }
     }
+
+
 }

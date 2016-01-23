@@ -17,7 +17,9 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.managers.ImageLoaderManager;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
@@ -200,6 +202,12 @@ public class ProductsRecyclerViewGridAdapter extends
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(AppPreferences.isUserLogIn(mContext)){
+
+                    }else{
+                        RecentProductsDBWrapper.addProduct(objs.get(position),1,System.currentTimeMillis());
+                    }
+
                     Intent intent = new Intent(mContext, NewProductDetailActivity.class);
                     intent.putExtra("slug", objs.get(positionTemp).getSlug());
                     intent.putExtra("id", objs.get(positionTemp).getId());

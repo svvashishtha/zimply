@@ -33,7 +33,7 @@ public interface RequestTags {
     String LATEST_NOTIFICATION_COUNT_TAG = "latestnotifcounttext";
     String LATEST_BOOKINGS_TAG = "latestbookingtag";
     String OFFERS_REQUEST_TAG = "offersrequesttag";
-
+    String RECENT_PRODUCT_REQUEST = "recentproductsrequest";
 
     String FAV_LIST_REQUEST_TAG = "favlistrequesttag";
     String FORGOT_PASSWORD_REQUEST_TAG = "forgotPasswordRequestTag";

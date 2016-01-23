@@ -29,6 +29,7 @@ public interface AppConstants {
     String FORGOT_PASSWORD = "zimply-auth/new-forget-password/";
     String PRODUCT_DESCRIPTION_REQUETS_URL = "ecommerce/product-detail/";
     String PRODUCT_DESCRIPTION_SIMILAR_PRODUCTS_URL = "ecommerce/product-recom/";
+    String PRODUCT_DESCRIPTION_RECENT_PRODUCTS_URL = "ecommerce/recent-viewed/";
 
     String MARK_FAVOURITE_URL = "zimply-auth/add-item-in-favourite/";
     String MARK_UNFAVOURITE_URL = "zimply-auth/delete-item-from-favourite/";
