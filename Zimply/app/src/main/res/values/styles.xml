@@ -25,6 +25,7 @@
         <item name="colorPrimaryDark">@color/app_primary_color_dark</item>
         <!-- <item name="android:homeAsUpIndicator">@drawable/ic_home_back</item>-->
         <item name="colorAccent">@color/z_blue_color</item>
+        <item name="colorButtonNormal">@color/z_blue_color</item>
     </style>
 
     <style name="Widget.AppCompat.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">

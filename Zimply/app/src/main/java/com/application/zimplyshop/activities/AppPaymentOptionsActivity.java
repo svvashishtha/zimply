@@ -47,23 +47,22 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 11/6/2015.
  */
-public class AppPaymentOptionsActivity extends BaseActivity implements View.OnClickListener,RequestTags,UploadManagerCallback{
+public class AppPaymentOptionsActivity extends BaseActivity implements View.OnClickListener, RequestTags, UploadManagerCallback {
 
 
-    String name,orderId,email;
+    String name, orderId, email;
     int totalPrice;
 
     AddressObject addressObj;
 
-    int PAYMENT_TYPE_CASH=1;
+    int PAYMENT_TYPE_CASH = 1;
     int PAYMENT_TYPE_CARD = 2;
 //    int PAYMENT_TYPE_COD = 2;
 
 
-
     int buyingChannel;
 
-    boolean isCoc,isAllOnline,isCodNotAvailable;
+    boolean isCoc, isAllOnline, isCodNotAvailable;
 
     CartObject cartObj;
 
@@ -72,19 +71,19 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_options_layout);
 
-        if(getIntent()!=null){
+        if (getIntent() != null) {
             orderId = getIntent().getStringExtra("order_id");
             name = getIntent().getStringExtra("name");
             email = getIntent().getStringExtra("email");
-            totalPrice =getIntent().getIntExtra("total_amount", 0);
-            addressObj = (AddressObject)getIntent().getSerializableExtra("address");
+            totalPrice = getIntent().getIntExtra("total_amount", 0);
+            addressObj = (AddressObject) getIntent().getSerializableExtra("address");
             buyingChannel = getIntent().getIntExtra("buying_channel", 0);
             isCoc = getIntent().getBooleanExtra("is_coc", false);
-            isAllOnline =  getIntent().getBooleanExtra("is_all_online",false);
-            cartObj = (CartObject)getIntent().getSerializableExtra("cart_obj");
-            isCodNotAvailable = getIntent().getBooleanExtra("is_cod_not_available",false);
+            isAllOnline = getIntent().getBooleanExtra("is_all_online", false);
+            cartObj = (CartObject) getIntent().getSerializableExtra("cart_obj");
+            isCodNotAvailable = getIntent().getBooleanExtra("is_cod_not_available", false);
         }
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -94,40 +93,40 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             ((CustomTextView)findViewById(R.id.pay_cash_counter)).setOnClickListener(this);
         }*/
 
-        if(totalPrice >20000 ){
+        if (totalPrice > 20000) {
             SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
-            string.setSpan(new RelativeSizeSpan(0.8f),18,string.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            string.setSpan(new RelativeSizeSpan(0.8f), 18, string.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() - 1, 0);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setText(string);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setText(string);
             //((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(false);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setEnabled(false);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
 
 
-        }else if(isCodNotAvailable){
+        } else if (isCodNotAvailable) {
             SpannableString string = new SpannableString("Cash-on-Delivery (Not Available for this order)");
-            string.setSpan(new RelativeSizeSpan(0.8f),18,string.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            string.setSpan(new RelativeSizeSpan(0.8f), 18, string.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             string.setSpan(new StyleSpan(Typeface.ITALIC), 18, string.length() - 1, 0);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setText(string);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setText(string);
             //((CustomTextView)findViewById(R.id.cash_on_delivery)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery)).getTypeface(), Typeface.ITALIC);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(false);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setText("*One or more item(s) in your cart is not eligible for COD. Use online payment mode.");
-            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setEnabled(false);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setText("*One or more item(s) in your cart is not eligible for COD. Use online payment mode.");
+            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.VISIBLE);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setTypeface(((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).getTypeface(), Typeface.ITALIC);
 
-        }else{
-            ((CustomTextView)findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.GONE);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setEnabled(true);
-            ((CustomTextView)findViewById(R.id.cash_on_delivery)).setOnClickListener(this);
+        } else {
+            ((CustomTextView) findViewById(R.id.cash_on_delivery_not_avail)).setVisibility(View.GONE);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setEnabled(true);
+            ((CustomTextView) findViewById(R.id.cash_on_delivery)).setOnClickListener(this);
         }
 
-        ((CustomTextView)findViewById(R.id.pay_online)).setOnClickListener(this);
-        LinearLayout buyLayout = (LinearLayout)findViewById(R.id.payment_layout);
+        ((CustomTextView) findViewById(R.id.pay_online)).setOnClickListener(this);
+        LinearLayout buyLayout = (LinearLayout) findViewById(R.id.payment_layout);
         buyLayout.setVisibility(View.VISIBLE);
-        ((CustomTextViewBold)findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " + "<font color=#0093b8>"+getResources().getString(R.string.rs_text) + " " + Math.round(totalPrice)+"</font>"));
-        ((CustomTextViewBold)findViewById(R.id.buy_btn)).setText("Place Order");
-        ((CustomTextViewBold)findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
+        ((CustomTextViewBold) findViewById(R.id.total_amount)).setText(Html.fromHtml("Total : " + "<font color=#0093b8>" + getResources().getString(R.string.rs_text) + " " + Math.round(totalPrice) + "</font>"));
+        ((CustomTextViewBold) findViewById(R.id.buy_btn)).setText("Place Order");
+        ((CustomTextViewBold) findViewById(R.id.buy_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makePaymentRequest();
@@ -143,19 +142,19 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         }*/
     }
 
-    public void addToolbarView(Toolbar toolbar){
-        View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout,toolbar,false);
+    public void addToolbarView(Toolbar toolbar) {
+        View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar, false);
         CustomTextView textView = (CustomTextView) view.findViewById(R.id.title_textview);
         textView.setText("Choose Payment Type");
         toolbar.addView(view);
     }
 
 
-    public void makePaymentRequest(){
-        if(paymentType == PAYMENT_TYPE_CASH){
+    public void makePaymentRequest() {
+        if (paymentType == PAYMENT_TYPE_CASH) {
             sendPaymentSuccessFullCashRequest();
 
-        }else{
+        } else {
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("furl",
                     "https://dl.dropboxusercontent.com/s/z69y7fupciqzr7x/furlWithParams.html");
@@ -165,7 +164,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             params.put(PayU.TXNID, transactionId);
             params.put(PayU.USER_CREDENTIALS, "test:test");
             params.put(PayU.PRODUCT_INFO, "My Product");
-            params.put(PayU.FIRSTNAME,name);
+            params.put(PayU.FIRSTNAME, name);
             params.put(PayU.EMAIL, email);
 
 
@@ -185,9 +184,10 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
     }
 
     String transactionId;
+
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.pay_online:
                 paymentType = PAYMENT_TYPE_CARD;
                 findViewById(R.id.pay_online).setSelected(true);
@@ -217,7 +217,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                     sendPaymentSuccessFullRequest();
                 }
 
-            }else if(resultCode == RESULT_CANCELED) {
+            } else if (resultCode == RESULT_CANCELED) {
                 // failed
                 if (data != null) {
                     Toast.makeText(this,
@@ -246,12 +246,12 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PLACE_ORDER_SUCCESS_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
-        list.add(new BasicNameValuePair("payment_method",PAYMENT_TYPE_CARD+""));
-        list.add(new BasicNameValuePair("total_price",totalPrice+""));
-        list.add(new BasicNameValuePair("order_id",orderId));
-        list.add(new BasicNameValuePair("transaction_id",transactionId));
-        list.add(new BasicNameValuePair("payment_status",((paymentSuccess)?1:3)+"" ));
-        list.add(new BasicNameValuePair("buying_channel", buyingChannel+ ""));
+        list.add(new BasicNameValuePair("payment_method", PAYMENT_TYPE_CARD + ""));
+        list.add(new BasicNameValuePair("total_price", totalPrice + ""));
+        list.add(new BasicNameValuePair("order_id", orderId));
+        list.add(new BasicNameValuePair("transaction_id", transactionId));
+        list.add(new BasicNameValuePair("payment_status", ((paymentSuccess) ? 1 : 3) + ""));
+        list.add(new BasicNameValuePair("buying_channel", buyingChannel + ""));
         UploadManager.getInstance().makeAyncRequest(url, PLACE_ORDER_SUCCESS_REQUEST_TAG, "", ObjectTypes.OBJECT_TYPE_PLACE_ORDER,
                 null, list, null);
 
@@ -263,19 +263,18 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PLACE_ORDER_SUCCESS_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
-        list.add(new BasicNameValuePair("payment_method",PAYMENT_TYPE_CASH+""));
-        list.add(new BasicNameValuePair("total_price",totalPrice+""));
-        list.add(new BasicNameValuePair("order_id",orderId));
-        list.add(new BasicNameValuePair("transaction_id",transactionId));
+        list.add(new BasicNameValuePair("payment_method", PAYMENT_TYPE_CASH + ""));
+        list.add(new BasicNameValuePair("total_price", totalPrice + ""));
+        list.add(new BasicNameValuePair("order_id", orderId));
+        list.add(new BasicNameValuePair("transaction_id", transactionId));
         list.add(new BasicNameValuePair("payment_status", 1 + ""));
-        list.add(new BasicNameValuePair("buying_channel", buyingChannel+ ""));
+        list.add(new BasicNameValuePair("buying_channel", buyingChannel + ""));
         UploadManager.getInstance().makeAyncRequest(url, PLACE_ORDER_SUCCESS_REQUEST_TAG, "", ObjectTypes.OBJECT_TYPE_PLACE_ORDER,
                 null, list, null);
 
     }
 
     boolean isDestroyed;
-
 
 
     @Override
@@ -288,7 +287,7 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             this.finish();
         }
         return super.onOptionsItemSelected(item);
@@ -297,18 +296,18 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
     @Override
     public void uploadFinished(int requestType, String objectId, Object data, Object response, boolean status, int parserId) {
         if (!isDestroyed && requestType == PLACE_ORDER_SUCCESS_REQUEST_TAG) {
-            if(zProgressDialog!=null){
+            if (zProgressDialog != null) {
                 zProgressDialog.dismiss();
             }
             if (status) {
                 if (JSONUtils.getIntegerfromJSON(((JSONObject) response), "payment_status") == 1) {
                     Toast.makeText(this, "Order placed successfully", Toast.LENGTH_LONG).show();
                     AllProducts.getInstance().setCartCount(JSONUtils.getIntegerfromJSON(((JSONObject) response), "cart_count"));
-                    Intent intent = new Intent(this ,CashOnCounterOrderCompletionActivity.class);
-                    intent.putExtra("cart_obj",cartObj);
-                    intent.putExtra("order_id",orderId);
-                    intent.putExtra("address_obj",addressObj);
-                    intent.putExtra("is_coc",(paymentType == PAYMENT_TYPE_CASH));
+                    Intent intent = new Intent(this, CashOnCounterOrderCompletionActivity.class);
+                    intent.putExtra("cart_obj", cartObj);
+                    intent.putExtra("order_id", orderId);
+                    intent.putExtra("address_obj", addressObj);
+                    intent.putExtra("is_coc", (paymentType == PAYMENT_TYPE_CASH));
                     try {
                         for (int i = 0; i < cartObj.getCart().getDetail().size(); i++) {
                             try {
@@ -320,6 +319,9 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                                             .setQuantity(cartObj.getCart().getDetail().get(i).getQty());
 // Add the step number and additional info about the checkout to the action.
                                     ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
+                                            .setCheckoutStep(5)
+                                            .setCheckoutOptions("Purchase Product with" + (paymentType == PAYMENT_TYPE_CASH ? " COD" : " Online payment"));
+                                    ZTracker.checkOutGaEvents(productAction, product, AppPaymentOptionsActivity.this);
                                             .setCheckoutStep(6)
                                             .setCheckoutOptions("Purchase Product with" + (paymentType == PAYMENT_TYPE_CASH? " COD":" Online payment"));
                                     ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
@@ -328,14 +330,13 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                                 e.printStackTrace();
                             }
                         }
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     startActivity(intent);
 
 
-                }else{
+                } else {
                     Toast.makeText(this, "Could not place order. Try again", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -343,7 +344,9 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
             }
         }
     }
+
     ProgressDialog zProgressDialog;
+
     @Override
     public void uploadStarted(int requestType, String objectId, int parserId, Object data) {
         if (!isDestroyed) {

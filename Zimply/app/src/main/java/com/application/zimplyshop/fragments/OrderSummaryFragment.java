@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.AppPaymentOptionsActivity;
+import com.application.zimplyshop.activities.NewAppPaymentOptionsActivity;
 import com.application.zimplyshop.activities.ProductCheckoutActivity;
 import com.application.zimplyshop.adapters.CartItemListAdapter;
 import com.application.zimplyshop.application.AppApplication;
@@ -157,7 +157,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             changeViewVisiblity(mListView, View.VISIBLE);*/
         //   }
 
-        ZTracker.logGAScreen(getActivity(),"Order Summary");
+        ZTracker.logGAScreen(getActivity(), "Order Summary");
     }
 
     private void loadAddressData() {
@@ -185,7 +185,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     private void loadCartData() {
         requestTimeOrder = System.currentTimeMillis();
-        String url = AppApplication.getInstance().getBaseUrl() + GET_ORDER_SUMMARY_URL + "?ids=" + productIds + "&quantity=" + quantity +(isCouponApplied?"&coupon_code="+couponCode:"");
+        String url = AppApplication.getInstance().getBaseUrl() + GET_ORDER_SUMMARY_URL + "?ids=" + productIds + "&quantity=" + quantity + (isCouponApplied ? "&coupon_code=" + couponCode : "");
         GetRequestManager.getInstance().makeAyncRequest(url, GET_ORDER_SUMMARY, OBJECT_TYPE_CART);
     }
 
@@ -278,14 +278,14 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
             }
         } else if (requestTag != null && requestTag.equals(GET_ORDER_SUMMARY)) {
-            if(mAdapter==null ||(mAdapter!=null &&  mAdapter.getItemCount() == 0)) {
+            if (mAdapter == null || (mAdapter != null && mAdapter.getItemCount() == 0)) {
                 showLoadingView();
                 changeViewVisiblity(mListView, View.GONE);
                 changeViewVisiblity(buyLayout, View.GONE);
-            }else if(isCouponApplied){
-                zProgressDialog= ProgressDialog.show(getActivity(),null,"Applying coupon. Please wait..");
-            }else{
-                zProgressDialog= ProgressDialog.show(getActivity(),null,"Updating order. Please wait..");
+            } else if (isCouponApplied) {
+                zProgressDialog = ProgressDialog.show(getActivity(), null, "Applying coupon. Please wait..");
+            } else {
+                zProgressDialog = ProgressDialog.show(getActivity(), null, "Updating order. Please wait..");
             }
             //view.findViewById(R.id.save).setVisibility(View.GONE);
         }
@@ -298,7 +298,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             zProgressDialog.dismiss();
         if (requestTag != null && requestTag.equals(RequestTags.GET_ADDRESS_REQUEST_TAG) && !isDestroyed) {
             CommonLib.ZLog("Request Time", "Order Detail Page Address Request :" + (System.currentTimeMillis() - requestTimeAddress) + " mS");
-            CommonLib.writeRequestData("Order Detail Page Address Request :" +   (System.currentTimeMillis() - requestTimeAddress) + " mS");
+            CommonLib.writeRequestData("Order Detail Page Address Request :" + (System.currentTimeMillis() - requestTimeAddress) + " mS");
 
             addressObjectArrayList = (ArrayList<AddressObject>) obj;
             if (addressObjectArrayList.size() > 0) {
@@ -319,7 +319,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             if (zProgressDialog != null)
                 zProgressDialog.dismiss();
             CommonLib.ZLog("Request Time", "Order Detail Page order summary Request :" + (System.currentTimeMillis() - requestTimeOrder) + " mS");
-            CommonLib.writeRequestData("Order Detail Page order summary Request :" +   (System.currentTimeMillis() - requestTimeOrder) + " mS");
+            CommonLib.writeRequestData("Order Detail Page order summary Request :" + (System.currentTimeMillis() - requestTimeOrder) + " mS");
 
             if (((CartObject) obj).getCart().getDetail().size() > 0) {
                 showView();
@@ -355,8 +355,8 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 changeViewVisiblity(buyLayout, View.GONE);
             }
             isCouponApplied = false;
-            if(((CartObject) obj).getCart().getError()!=null && ((CartObject) obj).getCart().getError().trim().length()>0){
-                Toast.makeText(getActivity(),((CartObject) obj).getCart().getError().trim(),Toast.LENGTH_LONG).show();
+            if (((CartObject) obj).getCart().getError() != null && ((CartObject) obj).getCart().getError().trim().length() > 0) {
+                Toast.makeText(getActivity(), ((CartObject) obj).getCart().getError().trim(), Toast.LENGTH_LONG).show();
             }
         } else if (requestTag != null && requestTag.equals(REMOVE_FROM_CART)) {/*
             JSONObject jsonObject = (JSONObject) obj;
@@ -423,7 +423,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && mAdapter!=null && AllUsers.getInstance().getObjs()!=null &&AllUsers.getInstance().getObjs().size()>0) {
+        if (isVisibleToUser && mAdapter != null && AllUsers.getInstance().getObjs() != null && AllUsers.getInstance().getObjs().size() > 0) {
             mAdapter.changeShippingBillingAddress(AllUsers.getInstance().getObjs().get(0));
         }
     }
@@ -458,7 +458,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     private void nextFragment() {
         if (mActivity != null) {
 
-            Intent intent = new Intent(getActivity(), AppPaymentOptionsActivity.class);
+            Intent intent = new Intent(getActivity(), NewAppPaymentOptionsActivity.class);
             intent.putExtra("total_amount", cartObject.getCart().getTotal_price());
             intent.putExtra("order_id", orderId);
             intent.putExtra("name", shippingAddress.getName());
@@ -518,7 +518,6 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
             // ((ProductCheckoutActivity) mActivity).setEditAddressFragmentWithBackstack(bundle);
         }
     }
-
 
 
     private void setAdapterData() {
@@ -589,7 +588,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
             @Override
             public void onApplyCoupon(String code) {
-                isCouponApplied=true;
+                isCouponApplied = true;
                 couponCode = code;
                 loadCartData();
             }
@@ -660,7 +659,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
             } else if (requestType == PLACE_ORDER_REQUEST_TAG) {
                 CommonLib.ZLog("Request Time", "Order Detail Page Payment Request :" + (System.currentTimeMillis() - requestTimePayment) + " mS");
-                CommonLib.writeRequestData("Order Detail Page Payment Request :" +   (System.currentTimeMillis() - requestTimePayment) + " mS");
+                CommonLib.writeRequestData("Order Detail Page Payment Request :" + (System.currentTimeMillis() - requestTimePayment) + " mS");
                 if (status) {
                     orderId = JSONUtils.getStringfromJSON(((JSONObject) response), "order_id");
                     for (int i = 0; i < cartObject.getCart().getDetail().size(); i++) {
@@ -774,7 +773,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PLACE_ORDER_SUCCESS_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
-        list.add(new BasicNameValuePair("total_price", cartObject.getCart().getTotal_price()+ ""));
+        list.add(new BasicNameValuePair("total_price", cartObject.getCart().getTotal_price() + ""));
         list.add(new BasicNameValuePair("order_id", orderId));
         list.add(new BasicNameValuePair("transaction_id", transactionId));
         list.add(new BasicNameValuePair("payment_status", ((paymentSuccess) ? 1 : 3) + ""));

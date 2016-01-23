@@ -163,6 +163,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
         <activity
+            android:name=".activities.PayUWebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseTheme" />
+        <activity
             android:name=".activities.BarcodeScannerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" />
@@ -189,6 +193,11 @@
             android:name=".activities.AppPaymentOptionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".activities.NewAppPaymentOptionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CheckboxAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activities.NewSearchActivity"

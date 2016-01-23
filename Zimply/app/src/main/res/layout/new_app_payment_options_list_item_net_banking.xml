@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/z_margin_mini"
+    android:layout_marginLeft="@dimen/z_margin_small"
+    android:layout_marginRight="@dimen/z_margin_small"
+    android:layout_marginTop="@dimen/z_margin_mini"
+    android:background="@drawable/ic_shadow_card"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/creditcardpaymentoptiontext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/z_margin_large">
+
+        <ImageView
+            android:layout_width="@dimen/z_payment_options_drawableleftwidth"
+            android:layout_height="@dimen/z_payment_options_drawableleftwidth"
+            android:layout_marginRight="@dimen/z_margin_medium"
+            android:src="@drawable/ic_net_banking" />
+
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Net Banking"
+            android:textColor="@color/z_text_color_dark"
+            android:textSize="@dimen/font_large"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/hidethispaymentlayut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_margin_xlarge"
+            android:layout_marginRight="@dimen/z_margin_large"
+            android:text="Choose from popular banks"
+            android:textColor="@color/z_text_color_light" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/z_margin_large"
+            android:background="@drawable/net_banking_layout_rectangular_bg"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:id="@+id/cardRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/statebankofindia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:padding="@dimen/z_margin_large"
+                    android:text="State Bank Of India" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/z_grey_shade_3" />
+
+                <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/hdfcbank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:padding="@dimen/z_margin_large"
+                    android:text="HDFC Bank" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/z_grey_shade_3" />
+
+                <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/icicibank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:padding="@dimen/z_margin_large"
+                    android:text="ICICI Bank" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/z_grey_shade_3" />
+
+                <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/axisbank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:padding="@dimen/z_margin_large"
+                    android:text="AXIS Bank" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/z_grey_shade_3" />
+
+                <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/kotakmahindrabank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:padding="@dimen/z_margin_large"
+                    android:text="Kotak Mahindra Bank" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/z_grey_shade_3" />
+
+                <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/yesbank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:padding="@dimen/z_margin_large"
+                    android:text="YES Bank" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_margin_xlarge"
+            android:layout_marginRight="@dimen/z_margin_large"
+            android:text="Or"
+            android:textColor="@color/z_text_color_light" />
+
+        <Spinner
+            android:id="@+id/netbankingbankslist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_margin_large"
+            android:layout_marginRight="@dimen/z_margin_large"
+            android:layout_marginTop="@dimen/z_margin_large" />
+
+        <Button
+            android:id="@+id/paysecurely__codcod"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="@dimen/z_margin_mini"
+            android:text="Pay Securely"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
+    </LinearLayout>
+
+</LinearLayout>

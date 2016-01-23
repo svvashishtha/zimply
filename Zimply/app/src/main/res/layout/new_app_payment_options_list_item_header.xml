@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/z_margin_large"
+        android:paddingRight="@dimen/z_margin_large"
+        android:paddingTop="@dimen/z_margin_large">
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Net amount to be paid : "
+            android:textColor="@color/z_text_color_dark" />
+
+        <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:id="@+id/paymentheaderpricetext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rs. 5000"
+            android:textColor="@color/z_text_color_dark"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/orderdetailslauout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/z_margin_large"
+        android:paddingRight="@dimen/z_margin_large">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/z_margin_small">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Sum"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/total_sum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="10000"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/applied_coupon_discount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/z_margin_small">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Discount"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/discount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="6.99"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/z_margin_small">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Shipping Charges"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/shipping_charges"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="6.99"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/z_margin_small">
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Payment"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/font_medium" />
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/total_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="6.99"
+                android:textColor="@color/blue_button"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/view_orderdetailsbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/z_margin_small"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="@dimen/z_margin_mini"
+        android:paddingLeft="@dimen/z_margin_large"
+        android:paddingRight="@dimen/z_margin_large"
+        android:paddingTop="@dimen/z_margin_mini"
+        android:text="View Details"
+        android:textColor="@color/z_blue_color" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/z_grey_shade_3" />
+
+    <com.application.zimplyshop.widgets.CustomTextViewBold
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/z_margin_large"
+        android:text="SELECT A PAY METHOD"
+        android:textColor="@color/z_text_color_dark"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/z_margin_mini"
+        android:layout_marginLeft="@dimen/z_margin_small"
+        android:layout_marginRight="@dimen/z_margin_small"
+        android:layout_marginTop="@dimen/z_margin_mini"
+        android:background="@drawable/ic_shadow_card"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/creditcardpaymentoptiontext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:padding="@dimen/z_margin_large">
+
+            <ImageView
+                android:layout_width="@dimen/z_payment_options_drawableleftwidth"
+                android:layout_height="@dimen/z_payment_options_drawableleftwidth"
+                android:layout_marginRight="@dimen/z_margin_medium"
+                android:src="@drawable/ic_saved_card" />
+
+            <com.application.zimplyshop.widgets.CustomTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saved Cards"
+                android:textColor="@color/z_text_color_dark"
+                android:textSize="@dimen/font_large"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hidethispaymentlayut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/z_margin_large"
+                android:paddingRight="@dimen/z_margin_large">
+
+                <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6725XXXXXX536" />
+
+
+                <LinearLayout
+                    android:layout_width="@dimen/z_item_height_48"
+                    android:layout_height="@dimen/z_item_height_48"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="@dimen/z_margin_large"
+                        android:layout_height="@dimen/z_margin_large"
+                        android:src="@drawable/delete" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/z_item_height_48"
+                android:text="Enter CVV No."
+                android:textColor="@color/z_text_color_light"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/z_item_height_48"
+                android:gravity="center_vertical"
+                android:paddingRight="@dimen/z_margin_large"
+                android:paddingTop="@dimen/z_margin_small">
+
+                <com.application.zimplyshop.widgets.CustomEdittext
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_selector_background_light"
+                    android:hint="CVV"
+                    android:inputType="numberPassword"
+                    android:padding="@dimen/z_margin_small"
+                    android:textColor="@color/z_text_color_dark"
+                    android:textColorHint="@color/z_text_color_light"
+                    android:textSize="@dimen/font_medium"
+                    android:typeface="normal" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:src="@drawable/ic_cvv" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/paysecurely__codcod"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_margin="@dimen/z_margin_mini"
+                android:text="Pay Securely"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_large" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

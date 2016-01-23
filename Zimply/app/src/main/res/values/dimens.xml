@@ -200,5 +200,6 @@
 
     <dimen name="products_list_fragment_offer_layout_height">250dp</dimen>
     <dimen name="product_description_similar_recycler_additional_height">100dp</dimen>
+    <dimen name="z_payment_options_drawableleftwidth">18dp</dimen>
 
 </resources>
