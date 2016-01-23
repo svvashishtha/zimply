@@ -2,15 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/z_margin_large"
-    android:layout_marginRight="@dimen/z_margin_large"
-    android:background="@android:color/white"
+    android:layout_marginBottom="@dimen/z_margin_mini"
+    android:layout_marginLeft="@dimen/z_margin_small"
+    android:layout_marginRight="@dimen/z_margin_small"
+    android:layout_marginTop="@dimen/z_margin_mini"
+    android:background="@drawable/ic_shadow_card"
     android:orientation="vertical">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/z_grey_shade_3" />
 
     <LinearLayout
         android:id="@+id/creditcardpaymentoptiontext"
@@ -59,10 +56,12 @@
             android:orientation="vertical">
 
             <RadioGroup
+                android:id="@+id/cardRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/statebankofindia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/z_margin_small"
@@ -75,11 +74,12 @@
                     android:background="@color/z_grey_shade_3" />
 
                 <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/hdfcbank"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/z_margin_small"
                     android:padding="@dimen/z_margin_large"
-                    android:text="State Bank Of India" />
+                    android:text="HDFC Bank" />
 
                 <View
                     android:layout_width="match_parent"
@@ -87,11 +87,12 @@
                     android:background="@color/z_grey_shade_3" />
 
                 <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/icicibank"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/z_margin_small"
                     android:padding="@dimen/z_margin_large"
-                    android:text="State Bank Of India" />
+                    android:text="ICICI Bank" />
 
                 <View
                     android:layout_width="match_parent"
@@ -99,11 +100,12 @@
                     android:background="@color/z_grey_shade_3" />
 
                 <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/axisbank"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/z_margin_small"
                     android:padding="@dimen/z_margin_large"
-                    android:text="State Bank Of India" />
+                    android:text="AXIS Bank" />
 
                 <View
                     android:layout_width="match_parent"
@@ -111,11 +113,25 @@
                     android:background="@color/z_grey_shade_3" />
 
                 <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/kotakmahindrabank"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/z_margin_small"
                     android:padding="@dimen/z_margin_large"
-                    android:text="State Bank Of India" />
+                    android:text="Kotak Mahindra Bank" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/z_grey_shade_3" />
+
+                <com.application.zimplyshop.widgets.CustomRadioButton
+                    android:id="@+id/yesbank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:padding="@dimen/z_margin_large"
+                    android:text="YES Bank" />
             </RadioGroup>
         </LinearLayout>
 
@@ -131,17 +147,19 @@
             android:id="@+id/netbankingbankslist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_margin_large"
+            android:layout_marginRight="@dimen/z_margin_large"
             android:layout_marginTop="@dimen/z_margin_large" />
 
         <Button
             android:id="@+id/paysecurely__codcod"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginBottom="@dimen/z_margin_mini"
-            android:layout_marginTop="@dimen/z_margin_mini"
+            android:layout_margin="@dimen/z_margin_mini"
             android:text="Pay Securely"
             android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
     </LinearLayout>
 
 </LinearLayout>

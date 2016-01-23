@@ -1,6 +1,7 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -8,17 +9,21 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewAppPaymentOptionsActivity;
 import com.application.zimplyshop.baseobjects.CartObject;
+import com.application.zimplyshop.widgets.CustomRadioButton;
+import com.application.zimplyshop.widgets.ZNothingSelectedSpinnerAdapter;
 import com.payu.india.Model.PaymentDetails;
 import com.payu.india.Model.PayuResponse;
 import com.payu.india.Payu.PayuConstants;
@@ -41,7 +46,8 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
     final int TYPE_COD = 5;
 
     private Context context;
-    int currentOpenPosition = 0;
+    int currentOpenPosition = 0, totalPrice;
+    boolean isCodNotAvailable;
 
     MyClickListener clickListener;
     boolean isOrderdetailShown;
@@ -55,12 +61,16 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
     PayuResponse payuResponse;
 
-    public NewAppPaymentOptionsActivityListAdapter(Context context, CartObject cartObject, PayuResponse payuResponse) {
+    String[] bankCodesFixed = {"SBIB", "HDFB", "ICIB", "AXIB", "162B", "YESB"};
+
+    public NewAppPaymentOptionsActivityListAdapter(Context context, CartObject cartObject, PayuResponse payuResponse, int totalPrice, boolean isCodNotAvailable) {
         this.context = context;
         this.cartObject = cartObject;
         clickListener = new MyClickListener();
         payuUtils = new PayuUtils();
         this.payuResponse = payuResponse;
+        this.totalPrice = totalPrice;
+        this.isCodNotAvailable = isCodNotAvailable;
     }
 
     @Override
@@ -173,7 +183,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
 
-            setDataForNetbankingBanks(holder.netBankingBanksList);
+            setDataForNetbankingBanks(holder);
         } else if (getItemViewType(position) == TYPE_DEBIT_CARD) {
             CreditCardHolder holder = (CreditCardHolder) holderCom;
             if (currentOpenPosition == position) {
@@ -191,6 +201,8 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
+
+            holder.skipCvvAndExpirytext.setVisibility(View.VISIBLE);
 
             addFunctionalityForCardNumberTextChanged(holder.cardNumber, holder.cartNumberTypeImage, holder.cvv);
 
@@ -212,6 +224,8 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
+
+            holder.skipCvvAndExpirytext.setVisibility(View.GONE);
 
             addFunctionalityForCardNumberTextChanged(holder.cardNumber, holder.cartNumberTypeImage, holder.cvv);
 
@@ -244,10 +258,25 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
+
+            if (isCodNotAvailable || totalPrice > 20000) {
+                holder.codEligibleLayout.setVisibility(View.GONE);
+                holder.codNotEligibleLayout.setVisibility(View.VISIBLE);
+                holder.codNotEligibletext.setTypeface(holder.codNotEligibletext.getTypeface(), Typeface.ITALIC);
+
+                if (isCodNotAvailable) {
+                    holder.codNotEligibletext.setText(context.getResources().getString(R.string.cod_not_avail));
+                } else {
+                    holder.codNotEligibletext.setText(context.getResources().getString(R.string.one_or_more_items_not_have_cod));
+                }
+            } else {
+                holder.codEligibleLayout.setVisibility(View.VISIBLE);
+                holder.codNotEligibleLayout.setVisibility(View.GONE);
+            }
         }
     }
 
-    private void setDataForNetbankingBanks(Spinner netBankingBanksList) {
+    private void setDataForNetbankingBanks(final NetBankingHolder holder) {
         ArrayList<String> banks = new ArrayList<>();
         for (PaymentDetails details : payuResponse.getNetBanks()) {
             banks.add(details.getBankName());
@@ -255,14 +284,80 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
         ArrayAdapter<String> adapterMonth = new ArrayAdapter<>(context, R.layout.simple_spinner_item_custom, banks);
         adapterMonth.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
-        netBankingBanksList.setAdapter(adapterMonth);
+
+        ZNothingSelectedSpinnerAdapter adapterNothingSelectedMonth = new ZNothingSelectedSpinnerAdapter(
+                adapterMonth, R.layout.spinner_item_nothing_selected, context,
+                "Select Bank");
+        holder.netBankingBanksList.setAdapter(adapterNothingSelectedMonth);
+        holder.netBankingBanksList.setPrompt("Select Bank");
+
+        final ArrayList<CustomRadioButton> listCheckBox = new ArrayList<>();
+        listCheckBox.add(holder.checkSbi);
+        listCheckBox.add(holder.checkHdfc);
+        listCheckBox.add(holder.checkIcici);
+        listCheckBox.add(holder.checkAxis);
+        listCheckBox.add(holder.checkKotak);
+        listCheckBox.add(holder.checkYes);
+
+        holder.checkAxis.setTag(holder);
+        holder.checkHdfc.setTag(holder);
+        holder.checkKotak.setTag(holder);
+        holder.checkYes.setTag(holder);
+        holder.checkIcici.setTag(holder);
+        holder.checkSbi.setTag(holder);
+
+        holder.checkAxis.setOnClickListener(clickListener);
+        holder.checkHdfc.setOnClickListener(clickListener);
+        holder.checkKotak.setOnClickListener(clickListener);
+        holder.checkYes.setOnClickListener(clickListener);
+        holder.checkIcici.setOnClickListener(clickListener);
+        holder.checkSbi.setOnClickListener(clickListener);
+
+        holder.netBankingBanksList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                for (CustomRadioButton check : listCheckBox) {
+                    check.setChecked(false);
+                }
+
+                if (position != 0) {
+                    String bankCodeSelected = payuResponse.getNetBanks().get(position - 1).getBankCode();
+                    for (int i = 0; i < bankCodesFixed.length; i++) {
+                        if (bankCodeSelected.equalsIgnoreCase(bankCodesFixed[i])) {
+                            listCheckBox.get(i).setChecked(true);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void selectSpinnerItemFromNetBank(NetBankingHolder holder, int pos) {
+        int positionToSelect = -1;
+        for (int i = 0; i < payuResponse.getNetBanks().size(); i++) {
+            if (payuResponse.getNetBanks().get(i).getBankCode().equalsIgnoreCase(bankCodesFixed[pos])) {
+                positionToSelect = i;
+                break;
+            }
+        }
+        holder.netBankingBanksList.setSelection(positionToSelect + 1, true);
     }
 
     private void addFunctionalityForSpinners(Spinner monthSpinner, Spinner yearSpinner) {
         String[] months = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
         ArrayAdapter<String> adapterMonth = new ArrayAdapter<>(context, R.layout.simple_spinner_item_custom, months);
         adapterMonth.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
-        monthSpinner.setAdapter(adapterMonth);
+
+        ZNothingSelectedSpinnerAdapter adapterNothingSelectedMonth = new ZNothingSelectedSpinnerAdapter(
+                adapterMonth, R.layout.spinner_item_nothing_selected, context,
+                "MM");
+        monthSpinner.setAdapter(adapterNothingSelectedMonth);
+        monthSpinner.setPrompt("MM");
 
         List<Integer> yearsList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
@@ -272,7 +367,12 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         }
         ArrayAdapter<Integer> adapterYear = new ArrayAdapter<>(context, R.layout.simple_spinner_item_custom, yearsList);
         adapterYear.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_custom);
-        yearSpinner.setAdapter(adapterYear);
+
+        ZNothingSelectedSpinnerAdapter adapterNothingSelectedYear = new ZNothingSelectedSpinnerAdapter(
+                adapterYear, R.layout.spinner_item_nothing_selected, context,
+                "YYYY");
+        yearSpinner.setAdapter(adapterNothingSelectedYear);
+        yearSpinner.setPrompt("YYYY");
     }
 
     private void addFunctionalityForCardNumberTextChanged(final EditText cardNumber, final ImageView cartNumberTypeImage, final EditText cvv) {
@@ -455,7 +555,9 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
         LinearLayout layoutHideContent, paymentModeTextLayout;
         Button paySecurely;
+        CustomRadioButton checkHdfc, checkIcici, checkSbi, checkAxis, checkYes, checkKotak;
         Spinner netBankingBanksList;
+        RadioGroup radioGroup;
 
         public NetBankingHolder(View v) {
             super(v);
@@ -463,6 +565,13 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             paymentModeTextLayout = (LinearLayout) v.findViewById(R.id.creditcardpaymentoptiontext);
             paySecurely = (Button) v.findViewById(R.id.paysecurely__codcod);
             netBankingBanksList = (Spinner) v.findViewById(R.id.netbankingbankslist);
+            checkAxis = (CustomRadioButton) v.findViewById(R.id.axisbank);
+            checkHdfc = (CustomRadioButton) v.findViewById(R.id.hdfcbank);
+            checkIcici = (CustomRadioButton) v.findViewById(R.id.icicibank);
+            checkSbi = (CustomRadioButton) v.findViewById(R.id.statebankofindia);
+            checkYes = (CustomRadioButton) v.findViewById(R.id.yesbank);
+            checkKotak = (CustomRadioButton) v.findViewById(R.id.kotakmahindrabank);
+            radioGroup = (RadioGroup) v.findViewById(R.id.cardRadioGroup);
         }
     }
 
@@ -471,6 +580,8 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         LinearLayout layoutHideContent, paymentModeTextLayout;
         TextView codAmountText;
         Button paySecurely;
+        LinearLayout codEligibleLayout, codNotEligibleLayout;
+        TextView codNotEligibletext;
 
         public CODHolder(View v) {
             super(v);
@@ -478,6 +589,9 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             paySecurely = (Button) v.findViewById(R.id.paysecurely__codcod);
             layoutHideContent = (LinearLayout) v.findViewById(R.id.hidethispaymentlayut);
             paymentModeTextLayout = (LinearLayout) v.findViewById(R.id.creditcardpaymentoptiontext);
+            codEligibleLayout = (LinearLayout) v.findViewById(R.id.cashdeleligible);
+            codNotEligibleLayout = (LinearLayout) v.findViewById(R.id.cashondevlirtklnvxvklkl);
+            codNotEligibletext = (TextView) v.findViewById(R.id.cashondevliverynotavailtext);
         }
     }
 
@@ -491,6 +605,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
         EditText cardNumber, cardName, cvv;
         Spinner monthSpinner, yearSpinner;
+        TextView skipCvvAndExpirytext;
 
         public CreditCardHolder(View v) {
             super(v);
@@ -505,6 +620,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             cartNumberTypeImage = (ImageView) v.findViewById(R.id.cartNumberTypeImage);
             monthSpinner = (Spinner) v.findViewById(R.id.monthspinnercreditcard);
             yearSpinner = (Spinner) v.findViewById(R.id.yearspinnercreditcard);
+            skipCvvAndExpirytext = (TextView) v.findViewById(R.id.maestrodebitcardskipcvv);
         }
     }
 
@@ -548,6 +664,30 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                         CreditCardHolder holder = (CreditCardHolder) v.getTag(R.integer.z_tag_holder_recycler_view);
                         ((NewAppPaymentOptionsActivity) context).openPayUWebViewForCreditCard(holder.cardNumber.getText().toString().trim(), holder.cardName.getText().toString().trim(), "06", "2022", holder.cvv.getText().toString().trim());
                     }
+                    break;
+                case R.id.icicibank:
+                    NetBankingHolder holder = (NetBankingHolder) v.getTag();
+                    selectSpinnerItemFromNetBank(holder, 2);
+                    break;
+                case R.id.hdfcbank:
+                    holder = (NetBankingHolder) v.getTag();
+                    selectSpinnerItemFromNetBank(holder, 1);
+                    break;
+                case R.id.statebankofindia:
+                    holder = (NetBankingHolder) v.getTag();
+                    selectSpinnerItemFromNetBank(holder, 0);
+                    break;
+                case R.id.axisbank:
+                    holder = (NetBankingHolder) v.getTag();
+                    selectSpinnerItemFromNetBank(holder, 3);
+                    break;
+                case R.id.kotakmahindrabank:
+                    holder = (NetBankingHolder) v.getTag();
+                    selectSpinnerItemFromNetBank(holder, 4);
+                    break;
+                case R.id.yesbank:
+                    holder = (NetBankingHolder) v.getTag();
+                    selectSpinnerItemFromNetBank(holder, 5);
                     break;
             }
         }

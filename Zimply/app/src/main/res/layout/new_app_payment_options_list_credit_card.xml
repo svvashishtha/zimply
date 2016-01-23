@@ -2,15 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/z_margin_large"
-    android:layout_marginRight="@dimen/z_margin_large"
-    android:background="@android:color/white"
+    android:layout_marginBottom="@dimen/z_margin_mini"
+    android:layout_marginLeft="@dimen/z_margin_small"
+    android:layout_marginRight="@dimen/z_margin_small"
+    android:layout_marginTop="@dimen/z_margin_mini"
+    android:background="@drawable/ic_shadow_card"
     android:orientation="vertical">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/z_grey_shade_3" />
 
     <LinearLayout
         android:id="@+id/creditcardpaymentoptiontext"
@@ -75,7 +72,7 @@
                     android:inputType="number"
                     android:padding="@dimen/z_margin_small"
                     android:textColor="@color/z_text_color_dark"
-                    android:textColorHint="@color/z_text_color_light"
+                    android:textColorHint="@color/z_grey_shade_4"
                     android:textSize="@dimen/font_medium" />
 
                 <ImageView
@@ -99,16 +96,18 @@
                 android:layout_marginTop="@dimen/z_margin_mini"
                 android:background="@drawable/edittext_selector_background_light"
                 android:hint="Name on card"
+                android:inputType="textPersonName"
                 android:padding="@dimen/z_margin_small"
                 android:textColor="@color/z_text_color_dark"
-                android:textColorHint="@color/z_text_color_light"
+                android:textColorHint="@color/z_grey_shade_4"
                 android:textSize="@dimen/font_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/z_margin_large"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -169,7 +168,7 @@
                     android:inputType="numberPassword"
                     android:padding="@dimen/z_margin_small"
                     android:textColor="@color/z_text_color_dark"
-                    android:textColorHint="@color/z_text_color_light"
+                    android:textColorHint="@color/z_grey_shade_4"
                     android:textSize="@dimen/font_medium"
                     android:typeface="normal" />
 
@@ -179,24 +178,37 @@
                     android:layout_marginLeft="@dimen/z_margin_small"
                     android:src="@drawable/ic_cvv" />
             </LinearLayout>
-
-            <com.application.zimplyshop.widgets.CustomCheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/z_margin_large"
-                android:checked="true"
-                android:text="Save this card for faster checkout" />
         </LinearLayout>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/maestrodebitcardskipcvv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_margin_large"
+            android:layout_marginRight="@dimen/z_margin_large"
+            android:layout_marginTop="@dimen/z_margin_small"
+            android:text="If your Maestro card does not have expiry date/CVV, skip these fields"
+            android:textColor="@color/z_text_color_light"
+            android:textSize="@dimen/font_small" />
+
+        <com.application.zimplyshop.widgets.CustomCheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_margin_small"
+            android:layout_marginRight="@dimen/z_margin_small"
+            android:layout_marginTop="@dimen/z_margin_small"
+            android:checked="true"
+            android:text="Save this card for faster checkout" />
 
         <Button
             android:id="@+id/paysecurely__codcod"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginBottom="@dimen/z_margin_mini"
-            android:layout_marginTop="@dimen/z_margin_mini"
+            android:layout_margin="@dimen/z_margin_mini"
             android:text="Pay Securely"
             android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
     </LinearLayout>
 
 </LinearLayout>

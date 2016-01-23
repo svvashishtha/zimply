@@ -149,6 +149,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         mPaymentParams.setUdf3("");
         mPaymentParams.setUdf4("");
         mPaymentParams.setUdf5("");
+        mPaymentParams.setUserCredentials(PAYU_KEY_MANDATORY + ":" + AppPreferences.getUserEmail(this));
 
         payuConfig = new PayuConfig();
         payuConfig.setEnvironment(PayuConstants.PRODUCTION_ENV);
@@ -161,7 +162,6 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         mPaymentParams.setExpiryMonth(expiryMonth);// MM
         mPaymentParams.setExpiryYear(expiryYear);// YYYY
         mPaymentParams.setCvv(cvv);
-        mPaymentParams.setUserCredentials(PAYU_KEY_MANDATORY + ":user_id");
     }
 
     public void generateHashFromServer() {
@@ -299,7 +299,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     @Override
     public void onPaymentRelatedDetailsResponse(PayuResponse res) {
         payuResponse = res;
-        adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj, payuResponse);
+        adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj, payuResponse, totalPrice, isCodNotAvailable);
         recyclerView.setAdapter(adapter);
     }
 
