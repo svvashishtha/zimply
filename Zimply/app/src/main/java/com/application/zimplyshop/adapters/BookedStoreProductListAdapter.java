@@ -3,6 +3,7 @@ package com.application.zimplyshop.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.application.zimplyshop.R;
@@ -18,6 +18,7 @@ import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class BookedStoreProductListAdapter extends
     Activity activity;
 
     BaseProductListObject obj;
+    private CheckLayoutOptions mListener;
+    private int count;
 
     public BookedStoreProductListAdapter(Activity activity, Context context,
                                          int height, BaseProductListObject obj) {
@@ -92,22 +95,17 @@ public class BookedStoreProductListAdapter extends
         isFooterRemoved = true;
         notifyItemRemoved(objs.size());
     }
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     @Override
     public int getItemCount() {
         if (objs != null) {
             if (isFooterRemoved) {
-                if (obj != null) {
-                    return objs.size() + 1;
-                } else {
-                    return objs.size();
-                }
+                return objs.size() + 1;
             } else {
-                if (obj != null) {
-                    return objs.size() + 2;
-                } else {
-                    return objs.size() + 1;
-                }
+                return objs.size() + 2;
             }
         }
         return 0;
@@ -116,79 +114,72 @@ public class BookedStoreProductListAdapter extends
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            if (obj != null) {
-                return TYPE_HEADER;
-            } else {
-                return TYPE_DATA;
-            }
-        } else if (position == objs.size() + 1) {
+        if (position == 0)
+            return TYPE_HEADER;
+        else if (position == objs.size() + 1) {
             return TYPE_LOADER;
-        } else if (position == objs.size()) {
-            if (obj != null) {
-                return TYPE_DATA;
-            } else {
-                return TYPE_LOADER;
-            }
         } else {
             return TYPE_DATA;
         }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holderCom, int position) {
         if (getItemViewType(position) == TYPE_DATA) {
-            final int newPos = (obj != null) ? position - 1 : position;
+            ProductViewHolder holder = (ProductViewHolder) holderCom;
+            position--;
+            final int positionTemp = position;
+
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, height);
-            ((ProductViewHolder) holder).img.setLayoutParams(lp);
-            if (objs.get(newPos).getImage() != null) {
-                if (((ProductViewHolder) holder).img.getTag() == null
-                        || !(((String) ((ProductViewHolder) holder).img
-                        .getTag()).equalsIgnoreCase(objs.get(newPos)
+            holder.img.setLayoutParams(lp);
+            if (objs.get(position).getImage() != null) {
+                if (holder.img.getTag() == null
+                        || !(((String) holder.img
+                        .getTag()).equalsIgnoreCase(objs.get(position)
                         .getImage()))) {
 
                     new ImageLoaderManager(activity).setImageFromUrl(
-                            objs.get(newPos).getImage(),
-                            ((ProductViewHolder) holder).img, "users", height,
+                            objs.get(position).getImage(),
+                            holder.img, "users", height,
                             height, true, false);
 
-                    ((ProductViewHolder) holder).img.setTag(objs.get(newPos)
+                    holder.img.setTag(objs.get(position)
                             .getImage());
                 }
             }
-            if (objs.get(newPos).is_o2o()) {
+            if (objs.get(position).is_o2o()) {
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.VISIBLE);
             } else {
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.GONE);
             }
-            ((ProductViewHolder) holder).productName.setText(objs.get(newPos)
+            ((ProductViewHolder) holder).productName.setText(objs.get(position)
                     .getName());
-            /*((ProductViewHolder) holder).productDiscountedPrice
+            ((ProductViewHolder) holder).productDiscountedPrice
                     .setText(mContext.getString(R.string.Rs) + " "
-                            + objs.get(newPos).getPrice());*/
+                            + Math.round(objs.get(position).getPrice()));
 
             ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
             ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
             try {
-                if (objs.get(newPos).getMrp() != objs.get(newPos).getPrice()) {
+                if (objs.get(position).getMrp() != objs.get(position).getPrice()) {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + objs.get(newPos).getPrice());
+                                    + objs.get(position).getPrice());
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.VISIBLE);
                     ((ProductViewHolder) holder).productPrice.setText(mContext
                             .getString(R.string.Rs)
                             + " "
-                            + objs.get(newPos).getMrp());
+                            + objs.get(position).getMrp());
                     ((ProductViewHolder) holder).productPrice
                             .setPaintFlags(((ProductViewHolder) holder).productPrice
                                     .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.VISIBLE);
-                    ((ProductViewHolder) holder).productDiscountFactor.setText(objs.get(newPos).getDiscount() + "% OFF");
+                    ((ProductViewHolder) holder).productDiscountFactor.setText(objs.get(position).getDiscount() + "% OFF");
                 } else {
                     ((ProductViewHolder) holder).productDiscountedPrice
                             .setText(mContext.getString(R.string.Rs) + " "
-                                    + Math.round(objs.get(newPos).getPrice()));
+                                    + Math.round(objs.get(position).getPrice()));
 
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
@@ -197,74 +188,43 @@ public class BookedStoreProductListAdapter extends
 
             }
 
+
             ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, NewProductDetailActivity.class);
-                    intent.putExtra("slug", objs.get(newPos).getSlug());
-                    intent.putExtra("id", objs.get(newPos).getId());
-                    intent.putExtra("title", objs.get(newPos).getName());
+                    intent.putExtra("slug", objs.get(positionTemp).getSlug());
+                    intent.putExtra("id", objs.get(positionTemp).getId());
+                    intent.putExtra("title", objs.get(positionTemp).getName());
 
                     //        GA Ecommerce
                     intent.putExtra("productActionListName", "Product List Item Click");
-                    intent.putExtra("screenName", "Booked Store Product List Activity");
+                    intent.putExtra("screenName", "Product List Activity");
                     intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
 
                     mContext.startActivity(intent);
                 }
             });
         } else if (getItemViewType(position) == TYPE_HEADER) {
-            ((HeaderViewHolder) holder).productName.setText(obj.getName());
-            ((HeaderViewHolder) holder).productLayout.setOnClickListener(new View.OnClickListener() {
+
+            final HeaderViewHolder holder = (HeaderViewHolder) holderCom;
+            holder.productCount.setText(count + " Products");
+            if (mListener.checkIsRecyclerViewInLongItemMode()) {
+                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.list_long_icon));
+            } else {
+                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.grid_icon));
+            }
+            holder.gridIconContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, NewProductDetailActivity.class);
-                    intent.putExtra("slug", obj.getSlug());
-                    intent.putExtra("id", obj.getId());
-                    intent.putExtra("title", obj.getName());
-
-                    //        GA Ecommerce
-                    intent.putExtra("productActionListName", "Header Clicked");
-                    intent.putExtra("screenName", "Booked Store Product List Activity");
-                    intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
-
-                    mContext.startActivity(intent);
+                   /* if (((ProductListingActivity) mContext).isRecyclerViewInLongItemMode) {
+                        holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),R.drawable.grid_icon));
+                    } else {
+                        holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.list_long_icon));
+                    }*/
+                    mListener.switchRecyclerViewLayoutManager();
                 }
             });
-            new ImageLoaderManager(activity).setImageFromUrl(
-                    obj.getImage(), ((HeaderViewHolder) holder).productImg, "users", height,
-                    height, true, false);
-
-            try {
-                if (obj.getMrp() != obj.getPrice()) {
-                    ((HeaderViewHolder) holder).productDiscountedPrice
-                            .setText(mContext.getString(R.string.Rs) + " "
-                                    + obj.getPrice());
-                    ((HeaderViewHolder) holder).productPrice.setVisibility(View.VISIBLE);
-                    ((HeaderViewHolder) holder).productPrice.setText(mContext
-                            .getString(R.string.Rs)
-                            + " "
-                            + obj.getMrp());
-                    ((HeaderViewHolder) holder).productPrice
-                            .setPaintFlags(((HeaderViewHolder) holder).productPrice
-                                    .getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    ((HeaderViewHolder) holder).productDiscountFactor.setVisibility(View.VISIBLE);
-                    ((HeaderViewHolder) holder).productDiscountFactor.setText(obj.getDiscount() + "% OFF");
-                } else {
-                    ((HeaderViewHolder) holder).productDiscountedPrice
-                            .setText(mContext.getString(R.string.Rs) + " "
-                                    + Math.round(obj.getPrice()));
-
-                    ((HeaderViewHolder) holder).productPrice.setVisibility(View.GONE);
-                    ((HeaderViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
-                }
-            } catch (NumberFormatException e) {
-
-            }
-
-
-        } else {
-
         }
 
     }
@@ -275,19 +235,19 @@ public class BookedStoreProductListAdapter extends
         RecyclerView.ViewHolder holder;
         if (itemViewType == TYPE_DATA) {
             View view = LayoutInflater.from(viewGrp.getContext()).inflate(
-                    R.layout.product_grid_item_layout, null);
+                    R.layout.product_grid_item_layout, viewGrp, false);
             holder = new ProductViewHolder(view);
-        } else if (itemViewType == TYPE_LOADER) {
+        } else if (itemViewType == TYPE_HEADER) {
+            View v = LayoutInflater.from(viewGrp.getContext()).inflate(R.layout.product_listing_activity_list_header_layout, viewGrp, false);
+            holder = new HeaderViewHolder(v);
+        } else {
             View view = LayoutInflater.from(viewGrp.getContext()).inflate(
                     R.layout.progress_footer_layout, viewGrp, false);
             holder = new LoadingViewHolder(view);
-        } else {
-            View view = LayoutInflater.from(viewGrp.getContext()).inflate(
-                    R.layout.booking_list_first_item_layout, viewGrp, false);
-            holder = new HeaderViewHolder(view);
         }
         return holder;
     }
+
 
     public void removePreviousData() {
         objs.clear();
@@ -323,23 +283,24 @@ public class BookedStoreProductListAdapter extends
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView productName, productPrice, productDiscountedPrice, productDiscountFactor;
-        ImageView productImg;
-        RelativeLayout productLayout;
+        LinearLayout gridIconContainer;
+        ImageView gridIcon;
+        CustomTextView productCount;
 
-        public HeaderViewHolder(View view) {
-            super(view);
-            productImg = (ImageView) view.findViewById(R.id.product_img);
-            productName = (TextView) view.findViewById(R.id.product_name);
-            productDiscountedPrice = (TextView) view
-                    .findViewById(R.id.product_disounted_price);
-            productPrice = (TextView) view
-                    .findViewById(R.id.product_price);
-            productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
-            productLayout = (RelativeLayout) view.findViewById(R.id.product_card);
+        public HeaderViewHolder(View v) {
+            super(v);
+            productCount = (CustomTextView) v.findViewById(R.id.product_count);
+            gridIcon = (ImageView) v.findViewById(R.id.gridicon);
+            gridIconContainer = (LinearLayout) v.findViewById(R.id.gridbuttonswitcher);
         }
-
     }
-
+    public void setCheckLayoutOptionListener(CheckLayoutOptions mListener)
+    {
+        this.mListener = mListener;
+    }
+    public interface CheckLayoutOptions{
+        boolean checkIsRecyclerViewInLongItemMode();
+        void switchRecyclerViewLayoutManager();
+    }
 
 }

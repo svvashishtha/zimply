@@ -83,7 +83,8 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
     //    used to handle no items view when the user visits the screen for the first time without appliying any filters
     boolean setFilterDataToArbitraryDefaultsIfNoData;
-
+    private boolean isRecyclerViewInLongItemMode;
+    GridLayoutManager gridLayoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,8 +102,22 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
+        gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
-        productList.setLayoutManager(new GridLayoutManager(this, 2));
+            @Override
+            public int getSpanSize(int position) {
+                if (position == 0)
+                    return 2;
+                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
+                    return 2;
+
+                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
+                    return 2;
+                } else return 1;
+            }
+        });
+        productList.setLayoutManager(gridLayoutManager);
         productList.addItemDecoration(new SpaceGridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
                 (int) getResources().getDimension(R.dimen.margin_mini), true));
@@ -296,12 +311,47 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         return subCategory;
     }
 
-    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs,ProductListObject object) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
             BookedStoreProductListAdapter adapter = new BookedStoreProductListAdapter(
                     this, this, height, obj);
+            adapter.setCheckLayoutOptionListener(new BookedStoreProductListAdapter.CheckLayoutOptions() {
+                @Override
+                public boolean checkIsRecyclerViewInLongItemMode() {
+                    return isRecyclerViewInLongItemMode;
+                }
+
+                @Override
+                public void switchRecyclerViewLayoutManager() {
+                    if (isRecyclerViewInLongItemMode) {
+                        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                            @Override
+                            public int getSpanSize(int position) {
+                                if (position == 0)
+                                    return 2;
+                                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
+                                    return 2;
+
+                                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
+                                    return 2;
+                                } else return 1;
+                            }
+                        });
+                        productList.setLayoutManager(gridLayoutManager);
+                        productList.getAdapter().notifyDataSetChanged();
+                    } else {
+                        productList.setLayoutManager(new LinearLayoutManager(BookingStoreProductListingActivity.this));
+                        productList.getAdapter().notifyDataSetChanged();
+                    }
+                    isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
+
+                }
+            });
+            adapter.setCount(object.getCount());
+
             productList.setAdapter(adapter);
             productList
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -333,27 +383,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
                             super.onScrollStateChanged(recyclerView, newState);
                         }
                     });
-            ((GridLayoutManager) productList.getLayoutManager())
-                    .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                        @Override
-                        public int getSpanSize(int position) {
-                            switch (productList
-                                    .getAdapter().getItemViewType(position)) {
-                                case 0:
-                                    if (obj != null) {
-                                        return 2;
-                                    } else {
-                                        return 1;
-                                    }
-                                case 1:
-                                    return 1;
-                                case 2:
-                                    return 2;
-                                default:
-                                    return -1;
-                            }
-                        }
-                    });
+
 
         }
         ((BookedStoreProductListAdapter) productList.getAdapter())
@@ -602,7 +632,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
                 if (productList.getAdapter() == null) {
                     setMinimumAndMaximumFilterPriceValues(((ProductListObject) obj));
                 }
-                setAdapterData(((ProductListObject) obj).getProducts());
+                setAdapterData(((ProductListObject) obj).getProducts(),(ProductListObject) obj);
                 nextUrl = ((ProductListObject) obj).getNext_url();
                 showView();
                 changeViewVisiblity(productList, View.VISIBLE);

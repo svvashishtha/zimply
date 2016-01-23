@@ -101,7 +101,7 @@ public class ProductsRecyclerViewGridAdapter extends
             if (isFooterRemoved) {
                 return objs.size() + 1;
             } else {
-                return objs.size() + 1 + 1;
+                return objs.size() + 2;
             }
         }
         return 0;
@@ -213,11 +213,6 @@ public class ProductsRecyclerViewGridAdapter extends
             holder.gridIconContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   /* if (((ProductListingActivity) mContext).isRecyclerViewInLongItemMode) {
-                        holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),R.drawable.grid_icon));
-                    } else {
-                        holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.list_long_icon));
-                    }*/
                     mListener.switchRecyclerViewLayoutManager();
                 }
             });
