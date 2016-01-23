@@ -319,11 +319,8 @@ public class AppPaymentOptionsActivity extends BaseActivity implements View.OnCl
                                             .setQuantity(cartObj.getCart().getDetail().get(i).getQty());
 // Add the step number and additional info about the checkout to the action.
                                     ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
-                                            .setCheckoutStep(5)
-                                            .setCheckoutOptions("Purchase Product with" + (paymentType == PAYMENT_TYPE_CASH ? " COD" : " Online payment"));
-                                    ZTracker.checkOutGaEvents(productAction, product, AppPaymentOptionsActivity.this);
                                             .setCheckoutStep(6)
-                                            .setCheckoutOptions("Purchase Product with" + (paymentType == PAYMENT_TYPE_CASH? " COD":" Online payment"));
+                                            .setCheckoutOptions("Purchase Product with" + (paymentType == PAYMENT_TYPE_CASH ? " COD" : " Online payment"));
                                     ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
                                 }
                             } catch (Exception e) {

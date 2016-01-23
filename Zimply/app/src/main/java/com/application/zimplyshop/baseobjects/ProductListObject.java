@@ -6,7 +6,7 @@ public class ProductListObject {
 
     private String next_url;
 
-    private int count;
+    private int count = 0;
 
     private ArrayList<BaseProductListObject> products;
 

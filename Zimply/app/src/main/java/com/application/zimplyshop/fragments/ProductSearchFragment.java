@@ -46,7 +46,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
     private ArrayList<CategoryObject> products;
     private AsyncTask mAsyncRunning;
     private ListView mListView;
-    private ProductListAdapter adapter1;
+   // private ProductListAdapter adapter1;
 
     View getView;
     Activity activity;
@@ -206,7 +206,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
 
                 products.addAll(objects);
                 newProductListAdapter = new NewProductListAdapter((ParentCategory) obj, activity);
-                adapter1 = new ProductListAdapter(activity, R.layout.simple_list_item, products);
+                //adapter1 = new ProductListAdapter(activity, R.layout.simple_list_item, products);
                 mListView.setAdapter(newProductListAdapter);
                 getView.findViewById(R.id.progress_container).setVisibility(View.GONE);
 
