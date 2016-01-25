@@ -302,23 +302,43 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         holder.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int index = group.indexOfChild(group.findViewById(group.getCheckedRadioButtonId()));
-                selectSpinnerItemFromNetBank(holder, index);
+                int id = group.getCheckedRadioButtonId();
+                CustomRadioButton radioButton = (CustomRadioButton) group.findViewById(id);
+                if (!radioButton.isChecked())
+                    return;
+                switch (id) {
+                    case R.id.statebankofindia:
+                        selectSpinnerItemFromNetBank(holder, 0);
+                        break;
+                    case R.id.hdfcbank:
+                        selectSpinnerItemFromNetBank(holder, 1);
+                        break;
+                    case R.id.icicibank:
+                        selectSpinnerItemFromNetBank(holder, 2);
+                        break;
+                    case R.id.axisbank:
+                        selectSpinnerItemFromNetBank(holder, 3);
+                        break;
+                    case R.id.kotakmahindrabank:
+                        selectSpinnerItemFromNetBank(holder, 4);
+                        break;
+                    case R.id.yesbank:
+                        selectSpinnerItemFromNetBank(holder, 5);
+                        break;
+                }
             }
         });
 
         holder.netBankingBanksList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                for (CustomRadioButton check : listCheckBox) {
-                    check.setChecked(false);
-                }
-
                 if (position != 0) {
                     String bankCodeSelected = payuResponse.getNetBanks().get(position - 1).getBankCode();
                     for (int i = 0; i < bankCodesFixed.length; i++) {
                         if (bankCodeSelected.equalsIgnoreCase(bankCodesFixed[i])) {
                             listCheckBox.get(i).setChecked(true);
+                        } else {
+                            listCheckBox.get(i).setChecked(false);
                         }
                     }
                 }
