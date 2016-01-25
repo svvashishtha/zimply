@@ -199,13 +199,14 @@ public class ProductsRecyclerViewGridAdapter extends
             }
 
 
-            ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
+            final int finalPosition = position;
+            ((ProductViewHolder) holder).itemContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(AppPreferences.isUserLogIn(mContext)){
+                    if (AppPreferences.isUserLogIn(mContext)) {
 
-                    }else{
-                        RecentProductsDBWrapper.addProduct(objs.get(position),1,System.currentTimeMillis());
+                    } else {
+                        RecentProductsDBWrapper.addProduct(objs.get(positionTemp), 1, System.currentTimeMillis());
                     }
 
                     Intent intent = new Intent(mContext, NewProductDetailActivity.class);
@@ -274,7 +275,7 @@ public class ProductsRecyclerViewGridAdapter extends
         ImageView img, buyOfflineTag;
         TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
         LinearLayout priceContainer;
-
+        View itemContainer;
         public ProductViewHolder(View view) {
             super(view);
             img = (ImageView) view.findViewById(R.id.product_img);
@@ -286,6 +287,7 @@ public class ProductsRecyclerViewGridAdapter extends
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
             buyOfflineTag = (ImageView) view.findViewById(R.id.buy_offline_tag);
             priceContainer = (LinearLayout) view.findViewById(R.id.price_container);
+            itemContainer = view.findViewById(R.id.productgriditemcoontainerlayout);
         }
     }
 

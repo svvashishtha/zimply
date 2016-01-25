@@ -5,10 +5,12 @@ import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -26,11 +28,13 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.NewProductDetailAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
 import com.application.zimplyshop.baseobjects.SimilarProductsListObject;
+import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -80,7 +84,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     //    Google analytics ecommerce
     String productActionListName, screenName, actionPerformed;
     int position;
-
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

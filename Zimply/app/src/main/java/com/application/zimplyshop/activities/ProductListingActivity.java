@@ -52,8 +52,8 @@ import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
+import com.application.zimplyshop.widgets.GridItemDecorator;
 import com.application.zimplyshop.widgets.RangeSeekBar;
-import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
 
 import java.util.ArrayList;
 
@@ -93,6 +93,7 @@ public class ProductListingActivity extends BaseActivity implements
     private String categoryName;
     private ArrayList<CustomRadioButton> priceRadioButtonsArrayList;
     SubCategoryAdapter subCategoryAdapter;
+    GridItemDecorator gridDecor,linearDecor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +115,12 @@ public class ProductListingActivity extends BaseActivity implements
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
-
+        gridDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),false);
+        linearDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),true);
         gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
@@ -130,9 +136,7 @@ public class ProductListingActivity extends BaseActivity implements
             }
         });
         productList.setLayoutManager(gridLayoutManager);
-        productList.addItemDecoration(new SpaceGridItemDecorator(
-                (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini)));
+        productList.addItemDecoration(gridDecor);
 
         // setProductsGrid();
         discountId = getIntent().getIntExtra("discount_id", -1);
@@ -189,7 +193,6 @@ public class ProductListingActivity extends BaseActivity implements
             }
         }, 500);
     }
-
 
 
     boolean isHideFilter;
@@ -284,9 +287,14 @@ public class ProductListingActivity extends BaseActivity implements
                                 } else return 1;
                             }
                         });
+
                         productList.setLayoutManager(gridLayoutManager);
+                        productList.removeItemDecoration(linearDecor);
+                        productList.addItemDecoration(gridDecor);
                         productList.getAdapter().notifyDataSetChanged();
                     } else {
+                        productList.removeItemDecoration(gridDecor);
+                        productList.addItemDecoration(linearDecor);
                         productList.setLayoutManager(new LinearLayoutManager(ProductListingActivity.this));
                         productList.getAdapter().notifyDataSetChanged();
                     }

@@ -43,8 +43,8 @@ import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
+import com.application.zimplyshop.widgets.GridItemDecorator;
 import com.application.zimplyshop.widgets.RangeSeekBar;
-import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
 
 import java.util.ArrayList;
 
@@ -84,6 +84,7 @@ public class SearchResultsActivity extends BaseActivity implements
     private GridLayoutManager gridLayoutManager;
 
     public boolean isRecyclerViewInLongItemMode = false;
+    GridItemDecorator gridDecor,linearDecor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +104,16 @@ public class SearchResultsActivity extends BaseActivity implements
         filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
+        gridDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),false);
+        linearDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),true);
+
         gridLayoutManager = new GridLayoutManager(this, 2);
         productList.setLayoutManager(gridLayoutManager);
-        productList.addItemDecoration(new SpaceGridItemDecorator(
-                (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini)));
+        productList.addItemDecoration(gridDecor);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
             @Override
@@ -264,8 +270,12 @@ public class SearchResultsActivity extends BaseActivity implements
                             }
                         });
                         productList.setLayoutManager(gridLayoutManager);
+                        productList.removeItemDecoration(linearDecor);
+                        productList.addItemDecoration(gridDecor);
                         productList.getAdapter().notifyDataSetChanged();
                     } else {
+                        productList.removeItemDecoration(gridDecor);
+                        productList.addItemDecoration(linearDecor);
                         productList.setLayoutManager(new LinearLayoutManager(SearchResultsActivity.this));
                         productList.getAdapter().notifyDataSetChanged();
                     }
