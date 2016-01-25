@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.application.zimplyshop.baseobjects.RecentSearchObject;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.utils.CommonLib;
 
@@ -55,9 +56,9 @@ public class RecentSearchesDBManager extends SQLiteOpenHelper {
 
     }
 
-    public int addProduct(String currentTag, int userId, long timestamp) {
+    public int addProduct(RecentSearchObject currentTag, int userId, long timestamp) {
 
-        ArrayList<String> users = getProducts(userId);
+        ArrayList<RecentSearchObject> users = getProducts(userId);
         int result = -1;
 
         try {
@@ -70,8 +71,8 @@ public class RecentSearchesDBManager extends SQLiteOpenHelper {
 
             boolean exists = false;
 
-            for(String tag: users) {
-                if(tag.equalsIgnoreCase(currentTag))
+            for(RecentSearchObject tag: users) {
+                if(tag== currentTag)
                     exists = true;
             }
 
@@ -86,7 +87,7 @@ public class RecentSearchesDBManager extends SQLiteOpenHelper {
                 byte[] bundle = GetRequestManager.Serialize_Object(currentTag);
 
                 values.put(USERID, userId);
-                values.put(TYPE, currentTag);
+                values.put(TYPE, currentTag.getType());
                 values.put(BUNDLE, bundle);
 
                 // 	Inserting Row
@@ -109,12 +110,12 @@ public class RecentSearchesDBManager extends SQLiteOpenHelper {
         // Closing database connection
     }
 
-    public ArrayList<String> getProducts(int userId) {
-        String location;
+    public ArrayList<RecentSearchObject> getProducts(int userId) {
+        RecentSearchObject location;
         this.getReadableDatabase();
         SQLiteDatabase db = null;
         Cursor cursor = null;
-        ArrayList<String> queries = new ArrayList<String>();
+        ArrayList<RecentSearchObject> queries = new ArrayList<RecentSearchObject>();
 
         try{
             db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
@@ -126,7 +127,7 @@ public class RecentSearchesDBManager extends SQLiteOpenHelper {
             for (int i=0;i<cursor.getCount();i++)
             {
                 cursor.moveToPosition(i);
-                location = (String) GetRequestManager.Deserialize_Object(cursor.getBlob(4), "");
+                location = (RecentSearchObject) GetRequestManager.Deserialize_Object(cursor.getBlob(4), "");
                 queries.add(location);
             }
 

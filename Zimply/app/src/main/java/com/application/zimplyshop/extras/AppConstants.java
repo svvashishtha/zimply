@@ -75,6 +75,7 @@ public interface AppConstants {
     int TYPE_CATEGORY = 1;
     int TYPE_SUB_CATEGORY = 2;
     int TYPE_SUB_SUB_CATEGORY = 3;
+    int TYPE_PRODUCT=4;
 
     int TYPE_PHOTO_FILTER_STYLE = 1;
     int TYPE_PHOTO_FILTER_BUDGET = 2;
