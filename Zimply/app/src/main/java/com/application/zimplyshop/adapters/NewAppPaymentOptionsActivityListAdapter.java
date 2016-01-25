@@ -299,19 +299,13 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         listCheckBox.add(holder.checkKotak);
         listCheckBox.add(holder.checkYes);
 
-        holder.checkAxis.setTag(holder);
-        holder.checkHdfc.setTag(holder);
-        holder.checkKotak.setTag(holder);
-        holder.checkYes.setTag(holder);
-        holder.checkIcici.setTag(holder);
-        holder.checkSbi.setTag(holder);
-
-        holder.checkAxis.setOnClickListener(clickListener);
-        holder.checkHdfc.setOnClickListener(clickListener);
-        holder.checkKotak.setOnClickListener(clickListener);
-        holder.checkYes.setOnClickListener(clickListener);
-        holder.checkIcici.setOnClickListener(clickListener);
-        holder.checkSbi.setOnClickListener(clickListener);
+        holder.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int index = group.indexOfChild(group.findViewById(group.getCheckedRadioButtonId()));
+                selectSpinnerItemFromNetBank(holder, index);
+            }
+        });
 
         holder.netBankingBanksList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -337,10 +331,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         });
     }
 
-    private void selectSpinnerItemFromNetBank(NetBankingHolder holder, int pos, View check) {
-        CustomRadioButton checkBox = (CustomRadioButton) check;
-        checkBox.setChecked(true);
-
+    private void selectSpinnerItemFromNetBank(NetBankingHolder holder, int pos) {
         int positionToSelect = -1;
         for (int i = 0; i < payuResponse.getNetBanks().size(); i++) {
             if (payuResponse.getNetBanks().get(i).getBankCode().equalsIgnoreCase(bankCodesFixed[pos])) {
@@ -348,7 +339,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                 break;
             }
         }
-        holder.netBankingBanksList.setSelection(positionToSelect + 1, true);
+        holder.netBankingBanksList.setSelection(positionToSelect + 1);
     }
 
     private void addFunctionalityForSpinners(Spinner monthSpinner, Spinner yearSpinner) {
@@ -667,30 +658,6 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                         CreditCardHolder holder = (CreditCardHolder) v.getTag(R.integer.z_tag_holder_recycler_view);
                         ((NewAppPaymentOptionsActivity) context).openPayUWebViewForCreditCard(holder.cardNumber.getText().toString().trim(), holder.cardName.getText().toString().trim(), "06", "2022", holder.cvv.getText().toString().trim());
                     }
-                    break;
-                case R.id.icicibank:
-                    NetBankingHolder holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 2, v);
-                    break;
-                case R.id.hdfcbank:
-                    holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 1, v);
-                    break;
-                case R.id.statebankofindia:
-                    holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 0, v);
-                    break;
-                case R.id.axisbank:
-                    holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 3, v);
-                    break;
-                case R.id.kotakmahindrabank:
-                    holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 4, v);
-                    break;
-                case R.id.yesbank:
-                    holder = (NetBankingHolder) v.getTag();
-                    selectSpinnerItemFromNetBank(holder, 5, v);
                     break;
             }
         }
