@@ -12,12 +12,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewAppPaymentOptionsActivity;
@@ -130,14 +132,36 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holderCom, int position) {
         if (getItemViewType(position) == TYPE_SAVED_CARDS) {
-            // make this value -1 if there is no saved card
-//            currentOpenPosition = -1;
-
             SavedCardsHolder holder = (SavedCardsHolder) holderCom;
             if (currentOpenPosition == position) {
                 holder.layoutHideContent.setVisibility(View.VISIBLE);
             } else {
                 holder.layoutHideContent.setVisibility(View.GONE);
+            }
+
+            if (payuResponse.getStoredCards() == null || payuResponse.getStoredCards().size() == 0) {
+                currentOpenPosition = -1;
+                holder.mainSavedCardsBgLayout.setVisibility(View.GONE);
+            } else {
+                currentOpenPosition = 0;
+                holder.mainSavedCardsBgLayout.setVisibility(View.VISIBLE);
+
+                holder.savedCardsDynamicContainer.removeAllViews();
+                for (int i = 0; i < payuResponse.getStoredCards().size(); i++) {
+                    View view = LayoutInflater.from(context).inflate(R.layout.new_app_payment_options_saved_card_list_item, holder.savedCardsDynamicContainer, false);
+                    CustomRadioButton radioButton = (CustomRadioButton) view.findViewById(R.id.radiobuttonsavedcard);
+                    LinearLayout savedCardButtonLayout = (LinearLayout) view.findViewById(R.id.savecardbuttonlaut);
+
+                    radioButton.setText(payuResponse.getStoredCards().get(i).getMaskedCardNumber());
+                    if (i == 0) {
+                        radioButton.setChecked(true);
+                        savedCardButtonLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        radioButton.setChecked(false);
+                        savedCardButtonLayout.setVisibility(View.GONE);
+                    }
+                    holder.savedCardsDynamicContainer.addView(view);
+                }
             }
 
             holder.paymentModeTextLayout.setTag(position);
@@ -164,10 +188,6 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             holder.totalSum.setText(context.getResources().getString(R.string.Rs) + " " + Math.round(price));
             holder.totalPayment.setText(context.getResources().getString(R.string.Rs) + " " + Math.round(totalPrice));
             holder.shipping.setText((cartObject.getCart().getTotal_shipping() == 0) ? "Free" : (context.getResources().getString(R.string.Rs) + " " + cartObject.getCart().getTotal_shipping()));
-
-            holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
-            holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
-            holder.paySecurely.setOnClickListener(clickListener);
         } else if (getItemViewType(position) == TYPE_NET_BANKING) {
             NetBankingHolder holder = (NetBankingHolder) holderCom;
             if (currentOpenPosition == position) {
@@ -240,6 +260,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
             holder.paymentModeTextLayout.setTag(position);
             holder.paymentModeTextLayout.setOnClickListener(clickListener);
+
             holder.paySecurely.setTag(R.integer.z_tag_position_recycler_view, position);
             holder.paySecurely.setTag(R.integer.z_tag_holder_recycler_view, holder);
             holder.paySecurely.setOnClickListener(clickListener);
@@ -534,7 +555,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         TextView viewOrderDetailsButton;
         TextView totalPayment, orderTotal, shipping, totalSum, discountValue;
         LinearLayout discountLayout;
-        Button paySecurely;
+        LinearLayout mainSavedCardsBgLayout, savedCardsDynamicContainer;
 
         public SavedCardsHolder(View v) {
             super(v);
@@ -547,8 +568,9 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             totalSum = (TextView) v.findViewById(R.id.total_sum);
             orderTotal = (TextView) v.findViewById(R.id.paymentheaderpricetext);
             discountLayout = (LinearLayout) v.findViewById(R.id.applied_coupon_discount);
-            paySecurely = (Button) v.findViewById(R.id.paysecurely__codcod);
             discountValue = (TextView) v.findViewById(R.id.discount);
+            mainSavedCardsBgLayout = (LinearLayout) v.findViewById(R.id.savedcardmainbglayout);
+            savedCardsDynamicContainer = (LinearLayout) v.findViewById(R.id.savedcardsdynamic);
         }
     }
 
@@ -616,7 +638,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         ImageView crediTordebitImage;
         Button paySecurely;
         ImageView cartNumberTypeImage;
-
+        CheckBox savecardCheck;
         EditText cardNumber, cardName, cvv;
         Spinner monthSpinner, yearSpinner;
         TextView skipCvvAndExpirytext;
@@ -635,6 +657,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             monthSpinner = (Spinner) v.findViewById(R.id.monthspinnercreditcard);
             yearSpinner = (Spinner) v.findViewById(R.id.yearspinnercreditcard);
             skipCvvAndExpirytext = (TextView) v.findViewById(R.id.maestrodebitcardskipcvv);
+            savecardCheck = (CheckBox) v.findViewById(R.id.savecreditcard);
         }
     }
 
@@ -676,7 +699,32 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                         ((NewAppPaymentOptionsActivity) context).sendPaymentSuccessFullCashRequest();
                     } else if (getItemViewType(pos) == TYPE_CREDIT_CARD) {
                         CreditCardHolder holder = (CreditCardHolder) v.getTag(R.integer.z_tag_holder_recycler_view);
-                        ((NewAppPaymentOptionsActivity) context).openPayUWebViewForCreditCard(holder.cardNumber.getText().toString().trim(), holder.cardName.getText().toString().trim(), "06", "2022", holder.cvv.getText().toString().trim());
+                        String cardNumber = holder.cardNumber.getText().toString().trim().replace(" ", "");
+                        String expiryMonth = null;
+                        if (holder.monthSpinner.getSelectedItemPosition() != 0)
+                            expiryMonth = holder.monthSpinner.getSelectedItem().toString();
+                        String expiryYear = null;
+                        if (holder.yearSpinner.getSelectedItemPosition() != 0)
+                            expiryYear = holder.yearSpinner.getSelectedItem().toString();
+                        ((NewAppPaymentOptionsActivity) context).openPayUWebViewForCreditCard(cardNumber, holder.cardName.getText().toString().trim(), expiryMonth, expiryYear, holder.cvv.getText().toString().trim(), holder.savecardCheck.isChecked());
+                    } else if (getItemViewType(pos) == TYPE_DEBIT_CARD) {
+                        CreditCardHolder holder = (CreditCardHolder) v.getTag(R.integer.z_tag_holder_recycler_view);
+                        String cardNumber = holder.cardNumber.getText().toString().trim().replace(" ", "");
+                        String expiryMonth = null;
+                        if (holder.monthSpinner.getSelectedItemPosition() != 0)
+                            expiryMonth = holder.monthSpinner.getSelectedItem().toString();
+                        String expiryYear = null;
+                        if (holder.yearSpinner.getSelectedItemPosition() != 0)
+                            expiryYear = holder.yearSpinner.getSelectedItem().toString();
+                        ((NewAppPaymentOptionsActivity) context).openPayUWebViewForCreditCard(cardNumber, holder.cardName.getText().toString().trim(), expiryMonth, expiryYear, holder.cvv.getText().toString().trim(), holder.savecardCheck.isChecked());
+                    } else if (getItemViewType(pos) == TYPE_NET_BANKING) {
+                        NetBankingHolder holder = (NetBankingHolder) v.getTag(R.integer.z_tag_holder_recycler_view);
+                        if (holder.netBankingBanksList.getSelectedItemPosition() == -1) {
+                            Toast.makeText(context, "Please select a bank", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String bankCode = payuResponse.getNetBanks().get(holder.netBankingBanksList.getSelectedItemPosition() - 1).getBankCode();
+                            ((NewAppPaymentOptionsActivity) context).openPaymentUsingNetBanking(bankCode);
+                        }
                     }
                     break;
             }

@@ -204,6 +204,7 @@
             android:textSize="@dimen/font_small" />
 
         <com.application.zimplyshop.widgets.CustomCheckBox
+            android:id="@+id/savecreditcard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/z_margin_small"

@@ -155,13 +155,45 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         payuConfig.setEnvironment(PayuConstants.PRODUCTION_ENV);
     }
 
-    public void openPayUWebViewForCreditCard(String cardNumber, String cardName, String expiryMonth, String expiryYear, String cvv) {
+    public void openPaymentUsingNetBanking(String bankCode) {
+        mPaymentParams.setBankCode(bankCode);
+        PostData postData = new PaymentPostParams(mPaymentParams, PayuConstants.NB).getPaymentPostParams();
+        if (postData.getCode() == PayuErrors.NO_ERROR) {
+            // launch webview
+            payuConfig.setData(postData.getResult());
+            Intent intent = new Intent(this, PayUWebViewActivity.class);
+            intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
+            startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
+        } else {
+            // something went wrong
+            Toast.makeText(this, postData.getResult(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void openPayUWebViewForCreditCard(String cardNumber, String cardName, String expiryMonth, String expiryYear, String cvv, boolean checked) {
         mPaymentParams.setCardNumber(cardNumber);
         mPaymentParams.setCardName(cardName);
         mPaymentParams.setNameOnCard(cardName);
         mPaymentParams.setExpiryMonth(expiryMonth);// MM
         mPaymentParams.setExpiryYear(expiryYear);// YYYY
         mPaymentParams.setCvv(cvv);
+
+        if (checked) {
+            mPaymentParams.setStoreCard(1);
+        } else
+            mPaymentParams.setStoreCard(0);
+
+        PostData postData = new PaymentPostParams(mPaymentParams, PayuConstants.CC).getPaymentPostParams();
+        if (postData.getCode() == PayuErrors.NO_ERROR) {
+            // launch webview
+            payuConfig.setData(postData.getResult());
+            Intent intent = new Intent(this, PayUWebViewActivity.class);
+            intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
+            startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
+        } else {
+            // something went wrong
+            Toast.makeText(this, postData.getResult(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void generateHashFromServer() {
@@ -302,21 +334,6 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj, payuResponse, totalPrice, isCodNotAvailable);
         recyclerView.setAdapter(adapter);
     }
-
-    private void launchCreditCardWebView() {
-        PostData postData = new PaymentPostParams(mPaymentParams, PayuConstants.CC).getPaymentPostParams();
-        if (postData.getCode() == PayuErrors.NO_ERROR) {
-            // launch webview
-            payuConfig.setData(postData.getResult());
-            Intent intent = new Intent(this, PayUWebViewActivity.class);
-            intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
-            startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
-        } else {
-            // something went wrong
-            Toast.makeText(this, postData.getResult(), Toast.LENGTH_LONG).show();
-        }
-    }
-
 
     public void sendPaymentSuccessFullRequest() {
         paymentType = PAYMENT_TYPE_CARD;

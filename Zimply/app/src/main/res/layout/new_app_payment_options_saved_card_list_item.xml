@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/z_margin_large"
+        android:paddingRight="@dimen/z_margin_large">
+
+        <com.application.zimplyshop.widgets.CustomRadioButton
+            android:id="@+id/radiobuttonsavedcard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6725XXXXXX536" />
+
+
+        <LinearLayout
+            android:layout_width="@dimen/z_item_height_48"
+            android:layout_height="@dimen/z_item_height_48"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/z_margin_large"
+                android:layout_height="@dimen/z_margin_large"
+                android:src="@drawable/delete" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.application.zimplyshop.widgets.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/z_item_height_48"
+        android:text="Enter CVV No."
+        android:textColor="@color/z_text_color_light"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/savecardbuttonlaut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_item_height_48"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/z_margin_large"
+            android:paddingTop="@dimen/z_margin_small">
+
+            <com.application.zimplyshop.widgets.CustomEdittext
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_selector_background_light"
+                android:hint="CVV"
+                android:inputType="numberPassword"
+                android:padding="@dimen/z_margin_small"
+                android:textColor="@color/z_text_color_dark"
+                android:textColorHint="@color/z_text_color_light"
+                android:textSize="@dimen/font_medium"
+                android:typeface="normal" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="@dimen/z_margin_small"
+                android:src="@drawable/ic_cvv" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/paysecurely__codcod"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="@dimen/z_margin_mini"
+            android:text="Pay Securely"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
+    </LinearLayout>
+</LinearLayout>
