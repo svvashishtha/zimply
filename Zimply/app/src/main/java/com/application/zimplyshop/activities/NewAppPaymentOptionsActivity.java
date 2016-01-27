@@ -66,7 +66,7 @@ import java.util.List;
 /**
  * Created by Ashish Lohani on 11/6/2015.
  */
-public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback, PaymentRelatedDetailsListener, DeleteCardApiListener {
+public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback, PaymentRelatedDetailsListener, DeleteCardApiListener, View.OnClickListener {
 
 
     String name, orderId, email;
@@ -121,6 +121,8 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
             isCodNotAvailable = getIntent().getBooleanExtra("is_cod_not_available", false);
         }
 
+        retryLayout.setOnClickListener(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
@@ -140,6 +142,8 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
 
     void setInitialDataForPaymentParamsObj() {
         showLoadingView();
+        changeViewVisiblity(recyclerView, View.GONE);
+
         transactionId = "0nf7" + System.currentTimeMillis();
         mPaymentParams = new PaymentParams();
         mPaymentParams.setKey(PAYU_KEY_MANDATORY);
@@ -251,6 +255,15 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.retry_layout:
+                setInitialDataForPaymentParamsObj();
+                break;
+        }
+    }
+
     class GetHashesFromServerTask extends AsyncTask<String, String, PayuHashes> {
 
         @Override
@@ -351,8 +364,10 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
 
             GetPaymentRelatedDetailsTask task = new GetPaymentRelatedDetailsTask(this);
             task.execute(payuConfig);
-        } else
+        } else {
+            showNetworkErrorView();
             Toast.makeText(this, postData.getResult(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void deleteSavedCardAskForConfirmation(final StoredCard storedCard) {
@@ -414,6 +429,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     @Override
     public void onPaymentRelatedDetailsResponse(PayuResponse res) {
         showView();
+        changeViewVisiblity(recyclerView, View.VISIBLE);
 
         payuResponse = res;
         adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj, payuResponse, totalPrice, isCodNotAvailable);
@@ -514,6 +530,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
                     Toast.makeText(this, "Could not place order. Try again", Toast.LENGTH_SHORT).show();
                 }
             } else {
+                setInitialDataForPaymentParamsObj();
                 Toast.makeText(this, "Could not place order. Try again", Toast.LENGTH_SHORT).show();
             }
         }
