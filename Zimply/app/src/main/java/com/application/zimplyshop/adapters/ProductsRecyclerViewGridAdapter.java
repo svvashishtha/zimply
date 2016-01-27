@@ -227,10 +227,10 @@ public class ProductsRecyclerViewGridAdapter extends
             final HeaderViewHolder holder = (HeaderViewHolder) holderCom;
             holder.productCount.setText(count + " Products");
             if (mListener.checkIsRecyclerViewInLongItemMode()) {
-                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.list_long_icon));
+                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.grid_icon));
 
             } else {
-                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.grid_icon));
+                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_icon));
             }
             holder.gridIconContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
