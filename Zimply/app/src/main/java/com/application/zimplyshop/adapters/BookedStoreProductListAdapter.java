@@ -257,6 +257,8 @@ public class BookedStoreProductListAdapter extends
 
                         ((NewHeaderViewHolder)holderCom).productPrice.setVisibility(View.GONE);
                         ((NewHeaderViewHolder)holderCom).productDiscountFactor.setVisibility(View.GONE);
+                        ((NewHeaderViewHolder)holderCom).productDiscountedPrice.setPadding((int) mContext.getResources().getDimension(R.dimen.margin_small), 0,
+                                (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
                     }
                 } catch (NumberFormatException e) {
 
