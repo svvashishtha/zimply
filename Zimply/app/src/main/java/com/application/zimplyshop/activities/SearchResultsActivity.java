@@ -250,7 +250,7 @@ public class SearchResultsActivity extends BaseActivity implements
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
+            final ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
             adapter.setCheckLayoutOptionListener(new ProductsRecyclerViewGridAdapter.CheckLayoutOptions() {
                 @Override
@@ -281,10 +281,12 @@ public class SearchResultsActivity extends BaseActivity implements
                         productList.setLayoutManager(gridLayoutManager);
                         productList.removeItemDecoration(linearDecor);
                         productList.addItemDecoration(gridDecor);
+                        adapter.setHeight(width);
                         productList.getAdapter().notifyDataSetChanged();
                     } else {
                         productList.removeItemDecoration(gridDecor);
                         productList.addItemDecoration(linearDecor);
+                        adapter.setHeight(getDisplayMetrics().widthPixels);
                         productList.setLayoutManager(new LinearLayoutManager(SearchResultsActivity.this));
                         productList.getAdapter().notifyDataSetChanged();
                     }

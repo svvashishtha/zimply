@@ -118,7 +118,7 @@ public class SimilarProductsActivity extends BaseActivity implements
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
+            final ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
             adapter.setCount(count);
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -164,10 +164,12 @@ public class SimilarProductsActivity extends BaseActivity implements
                         productList.setLayoutManager(gridLayoutManager);
                         productList.removeItemDecoration(linearDecor);
                         productList.addItemDecoration(gridDecor);
+                        adapter.setHeight(width);
                         productList.getAdapter().notifyDataSetChanged();
                     } else {
                         productList.removeItemDecoration(gridDecor);
                         productList.addItemDecoration(linearDecor);
+                        adapter.setHeight(getDisplayMetrics().widthPixels);
                         productList.setLayoutManager(new LinearLayoutManager(SimilarProductsActivity.this));
                         productList.getAdapter().notifyDataSetChanged();
                     }

@@ -114,7 +114,9 @@ public class BookedStoreProductListAdapter extends
         return 0;
     }
 
-
+    public void setHeight(int height) {
+        this.height = height;
+    }
     @Override
     public int getItemViewType(int position) {
         if (position == 0)
