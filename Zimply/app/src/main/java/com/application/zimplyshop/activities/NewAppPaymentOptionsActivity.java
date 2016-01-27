@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,6 +101,8 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_payment_options_layout);
+
+        setLoadingVariables();
 
         recyclerView = (RecyclerView) findViewById(R.id.apppaymentoptions);
         layoutManager = new LinearLayoutManager(this);
@@ -509,6 +510,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
 
 
                 } else {
+                    setInitialDataForPaymentParamsObj();
                     Toast.makeText(this, "Could not place order. Try again", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -527,8 +529,28 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        Log.w("as", "bakc");
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    Toast.makeText(this,
+                            "Success:  " + data.getStringExtra("result"),
+                            Toast.LENGTH_LONG).show();
+                    paymentSuccess = true;
+                    sendPaymentSuccessFullRequest();
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                if (data != null) {
+                    Toast.makeText(this,
+                            "Failed:  " + data.getStringExtra("result"),
+                            Toast.LENGTH_LONG).show();
+                    System.out.println("Payu Data::"
+                            + data.getStringExtra("result"));
+                }
+                paymentSuccess = false;
+                sendPaymentSuccessFullRequest();
+            }
+        }
     }
 }

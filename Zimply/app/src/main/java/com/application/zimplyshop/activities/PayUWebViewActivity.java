@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -42,45 +43,45 @@ public class PayUWebViewActivity extends BaseActivity {
         mWebView.setWebViewClient(new WebViewClient() {
         });
 
-//        mWebView.addJavascriptInterface(new Object() {
-//
-//            @android.webkit.JavascriptInterface
-//            public void onSuccess() {
-//                onSuccess("");
-//            }
-//
-//            @android.webkit.JavascriptInterface
-//            public void onSuccess(final String result) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Intent intent = new Intent();
-//                        intent.putExtra("result", result);
-//                        setResult(RESULT_OK, intent);
-//                        finish();
-//                    }
-////                }
-//                });
-//            }
-//
-//            @android.webkit.JavascriptInterface
-//            public void onFailure() {
-//                onFailure("");
-//            }
-//
-//            @android.webkit.JavascriptInterface
-//            public void onFailure(final String result) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Intent intent = new Intent();
-//                        intent.putExtra("result", result);
-//                        setResult(RESULT_CANCELED, intent);
-//                        finish();
-//                    }
-//                });
-//            }
-//        }, "PayU");
+        mWebView.addJavascriptInterface(new Object() {
+
+            @JavascriptInterface
+            public void onSuccess() {
+                onSuccess("");
+            }
+
+            @JavascriptInterface
+            public void onSuccess(final String result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent();
+                        intent.putExtra("result", result);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+//                }
+                });
+            }
+
+            @JavascriptInterface
+            public void onFailure() {
+                onFailure("");
+            }
+
+            @JavascriptInterface
+            public void onFailure(final String result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent();
+                        intent.putExtra("result", result);
+                        setResult(RESULT_CANCELED, intent);
+                        finish();
+                    }
+                });
+            }
+        }, "PayU");
     }
 
     @Override
