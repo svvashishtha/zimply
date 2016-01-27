@@ -13,12 +13,20 @@
 
         <com.application.zimplyshop.widgets.CustomRadioButton
             android:id="@+id/radiobuttonsavedcard"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="6725XXXXXX536" />
 
+        <ImageView
+            android:id="@+id/cartNumberTypeImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/z_margin_mini"
+            android:layout_marginRight="@dimen/z_margin_mini" />
 
         <LinearLayout
+            android:id="@+id/deletesavecard"
             android:layout_width="@dimen/z_item_height_48"
             android:layout_height="@dimen/z_item_height_48"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -55,6 +63,7 @@
             android:paddingTop="@dimen/z_margin_small">
 
             <com.application.zimplyshop.widgets.CustomEdittext
+                android:id="@+id/cvvEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_selector_background_light"
@@ -74,7 +83,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/paysecurely__codcod"
+            android:id="@+id/paysecurelysavedcardl"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_margin="@dimen/z_margin_mini"

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewAppPaymentOptionsActivity;
 import com.application.zimplyshop.baseobjects.CartObject;
+import com.application.zimplyshop.widgets.CustomEdittext;
 import com.application.zimplyshop.widgets.CustomRadioButton;
 import com.application.zimplyshop.widgets.ZNothingSelectedSpinnerAdapter;
 import com.payu.india.Model.PaymentDetails;
@@ -50,6 +51,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
     private Context context;
     int currentOpenPosition = 0, totalPrice;
     boolean isCodNotAvailable;
+    int currentOpenSavedCardPos = 0;
 
     MyClickListener clickListener;
     boolean isOrderdetailShown;
@@ -64,6 +66,8 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
     PayuResponse payuResponse;
 
     String[] bankCodesFixed = {"SBIB", "HDFB", "ICIB", "AXIB", "162B", "YESB"};
+
+    int deleteItemPosition = -1;
 
     public NewAppPaymentOptionsActivityListAdapter(Context context, CartObject cartObject, PayuResponse payuResponse, int totalPrice, boolean isCodNotAvailable) {
         this.context = context;
@@ -140,10 +144,8 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
             }
 
             if (payuResponse.getStoredCards() == null || payuResponse.getStoredCards().size() == 0) {
-                currentOpenPosition = -1;
                 holder.mainSavedCardsBgLayout.setVisibility(View.GONE);
             } else {
-                currentOpenPosition = 0;
                 holder.mainSavedCardsBgLayout.setVisibility(View.VISIBLE);
 
                 holder.savedCardsDynamicContainer.removeAllViews();
@@ -151,15 +153,36 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                     View view = LayoutInflater.from(context).inflate(R.layout.new_app_payment_options_saved_card_list_item, holder.savedCardsDynamicContainer, false);
                     CustomRadioButton radioButton = (CustomRadioButton) view.findViewById(R.id.radiobuttonsavedcard);
                     LinearLayout savedCardButtonLayout = (LinearLayout) view.findViewById(R.id.savecardbuttonlaut);
+                    ImageView cardtypeImage = (ImageView) view.findViewById(R.id.cartNumberTypeImage);
+                    LinearLayout deleteButton = (LinearLayout) view.findViewById(R.id.deletesavecard);
+                    Button button = (Button) view.findViewById(R.id.paysecurelysavedcardl);
+                    CustomEdittext edittextCvv = (CustomEdittext) view.findViewById(R.id.cvvEditText);
+
+                    button.setTag(edittextCvv);
+                    button.setOnClickListener(clickListener);
+
+                    if (null == issuer)
+                        issuer = payuUtils.getIssuer(payuResponse.getStoredCards().get(i).getMaskedCardNumber());
+                    if (issuer != null && issuer.length() > 1) {
+                        int image = getIssuerImage(issuer);
+                        cardtypeImage.setImageResource(image);
+                    }
 
                     radioButton.setText(payuResponse.getStoredCards().get(i).getMaskedCardNumber());
-                    if (i == 0) {
+                    if (i == currentOpenSavedCardPos) {
                         radioButton.setChecked(true);
                         savedCardButtonLayout.setVisibility(View.VISIBLE);
                     } else {
                         radioButton.setChecked(false);
                         savedCardButtonLayout.setVisibility(View.GONE);
                     }
+
+                    radioButton.setTag(i);
+                    radioButton.setOnClickListener(clickListener);
+
+                    deleteButton.setTag(i);
+                    deleteButton.setOnClickListener(clickListener);
+
                     holder.savedCardsDynamicContainer.addView(view);
                 }
             }
@@ -449,9 +472,12 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                         }
                     }
                 } else {
+                    cardNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(23)});
+                    cardLength = 23;
                     issuer = null;
                     cartNumberTypeImage.setImageResource(R.drawable.icon_card);
                     cvv.getText().clear();
+                    cvv.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
                 }
 
 //                if (charSequence.length() == 7) {
@@ -547,6 +573,12 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         } else {
 //            isCardNumberValid = true;
         }
+    }
+
+    public void deletedSavedCardSuccessfully(PayuResponse payuResponse) {
+        this.payuResponse.getStoredCards().remove(deleteItemPosition);
+        currentOpenSavedCardPos = 0;
+        notifyItemChanged(0);
     }
 
     class SavedCardsHolder extends RecyclerView.ViewHolder {
@@ -726,6 +758,23 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                             ((NewAppPaymentOptionsActivity) context).openPaymentUsingNetBanking(bankCode);
                         }
                     }
+                    break;
+                case R.id.deletesavecard:
+                    pos = (int) v.getTag();
+                    deleteItemPosition = pos;
+                    ((NewAppPaymentOptionsActivity) context).deleteSavedCard(payuResponse.getStoredCards().get(deleteItemPosition));
+                    break;
+                case R.id.radiobuttonsavedcard:
+                    pos = (int) v.getTag();
+                    currentOpenSavedCardPos = pos;
+                    notifyItemChanged(0);
+                    break;
+                case R.id.paysecurelysavedcardl:
+                    CustomEdittext cvv = (CustomEdittext) v.getTag();
+                    if (cvv.getText().toString().trim().length() == 0) {
+                        Toast.makeText(context, "Enter CVV for saved card", Toast.LENGTH_SHORT).show();
+                    } else
+                        ((NewAppPaymentOptionsActivity) context).makePaymentUsingSavedCard(payuResponse.getStoredCards().get(currentOpenSavedCardPos), cvv.getText().toString().trim());
                     break;
             }
         }

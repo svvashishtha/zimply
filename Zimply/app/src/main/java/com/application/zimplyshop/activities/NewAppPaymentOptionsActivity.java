@@ -30,6 +30,7 @@ import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.Product;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
+import com.payu.india.Interfaces.DeleteCardApiListener;
 import com.payu.india.Interfaces.PaymentRelatedDetailsListener;
 import com.payu.india.Model.MerchantWebService;
 import com.payu.india.Model.PaymentParams;
@@ -37,10 +38,12 @@ import com.payu.india.Model.PayuConfig;
 import com.payu.india.Model.PayuHashes;
 import com.payu.india.Model.PayuResponse;
 import com.payu.india.Model.PostData;
+import com.payu.india.Model.StoredCard;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
 import com.payu.india.PostParams.MerchantWebServicePostParams;
 import com.payu.india.PostParams.PaymentPostParams;
+import com.payu.india.Tasks.DeleteCardTask;
 import com.payu.india.Tasks.GetPaymentRelatedDetailsTask;
 
 import org.apache.http.NameValuePair;
@@ -61,7 +64,7 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 11/6/2015.
  */
-public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback, PaymentRelatedDetailsListener {
+public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback, PaymentRelatedDetailsListener, DeleteCardApiListener {
 
 
     String name, orderId, email;
@@ -223,6 +226,25 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         return key + "=" + value + "&";
     }
 
+    public void makePaymentUsingSavedCard(StoredCard storedCard, String cvv) {
+        mPaymentParams.setHash(payuHashes.getPaymentHash()); // make sure that you set payment hash
+        mPaymentParams.setCardToken(storedCard.getCardToken());
+        mPaymentParams.setCvv(cvv);
+        mPaymentParams.setNameOnCard(storedCard.getNameOnCard());
+        mPaymentParams.setCardName(storedCard.getCardName());
+        mPaymentParams.setExpiryMonth(storedCard.getExpiryMonth());
+        mPaymentParams.setExpiryYear(storedCard.getExpiryYear());
+
+        PostData postData = new PaymentPostParams(mPaymentParams, PayuConstants.CC).getPaymentPostParams();
+        if (postData.getCode() == PayuErrors.NO_ERROR) {
+            payuConfig.setData(postData.getResult());
+            Intent intent = new Intent(this, PayUWebViewActivity.class);
+            intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
+            startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
+        } else {
+            Toast.makeText(this, postData.getResult(), Toast.LENGTH_LONG).show();
+        }
+    }
 
     class GetHashesFromServerTask extends AsyncTask<String, String, PayuHashes> {
 
@@ -326,6 +348,38 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
             task.execute(payuConfig);
         } else
             Toast.makeText(this, postData.getResult(), Toast.LENGTH_SHORT).show();
+    }
+
+    public void deleteSavedCard(StoredCard storedCard) {
+        MerchantWebService merchantWebService = new MerchantWebService();
+        merchantWebService.setKey(mPaymentParams.getKey());
+        merchantWebService.setCommand(PayuConstants.DELETE_USER_CARD);
+        merchantWebService.setVar1(mPaymentParams.getUserCredentials());
+        merchantWebService.setVar2(storedCard.getCardToken());
+        merchantWebService.setHash(payuHashes.getDeleteCardHash());
+
+        PostData postData = null;
+        postData = new MerchantWebServicePostParams(merchantWebService).getMerchantWebServicePostParams();
+        if (postData.getCode() == PayuErrors.NO_ERROR) {
+            payuConfig.setData(postData.getResult());
+            payuConfig.setEnvironment(payuConfig.getEnvironment());
+
+            DeleteCardTask deleteCardTask = new DeleteCardTask(this);
+            deleteCardTask.execute(payuConfig);
+        } else {
+            Toast.makeText(this, postData.getResult(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onDeleteCardApiResponse(PayuResponse payuResponse) {
+        if (adapter == null)
+            return;
+        if (payuResponse.getResponseStatus().getCode() == PayuErrors.NO_ERROR) {
+            adapter.deletedSavedCardSuccessfully(payuResponse);
+        } else {
+            Toast.makeText(this, "Error While Deleting Card", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
