@@ -27,6 +27,7 @@
             android:id="@+id/gridicon"
             android:layout_width="@dimen/margin_medium"
             android:layout_height="@dimen/margin_medium"
+            android:scaleType="fitXY"
             android:src="@drawable/grid_icon" />
     </LinearLayout>
 

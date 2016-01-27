@@ -216,7 +216,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                             ProductAction productAction = new ProductAction(ProductAction.ACTION_CHECKOUT)
                                     .setCheckoutStep(3)
                                     .setCheckoutOptions("View cart");
-                            ZTracker.checkOutGaEvents(productAction, product, getActivity());
+                            ZTracker.checkOutGaEvents(productAction, product, AppApplication.getInstance());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -257,7 +257,7 @@ public class MyCartFragment extends ZFragment implements GetRequestListener, App
                             ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
                                     .setCheckoutStep(2)
                                     .setCheckoutOptions("Remove product from cart");
-                            ZTracker.checkOutGaEvents(productAction, product, getActivity());
+                            ZTracker.checkOutGaEvents(productAction, product, AppApplication.getInstance());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
