@@ -110,6 +110,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public void setIsFooterRemoved(boolean isFooterRemoved) {
         this.isFooterRemoved = isFooterRemoved;
+        notifyDataSetChanged();
     }
 
     @Override

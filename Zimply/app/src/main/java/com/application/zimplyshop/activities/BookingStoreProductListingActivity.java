@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.BookedStoreProductListAdapter;
-import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
 import com.application.zimplyshop.adapters.SubCategoryAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
@@ -116,7 +115,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
             @Override
             public int getSpanSize(int position) {
-                switch (((ProductsRecyclerViewGridAdapter) productList
+                switch (((BookedStoreProductListAdapter) productList
                         .getAdapter()).getItemViewType(position)) {
                     case 0:
                         return 1;
@@ -340,7 +339,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
 
                             @Override
                             public int getSpanSize(int position) {
-                                switch (((ProductsRecyclerViewGridAdapter) productList
+                                switch (((BookedStoreProductListAdapter) productList
                                         .getAdapter()).getItemViewType(position)) {
                                     case 0:
                                         return 1;
