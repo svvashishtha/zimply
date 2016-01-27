@@ -946,6 +946,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             case R.id.buy_now:
 
                 if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
+                    String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                    List<NameValuePair> nameValuePair = new ArrayList<>();
+                    nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE + ""));
+                    nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
+                    nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+                    nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
+
+                    UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL_COVERT, adapter.getObj().getProduct().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
 
 // Add the step number and additional info about the checkout to the action.
 
