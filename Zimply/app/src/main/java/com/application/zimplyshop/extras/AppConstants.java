@@ -2,6 +2,8 @@ package com.application.zimplyshop.extras;
 
 public interface AppConstants {
 
+    String STORE_PASS = "zimply@123";
+
     String FONT_PATH = "";
     String HOMEPAGE_URL = "content/home-page-new/";
     String EXPERT_LIST_URL = "explore/expert-list/";

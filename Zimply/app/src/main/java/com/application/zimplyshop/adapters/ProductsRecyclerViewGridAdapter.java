@@ -94,7 +94,7 @@ public class ProductsRecyclerViewGridAdapter extends
 
     public void removeItem() {
         isFooterRemoved = true;
-        notifyItemRemoved(objs.size());
+        notifyItemRemoved(objs.size()+1);
     }
 
     @Override

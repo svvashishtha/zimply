@@ -30,4 +30,8 @@ public class RecentProductsDBWrapper {
     public static CacheProductListObject getProducts(int userId,long timeStamp,int limit) {
         return helper.getProducts(userId,timeStamp,limit);
     }
+
+    public static  int getProductsCount(int userId){
+        return helper.getProductCount(userId);
+    }
 }

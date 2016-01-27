@@ -283,6 +283,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 viewHolder = new ViewHolder();
                 viewHolder.text = (TextView) v.findViewById(R.id.text1);
                 viewHolder.editSearch = (ImageView)v.findViewById(R.id.edit_recent_search);
+                viewHolder.editSearch.setVisibility(View.VISIBLE);
                 v.setTag(viewHolder);
             }
             viewHolder.editSearch.setVisibility(View.GONE);
@@ -395,6 +396,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 viewHolder = new ViewHolder();
                 viewHolder.text = (TextView) convertView.findViewById(R.id.text1);
                 viewHolder.editSearch = (ImageView) convertView.findViewById(R.id.edit_recent_search);
+                viewHolder.editSearch.setVisibility(View.VISIBLE);
                 convertView.setTag(viewHolder);
             }
 
@@ -536,6 +538,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 viewHolder = new ViewHolder();
                 viewHolder.text = (TextView) v.findViewById(R.id.text1);
                 viewHolder.editSearch = (ImageView)v.findViewById(R.id.edit_recent_search);
+                viewHolder.editSearch.setVisibility(View.VISIBLE);
                 v.setTag(viewHolder);
             }
 
