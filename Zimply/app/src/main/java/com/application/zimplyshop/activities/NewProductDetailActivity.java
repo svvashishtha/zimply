@@ -154,7 +154,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         if (adapter != null && adapter.getObj() != null && AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
         } else {
-            addToCart.setText("Add to cart");
+            addToCart.setText(getResources().getString(R.string.add_to_cart));
         }
         new Handler().postDelayed(new Runnable() {
             @Override

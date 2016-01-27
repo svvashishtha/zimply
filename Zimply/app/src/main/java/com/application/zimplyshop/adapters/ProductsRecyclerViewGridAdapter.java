@@ -94,7 +94,7 @@ public class ProductsRecyclerViewGridAdapter extends
 
     public void removeItem() {
         isFooterRemoved = true;
-        notifyItemRemoved(objs.size()+1);
+        notifyItemRemoved(objs.size() + 1);
     }
 
     @Override
@@ -107,6 +107,10 @@ public class ProductsRecyclerViewGridAdapter extends
             }
         }
         return 0;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Override
@@ -134,7 +138,7 @@ public class ProductsRecyclerViewGridAdapter extends
 
             if (mListener.checkIsRecyclerViewInLongItemMode()) {
                 holder.priceContainer.setOrientation(LinearLayout.HORIZONTAL);
-                holder.productDiscountedPrice.setPadding(0,0, (int) mContext.getResources().getDimension(R.dimen.margin_small),0);
+                holder.productDiscountedPrice.setPadding(0, 0, (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
 
             } else {
                 holder.priceContainer.setOrientation(LinearLayout.VERTICAL);
@@ -276,6 +280,7 @@ public class ProductsRecyclerViewGridAdapter extends
         TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
         LinearLayout priceContainer;
         View itemContainer;
+
         public ProductViewHolder(View view) {
             super(view);
             img = (ImageView) view.findViewById(R.id.product_img);

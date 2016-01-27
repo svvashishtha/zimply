@@ -325,7 +325,7 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            BookedStoreProductListAdapter adapter = new BookedStoreProductListAdapter(
+            final BookedStoreProductListAdapter adapter = new BookedStoreProductListAdapter(
                     this, this, height, obj);
             adapter.setCheckLayoutOptionListener(new BookedStoreProductListAdapter.CheckLayoutOptions() {
                 @Override
@@ -356,10 +356,12 @@ public class BookingStoreProductListingActivity extends BaseActivity implements
                         productList.setLayoutManager(gridLayoutManager);
                         productList.removeItemDecoration(linearDecor);
                         productList.addItemDecoration(gridDecor);
+                        adapter.setHeight(width);
                         productList.getAdapter().notifyDataSetChanged();
                     } else {
                         productList.removeItemDecoration(gridDecor);
                         productList.addItemDecoration(linearDecor);
+                        adapter.setHeight(getDisplayMetrics().widthPixels);
                         productList.setLayoutManager(new LinearLayoutManager(BookingStoreProductListingActivity.this));
                         productList.getAdapter().notifyDataSetChanged();
                     }
