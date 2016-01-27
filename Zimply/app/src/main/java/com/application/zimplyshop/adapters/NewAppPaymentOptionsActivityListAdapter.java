@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -146,6 +145,7 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
             if (payuResponse.getStoredCards() == null || payuResponse.getStoredCards().size() == 0) {
                 holder.mainSavedCardsBgLayout.setVisibility(View.GONE);
+                holder.savedCardsDynamicContainer.removeAllViews();
             } else {
                 holder.mainSavedCardsBgLayout.setVisibility(View.VISIBLE);
 
@@ -183,12 +183,6 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
 
                     deleteButton.setTag(i);
                     deleteButton.setOnClickListener(clickListener);
-
-                    if (payuResponse.getStoredCards().size() == 1) {
-                        edittextCvv.requestFocus();
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(edittextCvv, InputMethodManager.SHOW_IMPLICIT);
-                    }
 
                     holder.savedCardsDynamicContainer.addView(view);
                 }
@@ -755,10 +749,15 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                         String expiryYear = null;
                         if (holder.yearSpinner.getSelectedItemPosition() != 0)
                             expiryYear = holder.yearSpinner.getSelectedItem().toString();
-                        ((NewAppPaymentOptionsActivity) context).openPayUWebViewForCreditCard(cardNumber, holder.cardName.getText().toString().trim(), expiryMonth, expiryYear, holder.cvv.getText().toString().trim(), holder.savecardCheck.isChecked());
+                        String errorMessage = checkIfAllFieldsComplete(TYPE_DEBIT_CARD, holder);
+                        if (errorMessage == null) {
+                            ((NewAppPaymentOptionsActivity) context).openPayUWebViewForCreditCard(cardNumber, holder.cardName.getText().toString().trim(), expiryMonth, expiryYear, holder.cvv.getText().toString().trim(), holder.savecardCheck.isChecked());
+                        } else {
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+                        }
                     } else if (getItemViewType(pos) == TYPE_NET_BANKING) {
                         NetBankingHolder holder = (NetBankingHolder) v.getTag(R.integer.z_tag_holder_recycler_view);
-                        if (holder.netBankingBanksList.getSelectedItemPosition() == -1) {
+                        if (holder.netBankingBanksList.getSelectedItemPosition() == 0) {
                             Toast.makeText(context, "Please select a bank", Toast.LENGTH_SHORT).show();
                         } else {
                             String bankCode = payuResponse.getNetBanks().get(holder.netBankingBanksList.getSelectedItemPosition() - 1).getBankCode();
@@ -785,6 +784,39 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
                     break;
             }
         }
+    }
+
+    private String checkIfAllFieldsComplete(int type_debit_card, CreditCardHolder holder) {
+        if (type_debit_card == TYPE_DEBIT_CARD) {
+            issuer = payuUtils.getIssuer(holder.cardNumber.toString().replace(" ", ""));
+            if (issuer != null && issuer.length() > 1 && issuer == PayuConstants.MAES) {
+                if (holder.cardName.getText().toString().trim().length() == 0) {
+                    return "Please enter name on card";
+                }
+            } else {
+                if (holder.cardName.getText().toString().trim().length() == 0) {
+                    return "Please enter name on card";
+                } else if (holder.monthSpinner.getSelectedItemPosition() == 0) {
+                    return "Please select expiry month";
+                } else if (holder.yearSpinner.getSelectedItemPosition() == 0) {
+                    return "Please select expiry year";
+                } else if (holder.cvv.getText().toString().trim().length() == 0) {
+                    return "Please enter CVV number";
+                }
+            }
+        } else if (type_debit_card == TYPE_CREDIT_CARD) {
+            if (holder.cardName.getText().toString().trim().length() == 0) {
+                return "Please enter name on card";
+            } else if (holder.monthSpinner.getSelectedItemPosition() == 0) {
+                return "Please select expiry month";
+            } else if (holder.yearSpinner.getSelectedItemPosition() == 0) {
+                return "Please select expiry year";
+            } else if (holder.cvv.getText().toString().trim().length() == 0) {
+                return "Please enter CVV number";
+            }
+        }
+
+        return null;
     }
 
     private int getIssuerImage(String issuer) {

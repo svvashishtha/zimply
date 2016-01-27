@@ -147,8 +147,8 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         mPaymentParams.setFirstName(name);
         mPaymentParams.setEmail(email);
         mPaymentParams.setTxnId(transactionId);
-        mPaymentParams.setSurl("httpss://payu.herokuapp.com/success");
-        mPaymentParams.setFurl("httpss://payu.herokuapp.com/failure");
+        mPaymentParams.setSurl("https://payu.herokuapp.com/success");
+        mPaymentParams.setFurl("https://payu.herokuapp.com/failure");
         mPaymentParams.setUdf1("");
         mPaymentParams.setUdf2("");
         mPaymentParams.setUdf3("");
@@ -521,5 +521,11 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         if (!isDestroyed) {
             zProgressDialog = ProgressDialog.show(this, null, "Loading...");
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
     }
 }
