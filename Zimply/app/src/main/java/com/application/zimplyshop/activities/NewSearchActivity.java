@@ -24,7 +24,9 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
+import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
+import com.application.zimplyshop.baseobjects.RecentSearchObject;
 import com.application.zimplyshop.db.RecentSearchesDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -212,7 +214,13 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
     }
 
     private void performSearch(String query) {
-        RecentSearchesDBWrapper.addProduct(query,1,System.currentTimeMillis());
+        RecentSearchObject recentObj = new RecentSearchObject();
+        recentObj.setType(AppConstants.TYPE_CATEGORY);
+        CategoryObject obj = new CategoryObject();
+        obj.setType(AppConstants.TYPE_CATEGORY);
+        obj.setName(query);
+        recentObj.setCategoryObj(obj);
+        RecentSearchesDBWrapper.addProduct(recentObj,1,System.currentTimeMillis());
         Intent intent = new Intent(this, SearchResultsActivity.class);
 
         if (query == null || query.length() < 1)

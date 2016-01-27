@@ -24,6 +24,8 @@ import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
+import com.application.zimplyshop.baseobjects.RecentSearchObject;
+import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.db.RecentSearchesDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
@@ -112,7 +114,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                     @Override
                     public void onClick(View v) {
                         if (recentSearchesAdapter != null)
-                            recentSearchesAdapter.clear();
+                            recentSearchesAdapter.clearData();
                         try {
                             int userId = Integer.parseInt(AppPreferences.getUserID(activity));
                             RecentSearchesDBWrapper.removeProducts(userId);
@@ -223,7 +225,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                         @Override
                         public void onClick(View v) {
                             if (recentSearchesAdapter != null)
-                                recentSearchesAdapter.clear();
+                                recentSearchesAdapter.clearData();
                             try {
                                 int userId = Integer.parseInt(AppPreferences.getUserID(activity));
                                 RecentSearchesDBWrapper.removeProducts(userId);
@@ -281,6 +283,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 viewHolder = new ViewHolder();
                 viewHolder.text = (TextView) v.findViewById(R.id.text1);
                 viewHolder.editSearch = (ImageView)v.findViewById(R.id.edit_recent_search);
+                viewHolder.editSearch.setVisibility(View.VISIBLE);
                 v.setTag(viewHolder);
             }
             viewHolder.editSearch.setVisibility(View.GONE);
@@ -393,6 +396,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 viewHolder = new ViewHolder();
                 viewHolder.text = (TextView) convertView.findViewById(R.id.text1);
                 viewHolder.editSearch = (ImageView) convertView.findViewById(R.id.edit_recent_search);
+                viewHolder.editSearch.setVisibility(View.VISIBLE);
                 convertView.setTag(viewHolder);
             }
 
@@ -409,12 +413,17 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 viewHolder.editSearch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((NewSearchActivity)getActivity()).setSearchEditTextValue(product.getName());
+                        ((NewSearchActivity) getActivity()).setSearchEditTextValue(product.getName());
                     }
                 });
                 viewHolder.text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        RecentSearchObject obj = new RecentSearchObject();
+                        obj.setCategoryObj(product);
+                        obj.setType(AppConstants.TYPE_CATEGORY);
+                        RecentSearchesDBWrapper.addProduct(obj,1,System.currentTimeMillis());
+
                         Intent intent = new Intent(mContext, SearchResultsActivity.class);
                         intent.putExtra("type", product.getType());
                         intent.putExtra("id", product.getId());
@@ -457,6 +466,13 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 viewHolder.text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        RecentSearchObject obj = new RecentSearchObject();
+                        obj.setType(AppConstants.TYPE_PRODUCT);
+                        obj.setProductObj(productListObject);
+                        RecentSearchesDBWrapper.addProduct(obj,1,System.currentTimeMillis());
+                        if(!AppPreferences.isUserLogIn(getActivity())) {
+                            RecentProductsDBWrapper.addProduct(productListObject,1,System.currentTimeMillis());
+                        }
                         Intent intent = new Intent(mContext, NewProductDetailActivity.class);
                         intent.putExtra("slug", productListObject.getSlug());
                         intent.putExtra("id", productListObject.getId());
@@ -481,13 +497,12 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
             ImageView editSearch;
         }
     }
-    private class RecentProductListAdapter extends ArrayAdapter<String> {
+    private class RecentProductListAdapter extends BaseAdapter {
 
-        private ArrayList<String> wishes;
+        private ArrayList<RecentSearchObject> wishes;
         private Activity mContext;
 
-        public RecentProductListAdapter(Activity context, int resourceId, ArrayList<String> wishes) {
-            super(context.getApplicationContext(), resourceId, wishes);
+        public RecentProductListAdapter(Activity context, ArrayList<RecentSearchObject> wishes) {
             mContext = context;
             this.wishes = wishes;
         }
@@ -502,8 +517,18 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
         }
 
         @Override
+        public Object getItem(int position) {
+            return wishes.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
         public View getView(final int position, View v, ViewGroup parent) {
-            final String product = wishes.get(position);
+            final RecentSearchObject product = wishes.get(position);
             if (v == null || v.findViewById(R.id.list_root) == null) {
                 v = LayoutInflater.from(mContext).inflate(R.layout.simple_list_item, null);
             }
@@ -513,39 +538,70 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                 viewHolder = new ViewHolder();
                 viewHolder.text = (TextView) v.findViewById(R.id.text1);
                 viewHolder.editSearch = (ImageView)v.findViewById(R.id.edit_recent_search);
+                viewHolder.editSearch.setVisibility(View.VISIBLE);
                 v.setTag(viewHolder);
             }
 
             final String name = ((TextView)((NewSearchActivity)activity).getActionBarView().findViewById(R.id.search_category)).getText().toString();
             viewHolder.text.setTypeface(null, Typeface.BOLD);
-            viewHolder.text.setText(product);
+            if(product.getType()==AppConstants.TYPE_CATEGORY) {
+                viewHolder.text.setText(product.getCategoryObj().getName());
+            }else{
+                viewHolder.text.setText(product.getProductObj().getName());
+            }
 
             viewHolder.editSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((NewSearchActivity) getActivity()).setSearchEditTextValue(product);
+                    if(product.getType()==AppConstants.TYPE_CATEGORY) {
+                        ((NewSearchActivity) getActivity()).setSearchEditTextValue(product.getCategoryObj().getName());
+                    }else{
+                        ((NewSearchActivity) getActivity()).setSearchEditTextValue(product.getProductObj().getName());
+                    }
+
                 }
             });
             viewHolder.text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
+                    if (product.getType() == AppConstants.TYPE_CATEGORY) {
+                        Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
 
-                    if (product == null || product.length() < 1)
-                        return;
-                    String[] params = product.split(" ");
-                    String builder = "";
-                    for (String pam : params) {
-                        builder += (pam + "+");
-                    }
-                    builder = builder.substring(0, builder.length() - 1);
+                        if (product == null || product.getCategoryObj().getName().length() < 1)
+                            return;
+                        String[] params = product.getCategoryObj().getName().split(" ");
+                        String builder = "";
+                        for (String pam : params) {
+                            builder += (pam + "+");
+                        }
+                        builder = builder.substring(0, builder.length() - 1);
 
-                    intent.putExtra("query", builder);
-                    intent.putExtra("url", AppConstants.GET_SEARCH_RESULTS);
-                    startActivity(intent);
+                        intent.putExtra("query", builder);
+                        intent.putExtra("url", AppConstants.GET_SEARCH_RESULTS);
+                        startActivity(intent);
+                    }else{
+
+
+                        Intent intent = new Intent(mContext, NewProductDetailActivity.class);
+                        intent.putExtra("slug", product.getProductObj().getSlug());
+                        intent.putExtra("id", product.getProductObj().getId());
+                        intent.putExtra("title", product.getProductObj().getName());
+
+                        //        GA Ecommerce
+                        intent.putExtra("productActionListName", "Product Name Click");
+                        intent.putExtra("screenName", "Search Results Activity");
+                        intent.putExtra("actionPerformed", ProductAction.ACTION_CLICK);
+
+                        mContext.startActivity(intent);
+                       }
                 }
             });
             return v;
+        }
+
+        public void clearData(){
+            wishes.clear();
+            notifyDataSetChanged();
         }
 
         protected class ViewHolder {
@@ -559,7 +615,7 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
 
         @Override
         protected Object doInBackground(Void... params) {
-            ArrayList<String> result = null;
+            ArrayList<RecentSearchObject> result = null;
             try {
                 int userId = Integer.parseInt(AppPreferences.getUserID(activity));
                 result = RecentSearchesDBWrapper.getProducts(userId);
@@ -574,14 +630,14 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
         @Override
         protected void onPostExecute(Object result) {
             if(!destroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0 ) {
-                recentSearchesAdapter = new RecentProductListAdapter(activity, R.layout.simple_list_item, (ArrayList<String>)result);
+                recentSearchesAdapter = new RecentProductListAdapter(activity,  (ArrayList<RecentSearchObject>)result);
                 recentSearchesListView.setAdapter(recentSearchesAdapter);
                 getView.findViewById(R.id.recent_searches_container).setVisibility(View.VISIBLE);
                 getView.findViewById(R.id.clear_searches).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (recentSearchesAdapter != null)
-                            recentSearchesAdapter.clear();
+                            recentSearchesAdapter.clearData();
                         try {
                             int userId = Integer.parseInt(AppPreferences.getUserID(activity));
                             RecentSearchesDBWrapper.removeProducts(userId);

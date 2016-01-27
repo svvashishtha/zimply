@@ -22,5 +22,6 @@
         android:scaleType="center"
         android:src="@drawable/ic_communication_call_made"
         android:background="@drawable/action_bar_item_bg"
+        android:visibility="gone"
         android:layout_height="@dimen/z_item_height_48"/>
 </LinearLayout>

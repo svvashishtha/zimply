@@ -126,12 +126,16 @@ public class ProductListingActivity extends BaseActivity implements
 
             @Override
             public int getSpanSize(int position) {
-                if (position == 0)
-                    return 2;
-                else if (position == productList.getLayoutManager().getItemCount() - 1) {
-                    return 2;
-                } else {
-                    return 1;
+                switch (((ProductsRecyclerViewGridAdapter) productList
+                        .getAdapter()).getItemViewType(position)) {
+                    case 0:
+                        return 1;
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 2;
+                    default:
+                        return -1;
                 }
             }
         });
@@ -277,17 +281,19 @@ public class ProductListingActivity extends BaseActivity implements
 
                             @Override
                             public int getSpanSize(int position) {
-                                if (position == 0)
-                                    return 2;
-                                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
-                                    return 2;
-
-                                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
-                                    return 2;
-                                } else return 1;
+                                switch (((ProductsRecyclerViewGridAdapter) productList
+                                        .getAdapter()).getItemViewType(position)) {
+                                    case 0:
+                                        return 1;
+                                    case 1:
+                                        return 2;
+                                    case 2:
+                                        return 2;
+                                    default:
+                                        return -1;
+                                }
                             }
                         });
-
                         productList.setLayoutManager(gridLayoutManager);
                         productList.removeItemDecoration(linearDecor);
                         productList.addItemDecoration(gridDecor);

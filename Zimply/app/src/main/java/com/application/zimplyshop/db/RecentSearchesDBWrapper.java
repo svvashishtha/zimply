@@ -2,6 +2,8 @@ package com.application.zimplyshop.db;
 
 import android.content.Context;
 
+import com.application.zimplyshop.baseobjects.RecentSearchObject;
+
 import java.util.ArrayList;
 
 /**
@@ -14,7 +16,7 @@ public class RecentSearchesDBWrapper {
         helper = new RecentSearchesDBManager(context);
     }
 
-    public static int addProduct(String tag, int userId, long timestamp) {
+    public static int addProduct(RecentSearchObject tag, int userId, long timestamp) {
         return helper.addProduct(tag, userId, timestamp);
     }
 
@@ -22,7 +24,7 @@ public class RecentSearchesDBWrapper {
         return helper.removeUsers(userId);
     }
 
-    public static ArrayList<String> getProducts(int userId) {
+    public static ArrayList<RecentSearchObject> getProducts(int userId) {
         return helper.getProducts(userId);
     }
 }
