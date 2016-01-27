@@ -42,44 +42,45 @@ public class PayUWebViewActivity extends BaseActivity {
         mWebView.setWebViewClient(new WebViewClient() {
         });
 
-        mWebView.addJavascriptInterface(new Object() {
-            @android.webkit.JavascriptInterface
-            public void onSuccess() {
-                onSuccess("");
-            }
-
-            @android.webkit.JavascriptInterface
-            public void onSuccess(final String result) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent();
-                        intent.putExtra("result", result);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-//                }
-                });
-            }
-
-            @android.webkit.JavascriptInterface
-            public void onFailure() {
-                onFailure("");
-            }
-
-            @android.webkit.JavascriptInterface
-            public void onFailure(final String result) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent();
-                        intent.putExtra("result", result);
-                        setResult(RESULT_CANCELED, intent);
-                        finish();
-                    }
-                });
-            }
-        }, "PayU");
+//        mWebView.addJavascriptInterface(new Object() {
+//
+//            @android.webkit.JavascriptInterface
+//            public void onSuccess() {
+//                onSuccess("");
+//            }
+//
+//            @android.webkit.JavascriptInterface
+//            public void onSuccess(final String result) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Intent intent = new Intent();
+//                        intent.putExtra("result", result);
+//                        setResult(RESULT_OK, intent);
+//                        finish();
+//                    }
+////                }
+//                });
+//            }
+//
+//            @android.webkit.JavascriptInterface
+//            public void onFailure() {
+//                onFailure("");
+//            }
+//
+//            @android.webkit.JavascriptInterface
+//            public void onFailure(final String result) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Intent intent = new Intent();
+//                        intent.putExtra("result", result);
+//                        setResult(RESULT_CANCELED, intent);
+//                        finish();
+//                    }
+//                });
+//            }
+//        }, "PayU");
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,7 +65,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Umesh Lohani on 11/6/2015.
+ * Created by Ashish Lohani on 11/6/2015.
  */
 public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback, PaymentRelatedDetailsListener, DeleteCardApiListener {
 
@@ -127,8 +128,6 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         UploadManager.getInstance().addCallback(this);
 
         setInitialDataForPaymentParamsObj();
-
-        generateHashFromServer();
     }
 
     public void addToolbarView(Toolbar toolbar) {
@@ -139,6 +138,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     }
 
     void setInitialDataForPaymentParamsObj() {
+        showLoadingView();
         transactionId = "0nf7" + System.currentTimeMillis();
         mPaymentParams = new PaymentParams();
         mPaymentParams.setKey(PAYU_KEY_MANDATORY);
@@ -158,6 +158,8 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
 
         payuConfig = new PayuConfig();
         payuConfig.setEnvironment(PayuConstants.PRODUCTION_ENV);
+
+        generateHashFromServer();
     }
 
     public void openPaymentUsingNetBanking(String bankCode) {
@@ -410,6 +412,8 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
 
     @Override
     public void onPaymentRelatedDetailsResponse(PayuResponse res) {
+        showView();
+
         payuResponse = res;
         adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj, payuResponse, totalPrice, isCodNotAvailable);
         recyclerView.setAdapter(adapter);
@@ -433,7 +437,6 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
 
     public void sendPaymentSuccessFullCashRequest() {
         paymentType = PAYMENT_TYPE_CASH;
-        transactionId = "0nf7" + System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + AppConstants.PLACE_ORDER_SUCCESS_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
@@ -526,6 +529,6 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
+        Log.w("as", "bakc");
     }
 }
