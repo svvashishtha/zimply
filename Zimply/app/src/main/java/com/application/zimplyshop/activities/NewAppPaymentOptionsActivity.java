@@ -1,6 +1,8 @@
 package com.application.zimplyshop.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -350,7 +352,31 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
             Toast.makeText(this, postData.getResult(), Toast.LENGTH_SHORT).show();
     }
 
-    public void deleteSavedCard(StoredCard storedCard) {
+    public void deleteSavedCardAskForConfirmation(final StoredCard storedCard) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Delete Saved Card");
+        alertDialogBuilder
+                .setMessage("Are you sure you want to delete this saved card?")
+                .setCancelable(false)
+                .setPositiveButton("Delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+                                deleteSavedCardConfirmed(storedCard);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void deleteSavedCardConfirmed(StoredCard storedCard) {
         MerchantWebService merchantWebService = new MerchantWebService();
         merchantWebService.setKey(mPaymentParams.getKey());
         merchantWebService.setCommand(PayuConstants.DELETE_USER_CARD);
