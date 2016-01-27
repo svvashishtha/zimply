@@ -38,7 +38,7 @@
     <string name="under_5000">\u20B9 2500 to \u20B9 5000</string>
     <string name="under_10000">\u20B9 5000 to \u20B9 10000</string>
     <string name="above_10000">Above \u20B9 10000</string>
-    <string name="add_to_cart">Add to cart</string>
+    <string name="add_to_cart">Cart</string>
     <string name="buy_offline">Book a Visit</string>
     <string name="buy_online">Buy Online</string>
     <string name="buy_now">Buy now</string>
@@ -85,8 +85,8 @@
     <string name="logout">Logout</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="cancel_order_cofirm">Are you sure you want to cancel the order?</string>
-    <string name="return_order">Cancel Order</string>
-    <string name="return_order_cofirm">Are you sure you want to cancel the order?</string>
+    <string name="return_order">Return Order</string>
+    <string name="return_order_cofirm">Are you sure you want to return the order?</string>
     <string name="okay_text">OKAY</string>
     <string name="logout_confirm">Are you sure you want to logout?</string>
     <string name="dialog_cancel">Cancel</string>

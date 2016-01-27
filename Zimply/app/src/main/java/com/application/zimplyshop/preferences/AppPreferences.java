@@ -39,6 +39,7 @@ public class AppPreferences {
 	private static final String IS_FIRST_BOOKING_DONE="isfirstbookingdone";
 	private static final String NOTIFICATION_COUNT="notificationcount";
 	private static final String NOTIFICATION_ENABLE="notificationenabled";
+	private static final String IS_PASSWORD_AVAILABLE="IS_PASSWORD_AVAILABLE";
 
 
 
@@ -424,4 +425,20 @@ public class AppPreferences {
 				Context.MODE_PRIVATE);
 		return savedSession.getBoolean(NOTIFICATION_ENABLE, true);
 	}
+
+	public static boolean isPasswordSet(Context context)
+	{
+		if (isUserLogIn(context)) {
+			SharedPreferences savedSession = context.getSharedPreferences(KEY,
+					Context.MODE_PRIVATE);
+			return savedSession.getBoolean(IS_PASSWORD_AVAILABLE, false);
+		}else return false;
+	}
+	public static void setIsPasswordSet(Context context, boolean isPasswordSet)
+	{
+		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
+		editor.putBoolean(IS_PASSWORD_AVAILABLE, isPasswordSet);
+		editor.commit();
+	}
+
 }

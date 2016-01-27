@@ -23,7 +23,7 @@ public class ProductCheckoutActivity extends BaseActivity {
     BaseFragment orderSummaryFrag, addressSelectionFrag, myCartFrag, editAddressFragment;
     String ADDRESS_SELECTION = "addressSelection", ORDER_SUMMARY = "orderSummary", EDIT_ADDRESS = "editAddress", CART_TAG = "mycart";
 
-
+    boolean isDestroyed;
 
     public static int MY_CART_FRAGMENT = 1,ORDER_SUMMARY_FRAGMENT = 2,ADDRESS_SELECTION_FRAGMENT=3,EDIT_ADDRESS_FRAGMENT=4,NEW_EDIT_ADDRESS_FRAGMENT=5,ADD_FIRST_ADDRESS_FRAGMENT=6;
     @Override
@@ -89,14 +89,15 @@ public class ProductCheckoutActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-      //  outState.putInt("n", 1);
+        //  outState.putInt("n", 1);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                if(!isDestroyed)
+                    onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -138,19 +139,7 @@ public class ProductCheckoutActivity extends BaseActivity {
             super.onBackPressed();
 
         }
-      /*  ZFragment zf = (ZFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (zf != null) {
-            boolean consumed = zf.onBackPressed();
-            if (!consumed) {
-                if (getFragmentManager().getBackStackEntryCount() == 0) {
-                    super.onBackPressed();
-                } else {
-                    getFragmentManager().popBackStack();
-                    getFragmentManager().executePendingTransactions();
-                }
-            }
 
-        }*/
     }
 
    /* @Override
@@ -282,7 +271,7 @@ public class ProductCheckoutActivity extends BaseActivity {
         if(orderSummaryFrag==null){
             orderSummaryFrag = OrderSummaryFragment.newInstance(bundle);
         }
-      //  titleText.setText("Order Summary");
+        //  titleText.setText("Order Summary");
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, orderSummaryFrag, ORDER_SUMMARY).addToBackStack(null).commit();
     }
 
@@ -334,5 +323,11 @@ public class ProductCheckoutActivity extends BaseActivity {
         editAddressFragment = EditAddressFragment.newInstance(savedInstanceState);
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, editAddressFragment, EDIT_ADDRESS).addToBackStack(null).commit();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        isDestroyed = true;
+        super.onDestroy();
     }
 }

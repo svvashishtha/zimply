@@ -6,6 +6,8 @@ public class ProductListObject {
 
     private String next_url;
 
+    private int count = 0;
+
     private ArrayList<BaseProductListObject> products;
 
     private ArrayList<ShopSubCategoryObj> subcategory;
@@ -52,4 +54,11 @@ public class ProductListObject {
         this.products = products;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

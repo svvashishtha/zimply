@@ -12,6 +12,7 @@
         android:padding="@dimen/z_margin_large">
 
         <com.application.zimplyshop.widgets.CustomTextViewBold
+            android:id="@+id/recent_products_tag"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

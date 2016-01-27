@@ -5,10 +5,12 @@ import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -26,11 +28,13 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.NewProductDetailAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
 import com.application.zimplyshop.baseobjects.SimilarProductsListObject;
+import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -80,6 +84,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     //    Google analytics ecommerce
     String productActionListName, screenName, actionPerformed;
     int position;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +154,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         if (adapter != null && adapter.getObj() != null && AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
         } else {
-            addToCart.setText("Add to cart");
+            addToCart.setText(getResources().getString(R.string.add_to_cart));
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -159,7 +164,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 }
             }
         }, 500);
-
+        if (adapter != null && !AppPreferences.isUserLogIn(this)) {
+            new GetDataFromCache().execute();
+        }
     }
 
     public int getStatusBarHeight() {
@@ -186,7 +193,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     public void loadData() {
         requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_REQUETS_URL + "?id=" + productId
-                + "&width=" + width + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
+                + "&width=" + (width / 2) + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
         GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL);
     }
@@ -204,6 +211,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             showLoadingView();
             (findViewById(R.id.bottom_action_container)).setVisibility(View.GONE);
             changeViewVisiblity(productDetailList, View.GONE);
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+            isLoading = true;
         }
 
     }
@@ -241,7 +250,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 //                GA Ecommerce
                 ZTracker.logGAEcommerceProductClickAction(this, screenName, product.getProduct().getId() + "", product.getProduct().getName(), product.getProduct().getCategory(), product.getProduct().getSlug(), null, position, product.getProduct().getPrice(), productActionListName, actionPerformed);
 
-                loadSimilarProductsRequest();
+                // loadSimilarProductsRequest();
 
             } else {
                 showNullCaseView("No Info Available");
@@ -279,13 +288,26 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
             isSimilarProductsLoaded = true;
             if (adapter != null) {
-                SimilarProductsListObject similar = (SimilarProductsListObject) obj;
                 adapter.addSimilarProducts(((SimilarProductsListObject) obj).getProducts());
+            }
+            if (AppPreferences.isUserLogIn(this)) {
+                loadRecentlyViewed();
+            } else {
+                new GetDataFromCache().execute();
+            }
+            isLoading = false;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)) {
+
+            if (adapter != null) {
+                adapter.addRecentlyViewed(((SimilarProductsListObject) obj).getProducts());
+                adapter.setIsFooterRemoved(true);
             }
         }
     }
 
     NewProductDetailAdapter adapter;
+
+    boolean isLoading, isRequestAllowed;
 
     public void addAdapterData(HomeProductObj obj) {
         toolbarTitle.setText(obj.getProduct().getName());
@@ -333,6 +355,22 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     recyclerView.canScrollVertically(0);
                     Toast.makeText(NewProductDetailActivity.this,"Header reached",Toast.LENGTH_SHORT).show();
                 }*/
+
+                visibleItemCount = productDetailList.getLayoutManager()
+                        .getChildCount();
+                totalItemCount = productDetailList.getLayoutManager()
+                        .getItemCount();
+                pastVisiblesItems = ((LinearLayoutManager) productDetailList
+                        .getLayoutManager())
+                        .findFirstVisibleItemPosition();
+
+                if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
+                        && !isLoading) {
+                    if (!isSimilarProductsLoaded) {
+                        loadSimilarProductsRequest();
+                    }
+                }
+
                 if (adapter.getRefernceHolder() != null) {
 
                     System.out.println("Scroll Position::" + adapter.getRefernceHolder().mapParent.getTop());
@@ -343,8 +381,6 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     } else {
                         super.onScrolled(recyclerView, dx, dy);
                     }
-
-
                 } else {
                     super.onScrolled(recyclerView, dx, dy);
                 }
@@ -378,7 +414,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         if (AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
         } else {
-            addToCart.setText("Add to cart");
+            addToCart.setText(getResources().getString(R.string.add_to_cart));
         }
         if (AllProducts.getInstance().vendorIdsContains(adapter.getObj().getVendor().getId())) {
             adapter.setIsCancelBookingShown(true);
@@ -393,6 +429,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
 
     }
+
+
+    public void loadRecentlyViewed() {
+        int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
+        String finalUrl = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_RECENT_PRODUCTS_URL + "?userid=" + AppPreferences.getUserID(this)
+                + "&width=" + width + "&size=5&page=1";
+        GetRequestManager.getInstance().makeAyncRequest(finalUrl, RECENT_PRODUCT_REQUEST,
+                ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL_SIMILAR_PRODUCTS);
+    }
+
 
     private boolean checkEmailFormat(CharSequence target) {
 
@@ -523,6 +569,18 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+            if (AppPreferences.isUserLogIn(this)) {
+                loadRecentlyViewed();
+            } else {
+                new GetDataFromCache().execute();
+            }
+            isLoading = false;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)) {
+
+            if (adapter != null) {
+                adapter.setIsFooterRemoved(true);
+            }
         }
     }
 
@@ -614,7 +672,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         ProductAction productAction = new ProductAction(ProductAction.ACTION_ADD)
                                 .setCheckoutStep(1)
                                 .setCheckoutOptions("Add to cart");
-                    ZTracker.checkOutGaEvents(productAction,product,NewProductDetailActivity.this);
+                        ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
                     }
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
@@ -628,6 +686,21 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 if (progressDialog != null)
                     progressDialog.dismiss();
             }
+        } else if (requestType == ADD_TO_CART_PRODUCT_DETAIL_COVERT && status && !isDestroyed) {
+            try {
+                JSONObject jsonObject = ((JSONObject) response);
+                String message = null;
+                if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
+                    message = jsonObject.getString("success");
+                if (message != null) {
+                    ((CustomTextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
+                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) adapter.getObj().getProduct().getId(), 1));
+                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
             if (requestType == MARK_FAVOURITE_REQUEST_TAG) {
                 if (status) {
@@ -879,12 +952,25 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     showToast("No network available");
                     // Toast.makeText(ProductDetailsActivity.this, "No network available", Toast.LENGTH_SHORT).show();
                 }
-                ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Add-To-Cart", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
+                try {
+                    ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Add-To-Cart", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.buy_now:
 
                 if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
+                    if (!AllProducts.getInstance().cartContains(productId)) {
+                        String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                        List<NameValuePair> nameValuePair = new ArrayList<>();
+                        nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE + ""));
+                        nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
+                        nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+                        nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
 
+                        UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL_COVERT, adapter.getObj().getProduct().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+                    }
 // Add the step number and additional info about the checkout to the action.
 
 
@@ -926,11 +1012,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     shareIntent.putExtra("item_name", adapter.getObj().getProduct().getName());
                     shareIntent.putExtra("product_url", "/shop-product/");
                     shareIntent.putExtra("short_url", "www.zimply.in/shop-product/" + productSlug + "?pid=" + productId);
+                    ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Share-Product", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
                     startActivity(shareIntent);
                 } else {
                     Toast.makeText(this, "Please wait while loading...", Toast.LENGTH_SHORT).show();
                 }
-                ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Share-Product", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
                 break;
             case R.id.cart_icon:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
@@ -953,6 +1039,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     public void openSimilarProductsActivity() {
         Intent i = new Intent(this, SimilarProductsActivity.class);
         i.putExtra("productid", productId);
+        startActivity(i);
+    }
+
+    public void openRecentlyViewed() {
+        Intent i = new Intent(this, RecentProductsActivity.class);
+
         startActivity(i);
     }
 
@@ -1007,4 +1099,33 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             super.onBackPressed();
         }
     }
+
+    public class GetDataFromCache extends AsyncTask<Void, Void, Object> {
+
+        @Override
+        protected Object doInBackground(Void... params) {
+            ArrayList<BaseProductListObject> result = null;
+            try {
+                int userId = 1;
+                result = RecentProductsDBWrapper.getProducts(userId);
+            } catch (NumberFormatException e) {
+                result = RecentProductsDBWrapper.getProducts(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            if (!isDestroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0) {
+                adapter.addRecentlyViewed((ArrayList<BaseProductListObject>) result);
+
+            }
+            if (adapter != null)
+                adapter.setIsFooterRemoved(true);
+        }
+
+    }
+
 }

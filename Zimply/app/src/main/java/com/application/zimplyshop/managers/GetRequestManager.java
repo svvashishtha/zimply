@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.application.zimplyshop.baseobjects.ErrorObject;
+import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ParserClass;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.utils.CommonLib;
@@ -254,7 +255,8 @@ public class GetRequestManager {
         if(AppPreferences.isUserLogIn(mContext)){
             get.setHeader("Userid", AppPreferences.getUserID(mContext));
         }
-        HttpResponse response = HttpManager.execute(get);
+        HttpManager.setParams(mContext, AppConstants.STORE_PASS.toCharArray());
+        HttpResponse response = HttpManager.execute(get,mContext);
         BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
         StringBuilder builder = new StringBuilder();

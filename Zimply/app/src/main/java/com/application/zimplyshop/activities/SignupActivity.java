@@ -262,6 +262,7 @@ public class SignupActivity extends BaseActivity
         list.add(new BasicNameValuePair("password", password.getText().toString()));
         UploadManager.getInstance().makeAyncRequest(url, SIGNUP_REQUEST_TAG_SIGNUP, "",
                 ObjectTypes.OBJECT_TYPE_SIGNUP, null, list, null);
+        AppPreferences.setIsPasswordSet(SignupActivity.this, true);
     }
 
     private boolean checkEmailFormat(CharSequence target) {

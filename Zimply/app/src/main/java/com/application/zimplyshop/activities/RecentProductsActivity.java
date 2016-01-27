@@ -1,5 +1,6 @@
 package com.application.zimplyshop.activities;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,22 +15,25 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.ProductsRecyclerViewGridAdapter;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
+import com.application.zimplyshop.baseobjects.CacheProductListObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.baseobjects.ProductListObject;
+import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.managers.ImageLoaderManager;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.widgets.GridItemDecorator;
 
 import java.util.ArrayList;
 
 /**
- * Created by Ashish Goel on 1/8/2016.
+ * Created by Umesh Lohani on 1/22/2016.
  */
-public class SimilarProductsActivity extends BaseActivity implements
+public class RecentProductsActivity extends BaseActivity implements
         View.OnClickListener, GetRequestListener, RequestTags, AppConstants {
 
     String url, nextUrl;
@@ -41,9 +45,13 @@ public class SimilarProductsActivity extends BaseActivity implements
     int width;
     TextView titleText;
     long productId;
-    private GridLayoutManager gridLayoutManager;
-    private GridItemDecorator gridDecor,linearDecor;
+
+    long timeStamp;
     private boolean isRecyclerViewInLongItemMode;
+    private GridItemDecorator gridDecor, linearDecor;
+    GridLayoutManager gridLayoutManager;
+
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +65,13 @@ public class SimilarProductsActivity extends BaseActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         productList = (RecyclerView) findViewById(R.id.categories_list);
+
         gridDecor = new GridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini),false);
+                (int) getResources().getDimension(R.dimen.margin_mini), false);
         linearDecor = new GridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini),true);
+                (int) getResources().getDimension(R.dimen.margin_mini), true);
         gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
@@ -93,51 +102,38 @@ public class SimilarProductsActivity extends BaseActivity implements
         (findViewById(R.id.cart_item_true)).setVisibility(View.GONE);
         width = (getDisplayMetrics().widthPixels - (int) (2 * getResources()
                 .getDimension(R.dimen.font_small))) / 2;
-        productId = getIntent().getExtras().getLong("productid");
-
-        loadData();
+        //productId = getIntent().getExtras().getLong("productid");
+        if (AppPreferences.isUserLogIn(this)) {
+            loadData();
+        } else {
+            timeStamp = System.currentTimeMillis();
+            new GetDataFromCache().execute();
+        }
     }
 
     private void loadData() {
         String finalUrl;
         if (nextUrl == null) {
             int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
-            url = PRODUCT_DESCRIPTION_SIMILAR_PRODUCTS_URL + "?id=" + productId
-                    + "&width=" + width + "&size=20&page=1";
+            url = PRODUCT_DESCRIPTION_RECENT_PRODUCTS_URL + "?userid=" + AppPreferences.getUserID(this)
+                    + "&width=" + width + "&size=10&page=1";
             finalUrl = AppApplication.getInstance().getBaseUrl() + url;
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
         GetRequestManager.getInstance().addCallbacks(this);
         GetRequestManager.getInstance().makeAyncRequest(finalUrl,
-                PRODUCT_LIST_REQUEST_TAG + 1,
+                PRODUCT_LIST_REQUEST_TAG + 2,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_LIST_OBJECT);
     }
 
-    private void setAdapterData(ArrayList<BaseProductListObject> objs,int count) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs, int count) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
             final ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
             adapter.setCount(count);
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-
-                @Override
-                public int getSpanSize(int position) {
-                    switch (((ProductsRecyclerViewGridAdapter) productList
-                            .getAdapter()).getItemViewType(position)) {
-                        case 0:
-                            return 1;
-                        case 1:
-                            return 2;
-                        case 2:
-                            return 2;
-                        default:
-                            return -1;
-                    }
-                }
-            });
             adapter.setCheckLayoutOptionListener(new ProductsRecyclerViewGridAdapter.CheckLayoutOptions() {
                 @Override
                 public boolean checkIsRecyclerViewInLongItemMode() {
@@ -147,30 +143,32 @@ public class SimilarProductsActivity extends BaseActivity implements
                 @Override
                 public void switchRecyclerViewLayoutManager() {
                     if (isRecyclerViewInLongItemMode) {
+                        productList.removeItemDecoration(linearDecor);
                         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
-                            @Override
                             public int getSpanSize(int position) {
-                                if (position == 0)
-                                    return 2;
-                                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
-                                    return 2;
-
-                                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
-                                    return 2;
-                                } else return 1;
+                                switch (((ProductsRecyclerViewGridAdapter) productList
+                                        .getAdapter()).getItemViewType(position)) {
+                                    case 0:
+                                        return 1;
+                                    case 1:
+                                        return 2;
+                                    case 2:
+                                        return 2;
+                                    default:
+                                        return -1;
+                                }
                             }
                         });
                         productList.setLayoutManager(gridLayoutManager);
-                        productList.removeItemDecoration(linearDecor);
-                        productList.addItemDecoration(gridDecor);
                         adapter.setHeight(width);
+                        productList.addItemDecoration(gridDecor);
                         productList.getAdapter().notifyDataSetChanged();
                     } else {
                         productList.removeItemDecoration(gridDecor);
                         productList.addItemDecoration(linearDecor);
                         adapter.setHeight(getDisplayMetrics().widthPixels);
-                        productList.setLayoutManager(new LinearLayoutManager(SimilarProductsActivity.this));
+                        productList.setLayoutManager(new LinearLayoutManager(RecentProductsActivity.this));
                         productList.getAdapter().notifyDataSetChanged();
                     }
                     isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
@@ -195,7 +193,11 @@ public class SimilarProductsActivity extends BaseActivity implements
 
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
                                     && !isLoading && isRequestAllowed) {
-                                loadData();
+                                if (AppPreferences.isUserLogIn(RecentProductsActivity.this)) {
+                                    loadData();
+                                } else {
+                                    new GetDataFromCache().execute();
+                                }
                             }
                             //scrollToolbarAndHeaderBy(-dy);
 
@@ -204,7 +206,7 @@ public class SimilarProductsActivity extends BaseActivity implements
                         @Override
                         public void onScrollStateChanged(
                                 RecyclerView recyclerView, int newState) {
-                            new ImageLoaderManager(SimilarProductsActivity.this)
+                            new ImageLoaderManager(RecentProductsActivity.this)
                                     .setScrollState(newState);
                             super.onScrollStateChanged(recyclerView, newState);
                         }
@@ -220,7 +222,7 @@ public class SimilarProductsActivity extends BaseActivity implements
         View view = LayoutInflater.from(this).inflate(
                 R.layout.common_toolbar_text_layout, null);
         titleText = (TextView) view.findViewById(R.id.title_textview);
-        titleText.setText("You Might Also Like");
+        titleText.setText("Recently viewed");
         toolbar.addView(view);
     }
 
@@ -249,7 +251,7 @@ public class SimilarProductsActivity extends BaseActivity implements
     @Override
     public void onRequestStarted(String requestTag) {
         if (!isDestroyed
-                && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 1)) {
+                && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 2)) {
             if (productList.getAdapter() == null
                     || productList.getAdapter().getItemCount() == 0) {
                 showLoadingView();
@@ -266,8 +268,9 @@ public class SimilarProductsActivity extends BaseActivity implements
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
         if (!isDestroyed
-                && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 1)) {
+                && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 2)) {
             if (((ProductListObject) obj).getProducts().size() == 0) {
+                isRequestAllowed = false;
                 if (productList.getAdapter() == null
                         || productList.getAdapter().getItemCount() == 1) {
                     showNullCaseView("No Products");
@@ -276,9 +279,9 @@ public class SimilarProductsActivity extends BaseActivity implements
                     ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                 }
-                isRequestAllowed = false;
+
             } else {
-                setAdapterData(((ProductListObject) obj).getProducts(),((ProductListObject) obj).getCount());
+                setAdapterData(((ProductListObject) obj).getProducts(), ((ProductListObject) obj).getCount());
 
                 nextUrl = ((ProductListObject) obj).getNext_url();
                 showView();
@@ -299,7 +302,7 @@ public class SimilarProductsActivity extends BaseActivity implements
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
         if (!isDestroyed
-                && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 1)) {
+                && requestTag.equalsIgnoreCase(PRODUCT_LIST_REQUEST_TAG + 2)) {
             if (productList.getAdapter() == null
                     || productList.getAdapter().getItemCount() == 1) {
                 showNetworkErrorView();
@@ -327,5 +330,54 @@ public class SimilarProductsActivity extends BaseActivity implements
         isDestroyed = true;
         GetRequestManager.getInstance().removeCallbacks(this);
         super.onDestroy();
+    }
+
+    public class GetDataFromCache extends AsyncTask<Void, Void, Object> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (productList.getAdapter() == null
+                    || productList.getAdapter().getItemCount() == 0) {
+                showLoadingView();
+                changeViewVisiblity(productList, View.GONE);
+            }
+        }
+
+        @Override
+        protected Object doInBackground(Void... params) {
+            CacheProductListObject result = null;
+            count = RecentProductsDBWrapper.getProductsCount(1);
+            /*try {
+                int userId = Integer.parseInt(AppPreferences.getUserID(RecentProductsActivity.this));
+                result = RecentProductsDBWrapper.getProducts(userId,timeStamp,10);
+            } catch(NumberFormatException e) {*/
+            result = RecentProductsDBWrapper.getProducts(1, timeStamp, 10);
+            /*} catch (Exception e) {
+                e.printStackTrace();
+            }*/
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            if (!isDestroyed && result != null) {
+
+                timeStamp = ((CacheProductListObject) result).getTimeStamp();
+                setAdapterData(((CacheProductListObject) result).getObjects(),count);
+                showView();
+                changeViewVisiblity(productList, View.VISIBLE);
+                if (((CacheProductListObject) result).getObjects().size() != 10) {
+                    isRequestAllowed = false;
+                    if (productList.getAdapter() != null)
+                        ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
+                                .removeItem();
+                } else {
+                    isRequestAllowed = true;
+                }
+            }
+        }
+
     }
 }

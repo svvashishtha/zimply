@@ -33,7 +33,7 @@ public interface RequestTags {
     String LATEST_NOTIFICATION_COUNT_TAG = "latestnotifcounttext";
     String LATEST_BOOKINGS_TAG = "latestbookingtag";
     String OFFERS_REQUEST_TAG = "offersrequesttag";
-
+    String RECENT_PRODUCT_REQUEST = "recentproductsrequest";
 
     String FAV_LIST_REQUEST_TAG = "favlistrequesttag";
     String FORGOT_PASSWORD_REQUEST_TAG = "forgotPasswordRequestTag";
@@ -54,6 +54,7 @@ public interface RequestTags {
 
     int ADD_TO_CART_SEARCH = 0x0111;
     int ADD_TO_CART_PRODUCT_DETAIL = 0x0112;
+    int ADD_TO_CART_PRODUCT_DETAIL_COVERT = 0x01121;
     int MARK_PRODUCT_REVIEW_TAG = 0x0113;
     int CANCEL_PRODUCT_REVIEW_TAG = 0x0114;
     int QUANTITY_UPDATE = 0x009;

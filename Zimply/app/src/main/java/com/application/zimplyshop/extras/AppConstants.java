@@ -2,6 +2,8 @@ package com.application.zimplyshop.extras;
 
 public interface AppConstants {
 
+    String STORE_PASS = "zimply@123";
+
     String FONT_PATH = "";
     String HOMEPAGE_URL = "content/home-page-new/";
     String EXPERT_LIST_URL = "explore/expert-list/";
@@ -29,6 +31,7 @@ public interface AppConstants {
     String FORGOT_PASSWORD = "zimply-auth/new-forget-password/";
     String PRODUCT_DESCRIPTION_REQUETS_URL = "ecommerce/product-detail/";
     String PRODUCT_DESCRIPTION_SIMILAR_PRODUCTS_URL = "ecommerce/product-recom/";
+    String PRODUCT_DESCRIPTION_RECENT_PRODUCTS_URL = "ecommerce/recent-viewed/";
 
     String MARK_FAVOURITE_URL = "zimply-auth/add-item-in-favourite/";
     String MARK_UNFAVOURITE_URL = "zimply-auth/delete-item-from-favourite/";
@@ -74,6 +77,7 @@ public interface AppConstants {
     int TYPE_CATEGORY = 1;
     int TYPE_SUB_CATEGORY = 2;
     int TYPE_SUB_SUB_CATEGORY = 3;
+    int TYPE_PRODUCT=4;
 
     int TYPE_PHOTO_FILTER_STYLE = 1;
     int TYPE_PHOTO_FILTER_BUDGET = 2;

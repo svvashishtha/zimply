@@ -52,8 +52,8 @@ import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
+import com.application.zimplyshop.widgets.GridItemDecorator;
 import com.application.zimplyshop.widgets.RangeSeekBar;
-import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
 
 import java.util.ArrayList;
 
@@ -78,44 +78,69 @@ public class ProductListingActivity extends BaseActivity implements
     long FROM_VALUE = 1;
     long TO_VALUE = 500000;
 
+    ArrayList<Integer> subCategoryId;
+
     boolean isRefreshData;
     Context context;
     TextView titleText;
 
     boolean isNotification, isO2o, isCartChecked;
-
     ArrayList<ShopSubCategoryObj> subCategories;
-
     TextView filterFromTextView, filterToTextView;
-    ArrayList<CustomRadioButton> priceRadioButtonsArrayList;
-    SubCategoryAdapter subCategoryAdapter;
-
-    //    used to handle no items view when the user visits the screen for the first time without appliying any filters
+    public boolean isRecyclerViewInLongItemMode = false;
+    GridLayoutManager gridLayoutManager;
     boolean setFilterDataToArbitraryDefaultsIfNoData;
     private String categoryName;
+    private ArrayList<CustomRadioButton> priceRadioButtonsArrayList;
+    SubCategoryAdapter subCategoryAdapter;
+    GridItemDecorator gridDecor,linearDecor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_filter_layout);
-        PAGE_TYPE = AppConstants.PAGE_TYPE_PRODUCT;
+
         filterFromTextView = (TextView) findViewById(R.id.tv_new_from_price_filter);
         filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
-
+        PAGE_TYPE = AppConstants.PAGE_TYPE_PRODUCT;
         context = getApplicationContext();
         if (getIntent().getStringExtra("category_id") != null)
             categoryId = Integer.parseInt(getIntent().getStringExtra("category_id"));
+        subCategoryId = new ArrayList<>();
         isNotification = getIntent().getBooleanExtra("is_notification", false);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         productList = (RecyclerView) findViewById(R.id.categories_list);
-        productList.setLayoutManager(new GridLayoutManager(this, 2));
-        productList.addItemDecoration(new SpaceGridItemDecorator(
+        gridDecor = new GridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini)));
+                (int) getResources().getDimension(R.dimen.margin_mini),false);
+        linearDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),true);
+        gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+            @Override
+            public int getSpanSize(int position) {
+                switch (((ProductsRecyclerViewGridAdapter) productList
+                        .getAdapter()).getItemViewType(position)) {
+                    case 0:
+                        return 1;
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 2;
+                    default:
+                        return -1;
+                }
+            }
+        });
+        productList.setLayoutManager(gridLayoutManager);
+        productList.addItemDecoration(gridDecor);
 
         // setProductsGrid();
         discountId = getIntent().getIntExtra("discount_id", -1);
@@ -150,6 +175,7 @@ public class ProductListingActivity extends BaseActivity implements
                             gotIt.setVisibility(View.GONE);
 
                             showFilterTut();
+
                         }
                     });
                 }
@@ -157,8 +183,8 @@ public class ProductListingActivity extends BaseActivity implements
         }
         loadData();
 
-        if(isNotification){
-            ZTracker.logGaCustomEvent(this,"GCM-Click",getIntent().getStringExtra("category_name"),"","");
+        if (isNotification) {
+            ZTracker.logGaCustomEvent(this, "GCM-Click", getIntent().getStringExtra("category_name"), "", "");
         }
     }
 
@@ -171,6 +197,7 @@ public class ProductListingActivity extends BaseActivity implements
             }
         }, 500);
     }
+
 
     boolean isHideFilter;
     /*public int getSelectedCatgeoryId(int categoryId) {
@@ -219,12 +246,69 @@ public class ProductListingActivity extends BaseActivity implements
         return subCategory;
     }
 
-    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
+    private void setAdapterData(ProductListObject productListObject) {
+        ArrayList<BaseProductListObject> objs = productListObject.getProducts();
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
+            final ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                @Override
+                public int getSpanSize(int position) {
+                    if (position == 0)
+                        return 2;
+                    else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
+                        return 2;
+
+                    } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
+                        return 2;
+                    } else return 1;
+                }
+            });
+            productList.setLayoutManager(gridLayoutManager);
+            adapter.setCheckLayoutOptionListener(new ProductsRecyclerViewGridAdapter.CheckLayoutOptions() {
+                @Override
+                public boolean checkIsRecyclerViewInLongItemMode() {
+                    return isRecyclerViewInLongItemMode;
+                }
+
+                @Override
+                public void switchRecyclerViewLayoutManager() {
+                    if (isRecyclerViewInLongItemMode) {
+                        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                            @Override
+                            public int getSpanSize(int position) {
+                                switch (((ProductsRecyclerViewGridAdapter) productList
+                                        .getAdapter()).getItemViewType(position)) {
+                                    case 0:
+                                        return 1;
+                                    case 1:
+                                        return 2;
+                                    case 2:
+                                        return 2;
+                                    default:
+                                        return -1;
+                                }
+                            }
+                        });
+                        productList.setLayoutManager(gridLayoutManager);
+                        productList.removeItemDecoration(linearDecor);
+                        productList.addItemDecoration(gridDecor);
+                        adapter.setHeight(width);
+                        productList.getAdapter().notifyDataSetChanged();
+                    } else {
+                        productList.removeItemDecoration(gridDecor);
+                        productList.addItemDecoration(linearDecor);
+                        adapter.setHeight(getDisplayMetrics().widthPixels);
+                        productList.setLayoutManager(new LinearLayoutManager(ProductListingActivity.this));
+                        productList.getAdapter().notifyDataSetChanged();
+                    }
+                    isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
+                }
+            });
             productList.setAdapter(adapter);
             productList
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -256,7 +340,7 @@ public class ProductListingActivity extends BaseActivity implements
                             super.onScrollStateChanged(recyclerView, newState);
                         }
                     });
-            ((GridLayoutManager) productList.getLayoutManager())
+            /*((GridLayoutManager) productList.getLayoutManager())
                     .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                         @Override
                         public int getSpanSize(int position) {
@@ -270,11 +354,12 @@ public class ProductListingActivity extends BaseActivity implements
                                     return -1;
                             }
                         }
-                    });
+                    });*/
 
         }
         ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
                 .addData(objs);
+        ((ProductsRecyclerViewGridAdapter) productList.getAdapter()).setCount(productListObject.getCount());
     }
 
     private void addToolbarView(Toolbar toolbar) {
@@ -282,8 +367,7 @@ public class ProductListingActivity extends BaseActivity implements
                 R.layout.common_toolbar_text_layout, null);
         titleText = (TextView) view.findViewById(R.id.title_textview);
         if (getIntent().getStringExtra("category_name") != null) {
-            categoryName = getIntent().getStringExtra("category_name");
-            titleText.setText(categoryName);
+            titleText.setText(getIntent().getStringExtra("category_name"));
         } else {
             titleText.setText("Products");
         }
@@ -307,8 +391,7 @@ public class ProductListingActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                /*this.finish();*/
-                onBackPressed();
+                this.finish();
                 break;
             case R.id.cart:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
@@ -442,7 +525,7 @@ public class ProductListingActivity extends BaseActivity implements
                             + (isO2o ? "&is_o2o=" + 1 : "");
 
                     isRefreshData = true;
-                    if (sortId == -1 && priceHigh == TO_VALUE && priceLte == FROM_VALUE && !isO2o) {
+                    if (sortId == -1 && priceHigh == 500000 && priceLte == 1 && !isO2o) {
                         isFilterApplied = false;
                     } else {
                         isFilterApplied = true;
@@ -483,7 +566,6 @@ public class ProductListingActivity extends BaseActivity implements
             case R.id.sort_filter_layout:
 
                 break;
-            case R.id.null_case_image:
             case R.id.retry_layout:
                 if (isRequestFailed) {
                     loadData();
@@ -543,7 +625,7 @@ public class ProductListingActivity extends BaseActivity implements
                     }
 
                 } else {
-                        showToast("No more Products");
+                    showToast("No more Products");
                     ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
                             .removeItem();
                 }
@@ -552,14 +634,13 @@ public class ProductListingActivity extends BaseActivity implements
                 if (productList.getAdapter() == null) {
                     setMinimumAndMaximumFilterPriceValues(((ProductListObject) obj));
                 }
-                setAdapterData(((ProductListObject) obj).getProducts());
+                setAdapterData(((ProductListObject) obj));
                 try {
                     //log ga event for product listing activity
 
                     ZTracker.logGaCustomEvent(ProductListingActivity.this, "Product Listing",
                             categoryName != null ? categoryName : "category name not available", categoryId + "", "");
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 nextUrl = ((ProductListObject) obj).getNext_url();
@@ -753,6 +834,7 @@ public class ProductListingActivity extends BaseActivity implements
 
     @Override
     protected void onResume() {
+
         if (AllProducts.getInstance().getCartCount() > 0) {
             findViewById(R.id.cart_item_true).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.cart_item_true)).setText(AllProducts.getInstance().getCartCount() + "");
@@ -896,8 +978,9 @@ public class ProductListingActivity extends BaseActivity implements
         });
     }
 
+
     public void addMaxInputFilter() {
-        //((EditText)findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax( Long.parseLong((((EditText) findViewById(R.id.from_price)).getText()).toString()) + "",(TO_VALUE) + "")});
+//        ((EditText)findViewById(R.id.to_price)).setFilters(new InputFilter[]{new InputFilterMinMax( Long.parseLong((((EditText) findViewById(R.id.from_price)).getText()).toString()) + "",(TO_VALUE) + "")});
     }
 
     public void addMinInputFilter() {
@@ -926,6 +1009,4 @@ public class ProductListingActivity extends BaseActivity implements
         filterToTextView.setText(TO_VALUE + "");
         filterApplied = false;
     }
-
-
 }

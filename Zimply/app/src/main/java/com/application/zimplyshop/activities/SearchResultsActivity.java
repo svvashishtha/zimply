@@ -43,8 +43,8 @@ import com.application.zimplyshop.serverapis.RequestTags;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
+import com.application.zimplyshop.widgets.GridItemDecorator;
 import com.application.zimplyshop.widgets.RangeSeekBar;
-import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
 
 import java.util.ArrayList;
 
@@ -81,7 +81,10 @@ public class SearchResultsActivity extends BaseActivity implements
     TextView filterFromTextView, filterToTextView;
     ArrayList<RadioButton> priceRadioButtonsArrayList;
     boolean setFilterDataToArbitraryDefaultsIfNoData;
+    private GridLayoutManager gridLayoutManager;
 
+    public boolean isRecyclerViewInLongItemMode = false;
+    GridItemDecorator gridDecor,linearDecor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +104,34 @@ public class SearchResultsActivity extends BaseActivity implements
         filterToTextView = (TextView) findViewById(R.id.tv_new_to_price_filter);
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
-
-        productList.setLayoutManager(new GridLayoutManager(this, 2));
-        productList.addItemDecoration(new SpaceGridItemDecorator(
+        gridDecor = new GridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini)));
+                (int) getResources().getDimension(R.dimen.margin_mini),false);
+        linearDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),true);
 
+        gridLayoutManager = new GridLayoutManager(this, 2);
+        productList.setLayoutManager(gridLayoutManager);
+        productList.addItemDecoration(gridDecor);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+            @Override
+            public int getSpanSize(int position) {
+                switch (((ProductsRecyclerViewGridAdapter) productList
+                        .getAdapter()).getItemViewType(position)) {
+                    case 0:
+                        return 1;
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 2;
+                    default:
+                        return -1;
+                }
+            }
+        });
+        productList.setLayoutManager(gridLayoutManager);
         // setProductsGrid();
         url = getIntent().getStringExtra("url");
         if (getIntent().getExtras().containsKey("name"))
@@ -156,6 +181,34 @@ public class SearchResultsActivity extends BaseActivity implements
         sortByLayout.setOnClickListener(this);
     }
 
+    public void switchRecyclerViewLayoutManager() {
+        if (isRecyclerViewInLongItemMode) {
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                @Override
+                public int getSpanSize(int position) {
+                    switch (((ProductsRecyclerViewGridAdapter) productList
+                            .getAdapter()).getItemViewType(position)) {
+                        case 0:
+                            return 1;
+                        case 1:
+                            return 2;
+                        case 2:
+                            return 2;
+                        default:
+                            return -1;
+                    }
+                }
+            });
+            productList.setLayoutManager(gridLayoutManager);
+            productList.getAdapter().notifyDataSetChanged();
+        } else {
+            productList.setLayoutManager(new LinearLayoutManager(this));
+            productList.getAdapter().notifyDataSetChanged();
+        }
+        isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
+    }
+
     private void loadData() {
         String finalUrl;
         if (nextUrl == null) {
@@ -193,12 +246,54 @@ public class SearchResultsActivity extends BaseActivity implements
                 ObjectTypes.OBJECT_TYPE_PRODUCT_SEARCH_RESULT);
     }
 
-    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs, ProductListObject object) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
+            final ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
+            adapter.setCheckLayoutOptionListener(new ProductsRecyclerViewGridAdapter.CheckLayoutOptions() {
+                @Override
+                public boolean checkIsRecyclerViewInLongItemMode() {
+                    return isRecyclerViewInLongItemMode;
+                }
+
+                @Override
+                public void switchRecyclerViewLayoutManager() {
+                    if (isRecyclerViewInLongItemMode) {
+                        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                            @Override
+                            public int getSpanSize(int position) {
+                                switch (((ProductsRecyclerViewGridAdapter) productList
+                                        .getAdapter()).getItemViewType(position)) {
+                                    case 0:
+                                        return 1;
+                                    case 1:
+                                        return 2;
+                                    case 2:
+                                        return 2;
+                                    default:
+                                        return -1;
+                                }
+                            }
+                        });
+                        productList.setLayoutManager(gridLayoutManager);
+                        productList.removeItemDecoration(linearDecor);
+                        productList.addItemDecoration(gridDecor);
+                        adapter.setHeight(width);
+                        productList.getAdapter().notifyDataSetChanged();
+                    } else {
+                        productList.removeItemDecoration(gridDecor);
+                        productList.addItemDecoration(linearDecor);
+                        adapter.setHeight(getDisplayMetrics().widthPixels);
+                        productList.setLayoutManager(new LinearLayoutManager(SearchResultsActivity.this));
+                        productList.getAdapter().notifyDataSetChanged();
+                    }
+                    isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
+                }
+            });
+            adapter.setCount(object.getCount());
             productList.setAdapter(adapter);
             productList
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -230,7 +325,7 @@ public class SearchResultsActivity extends BaseActivity implements
                             super.onScrollStateChanged(recyclerView, newState);
                         }
                     });
-            ((GridLayoutManager) productList.getLayoutManager())
+            /*((GridLayoutManager) productList.getLayoutManager())
                     .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                         @Override
                         public int getSpanSize(int position) {
@@ -244,7 +339,7 @@ public class SearchResultsActivity extends BaseActivity implements
                                     return -1;
                             }
                         }
-                    });
+                    });*/
 
         }
         ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
@@ -513,7 +608,7 @@ public class SearchResultsActivity extends BaseActivity implements
                 if (productList.getAdapter() == null) {
                     setMinimumAndMaximumFilterPriceValues(((ProductListObject) obj));
                 }
-                setAdapterData(homeProductObjs);
+                setAdapterData(homeProductObjs,(ProductListObject) obj);
                 // nextUrl = ((ProductListObject) obj).getNext_url();
                 //subCategories =((ProductListObject) obj).getSubcategory();
                 showView();

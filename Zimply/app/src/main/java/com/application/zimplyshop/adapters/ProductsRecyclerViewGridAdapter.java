@@ -3,6 +3,7 @@ package com.application.zimplyshop.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,8 +17,11 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
+import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.managers.ImageLoaderManager;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import java.util.ArrayList;
@@ -25,10 +29,13 @@ import java.util.ArrayList;
 public class ProductsRecyclerViewGridAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public int TYPE_DATA = 0;
-    public int TYPE_LOADER = 1;
+    public static final int TYPE_DATA = 0;
+    public static final int TYPE_LOADER = 1;
+    public static final int TYPE_HEADER = 2;
 
     ArrayList<BaseProductListObject> objs;
+
+    CheckLayoutOptions mListener;
 
     Context mContext;
 
@@ -37,6 +44,7 @@ public class ProductsRecyclerViewGridAdapter extends
     boolean isFooterRemoved;
 
     Activity activity;
+    int count;
 
     public ProductsRecyclerViewGridAdapter(Activity activity, Context context,
                                            int height) {
@@ -86,24 +94,30 @@ public class ProductsRecyclerViewGridAdapter extends
 
     public void removeItem() {
         isFooterRemoved = true;
-        notifyItemRemoved(objs.size());
+        notifyItemRemoved(objs.size() + 1);
     }
 
     @Override
     public int getItemCount() {
         if (objs != null) {
             if (isFooterRemoved) {
-                return objs.size();
-            } else {
                 return objs.size() + 1;
+            } else {
+                return objs.size() + 2;
             }
         }
         return 0;
     }
 
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     @Override
     public int getItemViewType(int position) {
-        if (position == objs.size()) {
+        if (position == 0)
+            return TYPE_HEADER;
+        else if (position == objs.size() + 1) {
             return TYPE_LOADER;
         } else {
             return TYPE_DATA;
@@ -112,39 +126,55 @@ public class ProductsRecyclerViewGridAdapter extends
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holderCom, int position) {
         if (getItemViewType(position) == TYPE_DATA) {
+            ProductViewHolder holder = (ProductViewHolder) holderCom;
+            position--;
+            final int positionTemp = position;
+
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, height);
-            ((ProductViewHolder) holder).img.setLayoutParams(lp);
+            holder.img.setLayoutParams(lp);
+
+            if (mListener.checkIsRecyclerViewInLongItemMode()) {
+                holder.priceContainer.setOrientation(LinearLayout.HORIZONTAL);
+                holder.productDiscountedPrice.setPadding(0, 0, (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
+
+            } else {
+                holder.priceContainer.setOrientation(LinearLayout.VERTICAL);
+                holder.productDiscountedPrice.setPadding((int) mContext.getResources().getDimension(R.dimen.margin_small), 0,
+                        (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
+            }
+
+
             if (objs.get(position).getImage() != null) {
-                if (((ProductViewHolder) holder).img.getTag() == null
-                        || !(((String) ((ProductViewHolder) holder).img
+                if (holder.img.getTag() == null
+                        || !(((String) holder.img
                         .getTag()).equalsIgnoreCase(objs.get(position)
                         .getImage()))) {
 
                     new ImageLoaderManager(activity).setImageFromUrl(
                             objs.get(position).getImage(),
-                            ((ProductViewHolder) holder).img, "users", height,
+                            holder.img, "users", height,
                             height, true, false);
 
-                    ((ProductViewHolder) holder).img.setTag(objs.get(position)
+                    holder.img.setTag(objs.get(position)
                             .getImage());
                 }
             }
             if (objs.get(position).is_o2o()) {
                 ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.VISIBLE);
             } else {
-                ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.INVISIBLE);
+                ((ProductViewHolder) holder).buyOfflineTag.setVisibility(View.GONE);
             }
             ((ProductViewHolder) holder).productName.setText(objs.get(position)
                     .getName());
-            /*((ProductViewHolder) holder).productDiscountedPrice
+            ((ProductViewHolder) holder).productDiscountedPrice
                     .setText(mContext.getString(R.string.Rs) + " "
                             + Math.round(objs.get(position).getPrice()));
-*/
-            /*((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
-            ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);*/
+
+            ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
+            ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
             try {
                 if (objs.get(position).getMrp() != objs.get(position).getPrice()) {
                     ((ProductViewHolder) holder).productDiscountedPrice
@@ -173,13 +203,20 @@ public class ProductsRecyclerViewGridAdapter extends
             }
 
 
-            ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
+            final int finalPosition = position;
+            ((ProductViewHolder) holder).itemContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (AppPreferences.isUserLogIn(mContext)) {
+
+                    } else {
+                        RecentProductsDBWrapper.addProduct(objs.get(positionTemp), 1, System.currentTimeMillis());
+                    }
+
                     Intent intent = new Intent(mContext, NewProductDetailActivity.class);
-                    intent.putExtra("slug", objs.get(position).getSlug());
-                    intent.putExtra("id", objs.get(position).getId());
-                    intent.putExtra("title", objs.get(position).getName());
+                    intent.putExtra("slug", objs.get(positionTemp).getSlug());
+                    intent.putExtra("id", objs.get(positionTemp).getId());
+                    intent.putExtra("title", objs.get(positionTemp).getName());
 
                     //        GA Ecommerce
                     intent.putExtra("productActionListName", "Product List Item Click");
@@ -189,8 +226,22 @@ public class ProductsRecyclerViewGridAdapter extends
                     mContext.startActivity(intent);
                 }
             });
-        } else {
+        } else if (getItemViewType(position) == TYPE_HEADER) {
 
+            final HeaderViewHolder holder = (HeaderViewHolder) holderCom;
+            holder.productCount.setText(count + " Products");
+            if (mListener.checkIsRecyclerViewInLongItemMode()) {
+                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.grid_icon));
+
+            } else {
+                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_icon));
+            }
+            holder.gridIconContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.switchRecyclerViewLayoutManager();
+                }
+            });
         }
 
     }
@@ -201,8 +252,11 @@ public class ProductsRecyclerViewGridAdapter extends
         RecyclerView.ViewHolder holder;
         if (itemViewType == TYPE_DATA) {
             View view = LayoutInflater.from(viewGrp.getContext()).inflate(
-                    R.layout.product_grid_item_layout, null);
+                    R.layout.product_grid_item_layout, viewGrp, false);
             holder = new ProductViewHolder(view);
+        } else if (itemViewType == TYPE_HEADER) {
+            View v = LayoutInflater.from(viewGrp.getContext()).inflate(R.layout.product_listing_activity_list_header_layout, viewGrp, false);
+            holder = new HeaderViewHolder(v);
         } else {
             View view = LayoutInflater.from(viewGrp.getContext()).inflate(
                     R.layout.progress_footer_layout, viewGrp, false);
@@ -217,9 +271,15 @@ public class ProductsRecyclerViewGridAdapter extends
         notifyDataSetChanged();
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView img, buyOfflineTag;
         TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
+        LinearLayout priceContainer;
+        View itemContainer;
 
         public ProductViewHolder(View view) {
             super(view);
@@ -231,6 +291,8 @@ public class ProductsRecyclerViewGridAdapter extends
                     .findViewById(R.id.product_price);
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
             buyOfflineTag = (ImageView) view.findViewById(R.id.buy_offline_tag);
+            priceContainer = (LinearLayout) view.findViewById(R.id.price_container);
+            itemContainer = view.findViewById(R.id.productgriditemcoontainerlayout);
         }
     }
 
@@ -241,5 +303,29 @@ public class ProductsRecyclerViewGridAdapter extends
 
         }
 
+    }
+
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        LinearLayout gridIconContainer;
+        ImageView gridIcon;
+        CustomTextView productCount;
+
+        public HeaderViewHolder(View v) {
+            super(v);
+            productCount = (CustomTextView) v.findViewById(R.id.product_count);
+            gridIcon = (ImageView) v.findViewById(R.id.gridicon);
+            gridIconContainer = (LinearLayout) v.findViewById(R.id.gridbuttonswitcher);
+        }
+    }
+
+    public void setCheckLayoutOptionListener(CheckLayoutOptions mListener) {
+        this.mListener = mListener;
+    }
+
+    public interface CheckLayoutOptions {
+        boolean checkIsRecyclerViewInLongItemMode();
+
+        void switchRecyclerViewLayoutManager();
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class SimilarProductsListObject {
 
+    String next_url;
 
     ArrayList<BaseProductListObject> products;
 
@@ -18,4 +19,11 @@ public class SimilarProductsListObject {
         this.products = products;
     }
 
+    public String getNext_url() {
+        return next_url;
+    }
+
+    public void setNext_url(String next_url) {
+        this.next_url = next_url;
+    }
 }

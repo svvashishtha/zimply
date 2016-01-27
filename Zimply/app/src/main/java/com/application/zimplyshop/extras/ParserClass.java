@@ -4,6 +4,7 @@ import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.baseobjects.AppConfig;
 import com.application.zimplyshop.baseobjects.BannerObject;
+import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
 import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.CategoryTree;
@@ -199,6 +200,16 @@ public class ParserClass implements ObjectTypes {
                                 categories.add(category);
                             }
                             parentCategory.setCategories(categories);
+                        }
+                        if (parentCategoryJson.has("products") && parentCategoryJson.get("products") instanceof JSONArray){
+                            JSONArray products = parentCategoryJson.getJSONArray("products");
+                            ArrayList baseProductListObjects = new ArrayList<BaseProductListObject>();
+                            for (int i=0;i<products.length();i++)
+                            {
+                                baseProductListObjects.add(new Gson().fromJson(products.get(i).toString(),BaseProductListObject.class));
+                            }
+                            parentCategory.setProducts(baseProductListObjects);
+
                         }
                     }
                 } catch (JSONException e) {

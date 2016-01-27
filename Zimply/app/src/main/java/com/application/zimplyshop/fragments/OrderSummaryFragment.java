@@ -342,7 +342,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                             ProductAction productAction = new ProductAction(ProductAction.ACTION_CHECKOUT)
                                     .setCheckoutStep(4)
                                     .setCheckoutOptions("CheckOut order page");
-                            ZTracker.checkOutGaEvents(productAction, product, getActivity());
+                            ZTracker.checkOutGaEvents(productAction, product, getActivity().getApplicationContext());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -662,7 +662,24 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
                 CommonLib.writeRequestData("Order Detail Page Payment Request :" + (System.currentTimeMillis() - requestTimePayment) + " mS");
                 if (status) {
                     orderId = JSONUtils.getStringfromJSON(((JSONObject) response), "order_id");
-
+                    for (int i = 0; i < cartObject.getCart().getDetail().size(); i++) {
+                        try {
+                            if (CommonLib.isNetworkAvailable(getActivity())) {
+                                Product product = new Product()
+                                        .setId(cartObject.getCart().getDetail().get(i).getProduct().getId() + "")
+                                        .setName(cartObject.getCart().getDetail().get(i).getProduct().getName())
+                                        .setPrice(cartObject.getCart().getDetail().get(i).getProduct().getPrice())
+                                        .setQuantity(cartObject.getCart().getDetail().get(i).getQty());
+// Add the step number and additional info about the checkout to the action.
+                                ProductAction productAction = new ProductAction(ProductAction.ACTION_CHECKOUT)
+                                        .setCheckoutStep(5)
+                                        .setCheckoutOptions("Proceed to pay");
+                                ZTracker.checkOutGaEvents(productAction, product, getActivity().getApplicationContext());
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                     nextFragment();
                 } else {
                     Toast.makeText(getActivity(), "Could not place order. Try again", Toast.LENGTH_SHORT).show();

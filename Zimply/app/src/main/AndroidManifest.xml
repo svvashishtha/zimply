@@ -342,6 +342,10 @@
             android:name=".activities.SimilarProductsActivity"
             android:label="@string/app_name"
             android:theme="@style/CheckboxAppTheme" />
+        <activity
+            android:name=".activities.RecentProductsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

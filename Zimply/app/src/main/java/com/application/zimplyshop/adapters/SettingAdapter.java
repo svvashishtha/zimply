@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.BaseLoginSignupActivity;
+import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.objects.AllProducts;
 import com.application.zimplyshop.objects.AllUsers;
 import com.application.zimplyshop.preferences.AppPreferences;
@@ -64,11 +65,17 @@ public class SettingAdapter extends RecyclerView.Adapter {
     // case 4 when password view is visible
     @Override
     public int getItemViewType(int position) {
-        if (position == 1)
-            return 1;
-        else if (position == 2)
-            return 2;
-        else return 0;
+        if (position == 1) {
+            if (AppPreferences.isPasswordSet(context))
+                return 1;
+            else return 2;
+        } else {
+            if (AppPreferences.isPasswordSet(context)) {
+                if (position == 2)
+                    return 2;
+            }
+        }
+        return 0;
     }
 
     public void setNotificationStatus(boolean notificationSwitch) {
@@ -219,117 +226,194 @@ public class SettingAdapter extends RecyclerView.Adapter {
             }
 
         } else if (position == 1) {
-            final ItemHolderPassword itemHolderPassword = (ItemHolderPassword) holder;
-            // this view is visible in all of cases 1 2 and 3
-            // all of these are phone number related views
-            if (counter == 1 || counter == 2 || counter == 3) {
-                itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
-                itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.GONE);
-                itemHolderPassword.container.findViewById(R.id.edit_image).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setCounter(4);
-                        notifyItemChanged(1);
-                        notifyItemChanged(0);
-                    }
-                });
 
-            } else if (counter == 4) {
-                // when edit password is selected
 
-                itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
-                itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.VISIBLE);
-                itemHolderPassword.newPassword.setText("");
-                itemHolderPassword.oldpassword.setText("");
-                itemHolderPassword.confirmPassword.setText("");
-                itemHolderPassword.container.findViewById(R.id.cancel_verify).setOnClickListener(new View.OnClickListener() {
+            if (AppPreferences.isPasswordSet(context)) {
+                final ItemHolderPassword itemHolderPassword = (ItemHolderPassword) holder;
+                // this view is visible in all of cases 1 2 and 3
+                // all of these are phone number related views
+                if (counter == 1 || counter == 2 || counter == 3) {
+                    itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
+                    itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.GONE);
+                    itemHolderPassword.container.findViewById(R.id.edit_image).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setCounter(4);
+                            notifyItemChanged(1);
+                            notifyItemChanged(0);
+                        }
+                    });
+
+                } else if (counter == 4) {
+                    // when edit password is selected
+
+                    itemHolderPassword.container.findViewById(R.id.case1layout).setVisibility(View.GONE);
+                    itemHolderPassword.container.findViewById(R.id.case4layout).setVisibility(View.VISIBLE);
+                    itemHolderPassword.newPassword.setText("");
+                    itemHolderPassword.oldpassword.setText("");
+                    itemHolderPassword.confirmPassword.setText("");
+                    itemHolderPassword.container.findViewById(R.id.cancel_verify).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setCounter(1);
+                            notifyItemChanged(1);
+                            try {
+                                CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    itemHolderPassword.container.findViewById(R.id.change_password).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (itemHolderPassword.newPassword.getText().toString().trim().length() > 0 &&
+                                    itemHolderPassword.oldpassword.getText().toString().trim().length() > 0 &&
+                                    itemHolderPassword.confirmPassword.getText().toString().trim().length() > 0) {
+                                if (itemHolderPassword.newPassword.getText().toString().trim().length() > 8 &&
+                                        itemHolderPassword.oldpassword.getText().toString().trim().length() > 8 &&
+                                        itemHolderPassword.confirmPassword.getText().toString().trim().length() > 8) {
+
+                                    if (itemHolderPassword.newPassword.getText().toString()
+                                            .equalsIgnoreCase(itemHolderPassword.confirmPassword.getText().toString())) {
+                                        try {
+                                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        try {
+                                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        try {
+                                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        //send request via activity
+                                        mListener.sendPasswordRequest(itemHolderPassword.newPassword.getText().toString(),
+                                                itemHolderPassword.oldpassword.getText().toString());
+                                    } else {
+                                        Toast.makeText(context, "Passwords must match", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(context, "Password must be 8 characters long.", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(context, "All fields are important", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            } else {
+                final ItemHolderNotification holderNotification = (ItemHolderNotification) holder;
+                holderNotification.nSwitch.setChecked(notificationSwitch);
+                holderNotification.nSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setCounter(1);
+                        notifyItemChanged(0);
                         notifyItemChanged(1);
-                        try {
-                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+
+                        notificationSwitch = !notificationSwitch;
+                        mListener.sendNotificationToggleRequest(notificationSwitch);
                     }
                 });
-                itemHolderPassword.container.findViewById(R.id.change_password).setOnClickListener(new View.OnClickListener() {
+                holderNotification.itemView.findViewById(R.id.number).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        if (itemHolderPassword.newPassword.getText().toString().trim().length() > 0 &&
-                                itemHolderPassword.oldpassword.getText().toString().trim().length() > 0 &&
-                                itemHolderPassword.confirmPassword.getText().toString().trim().length() > 0) {
-                            if (itemHolderPassword.newPassword.getText().toString().trim().length() > 8 &&
-                                    itemHolderPassword.oldpassword.getText().toString().trim().length() > 8 &&
-                                    itemHolderPassword.confirmPassword.getText().toString().trim().length() > 8) {
-
-                                if (itemHolderPassword.newPassword.getText().toString()
-                                        .equalsIgnoreCase(itemHolderPassword.confirmPassword.getText().toString())) {
-                                    try {
-                                        CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.oldpassword);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    try {
-                                        CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    try {
-                                        CommonLib.hideKeyBoard((Activity) context, itemHolderPassword.newPassword);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    //send request via activity
-                                    mListener.sendPasswordRequest(itemHolderPassword.newPassword.getText().toString(),
-                                            itemHolderPassword.oldpassword.getText().toString());
-                                } else {
-                                    Toast.makeText(context, "Passwords must match", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(context, "Password must be 8 characters long.", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else {
-                            Toast.makeText(context, "All fields are important", Toast.LENGTH_SHORT).show();
-                        }
+                        holderNotification.nSwitch.performClick();
                     }
                 });
             }
-
         } else if (position == 2) {
-            final ItemHolderNotification holderNotification = (ItemHolderNotification) holder;
-            holderNotification.nSwitch.setChecked(notificationSwitch);
-            holderNotification.nSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setCounter(1);
-                    notifyItemChanged(0);
-                    notifyItemChanged(1);
+            if (AppPreferences.isPasswordSet(context)) {
+                final ItemHolderNotification holderNotification = (ItemHolderNotification) holder;
+                holderNotification.nSwitch.setChecked(notificationSwitch);
+                holderNotification.nSwitch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setCounter(1);
+                        notifyItemChanged(0);
+                        notifyItemChanged(1);
 
-                    notificationSwitch = !notificationSwitch;
-                    mListener.sendNotificationToggleRequest(notificationSwitch);
-                }
-            });
-            holderNotification.itemView.findViewById(R.id.number).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    holderNotification.nSwitch.performClick();
-                }
-            });
+                        notificationSwitch = !notificationSwitch;
+                        mListener.sendNotificationToggleRequest(notificationSwitch);
+                    }
+                });
+                holderNotification.itemView.findViewById(R.id.number).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        holderNotification.nSwitch.performClick();
+                    }
+                });
+            } else {
+                //this view is constant. all other views will be minimised when this is selected
+                final ItemHolderPhone itemHolder = (ItemHolderPhone) holder;
+                itemHolder.container.findViewById(R.id.case1layout).setVisibility(View.VISIBLE);
+                itemHolder.container.findViewById(R.id.case2layout).setVisibility(View.GONE);
+                itemHolder.container.findViewById(R.id.case3layout).setVisibility(View.GONE);
+
+                itemHolder.container.findViewById(R.id.title).setVisibility(View.GONE);
+                itemHolder.container.findViewById(R.id.edit_image).setVisibility(View.GONE);
+                ((CustomTextViewBold) itemHolder.container.findViewById(R.id.number)).setText("Logout");
+                itemHolder.container.findViewById(R.id.number).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setCounter(1);
+                        notifyItemChanged(0);
+                        notifyItemChanged(1);
+                        ZTracker.logGAEvent(context, "Settings", "Logout", "");
+                        final AlertDialog logoutDialog;
+                        logoutDialog = new AlertDialog.Builder(context)
+                                .setTitle(context.getResources().getString(R.string.logout))
+                                .setMessage(context.getResources().getString(R.string.logout_confirm))
+                                .setPositiveButton(context.getResources().getString(R.string.logout),
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                RecentProductsDBWrapper.removeProducts(Integer.parseInt(AppPreferences.getUserID(context)));
+                                                AppPreferences.setIsUserLogin(context, false);
+                                                AppPreferences.setUserID(context, "");
+                                                AppPreferences.setIsPasswordSet(context, false);
+                                                AllProducts.getInstance().setCartCount(0);
+                                                AllProducts.getInstance().setCartObjs(null);
+                                                AllUsers.getInstance().setObjs(null);
+                                                AllProducts.getInstance().setHomeProCatNBookingObj(null);
+                                                AllProducts.getInstance().getVendorIds().clear();
+                                                Intent loginIntent = new Intent(context, BaseLoginSignupActivity.class);
+                                                loginIntent.putExtra("is_logout", true);
+
+                                                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                //loginIntent.putExtra("inside", true);
+                                                context.startActivity(loginIntent);
+                                            }
+                                        }).setNegativeButton(context.getResources().getString(R.string.dialog_cancel),
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).create();
+                        logoutDialog.show();
+                    }
+                });
+            }
         } else if (position == 3) {
             //this view is constant. all other views will be minimised when this is selected
             final ItemHolderPhone itemHolder = (ItemHolderPhone) holder;
@@ -357,6 +441,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
                                         public void onClick(DialogInterface dialog, int which) {
                                             AppPreferences.setIsUserLogin(context, false);
                                             AppPreferences.setUserID(context, "");
+                                            AppPreferences.setIsPasswordSet(context, false);
                                             AllProducts.getInstance().setCartCount(0);
                                             AllProducts.getInstance().setCartObjs(null);
                                             AllUsers.getInstance().setObjs(null);
@@ -387,7 +472,9 @@ public class SettingAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 4;
+        if (AppPreferences.isPasswordSet(context))
+            return 4;
+        else return 3;
     }
 
     class ItemHolderNotification extends RecyclerView.ViewHolder {

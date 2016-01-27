@@ -61,17 +61,22 @@
             android:layout_height="@dimen/z_item_height_48"
             android:layout_gravity="bottom"
             android:orientation="horizontal">
+
             <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/add_to_cart"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:paddingLeft="@dimen/margin_large"
+                android:paddingRight="@dimen/margin_large"
+                android:drawablePadding="@dimen/margin_small"
+                android:drawableLeft="@drawable/add_to_cart_icon"
                 android:background="@drawable/gray_btn_bg"
                 android:gravity="center"
                 android:textAllCaps="true"
                 android:text="@string/add_to_cart"
                 android:textSize="@dimen/font_small"
-                android:textColor="@color/heading_text_color" />
+                android:textColor="@color/heading_text_color"
+                />
 
             <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/buy_now"

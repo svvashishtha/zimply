@@ -480,7 +480,7 @@ public class AllProducts {
         this.category_tree = category_tree;
     }
 
-    public boolean cartContains(int productId){
+    public boolean cartContains(long productId){
         if(cartObjs!=null && cartObjs.size()>0){
             for(BaseCartProdutQtyObj obj: cartObjs){
                 if(obj.getId() == productId){

@@ -24,7 +24,10 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
+import com.application.zimplyshop.baseobjects.CategoryObject;
 import com.application.zimplyshop.baseobjects.NonLoggedInCartObj;
+import com.application.zimplyshop.baseobjects.RecentSearchObject;
+import com.application.zimplyshop.db.RecentSearchesDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.fragments.ProductSearchFragment;
@@ -37,6 +40,7 @@ import com.application.zimplyshop.utils.JSONUtils;
 import com.application.zimplyshop.utils.NoSwipeViewPager;
 import com.application.zimplyshop.utils.UploadManager;
 import com.application.zimplyshop.utils.UploadManagerCallback;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.ZPagerSlidingTabStrip;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
 
@@ -66,7 +70,11 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_search_activity);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        try {
+            ZTracker.logGAEvent(NewSearchActivity.this, "Search Icon Clicked", "Entered Search products view", "NewSearchActivity");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -200,7 +208,19 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         toolbar.addView(actionBarView);
     }
 
+    public void setSearchEditTextValue(String text){
+        ((EditText) actionBarView.findViewById(R.id.search_category)).setText(text);
+        ((EditText) actionBarView.findViewById(R.id.search_category)).setSelection(text.length());
+    }
+
     private void performSearch(String query) {
+        RecentSearchObject recentObj = new RecentSearchObject();
+        recentObj.setType(AppConstants.TYPE_CATEGORY);
+        CategoryObject obj = new CategoryObject();
+        obj.setType(AppConstants.TYPE_CATEGORY);
+        obj.setName(query);
+        recentObj.setCategoryObj(obj);
+        RecentSearchesDBWrapper.addProduct(recentObj,1,System.currentTimeMillis());
         Intent intent = new Intent(this, SearchResultsActivity.class);
 
         if (query == null || query.length() < 1)
