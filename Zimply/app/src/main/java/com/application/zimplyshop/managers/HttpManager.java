@@ -2,8 +2,6 @@ package com.application.zimplyshop.managers;
 
 import android.content.Context;
 
-import com.application.zimplyshop.R;
-
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -19,7 +17,6 @@ import org.apache.http.conn.params.ConnPerRouteBean;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -28,7 +25,6 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.KeyStore;
 
 public class HttpManager {
@@ -60,14 +56,14 @@ public class HttpManager {
 
 		// Register http/s shemas!
 
-		InputStream inputStream = context.getResources().openRawResource(R.raw.keystore);
+		/*InputStream inputStream = context.getResources().openRawResource(R.raw.keystore);
 		KeyStore keyStore = KeyStore.getInstance("BKS");
-		keyStore.load(inputStream, password);
+		keyStore.load(inputStream, password);*/
 		SchemeRegistry schReg = new SchemeRegistry();
 		schReg.register(new Scheme("http", PlainSocketFactory
 				.getSocketFactory(), 80));
 
-		schReg.register(new Scheme("https", new SSLSocketFactory(keyStore), 443));
+		//schReg.register(new Scheme("https", new SSLSocketFactory(keyStore), 443));
 
 		ClientConnectionManager conMgr = new ThreadSafeClientConnManager(
 				params, schReg);
