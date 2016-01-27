@@ -85,6 +85,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     String productActionListName, screenName, actionPerformed;
     int position;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,7 +164,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 }
             }
         }, 500);
-        if(adapter!=null && !AppPreferences.isUserLogIn(this)){
+        if (adapter != null && !AppPreferences.isUserLogIn(this)) {
             new GetDataFromCache().execute();
         }
     }
@@ -192,7 +193,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     public void loadData() {
         requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_REQUETS_URL + "?id=" + productId
-                + "&width=" + (width/2) + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
+                + "&width=" + (width / 2) + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
         GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL);
     }
@@ -210,8 +211,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             showLoadingView();
             (findViewById(R.id.bottom_action_container)).setVisibility(View.GONE);
             changeViewVisiblity(productDetailList, View.GONE);
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)){
-            isLoading=true;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+            isLoading = true;
         }
 
     }
@@ -289,16 +290,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             if (adapter != null) {
                 adapter.addSimilarProducts(((SimilarProductsListObject) obj).getProducts());
             }
-            if(AppPreferences.isUserLogIn(this)) {
+            if (AppPreferences.isUserLogIn(this)) {
                 loadRecentlyViewed();
-            }else{
+            } else {
                 new GetDataFromCache().execute();
             }
-            isLoading=false;
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)){
+            isLoading = false;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)) {
 
-            if(adapter!=null){
-                adapter.addRecentlyViewed(((SimilarProductsListObject)obj).getProducts());
+            if (adapter != null) {
+                adapter.addRecentlyViewed(((SimilarProductsListObject) obj).getProducts());
                 adapter.setIsFooterRemoved(true);
             }
         }
@@ -306,7 +307,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     NewProductDetailAdapter adapter;
 
-    boolean isLoading,isRequestAllowed;
+    boolean isLoading, isRequestAllowed;
 
     public void addAdapterData(HomeProductObj obj) {
         toolbarTitle.setText(obj.getProduct().getName());
@@ -364,8 +365,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         .findFirstVisibleItemPosition();
 
                 if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
-                        && !isLoading ) {
-                    if(!isSimilarProductsLoaded) {
+                        && !isLoading) {
+                    if (!isSimilarProductsLoaded) {
                         loadSimilarProductsRequest();
                     }
                 }
@@ -430,11 +431,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     }
 
 
-    public void loadRecentlyViewed(){
+    public void loadRecentlyViewed() {
         int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
         String finalUrl = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_RECENT_PRODUCTS_URL + "?userid=" + AppPreferences.getUserID(this)
                 + "&width=" + width + "&size=5&page=1";
-        GetRequestManager.getInstance().makeAyncRequest(finalUrl,RECENT_PRODUCT_REQUEST,
+        GetRequestManager.getInstance().makeAyncRequest(finalUrl, RECENT_PRODUCT_REQUEST,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL_SIMILAR_PRODUCTS);
     }
 
@@ -568,16 +569,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)){
-            if(AppPreferences.isUserLogIn(this)) {
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+            if (AppPreferences.isUserLogIn(this)) {
                 loadRecentlyViewed();
-            }else{
+            } else {
                 new GetDataFromCache().execute();
             }
-            isLoading=false;
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)){
+            isLoading = false;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)) {
 
-            if(adapter!=null){
+            if (adapter != null) {
                 adapter.setIsFooterRemoved(true);
             }
         }
@@ -671,7 +672,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         ProductAction productAction = new ProductAction(ProductAction.ACTION_ADD)
                                 .setCheckoutStep(1)
                                 .setCheckoutOptions("Add to cart");
-                    ZTracker.checkOutGaEvents(productAction,product,getApplicationContext());
+                        ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
                     }
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
@@ -685,6 +686,21 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 if (progressDialog != null)
                     progressDialog.dismiss();
             }
+        } else if (requestType == ADD_TO_CART_PRODUCT_DETAIL_COVERT && status && !isDestroyed) {
+            try {
+                JSONObject jsonObject = ((JSONObject) response);
+                String message = null;
+                if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
+                    message = jsonObject.getString("success");
+                if (message != null) {
+                    ((CustomTextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
+                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) adapter.getObj().getProduct().getId(), 1));
+                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
             if (requestType == MARK_FAVOURITE_REQUEST_TAG) {
                 if (status) {
@@ -938,23 +954,23 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 }
                 try {
                     ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Add-To-Cart", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.buy_now:
 
                 if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
-                    String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
-                    List<NameValuePair> nameValuePair = new ArrayList<>();
-                    nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE + ""));
-                    nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
-                    nameValuePair.add(new BasicNameValuePair("quantity", "1"));
-                    nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
+                    if (!AllProducts.getInstance().cartContains(productId)) {
+                        String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                        List<NameValuePair> nameValuePair = new ArrayList<>();
+                        nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE + ""));
+                        nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
+                        nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+                        nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
 
-                    UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL_COVERT, adapter.getObj().getProduct().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
-
+                        UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL_COVERT, adapter.getObj().getProduct().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+                    }
 // Add the step number and additional info about the checkout to the action.
 
 
@@ -1092,7 +1108,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             try {
                 int userId = 1;
                 result = RecentProductsDBWrapper.getProducts(userId);
-            } catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 result = RecentProductsDBWrapper.getProducts(1);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1102,11 +1118,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
         @Override
         protected void onPostExecute(Object result) {
-            if(!isDestroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0 ) {
+            if (!isDestroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0) {
                 adapter.addRecentlyViewed((ArrayList<BaseProductListObject>) result);
 
             }
-            if(adapter!=null)
+            if (adapter != null)
                 adapter.setIsFooterRemoved(true);
         }
 
