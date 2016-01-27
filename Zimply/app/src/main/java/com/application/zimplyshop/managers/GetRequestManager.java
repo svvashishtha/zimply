@@ -255,7 +255,7 @@ public class GetRequestManager {
         if(AppPreferences.isUserLogIn(mContext)){
             get.setHeader("Userid", AppPreferences.getUserID(mContext));
         }
-        HttpManager.setParams(mContext,AppConstants.STORE_PASS.toCharArray());
+        HttpManager.setParams(mContext, AppConstants.STORE_PASS.toCharArray());
         HttpResponse response = HttpManager.execute(get,mContext);
         BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
