@@ -197,6 +197,8 @@ public class ProductsRecyclerViewGridAdapter extends
 
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+                    holder.productDiscountedPrice.setPadding((int) mContext.getResources().getDimension(R.dimen.margin_small), 0,
+                            (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
                 }
             } catch (NumberFormatException e) {
 
