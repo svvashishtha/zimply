@@ -92,6 +92,7 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
         pinCode = (EditText) findViewById(R.id.pincode);
 
         setLoadingVariables();
+
         retryLayout.setOnClickListener(this);
 
         addressObject = (AddressObject) getIntent().getSerializableExtra("addressObject");
@@ -102,6 +103,7 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
             getSupportActionBar().setTitle("Edit address");
         } else {
             getSupportActionBar().setTitle("Add address");
+            showView();
         }
         setListeners();
         UploadManager.getInstance().addCallback(this);
