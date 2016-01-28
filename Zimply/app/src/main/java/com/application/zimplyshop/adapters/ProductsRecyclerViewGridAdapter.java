@@ -21,6 +21,7 @@ import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
 
@@ -234,13 +235,15 @@ public class ProductsRecyclerViewGridAdapter extends
             holder.productCount.setText(count + " Products");
             if (mListener.checkIsRecyclerViewInLongItemMode()) {
                 holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.grid_icon));
-
+                ZTracker.logGAEvent(mContext,"Product Listing View","View changed to Card","View Switch");
             } else {
                 holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_icon));
+                ZTracker.logGAEvent(mContext,"Product Listing View","View changed to Grid","View Switch");
             }
             holder.gridIconContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     mListener.switchRecyclerViewLayoutManager();
                 }
             });
