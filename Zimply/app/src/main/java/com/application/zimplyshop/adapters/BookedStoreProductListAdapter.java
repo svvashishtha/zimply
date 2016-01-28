@@ -19,6 +19,7 @@ import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
@@ -285,9 +286,10 @@ public class BookedStoreProductListAdapter extends
             holder.productCount.setText(count + " Products");
                 if (mListener.checkIsRecyclerViewInLongItemMode()) {
                     holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.grid_icon));
-
+                    ZTracker.logGAEvent(mContext, "Product Listing View", "View changed to Card", "View Switch");
                 } else {
                     holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_icon));
+                    ZTracker.logGAEvent(mContext, "Product Listing View", "View changed to Grid", "View Switch");
                 }
 
                 holder.gridIconContainer.setOnClickListener(new View.OnClickListener() {
