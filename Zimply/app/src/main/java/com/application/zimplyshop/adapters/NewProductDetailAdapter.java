@@ -513,6 +513,38 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             isDescShown = true;
                         }
                         notifyItemChanged(position);
+                        if(isSpecsShown){
+                            isSpecsShown=false;
+                            if(obj.getProduct().is_o2o()) {
+                                notifyItemChanged(5);
+                            }else{
+                                notifyItemChanged(4);
+                            }
+                        }
+                        if(isCareShown){
+                            isCareShown=false;
+                            if(obj.getProduct().is_o2o()) {
+                                notifyItemChanged(6);
+                            }else{
+                                notifyItemChanged(5);
+                            }
+                        }
+                        if(isReturnPolicyShown){
+                            isReturnPolicyShown = false;
+                            if(obj.getProduct().is_o2o()) {
+                                notifyItemChanged(7);
+                            }else{
+                                notifyItemChanged(6);
+                            }
+                        }
+                        if(isFaqShown){
+                            isFaqShown = false;
+                            if(obj.getProduct().is_o2o()) {
+                                notifyItemChanged(8);
+                            }else{
+                                notifyItemChanged(7);
+                            }
+                        }
                     }
                 });
             } else if (position == 4) {
@@ -543,6 +575,38 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isDescShown = true;
                             }
                             notifyItemChanged(position);
+                            if(isSpecsShown){
+                                isSpecsShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(5);
+                                }else{
+                                    notifyItemChanged(4);
+                                }
+                            }
+                            if(isCareShown){
+                                isCareShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(6);
+                                }else{
+                                    notifyItemChanged(5);
+                                }
+                            }
+                            if(isReturnPolicyShown){
+                                isReturnPolicyShown = false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(7);
+                                }else{
+                                    notifyItemChanged(6);
+                                }
+                            }
+                            if(isFaqShown) {
+                                isFaqShown = false;
+                                if (obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(8);
+                                } else {
+                                    notifyItemChanged(7);
+                                }
+                            }
                         }
                     });
                 } else {
@@ -625,6 +689,39 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isSpecsShown = true;
                             }
                             notifyItemChanged(position);
+                            if(isDescShown){
+                                isDescShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(4);
+                                }else{
+                                    notifyItemChanged(3);
+                                }
+                            }
+                            if(isCareShown){
+                                isCareShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(6);
+                                }else{
+                                    notifyItemChanged(5);
+                                }
+                            }
+                            if(isReturnPolicyShown){
+                                isReturnPolicyShown = false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(7);
+                                }else{
+                                    notifyItemChanged(6);
+                                }
+                            }
+                            if(isFaqShown){
+                                isFaqShown = false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(8);
+                                }else{
+                                    notifyItemChanged(7);
+                                }
+                            }
+
                         }
                     });
                 }
@@ -716,6 +813,38 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isSpecsShown = true;
                             }
                             notifyItemChanged(position);
+                            if(isDescShown){
+                                isDescShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(4);
+                                }else{
+                                    notifyItemChanged(3);
+                                }
+                            }
+                            if(isCareShown){
+                                isCareShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(6);
+                                }else{
+                                    notifyItemChanged(5);
+                                }
+                            }
+                            if(isReturnPolicyShown){
+                                isReturnPolicyShown = false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(7);
+                                }else{
+                                    notifyItemChanged(6);
+                                }
+                            }
+                            if(isFaqShown){
+                                isFaqShown = false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(8);
+                                }else{
+                                    notifyItemChanged(7);
+                                }
+                            }
                         }
                     });
                 } else {
@@ -741,6 +870,38 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                     isCareShown = true;
                                 }
                                 notifyItemChanged(position);
+                                if(isDescShown){
+                                    isDescShown=false;
+                                    if(obj.getProduct().is_o2o()) {
+                                        notifyItemChanged(4);
+                                    }else{
+                                        notifyItemChanged(3);
+                                    }
+                                }
+                                if(isSpecsShown){
+                                    isCareShown=false;
+                                    if(obj.getProduct().is_o2o()) {
+                                        notifyItemChanged(5);
+                                    }else{
+                                        notifyItemChanged(4);
+                                    }
+                                }
+                                if(isReturnPolicyShown){
+                                    isReturnPolicyShown = false;
+                                    if(obj.getProduct().is_o2o()) {
+                                        notifyItemChanged(7);
+                                    }else{
+                                        notifyItemChanged(6);
+                                    }
+                                }
+                                if(isFaqShown){
+                                    isFaqShown = false;
+                                    if(obj.getProduct().is_o2o()) {
+                                        notifyItemChanged(8);
+                                    }else{
+                                        notifyItemChanged(7);
+                                    }
+                                }
                             }
                         });
                     } else {
@@ -779,6 +940,38 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                     isCareShown = true;
                                 }
                                 notifyItemChanged(position);
+                                if(isDescShown){
+                                    isDescShown=false;
+                                    if(obj.getProduct().is_o2o()) {
+                                        notifyItemChanged(4);
+                                    }else{
+                                        notifyItemChanged(3);
+                                    }
+                                }
+                                if(isSpecsShown){
+                                    isSpecsShown=false;
+                                    if(obj.getProduct().is_o2o()) {
+                                        notifyItemChanged(5);
+                                    }else{
+                                        notifyItemChanged(4);
+                                    }
+                                }
+                                if(isReturnPolicyShown){
+                                    isReturnPolicyShown = false;
+                                    if(obj.getProduct().is_o2o()) {
+                                        notifyItemChanged(7);
+                                    }else{
+                                        notifyItemChanged(6);
+                                    }
+                                }
+                                if(isFaqShown){
+                                    isFaqShown = false;
+                                    if(obj.getProduct().is_o2o()) {
+                                        notifyItemChanged(8);
+                                    }else{
+                                        notifyItemChanged(7);
+                                    }
+                                }
                             }
                         });
                     } else {
@@ -815,6 +1008,39 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isReturnPolicyShown = true;
                             }
                             notifyItemChanged(position);
+                            if(isDescShown){
+                                isDescShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(4);
+                                }else{
+                                    notifyItemChanged(3);
+                                }
+                            }
+                            if(isSpecsShown){
+                                isSpecsShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(5);
+                                }else{
+                                    notifyItemChanged(4);
+                                }
+                            }
+                            if(isCareShown){
+                                isCareShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(6);
+                                }else{
+                                    notifyItemChanged(5);
+                                }
+                            }
+                            if(isFaqShown){
+                                isFaqShown = false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(8);
+                                }else{
+                                    notifyItemChanged(7);
+                                }
+                            }
+
                         }
                     });
                 }
@@ -851,6 +1077,38 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isReturnPolicyShown = true;
                             }
                             notifyItemChanged(position);
+                            if(isDescShown){
+                                isDescShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(4);
+                                }else{
+                                    notifyItemChanged(3);
+                                }
+                            }
+                            if(isSpecsShown){
+                                isSpecsShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(5);
+                                }else{
+                                    notifyItemChanged(4);
+                                }
+                            }
+                            if(isCareShown){
+                                isCareShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(6);
+                                }else{
+                                    notifyItemChanged(5);
+                                }
+                            }
+                            if(isFaqShown){
+                                isFaqShown = false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(8);
+                                }else{
+                                    notifyItemChanged(7);
+                                }
+                            }
                         }
                     });
                 } else {
@@ -876,6 +1134,38 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isFaqShown = true;
                             }
                             notifyItemChanged(position);
+                            if(isDescShown){
+                                isDescShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(4);
+                                }else{
+                                    notifyItemChanged(3);
+                                }
+                            }
+                            if(isSpecsShown){
+                                isSpecsShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(5);
+                                }else{
+                                    notifyItemChanged(4);
+                                }
+                            }
+                            if(isCareShown){
+                                isCareShown=false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(6);
+                                }else{
+                                    notifyItemChanged(5);
+                                }
+                            }
+                            if(isReturnPolicyShown){
+                                isReturnPolicyShown = false;
+                                if(obj.getProduct().is_o2o()) {
+                                    notifyItemChanged(7);
+                                }else{
+                                    notifyItemChanged(6);
+                                }
+                            }
                         }
                     });
                 }
@@ -907,6 +1197,38 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             isFaqShown = true;
                         }
                         notifyItemChanged(position);
+                        if(isDescShown){
+                            isDescShown=false;
+                            if(obj.getProduct().is_o2o()) {
+                                notifyItemChanged(4);
+                            }else{
+                                notifyItemChanged(3);
+                            }
+                        }
+                        if(isSpecsShown){
+                            isSpecsShown=false;
+                            if(obj.getProduct().is_o2o()) {
+                                notifyItemChanged(5);
+                            }else{
+                                notifyItemChanged(4);
+                            }
+                        }
+                        if(isCareShown){
+                            isCareShown=false;
+                            if(obj.getProduct().is_o2o()) {
+                                notifyItemChanged(6);
+                            }else{
+                                notifyItemChanged(5);
+                            }
+                        }
+                        if(isReturnPolicyShown){
+                            isReturnPolicyShown = false;
+                            if(obj.getProduct().is_o2o()) {
+                                notifyItemChanged(7);
+                            }else{
+                                notifyItemChanged(6);
+                            }
+                        }
                     }
                 });
             }
