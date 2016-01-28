@@ -1,6 +1,7 @@
 package com.application.zimplyshop.fragments;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
@@ -156,7 +157,12 @@ public class BaseFragment extends Fragment {
             gifLoadingView.setVisibility(View.GONE);
             retryLayout.setVisibility(View.GONE);
             nullCaseLayout.setVisibility(View.VISIBLE);
-            ((ImageView)view.findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(getActivity(), R.drawable.ic_empty_cart, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            try {
+                ((ImageView) view.findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_cart));
+            }catch (Exception e)
+            {
+                ((ImageView)view.findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(getActivity(), R.drawable.ic_empty_cart, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+            }
 //            ((ImageView)view.findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_cart));
             ((TextView) view.findViewById(R.id.start_shopping)).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.start_shopping)).setOnClickListener(new View.OnClickListener() {
@@ -169,7 +175,7 @@ public class BaseFragment extends Fragment {
                     }
                 }
             });
-        }else {
+        } else {
             nullcaseText.setVisibility(View.VISIBLE);
             nullcaseText.setText(text);
             nullcaseText.setBackgroundColor(getResources().getColor(android.R.color.transparent));

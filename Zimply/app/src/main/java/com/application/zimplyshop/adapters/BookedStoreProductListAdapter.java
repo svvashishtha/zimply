@@ -28,9 +28,10 @@ import java.util.ArrayList;
 public class BookedStoreProductListAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public int TYPE_DATA = 1;
-    public int TYPE_LOADER = 2;
-    public int TYPE_HEADER = 0;
+
+    public static final int TYPE_DATA = 0;
+    public static final int TYPE_LOADER = 1;
+    public static final int TYPE_HEADER = 2;
 
     ArrayList<BaseProductListObject> objs;
 
