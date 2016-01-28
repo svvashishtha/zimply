@@ -183,6 +183,26 @@ public class GetRequestManager {
                 Object o = Request(url, requestTag, status);
                 if (o != null) {
                     returnValidObject = true;
+                    try {
+                        result = fetchhttp(this.url);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (result != null) {
+                        Object returnObj = null;
+                        if (result[0] != null && result[0] instanceof Boolean && ((Boolean) result[0])) {
+                            returnValidObject = true;
+                            returnObj = ParserClass.parseData(String.valueOf(result[1]), this.objType);
+                        } else if (result.length > 0) {
+                            returnValidObject = false;
+                            returnObj = new ErrorObject(String.valueOf(result[1]), ((Boolean) result[0]) ? 1 : 0);
+                        }
+                        if (returnObj != null) {
+                            // update the cache
+                            Update(url, returnObj, requestTag, this.status);
+                           // return returnObj;
+                        }
+                    }
                     return o;
                 } else { //else fetch from HTTP
                     try {
