@@ -68,8 +68,8 @@ public class CommonLib {
 
 	/**
 	 * Application version
-	 * */
-	public static final int VERSION = 12;
+     * */
+	public static final int VERSION = 9;
 
 	/**
 	 * Types
@@ -122,15 +122,15 @@ public class CommonLib {
 	/**
 	 * Version string
 	 */
-	public static final String VERSION_STRING = "1.0.7";
+	public static final String VERSION_STRING = "1.0.8";
 	/**
 	 * Crashlytics version string
 	 */
-	public static final String CRASHLYTICS_VERSION_STRING = "1.0.7 Live";
+	public static final String CRASHLYTICS_VERSION_STRING = "1.0.8 Live";
 	/**
 	 * Log control
 	 */
-	public final static boolean ZimplyLog = true;
+	public final static boolean ZimplyLog = false;
 	/**
 	 * GA event control
 	 */
