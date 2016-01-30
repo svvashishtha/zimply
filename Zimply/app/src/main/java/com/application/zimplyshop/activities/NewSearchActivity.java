@@ -220,7 +220,12 @@ public class NewSearchActivity extends BaseActivity implements ZPagerSlidingTabS
         obj.setType(AppConstants.TYPE_CATEGORY);
         obj.setName(query);
         recentObj.setCategoryObj(obj);
-        RecentSearchesDBWrapper.addProduct(recentObj,1,System.currentTimeMillis());
+        try {
+            int userId = Integer.parseInt(AppPreferences.getUserID(this));
+            RecentSearchesDBWrapper.addProduct(recentObj, userId , System.currentTimeMillis());
+        }catch(Exception e){
+            RecentSearchesDBWrapper.addProduct(recentObj, 1, System.currentTimeMillis());
+        }
         Intent intent = new Intent(this, SearchResultsActivity.class);
 
         if (query == null || query.length() < 1)
