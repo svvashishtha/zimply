@@ -322,6 +322,12 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             ProductRecentProductsHolder holderPro = (ProductRecentProductsHolder) holder;
             LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
             holderPro.recyclerView.setLayoutManager(layoutManager);
+            if(similarProducts == null || similarProducts.size()==0){
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.topMargin = mContext.getResources().getDimensionPixelSize(R.dimen.margin_small);
+                holderPro.viewAllLayout.setLayoutParams(lp);
+
+            }
             holderPro.recentProductsTag.setText("Recently Viewed");
             ProductRecentProductsAdapter adapter = new ProductRecentProductsAdapter();
             holderPro.recyclerView.setAdapter(adapter);
@@ -490,12 +496,16 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         } else if (getItemViewType(position) == TYPE_SIMILAR_PRODUCTS) {
             ProductSimilarProductsHolder holderPro = (ProductSimilarProductsHolder) holder;
             LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-            holderPro.recyclerView.setLayoutManager(layoutManager);
 
+            holderPro.recyclerView.setLayoutManager(layoutManager);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.topMargin = mContext.getResources().getDimensionPixelSize(R.dimen.margin_small);
+            holderPro.viewAllLayout.setLayoutParams(lp);
             SimilarProductsRecyclerAdapter adapter = new SimilarProductsRecyclerAdapter();
             holderPro.recyclerView.setAdapter(adapter);
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holderPro.recyclerView.getLayoutParams();
+
             params.height = similarProductsRecyclerHeight;
             holderPro.recyclerView.setLayoutParams(params);
 
@@ -1661,11 +1671,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         RecyclerView recyclerView;
         TextView viewAll;
+        LinearLayout viewAllLayout;
 
         public ProductSimilarProductsHolder(View v) {
             super(v);
             recyclerView = (RecyclerView) v.findViewById(R.id.simiilarproductslist);
             viewAll = (CustomTextView) v.findViewById(R.id.view_all_similarl);
+            viewAllLayout = (LinearLayout)v.findViewById(R.id.viewall_layout);
         }
     }
 
@@ -1936,12 +1948,14 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         RecyclerView recyclerView;
         TextView viewAll, recentProductsTag;
+        LinearLayout viewAllLayout;
 
         public ProductRecentProductsHolder(View v) {
             super(v);
             recyclerView = (RecyclerView) v.findViewById(R.id.simiilarproductslist);
             viewAll = (CustomTextView) v.findViewById(R.id.view_all_similarl);
             recentProductsTag = (TextView) v.findViewById(R.id.recent_products_tag);
+            viewAllLayout = (LinearLayout)v.findViewById(R.id.viewall_layout);
         }
     }
 
