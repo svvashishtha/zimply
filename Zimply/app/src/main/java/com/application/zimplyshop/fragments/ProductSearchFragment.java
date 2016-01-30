@@ -422,8 +422,13 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                         RecentSearchObject obj = new RecentSearchObject();
                         obj.setCategoryObj(product);
                         obj.setType(AppConstants.TYPE_CATEGORY);
-                        RecentSearchesDBWrapper.addProduct(obj,1,System.currentTimeMillis());
 
+                        try {
+                            int userId = Integer.parseInt(AppPreferences.getUserID(getActivity()));
+                            RecentSearchesDBWrapper.addProduct(obj, userId , System.currentTimeMillis());
+                        }catch(Exception e){
+                            RecentSearchesDBWrapper.addProduct(obj, 1, System.currentTimeMillis());
+                        }
                         Intent intent = new Intent(mContext, SearchResultsActivity.class);
                         intent.putExtra("type", product.getType());
                         intent.putExtra("id", product.getId());
@@ -469,7 +474,12 @@ public class ProductSearchFragment extends BaseFragment implements GetRequestLis
                         RecentSearchObject obj = new RecentSearchObject();
                         obj.setType(AppConstants.TYPE_PRODUCT);
                         obj.setProductObj(productListObject);
-                        RecentSearchesDBWrapper.addProduct(obj,1,System.currentTimeMillis());
+                        try {
+                            int userId = Integer.parseInt(AppPreferences.getUserID(getActivity()));
+                            RecentSearchesDBWrapper.addProduct(obj, userId , System.currentTimeMillis());
+                        }catch(Exception e){
+                            RecentSearchesDBWrapper.addProduct(obj, 1, System.currentTimeMillis());
+                        }
                         if(!AppPreferences.isUserLogIn(getActivity())) {
                             RecentProductsDBWrapper.addProduct(productListObject,1,System.currentTimeMillis());
                         }

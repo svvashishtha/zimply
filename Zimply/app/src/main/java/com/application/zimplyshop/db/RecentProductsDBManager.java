@@ -24,7 +24,7 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
     private static final String BUNDLE = "Bundle";
     SQLiteDatabase db;
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String CACHE_TABLE_NAME = "PRODUCTS";
     private static final String DICTIONARY_TABLE_CREATE =
             "CREATE TABLE " + CACHE_TABLE_NAME + " (" +
