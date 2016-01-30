@@ -673,6 +673,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                                 .setCheckoutStep(1)
                                 .setCheckoutOptions("Add to cart");
                         ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
+                        ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                                "Add to cart", "Product Description Page");
+
                     }
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
@@ -696,6 +699,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     ((CustomTextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
                     AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) adapter.getObj().getProduct().getId(), 1));
                     AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -914,6 +918,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         } else {
                             Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                             intent.putExtra("OrderSummaryFragment", false);
+                            try{
+                                ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                                        "Go to cart(from bottom button)", "Product Description Page");
+
+                            }catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
                             intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
                             startActivity(intent);
 
@@ -986,6 +998,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                             .setCheckoutStep(2)
                             .setCheckoutOptions("Buy Now");
                     ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
+                    try{
+                        ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                                "Buy Now", "Product Description Page");
+
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                     if (AppPreferences.isUserLogIn(NewProductDetailActivity.this)) {
                         Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                         intent.putExtra("OrderSummaryFragment", true);
@@ -1013,6 +1033,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     shareIntent.putExtra("product_url", "/shop-product/");
                     shareIntent.putExtra("short_url", "www.zimply.in/shop-product/" + productSlug + "?pid=" + productId);
                     ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Share-Product", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
+                    try{
+                        ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                                "Share Product", "Product Description Page");
+
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                     startActivity(shareIntent);
                 } else {
                     Toast.makeText(this, "Please wait while loading...", Toast.LENGTH_SHORT).show();
@@ -1020,6 +1048,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 break;
             case R.id.cart_icon:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
+                try{
+                    ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                            "Go to cart(From toolbar)", "Product Description Page");
+
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 intent.putExtra("OrderSummaryFragment", false);
                 startActivity(intent);
                 break;

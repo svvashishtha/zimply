@@ -43,6 +43,7 @@ import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.utils.CommonLib;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.ProductThumbListItemDecorator;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
@@ -63,7 +64,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     int TYPE_PRODUCT_INFO_3 = 3;
     int TYPE_PRODUCT_INFO_4 = 4;
     int TYPE_SIMILAR_PRODUCTS = 5;
-    int TYPE_RECENTLY_VIEWED_PRODUCTS=6;
+    int TYPE_RECENTLY_VIEWED_PRODUCTS = 6;
     int TYPE_LOADER = 7;
 
     int BOOK_BTN_CLICK = 1;
@@ -122,23 +123,23 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         } else if (viewType == TYPE_PRODUCT_INFO_1) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_product_info_layout_1, parent, false);
             holder = new ProductInfoHolder1(view);
-        }else if (viewType == TYPE_PRODUCT_INFO_2) {
+        } else if (viewType == TYPE_PRODUCT_INFO_2) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_product_info_layout_2, parent, false);
             holder = new ProductInfoHolder2(view);
             this.refernceHolder = (ProductInfoHolder2) holder;
-        }else if (viewType == TYPE_PRODUCT_INFO_3) {
+        } else if (viewType == TYPE_PRODUCT_INFO_3) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_product_info_layout_3, parent, false);
             holder = new ProductInfoHolder3(view);
-        }else if (viewType == TYPE_SIMILAR_PRODUCTS){
+        } else if (viewType == TYPE_SIMILAR_PRODUCTS) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_description_similar_products_item_layout, parent, false);
             holder = new ProductSimilarProductsHolder(view);
-        }else if(viewType == TYPE_RECENTLY_VIEWED_PRODUCTS) {
+        } else if (viewType == TYPE_RECENTLY_VIEWED_PRODUCTS) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_description_similar_products_item_layout, parent, false);
             holder = new ProductRecentProductsHolder(view);
-        }else if(viewType == TYPE_LOADER){
+        } else if (viewType == TYPE_LOADER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_footer_layout, parent, false);
             holder = new LoadingViewHolder(view);
-        }else{
+        } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_product_info_layout_desc, parent, false);
             holder = new ProductInfoHolder4(view);
         }
@@ -146,7 +147,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     ArrayList<BaseProductListObject> products;
-    public void addRecentlyViewed(ArrayList<BaseProductListObject> products){
+
+    public void addRecentlyViewed(ArrayList<BaseProductListObject> products) {
         this.products.clear();
         this.products.addAll(products);
         notifyDataSetChanged();
@@ -177,6 +179,12 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ProductPhotoZoomActivity.class);
+                    try {
+                        ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                "Full Screen Image View", "Product Description Page");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     intent.putExtra("product_obj", obj.getProduct());
                     intent.putExtra("position", (Integer) ((ImageViewHolder) holder).productNewImage.getTag());
                     mContext.startActivity(intent);
@@ -310,7 +318,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 }
             });
-        }else if (getItemViewType(position) == TYPE_RECENTLY_VIEWED_PRODUCTS) {
+        } else if (getItemViewType(position) == TYPE_RECENTLY_VIEWED_PRODUCTS) {
             ProductRecentProductsHolder holderPro = (ProductRecentProductsHolder) holder;
             LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
             holderPro.recyclerView.setLayoutManager(layoutManager);
@@ -324,7 +332,14 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             holderPro.viewAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    try {
+                        ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                "Recently Viewwed Products(View All)", "Product Description Page");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     ((NewProductDetailActivity) mContext).openRecentlyViewed();
+
                 }
             });
             /*holderPro.viewAll.setOnClickListener(new View.OnClickListener() {
@@ -461,6 +476,14 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     bookIntent.putExtra("vendor_id", obj.getVendor().getId());
                     bookIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
                     bookIntent.putExtra("vendor_name", obj.getVendor().getName());
+                    try {
+
+                        ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                "More Products from " + obj.getVendor().getName(), "Product Description Page");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     mContext.startActivity(bookIntent);
                 }
             });
@@ -480,9 +503,16 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     ((NewProductDetailActivity) mContext).openSimilarProductsActivity();
+                    try {
+                        ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                "Similar Products(View All)", "Product Description Page");
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
-        }else if(getItemViewType(position) == TYPE_LOADER){
+        } else if (getItemViewType(position) == TYPE_LOADER) {
 
         } else {
 
@@ -513,37 +543,43 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             isDescShown = true;
                         }
                         notifyItemChanged(position);
-                        if(isSpecsShown){
-                            isSpecsShown=false;
-                            if(obj.getProduct().is_o2o()) {
+                        if (isSpecsShown) {
+                            isSpecsShown = false;
+                            if (obj.getProduct().is_o2o()) {
                                 notifyItemChanged(5);
-                            }else{
+                            } else {
                                 notifyItemChanged(4);
                             }
                         }
-                        if(isCareShown){
-                            isCareShown=false;
-                            if(obj.getProduct().is_o2o()) {
+                        if (isCareShown) {
+                            isCareShown = false;
+                            if (obj.getProduct().is_o2o()) {
                                 notifyItemChanged(6);
-                            }else{
+                            } else {
                                 notifyItemChanged(5);
                             }
                         }
-                        if(isReturnPolicyShown){
+                        if (isReturnPolicyShown) {
                             isReturnPolicyShown = false;
-                            if(obj.getProduct().is_o2o()) {
+                            if (obj.getProduct().is_o2o()) {
                                 notifyItemChanged(7);
-                            }else{
+                            } else {
                                 notifyItemChanged(6);
                             }
                         }
-                        if(isFaqShown){
+                        if (isFaqShown) {
                             isFaqShown = false;
-                            if(obj.getProduct().is_o2o()) {
+                            if (obj.getProduct().is_o2o()) {
                                 notifyItemChanged(8);
-                            }else{
+                            } else {
                                 notifyItemChanged(7);
                             }
+                        }
+                        try {
+                            ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                    ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -575,37 +611,43 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isDescShown = true;
                             }
                             notifyItemChanged(position);
-                            if(isSpecsShown){
-                                isSpecsShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isSpecsShown) {
+                                isSpecsShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(5);
-                                }else{
+                                } else {
                                     notifyItemChanged(4);
                                 }
                             }
-                            if(isCareShown){
-                                isCareShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isCareShown) {
+                                isCareShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(6);
-                                }else{
+                                } else {
                                     notifyItemChanged(5);
                                 }
                             }
-                            if(isReturnPolicyShown){
+                            if (isReturnPolicyShown) {
                                 isReturnPolicyShown = false;
-                                if(obj.getProduct().is_o2o()) {
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(7);
-                                }else{
+                                } else {
                                     notifyItemChanged(6);
                                 }
                             }
-                            if(isFaqShown) {
+                            if (isFaqShown) {
                                 isFaqShown = false;
                                 if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(8);
                                 } else {
                                     notifyItemChanged(7);
                                 }
+                            }
+                            try {
+                                ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                        ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     });
@@ -689,39 +731,44 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isSpecsShown = true;
                             }
                             notifyItemChanged(position);
-                            if(isDescShown){
-                                isDescShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isDescShown) {
+                                isDescShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(4);
-                                }else{
+                                } else {
                                     notifyItemChanged(3);
                                 }
                             }
-                            if(isCareShown){
-                                isCareShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isCareShown) {
+                                isCareShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(6);
-                                }else{
+                                } else {
                                     notifyItemChanged(5);
                                 }
                             }
-                            if(isReturnPolicyShown){
+                            if (isReturnPolicyShown) {
                                 isReturnPolicyShown = false;
-                                if(obj.getProduct().is_o2o()) {
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(7);
-                                }else{
+                                } else {
                                     notifyItemChanged(6);
                                 }
                             }
-                            if(isFaqShown){
+                            if (isFaqShown) {
                                 isFaqShown = false;
-                                if(obj.getProduct().is_o2o()) {
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(8);
-                                }else{
+                                } else {
                                     notifyItemChanged(7);
                                 }
                             }
-
+                            try {
+                                ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                        ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 }
@@ -813,39 +860,46 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isSpecsShown = true;
                             }
                             notifyItemChanged(position);
-                            if(isDescShown){
-                                isDescShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isDescShown) {
+                                isDescShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(4);
-                                }else{
+                                } else {
                                     notifyItemChanged(3);
                                 }
                             }
-                            if(isCareShown){
-                                isCareShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isCareShown) {
+                                isCareShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(6);
-                                }else{
+                                } else {
                                     notifyItemChanged(5);
                                 }
                             }
-                            if(isReturnPolicyShown){
+                            if (isReturnPolicyShown) {
                                 isReturnPolicyShown = false;
-                                if(obj.getProduct().is_o2o()) {
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(7);
-                                }else{
+                                } else {
                                     notifyItemChanged(6);
                                 }
                             }
-                            if(isFaqShown){
+                            if (isFaqShown) {
                                 isFaqShown = false;
-                                if(obj.getProduct().is_o2o()) {
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(8);
-                                }else{
+                                } else {
                                     notifyItemChanged(7);
                                 }
                             }
+                            try {
+                                ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                        ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
+
                     });
                 } else {
                     if (obj.getProduct().getCare().trim().length() > 0) {
@@ -870,37 +924,43 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                     isCareShown = true;
                                 }
                                 notifyItemChanged(position);
-                                if(isDescShown){
-                                    isDescShown=false;
-                                    if(obj.getProduct().is_o2o()) {
+                                if (isDescShown) {
+                                    isDescShown = false;
+                                    if (obj.getProduct().is_o2o()) {
                                         notifyItemChanged(4);
-                                    }else{
+                                    } else {
                                         notifyItemChanged(3);
                                     }
                                 }
-                                if(isSpecsShown){
-                                    isCareShown=false;
-                                    if(obj.getProduct().is_o2o()) {
+                                if (isSpecsShown) {
+                                    isCareShown = false;
+                                    if (obj.getProduct().is_o2o()) {
                                         notifyItemChanged(5);
-                                    }else{
+                                    } else {
                                         notifyItemChanged(4);
                                     }
                                 }
-                                if(isReturnPolicyShown){
+                                if (isReturnPolicyShown) {
                                     isReturnPolicyShown = false;
-                                    if(obj.getProduct().is_o2o()) {
+                                    if (obj.getProduct().is_o2o()) {
                                         notifyItemChanged(7);
-                                    }else{
+                                    } else {
                                         notifyItemChanged(6);
                                     }
                                 }
-                                if(isFaqShown){
+                                if (isFaqShown) {
                                     isFaqShown = false;
-                                    if(obj.getProduct().is_o2o()) {
+                                    if (obj.getProduct().is_o2o()) {
                                         notifyItemChanged(8);
-                                    }else{
+                                    } else {
                                         notifyItemChanged(7);
                                     }
+                                }
+                                try {
+                                    ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                            ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
                         });
@@ -940,37 +1000,43 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                     isCareShown = true;
                                 }
                                 notifyItemChanged(position);
-                                if(isDescShown){
-                                    isDescShown=false;
-                                    if(obj.getProduct().is_o2o()) {
+                                if (isDescShown) {
+                                    isDescShown = false;
+                                    if (obj.getProduct().is_o2o()) {
                                         notifyItemChanged(4);
-                                    }else{
+                                    } else {
                                         notifyItemChanged(3);
                                     }
                                 }
-                                if(isSpecsShown){
-                                    isSpecsShown=false;
-                                    if(obj.getProduct().is_o2o()) {
+                                if (isSpecsShown) {
+                                    isSpecsShown = false;
+                                    if (obj.getProduct().is_o2o()) {
                                         notifyItemChanged(5);
-                                    }else{
+                                    } else {
                                         notifyItemChanged(4);
                                     }
                                 }
-                                if(isReturnPolicyShown){
+                                if (isReturnPolicyShown) {
                                     isReturnPolicyShown = false;
-                                    if(obj.getProduct().is_o2o()) {
+                                    if (obj.getProduct().is_o2o()) {
                                         notifyItemChanged(7);
-                                    }else{
+                                    } else {
                                         notifyItemChanged(6);
                                     }
                                 }
-                                if(isFaqShown){
+                                if (isFaqShown) {
                                     isFaqShown = false;
-                                    if(obj.getProduct().is_o2o()) {
+                                    if (obj.getProduct().is_o2o()) {
                                         notifyItemChanged(8);
-                                    }else{
+                                    } else {
                                         notifyItemChanged(7);
                                     }
+                                }
+                                try {
+                                    ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                            ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
                         });
@@ -1008,38 +1074,45 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isReturnPolicyShown = true;
                             }
                             notifyItemChanged(position);
-                            if(isDescShown){
-                                isDescShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isDescShown) {
+                                isDescShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(4);
-                                }else{
+                                } else {
                                     notifyItemChanged(3);
                                 }
                             }
-                            if(isSpecsShown){
-                                isSpecsShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isSpecsShown) {
+                                isSpecsShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(5);
-                                }else{
+                                } else {
                                     notifyItemChanged(4);
                                 }
                             }
-                            if(isCareShown){
-                                isCareShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isCareShown) {
+                                isCareShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(6);
-                                }else{
+                                } else {
                                     notifyItemChanged(5);
                                 }
                             }
-                            if(isFaqShown){
+                            if (isFaqShown) {
                                 isFaqShown = false;
-                                if(obj.getProduct().is_o2o()) {
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(8);
-                                }else{
+                                } else {
                                     notifyItemChanged(7);
                                 }
                             }
+                            try {
+                                ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                        ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
 
                         }
                     });
@@ -1077,37 +1150,43 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isReturnPolicyShown = true;
                             }
                             notifyItemChanged(position);
-                            if(isDescShown){
-                                isDescShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isDescShown) {
+                                isDescShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(4);
-                                }else{
+                                } else {
                                     notifyItemChanged(3);
                                 }
                             }
-                            if(isSpecsShown){
-                                isSpecsShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isSpecsShown) {
+                                isSpecsShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(5);
-                                }else{
+                                } else {
                                     notifyItemChanged(4);
                                 }
                             }
-                            if(isCareShown){
-                                isCareShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isCareShown) {
+                                isCareShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(6);
-                                }else{
+                                } else {
                                     notifyItemChanged(5);
                                 }
                             }
-                            if(isFaqShown){
+                            if (isFaqShown) {
                                 isFaqShown = false;
-                                if(obj.getProduct().is_o2o()) {
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(8);
-                                }else{
+                                } else {
                                     notifyItemChanged(7);
                                 }
+                            }
+                            try {
+                                ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                        ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     });
@@ -1134,37 +1213,43 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 isFaqShown = true;
                             }
                             notifyItemChanged(position);
-                            if(isDescShown){
-                                isDescShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isDescShown) {
+                                isDescShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(4);
-                                }else{
+                                } else {
                                     notifyItemChanged(3);
                                 }
                             }
-                            if(isSpecsShown){
-                                isSpecsShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isSpecsShown) {
+                                isSpecsShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(5);
-                                }else{
+                                } else {
                                     notifyItemChanged(4);
                                 }
                             }
-                            if(isCareShown){
-                                isCareShown=false;
-                                if(obj.getProduct().is_o2o()) {
+                            if (isCareShown) {
+                                isCareShown = false;
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(6);
-                                }else{
+                                } else {
                                     notifyItemChanged(5);
                                 }
                             }
-                            if(isReturnPolicyShown){
+                            if (isReturnPolicyShown) {
                                 isReturnPolicyShown = false;
-                                if(obj.getProduct().is_o2o()) {
+                                if (obj.getProduct().is_o2o()) {
                                     notifyItemChanged(7);
-                                }else{
+                                } else {
                                     notifyItemChanged(6);
                                 }
+                            }
+                            try {
+                                ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                        ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     });
@@ -1197,37 +1282,43 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                             isFaqShown = true;
                         }
                         notifyItemChanged(position);
-                        if(isDescShown){
-                            isDescShown=false;
-                            if(obj.getProduct().is_o2o()) {
+                        if (isDescShown) {
+                            isDescShown = false;
+                            if (obj.getProduct().is_o2o()) {
                                 notifyItemChanged(4);
-                            }else{
+                            } else {
                                 notifyItemChanged(3);
                             }
                         }
-                        if(isSpecsShown){
-                            isSpecsShown=false;
-                            if(obj.getProduct().is_o2o()) {
+                        if (isSpecsShown) {
+                            isSpecsShown = false;
+                            if (obj.getProduct().is_o2o()) {
                                 notifyItemChanged(5);
-                            }else{
+                            } else {
                                 notifyItemChanged(4);
                             }
                         }
-                        if(isCareShown){
-                            isCareShown=false;
-                            if(obj.getProduct().is_o2o()) {
+                        if (isCareShown) {
+                            isCareShown = false;
+                            if (obj.getProduct().is_o2o()) {
                                 notifyItemChanged(6);
-                            }else{
+                            } else {
                                 notifyItemChanged(5);
                             }
                         }
-                        if(isReturnPolicyShown){
+                        if (isReturnPolicyShown) {
                             isReturnPolicyShown = false;
-                            if(obj.getProduct().is_o2o()) {
+                            if (obj.getProduct().is_o2o()) {
                                 notifyItemChanged(7);
-                            }else{
+                            } else {
                                 notifyItemChanged(6);
                             }
+                        }
+                        try {
+                            ZTracker.logGAEvent(mContext, obj.getProduct().getName() + " Sku " + obj.getProduct().getSku(),
+                                    ((ProductInfoHolder4) holder).descTitle.getText() + " Opened", "Product Description Page");
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -1276,60 +1367,60 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (obj != null) {
             if (obj.getProduct().is_o2o()) {
                 if (similarProducts == null || similarProducts.size() == 0) {
-                    if(products == null || products.size() == 0) {
-                        if(isFooterRemoved) {
+                    if (products == null || products.size() == 0) {
+                        if (isFooterRemoved) {
                             return 9;
-                        }else{
+                        } else {
                             return 10;
                         }
-                    }else{
-                        if(isFooterRemoved) {
+                    } else {
+                        if (isFooterRemoved) {
                             return 10;
-                        }else{
+                        } else {
                             return 11;
                         }
                     }
                 } else {
-                    if(products == null || products.size() == 0) {
-                        if(isFooterRemoved) {
+                    if (products == null || products.size() == 0) {
+                        if (isFooterRemoved) {
                             return 10;
-                        }else{
+                        } else {
                             return 11;
                         }
-                    }else{
-                        if(isFooterRemoved) {
+                    } else {
+                        if (isFooterRemoved) {
                             return 11;
-                        }else{
+                        } else {
                             return 12;
                         }
                     }
                 }
             } else {
                 if (similarProducts == null || similarProducts.size() == 0) {
-                    if(products == null || products.size() == 0) {
-                        if(isFooterRemoved) {
+                    if (products == null || products.size() == 0) {
+                        if (isFooterRemoved) {
                             return 8;
-                        }else{
+                        } else {
                             return 9;
                         }
-                    }else{
-                        if(isFooterRemoved) {
+                    } else {
+                        if (isFooterRemoved) {
                             return 9;
-                        }else{
+                        } else {
                             return 10;
                         }
                     }
                 } else {
-                    if(products == null || products.size() == 0) {
-                        if(isFooterRemoved) {
+                    if (products == null || products.size() == 0) {
+                        if (isFooterRemoved) {
                             return 9;
-                        }else{
+                        } else {
                             return 10;
                         }
-                    }else{
-                        if(isFooterRemoved) {
+                    } else {
+                        if (isFooterRemoved) {
                             return 10;
-                        }else{
+                        } else {
                             return 11;
                         }
                     }
@@ -1357,44 +1448,44 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             } else {
                 return TYPE_PRODUCT_INFO_4;
             }
-        }else if(position == 4 ||position == 5 || position == 6|| position == 7){
+        } else if (position == 4 || position == 5 || position == 6 || position == 7) {
             return TYPE_PRODUCT_INFO_4;
-        }else if(position ==8){
-                if(obj!=null && obj.getProduct().is_o2o()){
-                    return TYPE_PRODUCT_INFO_4;
-                }else{
-                    if(similarProducts!=null && similarProducts.size()>0){
-                        return TYPE_SIMILAR_PRODUCTS;
-                    }else if(products!=null && products.size()>0){
-                        return TYPE_RECENTLY_VIEWED_PRODUCTS;
-                    }else{
-                        return TYPE_LOADER;
-                    }
-                }
-        }else if(position == 9){
-            if(obj!=null && obj.getProduct().is_o2o()){
-                if(similarProducts!=null && similarProducts.size()>0){
+        } else if (position == 8) {
+            if (obj != null && obj.getProduct().is_o2o()) {
+                return TYPE_PRODUCT_INFO_4;
+            } else {
+                if (similarProducts != null && similarProducts.size() > 0) {
                     return TYPE_SIMILAR_PRODUCTS;
-                }else if(products!=null && products.size()>0){
+                } else if (products != null && products.size() > 0) {
                     return TYPE_RECENTLY_VIEWED_PRODUCTS;
-                }else{
+                } else {
                     return TYPE_LOADER;
                 }
-            }else{
-                if(products!=null && products.size()>0){
+            }
+        } else if (position == 9) {
+            if (obj != null && obj.getProduct().is_o2o()) {
+                if (similarProducts != null && similarProducts.size() > 0) {
+                    return TYPE_SIMILAR_PRODUCTS;
+                } else if (products != null && products.size() > 0) {
                     return TYPE_RECENTLY_VIEWED_PRODUCTS;
-                }else{
+                } else {
+                    return TYPE_LOADER;
+                }
+            } else {
+                if (products != null && products.size() > 0) {
+                    return TYPE_RECENTLY_VIEWED_PRODUCTS;
+                } else {
                     return TYPE_LOADER;
                 }
             }
 
-        }else if(position == 10){
-            if(products!=null && products.size()>0){
+        } else if (position == 10) {
+            if (products != null && products.size() > 0) {
                 return TYPE_RECENTLY_VIEWED_PRODUCTS;
-            }else{
+            } else {
                 return TYPE_LOADER;
             }
-        }else{
+        } else {
             return TYPE_LOADER;
         }
 
@@ -1783,8 +1874,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((SimilarProductHolder) holder).container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(AppPreferences.isUserLogIn(mContext)){
-                    }else{
+                    if (AppPreferences.isUserLogIn(mContext)) {
+                    } else {
                         RecentProductsDBWrapper.addProduct(similarProducts.get(position), 1, System.currentTimeMillis());
                     }
                     Intent intent = new Intent(mContext, NewProductDetailActivity.class);
@@ -1801,7 +1892,6 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((NewProductDetailActivity) mContext).finish();
                 }
             });
-
 
 
         }
@@ -1831,16 +1921,17 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
         }
     }
+
     public class ProductRecentProductsHolder extends RecyclerView.ViewHolder {
 
         RecyclerView recyclerView;
-        TextView viewAll,recentProductsTag;
+        TextView viewAll, recentProductsTag;
 
         public ProductRecentProductsHolder(View v) {
             super(v);
             recyclerView = (RecyclerView) v.findViewById(R.id.simiilarproductslist);
             viewAll = (CustomTextView) v.findViewById(R.id.view_all_similarl);
-            recentProductsTag = (TextView)v.findViewById(R.id.recent_products_tag);
+            recentProductsTag = (TextView) v.findViewById(R.id.recent_products_tag);
         }
     }
 
@@ -1933,8 +2024,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
 
-                    if(AppPreferences.isUserLogIn(mContext)){
-                    }else{
+                    if (AppPreferences.isUserLogIn(mContext)) {
+                    } else {
                         RecentProductsDBWrapper.addProduct(products.get(position), 1, System.currentTimeMillis());
                     }
                     Intent intent = new Intent(mContext, NewProductDetailActivity.class);
