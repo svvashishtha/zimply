@@ -5,11 +5,15 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/viewall_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/z_margin_large">
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small"
+        >
 
         <com.application.zimplyshop.widgets.CustomTextViewBold
             android:id="@+id/recent_products_tag"
@@ -25,11 +29,10 @@
         <com.application.zimplyshop.widgets.CustomTextView
             android:id="@+id/view_all_similarl"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
             android:clickable="true"
-            android:includeFontPadding="false"
-            android:padding="@dimen/z_margin_small"
             android:text="View All"
             android:textColor="@color/z_blue_color"
             android:textStyle="bold" />
