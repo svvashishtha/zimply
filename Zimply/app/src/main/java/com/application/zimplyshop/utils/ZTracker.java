@@ -22,6 +22,7 @@ public class ZTracker {
                         .getTracker(CommonLib.TrackerName.APPLICATION_TRACKER);
 
                 // Build and send an Event.
+                GoogleAnalytics.getInstance(ctx).getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
                 tracker.send(new HitBuilders.EventBuilder().setCategory(categoryStr).setAction(actionStr).setLabel(labelStr)
                         .build());
             }
@@ -60,6 +61,7 @@ public class ZTracker {
             tracker.setScreenName(screenName);
 
             // Send a screen view.
+            GoogleAnalytics.getInstance(ctx).getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
             tracker.send(new HitBuilders.AppViewBuilder().build());
 
         } catch (Exception e) {
@@ -101,7 +103,7 @@ public class ZTracker {
 
                 Tracker t = ((AppApplication) context).getTracker(
                         CommonLib.TrackerName.APPLICATION_TRACKER);
-                GoogleAnalytics.getInstance(context).getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+               GoogleAnalytics.getInstance(context).getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
                 t.send(builder.build());
             } catch (Exception e) {
                 e.printStackTrace();

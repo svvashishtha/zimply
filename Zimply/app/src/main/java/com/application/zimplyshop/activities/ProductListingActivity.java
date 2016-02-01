@@ -52,8 +52,8 @@ import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
+import com.application.zimplyshop.widgets.GridItemDecorator;
 import com.application.zimplyshop.widgets.RangeSeekBar;
-import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
 
 import java.util.ArrayList;
 
@@ -93,6 +93,7 @@ public class ProductListingActivity extends BaseActivity implements
     private String categoryName;
     private ArrayList<CustomRadioButton> priceRadioButtonsArrayList;
     SubCategoryAdapter subCategoryAdapter;
+    GridItemDecorator gridDecor,linearDecor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,25 +115,32 @@ public class ProductListingActivity extends BaseActivity implements
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         productList = (RecyclerView) findViewById(R.id.categories_list);
-
+        gridDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),false);
+        linearDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),true);
         gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
             @Override
             public int getSpanSize(int position) {
-                if (position == 0)
-                    return 2;
-                else if (position == productList.getLayoutManager().getItemCount() - 1) {
-                    return 2;
-                } else {
-                    return 1;
+                switch (((ProductsRecyclerViewGridAdapter) productList
+                        .getAdapter()).getItemViewType(position)) {
+                    case 0:
+                        return 1;
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 2;
+                    default:
+                        return -1;
                 }
             }
         });
         productList.setLayoutManager(gridLayoutManager);
-        productList.addItemDecoration(new SpaceGridItemDecorator(
-                (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini)));
+        productList.addItemDecoration(gridDecor);
 
         // setProductsGrid();
         discountId = getIntent().getIntExtra("discount_id", -1);
@@ -191,7 +199,6 @@ public class ProductListingActivity extends BaseActivity implements
     }
 
 
-
     boolean isHideFilter;
     /*public int getSelectedCatgeoryId(int categoryId) {
         if (AllProducts.getInstance().getHomeProCatNBookingObj().getProduct_category() != null) {
@@ -244,7 +251,7 @@ public class ProductListingActivity extends BaseActivity implements
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
+            final ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
@@ -274,19 +281,28 @@ public class ProductListingActivity extends BaseActivity implements
 
                             @Override
                             public int getSpanSize(int position) {
-                                if (position == 0)
-                                    return 2;
-                                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
-                                    return 2;
-
-                                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
-                                    return 2;
-                                } else return 1;
+                                switch (((ProductsRecyclerViewGridAdapter) productList
+                                        .getAdapter()).getItemViewType(position)) {
+                                    case 0:
+                                        return 1;
+                                    case 1:
+                                        return 2;
+                                    case 2:
+                                        return 2;
+                                    default:
+                                        return -1;
+                                }
                             }
                         });
                         productList.setLayoutManager(gridLayoutManager);
+                        productList.removeItemDecoration(linearDecor);
+                        productList.addItemDecoration(gridDecor);
+                        adapter.setHeight(width);
                         productList.getAdapter().notifyDataSetChanged();
                     } else {
+                        productList.removeItemDecoration(gridDecor);
+                        productList.addItemDecoration(linearDecor);
+                        adapter.setHeight(getDisplayMetrics().widthPixels);
                         productList.setLayoutManager(new LinearLayoutManager(ProductListingActivity.this));
                         productList.getAdapter().notifyDataSetChanged();
                     }

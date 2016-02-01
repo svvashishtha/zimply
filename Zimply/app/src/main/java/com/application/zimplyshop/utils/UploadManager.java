@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.ErrorObject;
+import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ParserClass;
 import com.application.zimplyshop.managers.HttpManager;
 import com.application.zimplyshop.preferences.AppPreferences;
@@ -123,6 +124,7 @@ public class UploadManager {
 
 				if (entities != null)
 					httpPost.setEntity(entities);
+				HttpManager.setParams(mContext, AppConstants.STORE_PASS.toCharArray());
 
 				response = HttpManager.execute(httpPost);
 

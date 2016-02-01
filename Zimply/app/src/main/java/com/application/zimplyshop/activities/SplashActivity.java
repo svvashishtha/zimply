@@ -435,7 +435,7 @@ public class SplashActivity extends BaseActivity implements RequestTags, GetRequ
                 AllCities.getInsance().setCities(appConfig.getCities());
             }
             if (appConfig != null && appConfig.isUpdateRequired()) { //response[0] != null && (Boolean) ((Object[]) (response[0]))[0]) {
-                new AlertDialog.Builder(mContext).setMessage(appConfig.getMessage())
+                new AlertDialog.Builder(mContext).setMessage(appConfig.getUpdateText())
                         .setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {

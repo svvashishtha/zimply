@@ -150,7 +150,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
                     logoutDialog = new AlertDialog.Builder(PurchaseListActivity.this)
                             .setTitle(getResources().getString(R.string.return_order))
                             .setMessage(getResources().getString(R.string.return_order_cofirm))
-                            .setPositiveButton(getResources().getString(R.string.okay_text),
+                            .setPositiveButton("Yes",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -160,7 +160,7 @@ public class PurchaseListActivity extends BaseActivity implements GetRequestList
                                             sendServerRequest(AppConstants.RETURN_ORDER, orderId);
                                             ;
                                         }
-                                    }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
+                                    }).setNegativeButton("No",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

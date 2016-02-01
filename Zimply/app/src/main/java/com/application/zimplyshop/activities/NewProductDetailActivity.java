@@ -84,7 +84,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     //    Google analytics ecommerce
     String productActionListName, screenName, actionPerformed;
     int position;
-    int pastVisiblesItems, visibleItemCount, totalItemCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,7 +153,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         if (adapter != null && adapter.getObj() != null && AllProducts.getInstance().cartContains((int) adapter.getObj().getProduct().getId())) {
             addToCart.setText("Go to cart");
         } else {
-            addToCart.setText("Add to cart");
+            addToCart.setText(getResources().getString(R.string.add_to_cart));
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -671,7 +671,10 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         ProductAction productAction = new ProductAction(ProductAction.ACTION_ADD)
                                 .setCheckoutStep(1)
                                 .setCheckoutOptions("Add to cart");
-                    ZTracker.checkOutGaEvents(productAction,product,getApplicationContext());
+                        ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
+                        ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                                "Add to cart", "Product Description Page");
+
                     }
                 } else if (jsonObject.getString("error") != null && jsonObject.getString("error").length() > 0) {
                     message = jsonObject.getString("error");
@@ -685,6 +688,22 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 if (progressDialog != null)
                     progressDialog.dismiss();
             }
+        } else if (requestType == ADD_TO_CART_PRODUCT_DETAIL_COVERT && status && !isDestroyed) {
+            try {
+                JSONObject jsonObject = ((JSONObject) response);
+                String message = null;
+                if (jsonObject.getString("success") != null && jsonObject.getString("success").length() > 0)
+                    message = jsonObject.getString("success");
+                if (message != null) {
+                    ((CustomTextView) findViewById(R.id.add_to_cart)).setText("Go To Cart");
+                    AllProducts.getInstance().getCartObjs().add(new BaseCartProdutQtyObj((int) adapter.getObj().getProduct().getId(), 1));
+                    AllProducts.getInstance().setCartCount(AllProducts.getInstance().getCartCount() + 1);
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } else if ((requestType == MARK_UN_FAVOURITE_REQUEST_TAG || requestType == MARK_FAVOURITE_REQUEST_TAG) && !isDestroyed) {
             if (requestType == MARK_FAVOURITE_REQUEST_TAG) {
                 if (status) {
@@ -898,6 +917,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         } else {
                             Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                             intent.putExtra("OrderSummaryFragment", false);
+                            try{
+                                ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                                        "Go to cart(from bottom button)", "Product Description Page");
+
+                            }catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
                             intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
                             startActivity(intent);
 
@@ -946,7 +973,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             case R.id.buy_now:
 
                 if (CommonLib.isNetworkAvailable(NewProductDetailActivity.this)) {
+                    if (!AllProducts.getInstance().cartContains(productId)) {
+                        String url = AppApplication.getInstance().getBaseUrl() + ADD_TO_CART_URL;
+                        List<NameValuePair> nameValuePair = new ArrayList<>();
+                        nameValuePair.add(new BasicNameValuePair("buying_channel", AppConstants.BUYING_CHANNEL_ONLINE + ""));
+                        nameValuePair.add(new BasicNameValuePair("product_id", productId + ""));
+                        nameValuePair.add(new BasicNameValuePair("quantity", "1"));
+                        nameValuePair.add(new BasicNameValuePair("userid", AppPreferences.getUserID(this)));
 
+                        UploadManager.getInstance().makeAyncRequest(url, ADD_TO_CART_PRODUCT_DETAIL_COVERT, adapter.getObj().getProduct().getSlug(), OBJECT_ADD_TO_CART, null, nameValuePair, null);
+                    }
 // Add the step number and additional info about the checkout to the action.
 
 
@@ -962,6 +998,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                             .setCheckoutStep(2)
                             .setCheckoutOptions("Buy Now");
                     ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
+                    try{
+                        ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                                "Buy Now", "Product Description Page");
+
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                     if (AppPreferences.isUserLogIn(NewProductDetailActivity.this)) {
                         Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                         intent.putExtra("OrderSummaryFragment", true);
@@ -989,6 +1033,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     shareIntent.putExtra("product_url", "/shop-product/");
                     shareIntent.putExtra("short_url", "www.zimply.in/shop-product/" + productSlug + "?pid=" + productId);
                     ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Share-Product", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
+                    try{
+                        ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                                "Share Product", "Product Description Page");
+
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                     startActivity(shareIntent);
                 } else {
                     Toast.makeText(this, "Please wait while loading...", Toast.LENGTH_SHORT).show();
@@ -996,6 +1048,14 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 break;
             case R.id.cart_icon:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
+                try{
+                    ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
+                            "Go to cart(From toolbar)", "Product Description Page");
+
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 intent.putExtra("OrderSummaryFragment", false);
                 startActivity(intent);
                 break;
@@ -1075,7 +1135,6 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             super.onBackPressed();
         }
     }
-
 
     public class GetDataFromCache extends AsyncTask<Void, Void, Object> {
 

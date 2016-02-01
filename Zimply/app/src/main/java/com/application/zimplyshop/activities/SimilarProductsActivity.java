@@ -22,7 +22,7 @@ import com.application.zimplyshop.managers.GetRequestListener;
 import com.application.zimplyshop.managers.GetRequestManager;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.serverapis.RequestTags;
-import com.application.zimplyshop.widgets.SpaceGridItemDecorator;
+import com.application.zimplyshop.widgets.GridItemDecorator;
 
 import java.util.ArrayList;
 
@@ -41,6 +41,9 @@ public class SimilarProductsActivity extends BaseActivity implements
     int width;
     TextView titleText;
     long productId;
+    private GridLayoutManager gridLayoutManager;
+    private GridItemDecorator gridDecor,linearDecor;
+    private boolean isRecyclerViewInLongItemMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +57,33 @@ public class SimilarProductsActivity extends BaseActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         productList = (RecyclerView) findViewById(R.id.categories_list);
-        productList.setLayoutManager(new GridLayoutManager(this, 2));
-        productList.addItemDecoration(new SpaceGridItemDecorator(
+        gridDecor = new GridItemDecorator(
                 (int) getResources().getDimension(R.dimen.margin_small),
-                (int) getResources().getDimension(R.dimen.margin_mini)));
+                (int) getResources().getDimension(R.dimen.margin_mini),false);
+        linearDecor = new GridItemDecorator(
+                (int) getResources().getDimension(R.dimen.margin_small),
+                (int) getResources().getDimension(R.dimen.margin_mini),true);
+        gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+            @Override
+            public int getSpanSize(int position) {
+                switch (((ProductsRecyclerViewGridAdapter) productList
+                        .getAdapter()).getItemViewType(position)) {
+                    case 0:
+                        return 1;
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 2;
+                    default:
+                        return -1;
+                }
+            }
+        });
+
+        productList.setLayoutManager(gridLayoutManager);
+        productList.addItemDecoration(gridDecor);
 
         setStatusBarColor();
         setLoadingVariables();
@@ -88,13 +114,71 @@ public class SimilarProductsActivity extends BaseActivity implements
                 ObjectTypes.OBJECT_TYPE_PRODUCT_LIST_OBJECT);
     }
 
-    private void setAdapterData(ArrayList<BaseProductListObject> objs) {
+    private void setAdapterData(ArrayList<BaseProductListObject> objs,int count) {
         if (productList.getAdapter() == null) {
             int height = (getDisplayMetrics().widthPixels - 3 * ((int) getResources()
                     .getDimension(R.dimen.margin_mini))) / 2;
-            ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
+            final ProductsRecyclerViewGridAdapter adapter = new ProductsRecyclerViewGridAdapter(
                     this, this, height);
+            adapter.setCount(count);
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                @Override
+                public int getSpanSize(int position) {
+                    switch (((ProductsRecyclerViewGridAdapter) productList
+                            .getAdapter()).getItemViewType(position)) {
+                        case 0:
+                            return 1;
+                        case 1:
+                            return 2;
+                        case 2:
+                            return 2;
+                        default:
+                            return -1;
+                    }
+                }
+            });
+            adapter.setCheckLayoutOptionListener(new ProductsRecyclerViewGridAdapter.CheckLayoutOptions() {
+                @Override
+                public boolean checkIsRecyclerViewInLongItemMode() {
+                    return isRecyclerViewInLongItemMode;
+                }
+
+                @Override
+                public void switchRecyclerViewLayoutManager() {
+                    if (isRecyclerViewInLongItemMode) {
+                        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                            @Override
+                            public int getSpanSize(int position) {
+                                if (position == 0)
+                                    return 2;
+                                else if (position == productList.getLayoutManager().getItemCount() - 1 && isRequestAllowed) {
+                                    return 2;
+
+                                } else if (!isRequestAllowed && position == productList.getLayoutManager().getItemCount()) {
+                                    return 2;
+                                } else return 1;
+                            }
+                        });
+                        productList.setLayoutManager(gridLayoutManager);
+                        productList.removeItemDecoration(linearDecor);
+                        productList.addItemDecoration(gridDecor);
+                        adapter.setHeight(width);
+                        productList.getAdapter().notifyDataSetChanged();
+                    } else {
+                        productList.removeItemDecoration(gridDecor);
+                        productList.addItemDecoration(linearDecor);
+                        adapter.setHeight(getDisplayMetrics().widthPixels);
+                        productList.setLayoutManager(new LinearLayoutManager(SimilarProductsActivity.this));
+                        productList.getAdapter().notifyDataSetChanged();
+                    }
+                    isRecyclerViewInLongItemMode = !isRecyclerViewInLongItemMode;
+                }
+            });
+
             productList.setAdapter(adapter);
+
             productList
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
@@ -125,21 +209,7 @@ public class SimilarProductsActivity extends BaseActivity implements
                             super.onScrollStateChanged(recyclerView, newState);
                         }
                     });
-            ((GridLayoutManager) productList.getLayoutManager())
-                    .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                        @Override
-                        public int getSpanSize(int position) {
-                            switch (productList
-                                    .getAdapter().getItemViewType(position)) {
-                                case 0:
-                                    return 1;
-                                case 1:
-                                    return 2;
-                                default:
-                                    return -1;
-                            }
-                        }
-                    });
+
 
         }
         ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
@@ -208,7 +278,7 @@ public class SimilarProductsActivity extends BaseActivity implements
                 }
                 isRequestAllowed = false;
             } else {
-                setAdapterData(((ProductListObject) obj).getProducts());
+                setAdapterData(((ProductListObject) obj).getProducts(),((ProductListObject) obj).getCount());
 
                 nextUrl = ((ProductListObject) obj).getNext_url();
                 showView();

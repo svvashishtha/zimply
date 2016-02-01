@@ -21,6 +21,7 @@ import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.serverapis.RequestTags;
+import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
 
@@ -94,7 +95,7 @@ public class ProductsRecyclerViewGridAdapter extends
 
     public void removeItem() {
         isFooterRemoved = true;
-        notifyItemRemoved(objs.size());
+        notifyItemRemoved(objs.size() + 1);
     }
 
     @Override
@@ -107,6 +108,10 @@ public class ProductsRecyclerViewGridAdapter extends
             }
         }
         return 0;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Override
@@ -134,7 +139,7 @@ public class ProductsRecyclerViewGridAdapter extends
 
             if (mListener.checkIsRecyclerViewInLongItemMode()) {
                 holder.priceContainer.setOrientation(LinearLayout.HORIZONTAL);
-                holder.productDiscountedPrice.setPadding(0,0, (int) mContext.getResources().getDimension(R.dimen.margin_small),0);
+                holder.productDiscountedPrice.setPadding(0, 0, (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
 
             } else {
                 holder.priceContainer.setOrientation(LinearLayout.VERTICAL);
@@ -193,6 +198,8 @@ public class ProductsRecyclerViewGridAdapter extends
 
                     ((ProductViewHolder) holder).productPrice.setVisibility(View.GONE);
                     ((ProductViewHolder) holder).productDiscountFactor.setVisibility(View.GONE);
+                    holder.productDiscountedPrice.setPadding((int) mContext.getResources().getDimension(R.dimen.margin_small), 0,
+                            (int) mContext.getResources().getDimension(R.dimen.margin_small), 0);
                 }
             } catch (NumberFormatException e) {
 
@@ -200,13 +207,13 @@ public class ProductsRecyclerViewGridAdapter extends
 
 
             final int finalPosition = position;
-            ((ProductViewHolder) holder).img.setOnClickListener(new View.OnClickListener() {
+            ((ProductViewHolder) holder).itemContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(AppPreferences.isUserLogIn(mContext)){
+                    if (AppPreferences.isUserLogIn(mContext)) {
 
-                    }else{
-                        RecentProductsDBWrapper.addProduct(objs.get(positionTemp),1,System.currentTimeMillis());
+                    } else {
+                        RecentProductsDBWrapper.addProduct(objs.get(positionTemp), 1, System.currentTimeMillis());
                     }
 
                     Intent intent = new Intent(mContext, NewProductDetailActivity.class);
@@ -227,14 +234,16 @@ public class ProductsRecyclerViewGridAdapter extends
             final HeaderViewHolder holder = (HeaderViewHolder) holderCom;
             holder.productCount.setText(count + " Products");
             if (mListener.checkIsRecyclerViewInLongItemMode()) {
-                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.list_long_icon));
-
-            } else {
                 holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.grid_icon));
+                ZTracker.logGAEvent(mContext,"Product Listing View","View changed to Card","View Switch");
+            } else {
+                holder.gridIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_icon));
+                ZTracker.logGAEvent(mContext,"Product Listing View","View changed to Grid","View Switch");
             }
             holder.gridIconContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     mListener.switchRecyclerViewLayoutManager();
                 }
             });
@@ -275,6 +284,7 @@ public class ProductsRecyclerViewGridAdapter extends
         ImageView img, buyOfflineTag;
         TextView productName, productDiscountedPrice, productPrice, productDiscountFactor;
         LinearLayout priceContainer;
+        View itemContainer;
 
         public ProductViewHolder(View view) {
             super(view);
@@ -287,6 +297,7 @@ public class ProductsRecyclerViewGridAdapter extends
             productDiscountFactor = (TextView) view.findViewById(R.id.product_disounted_factor);
             buyOfflineTag = (ImageView) view.findViewById(R.id.buy_offline_tag);
             priceContainer = (LinearLayout) view.findViewById(R.id.price_container);
+            itemContainer = view.findViewById(R.id.productgriditemcoontainerlayout);
         }
     }
 

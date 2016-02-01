@@ -33,7 +33,7 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     CustomTextView emailUser, pNumber, addressLine1, addressLine2, numberAddress, viewAll;
     CustomTextViewBold nameOfUser, nameAddress;
     ArrayList<AddressObject> addressObjectArrayList;
-    View mainView, addressView, settings;
+    View mainView, addressView, settings, addressViewSecondary;
 
 
     @Override
@@ -44,6 +44,7 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
         viewAll = (CustomTextView) findViewById(R.id.view_all);
         viewAll.setOnClickListener(this);
         addressView = findViewById(R.id.address_view);
+        addressViewSecondary = findViewById(R.id.address_view_secondary);
         mainView = findViewById(R.id.mainView);
         backgroundImage = (ImageView) findViewById(R.id.background_image);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,7 +87,7 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     }
 
     void fillAddressView(AddressObject addressObject) {
-        addressView.setVisibility(View.VISIBLE);
+        addressViewSecondary.setVisibility(View.VISIBLE);
         nameAddress.setText(addressObject.getName());
         if (addressObject.getLine1() != null && addressObject.getLine1().length() > 0)
             addressLine1.setText(addressObject.getLine1());
@@ -96,6 +97,7 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
             addressLine2.setText(addressObject.getLine2());
         else addressLine2.setVisibility(View.GONE);
         numberAddress.setText(addressObject.getPhone());
+        viewAll.setText("View All");
     }
 
     private void loadData() {
@@ -123,11 +125,11 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
                 addressObjectArrayList = new ArrayList<>();
             addressObjectArrayList = (ArrayList<AddressObject>) obj;
             if (addressObjectArrayList.size() > 0) {
-                addressView.setVisibility(View.VISIBLE);
+                addressViewSecondary.setVisibility(View.VISIBLE);
                 fillAddressView(addressObjectArrayList.get(0));
             } else {
-                addressView.setVisibility(View.GONE);
-                viewAll.setText("Add New Address");
+                addressViewSecondary.setVisibility(View.GONE);
+                viewAll.setText("Add New");
                /* viewAll.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -172,7 +174,7 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_all:
-                if(((CustomTextView)v).getText().toString().equalsIgnoreCase("Add New Address"))
+                if(((CustomTextView)v).getText().toString().equalsIgnoreCase("Add New"))
                 {
                     Intent intent = new Intent(ProfileActivity.this, EditAddressActivity.class);
                     startActivity(intent);
@@ -197,7 +199,10 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
                 mainView.setVisibility(View.VISIBLE);
                 fillAddressView(AllUsers.getInstance().getObjs().get(0));
             } else
-                addressView.setVisibility(View.GONE);
+            {
+                addressViewSecondary.setVisibility(View.GONE);
+                viewAll.setText("Add New");
+            }
             fillHeaderDetails();
         } catch (Exception e) {
             e.printStackTrace();

@@ -24,7 +24,7 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
     private static final String BUNDLE = "Bundle";
     SQLiteDatabase db;
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String CACHE_TABLE_NAME = "PRODUCTS";
     private static final String DICTIONARY_TABLE_CREATE =
             "CREATE TABLE " + CACHE_TABLE_NAME + " (" +
@@ -120,11 +120,11 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         try{
             db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
             cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, USERID,TIMESTAMP,TYPE,BUNDLE }, /*CITYID + "=? AND " +*/ USERID + "=?",
-                    new String[] { /*Integer.toString(cityId),*/ Integer.toString(userId) }, null, null, TIMESTAMP + " DESC", "5");
+                    new String[] { /*Integer.toString(cityId),*/ Integer.toString(userId) }, null, null, TIMESTAMP + " DESC", "6");
             if (cursor != null)
                 cursor.moveToFirst();
 
-            for (int i=0;i<cursor.getCount();i++)
+            for (int i=1;i<cursor.getCount();i++)
             {
                 cursor.moveToPosition(i);
                 location = (BaseProductListObject) GetRequestManager.Deserialize_Object(cursor.getBlob(4), "");
@@ -310,6 +310,52 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
             result = - 1;
         }
         return result;
+    }
+
+    public int getProductCount(int userId) {
+        int count=0;
+
+        BaseProductListObject location;
+        this.getReadableDatabase();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        ArrayList<BaseProductListObject> queries = new ArrayList<BaseProductListObject>();
+
+        try{
+            db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
+            cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, USERID,TIMESTAMP,TYPE,BUNDLE }, null,
+                    null, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                count = cursor.getCount();
+            }
+            cursor.close();
+            db.close();
+            this.close();
+            return count;
+        }
+        catch (SQLiteException e) {
+
+            this.close();
+        }
+        catch(Exception E)
+        {
+            try {
+                cursor.close();
+                db.close();
+                this.close();
+            }
+            catch(Exception ec) {
+                try {
+                    db.close();
+                }
+                catch (Exception e) {
+                    this.close();
+                }
+                this.close();
+            }
+        }
+        return count;
     }
 
 }

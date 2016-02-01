@@ -1,52 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.application.zimplyshop.activities.EditAddressActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:background="@drawable/actionbar_bg"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentTop="true"
-        />
-    <LinearLayout
-        android:id="@+id/save_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:clickable="true"
-        android:layout_marginBottom="@dimen/size10"
-        android:layout_marginLeft="@dimen/size10"
-        android:layout_marginRight="@dimen/size10">
-
-
-        <com.application.zimplyshop.widgets.CustomTextView
-            android:id="@+id/save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/greenbtn_bg"
-            android:gravity="center"
-            android:maxLines="1"
-            android:padding="@dimen/size12"
-            android:singleLine="true"
-            android:textAllCaps="true"
-            android:text="@string/save_address"
-            android:textColor="@color/white"
-            android:textSize="@dimen/size18" />
-
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@id/save_view"
+        android:paddingTop="?attr/actionBarSize"
         android:background="@color/white"
         android:clickable="true"
-        android:layout_below="@id/toolbar"
         android:clipToPadding="false"
         android:padding="@dimen/margin_small"
         android:scrollbars="vertical">
@@ -55,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:clipToPadding="false"
             android:clickable="true"
+            android:clipToPadding="false"
 
             android:orientation="vertical">
 
@@ -64,18 +29,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small">
+
                 <com.application.zimplyshop.widgets.CustomEdittext
                     android:id="@+id/phone"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/enter_phone"
                     android:inputType="phone"
+                    android:maxLength="10"
                     android:maxLines="1"
                     android:padding="@dimen/size12"
-                    android:maxLength="10"
                     android:singleLine="true"
-                    android:textColorHint="@color/zhl_darkest"
                     android:textColor="@color/text_color1"
+                    android:textColorHint="@color/zhl_darkest"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -93,8 +59,8 @@
                     android:maxLines="1"
                     android:padding="@dimen/size12"
                     android:singleLine="true"
-                    android:textColorHint="@color/zhl_darkest"
                     android:textColor="@color/text_color1"
+                    android:textColorHint="@color/zhl_darkest"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -102,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small">
+
                 <com.application.zimplyshop.widgets.CustomEdittext
                     android:id="@+id/name"
                     android:layout_width="fill_parent"
@@ -112,8 +79,8 @@
                     android:maxLines="1"
                     android:padding="@dimen/size12"
                     android:singleLine="true"
-                    android:textColorHint="@color/zhl_darkest"
                     android:textColor="@color/text_color1"
+                    android:textColorHint="@color/zhl_darkest"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -121,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small">
+
                 <com.application.zimplyshop.widgets.CustomEdittext
                     android:id="@+id/address_line1"
                     android:layout_width="fill_parent"
@@ -130,8 +98,8 @@
                     android:inputType="textPostalAddress|textAutoCorrect"
                     android:lines="2"
                     android:padding="@dimen/size12"
-                    android:textColorHint="@color/zhl_darkest"
                     android:textColor="@color/text_color1"
+                    android:textColorHint="@color/zhl_darkest"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -139,6 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small">
+
                 <com.application.zimplyshop.widgets.CustomEdittext
                     android:id="@+id/address_line2"
                     android:layout_width="fill_parent"
@@ -148,8 +117,8 @@
                     android:inputType="textPostalAddress|textAutoCorrect"
                     android:lines="2"
                     android:padding="@dimen/size12"
-                    android:textColorHint="@color/zhl_darkest"
                     android:textColor="@color/text_color1"
+                    android:textColorHint="@color/zhl_darkest"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -157,18 +126,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small">
+
                 <com.application.zimplyshop.widgets.CustomEdittext
                     android:id="@+id/pincode"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/pin_code_et_hint"
                     android:inputType="number"
-                    android:maxLines="1"
                     android:maxLength="6"
+                    android:maxLines="1"
                     android:padding="@dimen/size12"
                     android:singleLine="true"
-                    android:textColorHint="@color/zhl_darkest"
                     android:textColor="@color/text_color1"
+                    android:textColorHint="@color/zhl_darkest"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
 
@@ -181,6 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small">
+
                     <com.application.zimplyshop.widgets.CustomEdittext
                         android:id="@+id/city"
                         android:layout_width="fill_parent"
@@ -190,8 +161,8 @@
                         android:maxLines="1"
                         android:padding="@dimen/size12"
                         android:singleLine="true"
-                        android:textColorHint="@color/zhl_darkest"
                         android:textColor="@color/text_color1"
+                        android:textColorHint="@color/zhl_darkest"
                         android:textSize="@dimen/font_medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -206,6 +177,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small">
+
                 <com.application.zimplyshop.widgets.CustomEdittext
                     android:id="@+id/state"
                     android:layout_width="fill_parent"
@@ -215,26 +187,61 @@
                     android:maxLines="1"
                     android:padding="@dimen/size12"
                     android:singleLine="true"
-                    android:textColorHint="@color/zhl_darkest"
                     android:textColor="@color/text_color1"
+                    android:textColorHint="@color/zhl_darkest"
                     android:textSize="@dimen/font_medium" />
             </android.support.design.widget.TextInputLayout>
-
 
 
             <com.application.zimplyshop.widgets.CustomTextView
                 android:id="@+id/is_available_pincode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_medium"
                 android:gravity="center"
-                android:textSize="@dimen/font_small"
-                android:textColor="@color/red_text_color"
-                android:visibility="gone"
                 android:paddingLeft="@dimen/margin_medium"
                 android:paddingRight="@dimen/margin_medium"
-                android:layout_marginBottom="@dimen/margin_medium"/>
+                android:textColor="@color/red_text_color"
+                android:textSize="@dimen/font_small"
+                android:visibility="gone" />
 
         </LinearLayout>
 
     </ScrollView>
-</RelativeLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:background="@drawable/actionbar_bg" />
+
+    <LinearLayout
+        android:id="@+id/save_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/size10"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size10"
+        android:clickable="true">
+
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/greenbtn_bg"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/size12"
+            android:singleLine="true"
+            android:text="@string/save_address"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size18" />
+
+    </LinearLayout>
+    <include layout="@layout/progress_layout" />
+</FrameLayout>

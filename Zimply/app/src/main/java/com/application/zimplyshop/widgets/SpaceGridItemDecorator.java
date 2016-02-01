@@ -24,7 +24,7 @@ public class SpaceGridItemDecorator extends RecyclerView.ItemDecoration {
 
 		// Add top margin only for the first item to avoid double space between
 		// items
-		if (parent.getChildAdapterPosition(view) == 0 || parent.getChildAdapterPosition(view) == 1||(isStoreListing &&parent.getChildAdapterPosition(view) == 2)) {
+		if (parent.getChildAdapterPosition(view) == 0 || parent.getChildAdapterPosition(view) == 1||(isStoreListing && parent.getChildAdapterPosition(view) == 2)) {
 			outRect.left = space;
 			outRect.bottom = space2;
 			outRect.right = space2;
