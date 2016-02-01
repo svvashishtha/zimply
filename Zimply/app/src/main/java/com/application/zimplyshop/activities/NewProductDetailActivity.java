@@ -84,6 +84,9 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     //    Google analytics ecommerce
     String productActionListName, screenName, actionPerformed;
     int position;
+    private int visibleItemCount;
+    private int pastVisiblesItems;
+    private int totalItemCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

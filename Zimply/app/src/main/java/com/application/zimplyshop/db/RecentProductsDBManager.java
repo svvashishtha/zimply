@@ -312,7 +312,7 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         return result;
     }
 
-    public int getProductCount(int userId) {
+    /*public int getProductCount(int userId) {
         int count=0;
 
         BaseProductListObject location;
@@ -356,6 +356,6 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
             }
         }
         return count;
-    }
+    }*/
 
 }
