@@ -30,6 +30,8 @@ import com.application.zimplyshop.utils.ZTracker;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.google.android.gms.analytics.ecommerce.Product;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
+import com.payu.india.Interfaces.DeleteCardApiListener;
+import com.payu.india.Interfaces.GetStoredCardApiListener;
 import com.payu.india.Interfaces.PaymentRelatedDetailsListener;
 import com.payu.india.Model.MerchantWebService;
 import com.payu.india.Model.PaymentParams;
@@ -37,10 +39,12 @@ import com.payu.india.Model.PayuConfig;
 import com.payu.india.Model.PayuHashes;
 import com.payu.india.Model.PayuResponse;
 import com.payu.india.Model.PostData;
+import com.payu.india.Model.StoredCard;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
 import com.payu.india.PostParams.MerchantWebServicePostParams;
 import com.payu.india.PostParams.PaymentPostParams;
+import com.payu.india.Tasks.DeleteCardTask;
 import com.payu.india.Tasks.GetPaymentRelatedDetailsTask;
 
 import org.apache.http.NameValuePair;
@@ -61,7 +65,7 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 11/6/2015.
  */
-public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback, PaymentRelatedDetailsListener {
+public class NewAppPaymentOptionsActivity extends BaseActivity implements RequestTags, UploadManagerCallback, PaymentRelatedDetailsListener, GetStoredCardApiListener, DeleteCardApiListener {
 
 
     String name, orderId, email;
@@ -90,6 +94,9 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     boolean paymentSuccess;
     int paymentType;
 
+    ArrayList<StoredCard> storedCards;
+    ArrayList<StoredCard> oneClickCards;
+
     final String PAYU_KEY_MANDATORY = "0MQaQP";
 
     @Override
@@ -100,12 +107,14 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         recyclerView = (RecyclerView) findViewById(R.id.apppaymentoptions);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
+        setLoadingVariables();
+        showLoadingView();
         if (getIntent() != null) {
             orderId = getIntent().getStringExtra("order_id");
             name = getIntent().getStringExtra("name");
             email = getIntent().getStringExtra("email");
             totalPrice = getIntent().getIntExtra("total_amount", 0);
+            totalPrice = 1;
             addressObj = (AddressObject) getIntent().getSerializableExtra("address");
             buyingChannel = getIntent().getIntExtra("buying_channel", 0);
             isCoc = getIntent().getBooleanExtra("is_coc", false);
@@ -124,6 +133,8 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         setInitialDataForPaymentParamsObj();
 
         generateHashFromServer();
+
+
     }
 
     public void addToolbarView(Toolbar toolbar) {
@@ -189,6 +200,16 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
 
     protected String concatParams(String key, String value) {
         return key + "=" + value + "&";
+    }
+
+    @Override
+    public void onGetStoredCardApiResponse(PayuResponse payuResponse) {
+        storedCards = payuResponse.getStoredCards();
+    }
+
+    @Override
+    public void onDeleteCardApiResponse(PayuResponse payuResponse) {
+//        CommonLib.ZLog("NewApPaymentOptionsActivity","stored card number "+ payuResponse.getStoredCards().size());
     }
 
 
@@ -275,6 +296,7 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
             mPaymentParams.setHash(payuHashes.getPaymentHash());
 
             getSavedCardsAndNetBanksInfo();
+            //getSavedCards();
         }
     }
 
@@ -299,8 +321,85 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
     @Override
     public void onPaymentRelatedDetailsResponse(PayuResponse res) {
         payuResponse = res;
+        showView();
         adapter = new NewAppPaymentOptionsActivityListAdapter(this, cartObj, payuResponse, totalPrice, isCodNotAvailable);
+        adapter.setOnPaySecurelyClicked(new NewAppPaymentOptionsActivityListAdapter.onPaySecurely() {
+            @Override
+            public void paySecurely(String cardNumber, String name, String expiryMonth, String expiryYear, String cvv, boolean saveCard) {
+                //todo do something here
+                CommonLib.ZLog("card Options", cardNumber + " " + name + " " + expiryMonth + " " + expiryYear + " " + cvv +
+                        " " + (saveCard ? "true" : "false"));
+                mPaymentParams.setStoreCard(saveCard ? 1 : 0);
+                cardNumber = cardNumber.replaceAll(" ", "");
+                mPaymentParams.setCardNumber(cardNumber);
+                mPaymentParams.setCardName(name);
+                mPaymentParams.setNameOnCard(name);
+                mPaymentParams.setExpiryMonth(expiryMonth);
+                mPaymentParams.setExpiryYear(expiryYear);
+                mPaymentParams.setCvv(cvv);
+                launchCreditCardWebView();
+            }
+
+            @Override
+            public void payViaStoredCard(String cardToken, String cvv, String nameOnCard, String cardName, String expiryMOnth, String expiryYear) {
+                mPaymentParams.setCardToken(cardToken);
+                mPaymentParams.setCvv(cvv);
+                mPaymentParams.setNameOnCard(nameOnCard);
+                mPaymentParams.setCardName(cardName);
+                mPaymentParams.setExpiryMonth(expiryMOnth);
+                mPaymentParams.setExpiryYear(expiryYear);
+                launchCreditCardWebView();
+            }
+
+            @Override
+            public void payViaNetBanking(String bankCode) {
+                mPaymentParams.setBankCode(bankCode);
+                PostData postData = new PaymentPostParams(mPaymentParams, PayuConstants.NB).getPaymentPostParams();
+                if (postData.getCode() == PayuErrors.NO_ERROR) {
+                    // launch webview
+                    payuConfig.setData(postData.getResult());
+                    Intent intent = new Intent(NewAppPaymentOptionsActivity.this, PayUWebViewActivity.class);
+                    intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
+                    startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
+                } else {
+                    Toast.makeText(NewAppPaymentOptionsActivity.this, postData.getResult(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void deleteStoredCard(StoredCard card) {
+                deleteCard(card);
+                payuResponse.getStoredCards().remove(card);
+                adapter.updateData(payuResponse);
+
+            }
+        });
         recyclerView.setAdapter(adapter);
+    }
+
+    private void deleteCard(StoredCard storedCard) {
+        MerchantWebService merchantWebService = new MerchantWebService();
+        merchantWebService.setKey(mPaymentParams.getKey());
+        merchantWebService.setCommand(PayuConstants.DELETE_USER_CARD);
+        merchantWebService.setVar1(mPaymentParams.getUserCredentials());
+        merchantWebService.setVar2(storedCard.getCardToken());
+        merchantWebService.setHash(payuHashes.getDeleteCardHash());
+
+        PostData postData = null;
+        postData = new MerchantWebServicePostParams(merchantWebService).getMerchantWebServicePostParams();
+
+        if (postData.getCode() == PayuErrors.NO_ERROR) {
+            // ok we got the post params, let make an api call to payu to fetch
+            // the payment related details
+            payuConfig.setData(postData.getResult());
+            payuConfig.setEnvironment(payuConfig.getEnvironment());
+
+            DeleteCardTask deleteCardTask = new DeleteCardTask(this);
+            deleteCardTask.execute(payuConfig);
+        } else {
+            Toast.makeText(this, postData.getResult(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void launchCreditCardWebView() {
@@ -425,4 +524,5 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
             zProgressDialog = ProgressDialog.show(this, null, "Loading...");
         }
     }
+
 }

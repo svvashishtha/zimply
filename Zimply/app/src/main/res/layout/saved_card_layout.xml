@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/z_margin_large"
+        android:paddingRight="@dimen/z_margin_large">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.application.zimplyshop.widgets.CustomRadioButton
+                android:id="@+id/card_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kjvnslkfkgkvkuvn" />
+        </LinearLayout>
+        <!--<View
+            android:layout_width="1dp"
+            android:layout_height="40dp"
+            android:background="@color/z_grey_color" />-->
+
+        <ImageView
+            android:id="@+id/card_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+
+        <LinearLayout
+            android:layout_width="@dimen/z_item_height_48"
+            android:layout_height="@dimen/z_item_height_48"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/delete_card"
+            android:clickable="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/z_margin_large"
+                android:layout_height="@dimen/z_margin_large"
+                android:src="@drawable/delete" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/saved_card_hidden_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_item_height_48"
+            android:text="Enter CVV No."
+            android:textColor="@color/z_text_color_light" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_item_height_48"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/z_margin_large"
+            android:paddingTop="@dimen/z_margin_small">
+
+            <com.application.zimplyshop.widgets.CustomEdittext
+                android:id="@+id/saved_card_cvv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_selector_background_light"
+                android:hint="CVV"
+                android:inputType="numberPassword"
+                android:padding="@dimen/z_margin_small"
+                android:textColor="@color/z_text_color_dark"
+                android:textColorHint="@color/z_text_color_light"
+                android:textSize="@dimen/font_medium"
+                android:typeface="normal" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="@dimen/z_margin_small"
+                android:src="@drawable/ic_cvv" />
+        </LinearLayout>
+
+        <com.application.zimplyshop.widgets.CustomTextView
+            android:id="@+id/cvv_not_imp_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:text="@string/cvv_not_important_text" />
+    </LinearLayout>
+</LinearLayout>

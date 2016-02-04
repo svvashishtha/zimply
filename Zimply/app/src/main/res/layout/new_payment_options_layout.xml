@@ -27,5 +27,5 @@
             android:paddingBottom="@dimen/z_margin_large" />
     </LinearLayout>
 
-
+    <include layout="@layout/progress_layout" />
 </FrameLayout>

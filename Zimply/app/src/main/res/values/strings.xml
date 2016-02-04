@@ -300,4 +300,6 @@
 
     <string name="similar_products_text">Similar Products</string>
     <string name="one_or_more_items_not_have_cod">*One or more item(s) in your cart is not eligible for COD. Use online payment mode.</string>
+
+    <string name="cvv_not_important_text">If your Maestro card does not have expiry date/CVV, skip these fields</string>
 </resources>

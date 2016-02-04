@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -92,7 +93,6 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
         pinCode = (EditText) findViewById(R.id.pincode);
 
         setLoadingVariables();
-
         retryLayout.setOnClickListener(this);
 
         addressObject = (AddressObject) getIntent().getSerializableExtra("addressObject");
@@ -101,6 +101,7 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
             editPosition = getIntent().getIntExtra("edit_position", -1);
             isEditAddress = true;
             getSupportActionBar().setTitle("Edit address");
+            showView();
         } else {
             getSupportActionBar().setTitle("Add address");
             showView();
@@ -328,6 +329,17 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
                 zProgressDialog.dismiss();
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     @Override

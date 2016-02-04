@@ -148,7 +148,15 @@ public class BaseActivity extends AppCompatActivity
         }
 
     }
+    @SuppressLint("NewApi")
+    public void setStatusBarColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(color));
+        }
 
+    }
     public void showToast(String message) {
         if (toast == null) {
             toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
@@ -830,4 +838,6 @@ public class BaseActivity extends AppCompatActivity
         //loginIntent.putExtra("inside", true);
         context.startActivity(loginIntent);
     }
+
+
 }

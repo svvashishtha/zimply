@@ -49,11 +49,13 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
         backgroundImage = (ImageView) findViewById(R.id.background_image);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Profile");
+        setStatusBarColor(R.color.blue_header_pressed);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_back_white));
+       // setStatusBarColor(ProfileActivity.this,R.color.z_rate_btn_blue_pressed_color);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);*/
         setLoadingVariables();
 

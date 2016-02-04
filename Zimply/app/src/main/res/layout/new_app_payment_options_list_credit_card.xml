@@ -187,13 +187,14 @@
             android:layout_marginLeft="@dimen/z_margin_large"
             android:layout_marginRight="@dimen/z_margin_large"
             android:layout_marginTop="@dimen/z_margin_small"
-            android:text="If your Maestro card does not have expiry date/CVV, skip these fields"
+            android:text="@string/cvv_not_important_text"
             android:textColor="@color/z_text_color_light"
             android:textSize="@dimen/font_small" />
 
         <com.application.zimplyshop.widgets.CustomCheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/save_card"
             android:layout_marginLeft="@dimen/z_margin_small"
             android:layout_marginRight="@dimen/z_margin_small"
             android:layout_marginTop="@dimen/z_margin_small"
