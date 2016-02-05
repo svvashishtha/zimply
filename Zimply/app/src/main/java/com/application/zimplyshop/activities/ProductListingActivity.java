@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
@@ -54,6 +55,12 @@ import com.application.zimplyshop.widgets.CustomCheckBox;
 import com.application.zimplyshop.widgets.CustomRadioButton;
 import com.application.zimplyshop.widgets.GridItemDecorator;
 import com.application.zimplyshop.widgets.RangeSeekBar;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
 
@@ -94,6 +101,12 @@ public class ProductListingActivity extends BaseActivity implements
     private ArrayList<CustomRadioButton> priceRadioButtonsArrayList;
     SubCategoryAdapter subCategoryAdapter;
     GridItemDecorator gridDecor,linearDecor;
+    private GoogleApiClient mClient;
+
+    String baseAppUri = "android-app://com.application.zimplyshop/http/m.zimply.in/shop/";
+    String baseWebUri = "http://m.zimply.in/shop/";
+    Uri WEB_URL;
+    Uri APP_URI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +194,9 @@ public class ProductListingActivity extends BaseActivity implements
                 }
             }, 5000);
         }
+
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
         loadData();
 
         if (isNotification) {
@@ -360,6 +376,7 @@ public class ProductListingActivity extends BaseActivity implements
         ((ProductsRecyclerViewGridAdapter) productList.getAdapter())
                 .addData(objs);
         ((ProductsRecyclerViewGridAdapter) productList.getAdapter()).setCount(productListObject.getCount());
+        setUpIndexingApi();
     }
 
     private void addToolbarView(Toolbar toolbar) {
@@ -1008,5 +1025,66 @@ public class ProductListingActivity extends BaseActivity implements
         filterFromTextView.setText(FROM_VALUE + "");
         filterToTextView.setText(TO_VALUE + "");
         filterApplied = false;
+    }
+
+
+    private void setUpIndexingApi() {
+        // Construct the Action performed by the user
+        mClient.connect();
+        APP_URI = Uri.parse(baseAppUri+ "?category_name="+ (getIntent().getStringExtra("category_name")!=null?getIntent().getStringExtra("category_name").replaceAll(" ","-"):String.valueOf(categoryId))+
+                "&category_id=" + categoryId);
+        WEB_URL = Uri.parse(baseWebUri +"?category_name="+ (getIntent().getStringExtra("category_name")!=null?getIntent().getStringExtra("category_name").replaceAll(" ","-"):String.valueOf(categoryId))+
+                "&category_id=" + categoryId);
+        Action viewAction = Action.newAction(Action.TYPE_VIEW,
+                getIntent().getStringExtra("category_name")!=null?getIntent().getStringExtra("category_name"):String.valueOf(categoryId),
+                WEB_URL, APP_URI);
+
+        // Call the App Indexing API start method after the view has
+        // completely
+        // rendered
+        // Call the App Indexing API view method
+        PendingResult<Status> result = AppIndex.AppIndexApi.start(mClient, viewAction);
+
+        result.setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(Status status) {
+                if (status.isSuccess()) {
+                    CommonLib.ZLog("ProductListingActivity", "App Indexing API: Recorded category" + categoryId + " view successfully.");
+                } else {
+                    CommonLib.ZLog("ProductListingActivity", "App Indexing API: There was an error recording the product view." + status.toString());
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onStop() {
+
+        // Call end() and disconnect the client
+
+      /* final Uri APP_URI = Uri.parse(baseAppUri + slug); */
+        try {
+            Action viewAction = Action.newAction(Action.TYPE_VIEW,
+                    getIntent().getStringExtra("category_name") != null ? getIntent().getStringExtra("category_name") : String.valueOf(categoryId),
+                    APP_URI);
+            PendingResult<Status> result = AppIndex.AppIndexApi.end(mClient, viewAction);
+
+            result.setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    if (status.isSuccess()) {
+                        CommonLib.ZLog("ProductListingActivity", "App Indexing API: Recorded category view" + categoryId + " view end successfully.");
+                    } else {
+                        CommonLib.ZLog("ProductListingActivity", "App Indexing API: There was an error recording the category view." + status.toString());
+                    }
+
+                }
+            });
+            mClient.disconnect();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        super.onStop();
     }
 }

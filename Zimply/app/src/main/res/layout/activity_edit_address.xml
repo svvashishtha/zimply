@@ -12,7 +12,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/white"
         android:clickable="true"
-        android:isScrollContainer="false"
+        android:isScrollContainer="true"
         android:clipToPadding="false"
         android:padding="@dimen/margin_small"
         android:scrollbars="vertical">

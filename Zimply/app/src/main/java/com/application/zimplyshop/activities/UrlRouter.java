@@ -71,12 +71,14 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
             if (Intent.ACTION_VIEW.equals(action)) {
                 final List<String> segments = intent.getData()
                         .getPathSegments();
-
+                String secondSegment = null;
                 if (segments.size() > 0) {
-
-                    firstSegment = segments.get(0);
-                    String secondSegment = segments.get(1);
-
+                    try {
+                        firstSegment = segments.get(0);
+                        secondSegment = segments.get(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     if (firstSegment.contains("home")) {
                         navigateToHome();
                     } else if (firstSegment.equalsIgnoreCase("p")) {
@@ -86,12 +88,30 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
                         id = id.split("=")[1];
                         String slug = segments.get(1);
                         navigateToProduct(slug, id);
+                    } else if (firstSegment.contains("product")) {
+                        String id = new URL(intent.getDataString()).getQuery();
+                        id = id.split("=")[1];
+                        // String slug = segments.get(1);
+                        navigateToProduct("", id);
                     } else if (firstSegment.contains("shop")) {
-                        String shopId = segments.get(1);
                         String shopName = "";
-                        if (segments.size() >= 3)
-                            shopName = segments.get(2);
-                        navigateToShop(shopId, shopName);
+                        String shopid = new URL(intent.getDataString()).getQuery();
+                        boolean fromUrl;
+                        try {
+                            shopName = shopid.split("&")[0];
+                            shopid = shopid.split("&")[1];
+                            shopid = shopid.split("=")[1];
+                            shopName = shopName.split("=")[1];
+                            navigateToShopWithId(shopid, shopName);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            try {
+                                navigateToShopWithId(segments.get(1), "");
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+
                     } else {
                         navigateToTour();
                     }
@@ -123,6 +143,20 @@ public class UrlRouter extends Activity implements GetRequestListener, RequestTa
             UrlRouter.this.finish();
             startActivity(listIntent);
         }
+    }
+
+    private void navigateToShopWithId(String categoryId, String shopName) {
+        Intent listIntent = new Intent(this, ProductListingActivity.class);
+        listIntent.putExtra("category_id", categoryId);
+        listIntent.putExtra("hide_filter", false);
+        if (shopName.length() > 0) {
+            shopName = shopName.replaceAll("-", " ");
+            listIntent.putExtra("category_name", shopName);
+        }
+        listIntent.putExtra("url", AppConstants.GET_PRODUCT_LIST);
+
+        UrlRouter.this.finish();
+        startActivity(listIntent);
     }
 
     private void navigateToProduct(String slug, String id) {
