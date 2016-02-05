@@ -1,6 +1,8 @@
 package com.application.zimplyshop.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -368,10 +370,30 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
             }
 
             @Override
-            public void deleteStoredCard(StoredCard card) {
-                deleteCard(card);
-                payuResponse.getStoredCards().remove(card);
-                adapter.updateData(payuResponse);
+            public void deleteStoredCard(final StoredCard card) {
+                {
+                    final AlertDialog deleteCardDialog;
+                    deleteCardDialog = new AlertDialog.Builder(NewAppPaymentOptionsActivity.this)
+                            .setTitle(getResources().getString(R.string.delete_saved_card))
+                            .setMessage(getResources().getString(R.string.confirm_delete_card))
+                            .setPositiveButton("Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            deleteCard(card);
+                                            payuResponse.getStoredCards().remove(card);
+                                            adapter.updateData(payuResponse);
+                                        }
+                                    }).setNegativeButton(getResources().getString(R.string.dialog_cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    }).create();
+                    deleteCardDialog.show();
+                }
+
 
             }
         });
