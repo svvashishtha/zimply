@@ -439,15 +439,18 @@ public class NewAppPaymentOptionsActivityListAdapter extends RecyclerView.Adapte
         holder.netBankingBanksList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                for (CustomRadioButton check : listCheckBox) {
+                /*for (CustomRadioButton check : listCheckBox) {
                     check.setChecked(false);
                 }
-
+*/
                 if (position != 0) {
                     String bankCodeSelected = payuResponse.getNetBanks().get(position - 1).getBankCode();
                     for (int i = 0; i < bankCodesFixed.length; i++) {
                         if (bankCodeSelected.equalsIgnoreCase(bankCodesFixed[i])) {
                             listCheckBox.get(i).setChecked(true);
+                        }
+                        else{
+                            listCheckBox.get(i).setChecked(false);
                         }
                     }
                 }

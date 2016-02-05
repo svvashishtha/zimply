@@ -525,4 +525,8 @@ public class NewAppPaymentOptionsActivity extends BaseActivity implements Reques
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
 }

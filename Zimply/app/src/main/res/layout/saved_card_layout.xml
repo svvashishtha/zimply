@@ -94,7 +94,10 @@
             android:id="@+id/cvv_not_imp_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
+            android:textSize="@dimen/font_small"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
             android:text="@string/cvv_not_important_text" />
     </LinearLayout>
 </LinearLayout>
