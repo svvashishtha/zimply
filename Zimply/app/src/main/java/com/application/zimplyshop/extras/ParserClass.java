@@ -3,6 +3,7 @@ package com.application.zimplyshop.extras;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AddressObject;
 import com.application.zimplyshop.baseobjects.AppConfig;
+import com.application.zimplyshop.baseobjects.AskUsQuestionsObject;
 import com.application.zimplyshop.baseobjects.BannerObject;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.BookedProductHistoryObject;
@@ -16,6 +17,7 @@ import com.application.zimplyshop.baseobjects.LatestBookingObject;
 import com.application.zimplyshop.baseobjects.MyWishListObject;
 import com.application.zimplyshop.baseobjects.OffersObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
+import com.application.zimplyshop.baseobjects.PostQuestionReceivedObject;
 import com.application.zimplyshop.baseobjects.ProductVendorTimeObj;
 import com.application.zimplyshop.baseobjects.SimilarProductsListObject;
 import com.application.zimplyshop.objects.AllCategories;
@@ -936,6 +938,12 @@ public class ParserClass implements ObjectTypes {
                 return new Gson().fromJson(responseString, OffersObject.class);
             case OBJECT_TYPE_PRODUCT_DETAIL_SIMILAR_PRODUCTS:
                 return new Gson().fromJson(responseString, SimilarProductsListObject.class);
+            case OBJECT_TYPES_ASKUS_QUESTIONS:
+                return  new Gson().fromJson(responseString, AskUsQuestionsObject.class);
+            case OBJECT_TYPE_POST_QUESTION:
+                return new Gson().fromJson(JSONUtils.getJSONObject(JSONUtils.getJSONObject(responseString),"ques").toString(), PostQuestionReceivedObject.class);
+            case OBJECT_TYPE_DELETE_QUESTION:
+                return JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(responseString),"success");
             default:
                 return null;
         }

@@ -50,11 +50,15 @@ public class BaseFragment extends Fragment {
         return metrics;
     }
     public void showToast(String message){
-        if(toast == null && getActivity() != null){
-            toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
+        try {
+            if (toast == null && getActivity() != null) {
+                toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
+            }
+            toast.setText(message);
+            toast.show();
+        }catch(Exception e){
+
         }
-        toast.setText(message);
-        toast.show();
     }
 
 

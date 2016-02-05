@@ -216,6 +216,12 @@
             android:name=".activities.CashOnCounterOrderCompletionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".activities.AskUsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activities.NewProductDetailActivity"
             android:screenOrientation="portrait"

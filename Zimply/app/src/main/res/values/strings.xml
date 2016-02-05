@@ -299,4 +299,9 @@
     </string>
 
     <string name="similar_products_text">Similar Products</string>
+    <string name="have_a_query_text">Have a query? Search for answers</string>
+    <string name="not_find_ans_text">Still not able to find answer?</string>
+    <string name="question_posted_success_text">Your question has been posted successfully. You will get a reply within 48 hours.</string>
+    <string name="post_question_text">Post Your Query</string>
+
 </resources>

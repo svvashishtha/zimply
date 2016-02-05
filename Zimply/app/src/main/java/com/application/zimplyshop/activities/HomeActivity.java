@@ -782,7 +782,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
         navView = (NavigationView) findViewById(R.id.navigation_view);
 
         CircularImageView userImage = (CircularImageView) navView.findViewById(R.id.user_img);
-        //userImage.setOnClickListener(this);
+        userImage.setOnClickListener(this);
         TextView userName = (TextView) navView.findViewById(R.id.drawer_user_name);
 
         ImageView backgroundImg = (ImageView) navView.findViewById(R.id.drawer_user_info_background_image_blurr);

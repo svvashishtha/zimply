@@ -17,6 +17,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
+import com.application.zimplyshop.activities.AskUsActivity;
 import com.application.zimplyshop.activities.BaseLoginSignupActivity;
 import com.application.zimplyshop.activities.BookingStoreProductListingActivity;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
@@ -38,13 +40,16 @@ import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ProductAttribute;
+import com.application.zimplyshop.baseobjects.QuestionAnswerObject;
 import com.application.zimplyshop.db.RecentProductsDBWrapper;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.managers.ImageLoaderManager;
 import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.utils.CommonLib;
 import com.application.zimplyshop.utils.ZTracker;
+import com.application.zimplyshop.widgets.CustomEdittext;
 import com.application.zimplyshop.widgets.CustomTextView;
+import com.application.zimplyshop.widgets.CustomTextViewBold;
 import com.application.zimplyshop.widgets.ProductThumbListItemDecorator;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
 
@@ -66,6 +71,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
     int TYPE_SIMILAR_PRODUCTS = 5;
     int TYPE_RECENTLY_VIEWED_PRODUCTS = 6;
     int TYPE_LOADER = 7;
+    int TYPE_ASKUS = 8;
+    int TYPE_QUESTION_ANSWER =9;
 
     int BOOK_BTN_CLICK = 1;
     int PROGRESS_TIME_COMPLETE = 2;
@@ -84,12 +91,19 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     boolean isAvailableAtPincode;
 
+    ArrayList<QuestionAnswerObject> quesAnsObjs;
+
+    int questionCount;
+
     ArrayList<BaseProductListObject> similarProducts;
     int similarProductsItemHeight, similarProductsRecyclerHeight, similarProductsItemWidth;
     int similarProductsitemMargin;
 
 
     boolean isFooterRemoved;
+
+    boolean isQuestionAnswersReceived;
+
 
     public NewProductDetailAdapter(Context context, int displayWidth, int displayHeight, HomeProductObj obj) {
         this.mContext = context;
@@ -102,6 +116,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         similarProductsItemWidth = (int) ((mContext.getResources()).getDisplayMetrics().widthPixels / 2.3);
         similarProductsitemMargin = mContext.getResources().getDimensionPixelSize(R.dimen.z_margin_mini);
         products = new ArrayList<>();
+        quesAnsObjs = new ArrayList<>();
     }
 
 
@@ -139,7 +154,10 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         } else if (viewType == TYPE_LOADER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_footer_layout, parent, false);
             holder = new LoadingViewHolder(view);
-        } else {
+        }else if(viewType == TYPE_ASKUS){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_detail_askus_layout, parent, false);
+            holder = new ProductAskUsViewHolder(view);
+        }else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_product_info_layout_desc, parent, false);
             holder = new ProductInfoHolder4(view);
         }
@@ -158,6 +176,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.isCancelBookingShown = isCancelBookingShown;
         // notifyItemChanged(2);
     }
+    public void addQuesAnsObjs(ArrayList<QuestionAnswerObject> objs,int count){
+        isQuestionAnswersReceived = true;
+        questionCount = count;
+        this.quesAnsObjs.addAll(objs);
+        notifyDataSetChanged();
+    }
+
 
     public ProductInfoHolder2 getRefernceHolder() {
         return refernceHolder;
@@ -522,7 +547,211 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 }
             });
-        } else if (getItemViewType(position) == TYPE_LOADER) {
+        }else if(getItemViewType(position) == TYPE_ASKUS){
+            boolean isFirstQuestion=false,isSecondQuestion=false;
+            ProductAskUsViewHolder holderPro = (ProductAskUsViewHolder)holder;
+
+
+            if(quesAnsObjs.size()==0){
+                holderPro.searchLayout.setVisibility(View.GONE);
+                holderPro.noQuestionLayout.setVisibility(View.VISIBLE);
+                holderPro.firstQuestionLayout.setVisibility(View.GONE);
+                holderPro.secondQuestionLayout.setVisibility(View.GONE);
+                holderPro.postQry.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, AskUsActivity.class);
+                        intent.putExtra("id", obj.getProduct().getId());
+                        intent.putExtra("fragment_type", 2);
+                        mContext.startActivity(intent);
+                    }
+                });
+
+                holderPro.seeAllLayout.setVisibility(View.GONE);
+
+                isFirstQuestion = false;
+                isSecondQuestion=false;
+            }else if(quesAnsObjs.size() == 1){
+                holderPro.searchLayout.setVisibility(View.VISIBLE);
+                holderPro.search.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, AskUsActivity.class);
+                        intent.putExtra("id", obj.getProduct().getId());
+                        mContext.startActivity(intent);
+                    }
+                });
+                holderPro.seeAllLayout.setVisibility(View.VISIBLE);
+                holderPro.questionCount.setText(questionCount + " Related Questions");
+                holderPro.seeAllLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, AskUsActivity.class);
+                        intent.putExtra("id",obj.getProduct().getId());
+                        mContext.startActivity(intent);
+                    }
+                });
+                holderPro.noQuestionLayout.setVisibility(View.GONE);
+                holderPro.firstQuestionLayout.setVisibility(View.VISIBLE);
+                holderPro.secondQuestionLayout.setVisibility(View.GONE);
+                isFirstQuestion = true;
+                isSecondQuestion = false;
+            }else{
+                holderPro.searchLayout.setVisibility(View.VISIBLE);
+                holderPro.search.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, AskUsActivity.class);
+                        intent.putExtra("id", obj.getProduct().getId());
+                        mContext.startActivity(intent);
+                    }
+                });
+                holderPro.seeAllLayout.setVisibility(View.VISIBLE);
+                holderPro.questionCount.setText(questionCount + " Related Questions");
+                holderPro.seeAllLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, AskUsActivity.class);
+                        intent.putExtra("id",obj.getProduct().getId());
+                        mContext.startActivity(intent);
+                    }
+                });
+                holderPro.noQuestionLayout.setVisibility(View.GONE);
+                holderPro.firstQuestionLayout.setVisibility(View.VISIBLE);
+                holderPro.secondQuestionLayout.setVisibility(View.VISIBLE);
+                isFirstQuestion = true;
+                isSecondQuestion = true;
+            }
+            if(isFirstQuestion){
+                SpannableString question = new SpannableString("Q: "+quesAnsObjs.get(0).getQues().getQuestion());
+                question.setSpan(new StyleSpan(Typeface.BOLD),0,2,0);
+                holderPro.questionText.setText(question);
+
+                SpannableString answer = new SpannableString("A: "+quesAnsObjs.get(0).getAns().get(0).getQuestion());
+                answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);
+                holderPro.answerText.setText(answer);
+
+                //holderPro.answerText.setText(quesAnsObjs.get(0).getAns().get(0).getQuestion());
+
+                SpannableString postedBy= new SpannableString("Posted by: "+quesAnsObjs.get(0).getQues().getName());
+                postedBy.setSpan(new StyleSpan(Typeface.ITALIC), 11, postedBy.length(), 0);
+                postedBy.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)),11,postedBy.length(),0);
+                //holderPro.answerText.setText(answer);
+                holderPro.postedByText.setText(postedBy);
+
+                SpannableString repliedBy= new SpannableString("Replied by: " + quesAnsObjs.get(0).getAns().get(0).getName());
+                repliedBy.setSpan(new StyleSpan(Typeface.ITALIC), 11, repliedBy.length(), 0);
+                repliedBy.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)),12,repliedBy.length(),0);
+                holderPro.replyByText.setText(repliedBy);
+                holderPro.foundUsefullCount.setText(quesAnsObjs.get(0).getAns().get(0).getHelpful() + " out of " + quesAnsObjs.get(0).getAns().get(0).getTotal() + " found this helpful");
+
+                if(quesAnsObjs.get(0).getAns().get(0).getIs_useful() == -1){
+                    holderPro.wasReviewUseful.setText("Was this answer useful?");
+                    holderPro.reviewUsefulText.setVisibility(View.VISIBLE);
+                    holderPro.reviewUsefulText.setText("Yes");
+                    holderPro.reviewNotUseful.setVisibility(View.VISIBLE);
+                    holderPro.reviewNotUseful.setText("No");
+                }else if(quesAnsObjs.get(0).getAns().get(0).getIs_useful() == 0){
+                    holderPro.wasReviewUseful.setText("You didn't found this answer useful.");
+                    holderPro.reviewNotUseful.setText("Change");
+                    holderPro.reviewUsefulText.setVisibility(View.GONE);
+                }else {
+                    holderPro.wasReviewUseful.setText("You found this answer useful.");
+                    holderPro.reviewUsefulText.setVisibility(View.GONE);
+                    holderPro.reviewNotUseful.setVisibility(View.GONE);
+                }
+
+                holderPro.reviewUsefulText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        quesAnsObjs.get(0).getAns().get(0).setIs_useful(1);
+                        notifyItemChanged(position);
+                        if(mListener!=null) {
+                           mListener.onReviewMarkUseful(quesAnsObjs.get(0).getAns().get(0).getId(),1);
+                        }
+                    }
+                });
+                holderPro.reviewNotUseful.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(quesAnsObjs.get(0).getAns().get(0).getIs_useful() == 0){
+                            quesAnsObjs.get(0).getAns().get(0).setIs_useful(-1);
+
+                        }else{
+                            quesAnsObjs.get(0).getAns().get(0).setIs_useful(0);
+                            if(mListener!=null) {
+                                mListener.onReviewMarkUseful(quesAnsObjs.get(0).getAns().get(0).getId(),0);
+                            }
+                        }
+                        notifyItemChanged(position);
+                    }
+                });
+            }
+            if(isSecondQuestion){
+                SpannableString question = new SpannableString("Q: "+quesAnsObjs.get(1).getQues().getQuestion());
+                question.setSpan(new StyleSpan(Typeface.BOLD),0,2,0);
+                holderPro.questionText2.setText(question);
+
+                SpannableString answer = new SpannableString("A: "+quesAnsObjs.get(1).getAns().get(0).getQuestion());
+                answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);
+                holderPro.answerText2.setText(answer);
+
+                SpannableString postedBy= new SpannableString("Posted by: "+quesAnsObjs.get(1).getQues().getName());
+                postedBy.setSpan(new StyleSpan(Typeface.ITALIC), 10, postedBy.length(), 0);
+                postedBy.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)),11,postedBy.length(),0);
+                holderPro.postedByText2.setText(postedBy);
+
+                SpannableString repliedBy= new SpannableString("Replied by: " + quesAnsObjs.get(1).getAns().get(0).getName());
+                repliedBy.setSpan(new StyleSpan(Typeface.ITALIC), 11, repliedBy.length(), 0);
+                repliedBy.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)),12,repliedBy.length(),0);
+                holderPro.replyByText2.setText(repliedBy);
+
+                holderPro.foundUsefullCount2.setText(quesAnsObjs.get(1).getAns().get(0).getHelpful()+" out of "+quesAnsObjs.get(1).getAns().get(0).getTotal()+" found this helpful");
+
+                if(quesAnsObjs.get(1).getAns().get(0).getIs_useful() == -1){
+                    holderPro.wasReviewUseful2.setText("Was this answer useful?");
+                    holderPro.reviewUsefulText2.setVisibility(View.VISIBLE);
+                    holderPro.reviewUsefulText2.setText("Yes");
+                    holderPro.reviewNotUseful2.setVisibility(View.VISIBLE);
+                    holderPro.reviewNotUseful2.setText("No");
+                }else if(quesAnsObjs.get(1).getAns().get(0).getIs_useful() == 0){
+                    holderPro.wasReviewUseful2.setText("You didn't found this answer useful.");
+                    holderPro.reviewNotUseful2.setText("Change");
+                    holderPro.reviewUsefulText2.setVisibility(View.GONE);
+                }else {
+                    holderPro.wasReviewUseful2.setText("You found this answer useful.");
+                    holderPro.reviewUsefulText2.setVisibility(View.GONE);
+                    holderPro.reviewNotUseful2.setVisibility(View.GONE);
+                }
+
+                holderPro.reviewUsefulText2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        quesAnsObjs.get(1).getAns().get(0).setIs_useful(1);
+                        if(mListener!=null) {
+                            mListener.onReviewMarkUseful(quesAnsObjs.get(1).getAns().get(0).getId(),1);
+                        }
+                    }
+                });
+                holderPro.reviewNotUseful2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if(quesAnsObjs.get(1).getAns().get(0).getIs_useful() == 0){
+                            quesAnsObjs.get(1).getAns().get(0).setIs_useful(-1);
+
+                        }else{
+                            quesAnsObjs.get(1).getAns().get(0).setIs_useful(0);
+                            if(mListener!=null) {
+                                mListener.onReviewMarkUseful(quesAnsObjs.get(1).getAns().get(0).getId(),0);
+                            }
+                        }
+                        notifyItemChanged(position);
+                    }
+                });
+            }
+
+        }else if (getItemViewType(position) == TYPE_LOADER) {
 
         } else {
 
@@ -1388,60 +1617,124 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (obj.getProduct().is_o2o()) {
                 if (similarProducts == null || similarProducts.size() == 0) {
                     if (products == null || products.size() == 0) {
-                        if (isFooterRemoved) {
-                            return 9;
-                        } else {
-                            return 10;
+                        if(isQuestionAnswersReceived) {
+                            if (isFooterRemoved) {
+                                return 10;
+                            } else {
+                                return 11;
+                            }
+                        }else{
+                            if (isFooterRemoved) {
+                                return 9;
+                            } else {
+                                return 10;
+                            }
                         }
                     } else {
-                        if (isFooterRemoved) {
-                            return 10;
-                        } else {
-                            return 11;
+                        if(isQuestionAnswersReceived) {
+                            if (isFooterRemoved) {
+                                return 11;
+                            } else {
+                                return 12;
+                            }
+                        }else{
+                            if (isFooterRemoved) {
+                                return 10;
+                            } else {
+                                return 11;
+                            }
                         }
                     }
                 } else {
                     if (products == null || products.size() == 0) {
-                        if (isFooterRemoved) {
-                            return 10;
-                        } else {
-                            return 11;
+                        if(isQuestionAnswersReceived) {
+                            if (isFooterRemoved) {
+                                return 11;
+                            } else {
+                                return 12;
+                            }
+                        }else{
+                            if (isFooterRemoved) {
+                                return 10;
+                            } else {
+                                return 11;
+                            }
                         }
                     } else {
-                        if (isFooterRemoved) {
-                            return 11;
-                        } else {
-                            return 12;
+                        if(isQuestionAnswersReceived) {
+                            if (isFooterRemoved) {
+                                return 12;
+                            } else {
+                                return 13;
+                            }
+                        }else{
+                            if (isFooterRemoved) {
+                                return 11;
+                            } else {
+                                return 12;
+                            }
                         }
                     }
                 }
             } else {
                 if (similarProducts == null || similarProducts.size() == 0) {
                     if (products == null || products.size() == 0) {
-                        if (isFooterRemoved) {
-                            return 8;
-                        } else {
-                            return 9;
+                        if(isQuestionAnswersReceived) {
+                            if (isFooterRemoved) {
+                                return 9;
+                            } else {
+                                return 10;
+                            }
+                        }else{
+                            if (isFooterRemoved) {
+                                return 8;
+                            } else {
+                                return 9;
+                            }
                         }
                     } else {
-                        if (isFooterRemoved) {
-                            return 9;
-                        } else {
-                            return 10;
+                        if(isQuestionAnswersReceived) {
+                            if (isFooterRemoved) {
+                                return 10;
+                            } else {
+                                return 11;
+                            }
+                        }else{
+                            if (isFooterRemoved) {
+                                return 9;
+                            } else {
+                                return 10;
+                            }
                         }
                     }
                 } else {
                     if (products == null || products.size() == 0) {
-                        if (isFooterRemoved) {
-                            return 9;
-                        } else {
-                            return 10;
+                        if(isQuestionAnswersReceived) {
+                            if (isFooterRemoved) {
+                                return 10;
+                            } else {
+                                return 11;
+                            }
+                        }else{
+                            if (isFooterRemoved) {
+                                return 9;
+                            } else {
+                                return 10;
+                            }
                         }
                     } else {
-                        if (isFooterRemoved) {
-                            return 10;
-                        } else {
-                            return 11;
+                        if(isQuestionAnswersReceived) {
+                            if (isFooterRemoved) {
+                                return 11;
+                            } else {
+                                return 12;
+                            }
+                        }else{
+                            if (isFooterRemoved) {
+                                return 10;
+                            } else {
+                                return 11;
+                            }
                         }
                     }
                 }
@@ -1474,6 +1767,20 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (obj != null && obj.getProduct().is_o2o()) {
                 return TYPE_PRODUCT_INFO_4;
             } else {
+                if(isQuestionAnswersReceived) {
+                    return TYPE_ASKUS;
+                }else{
+                    return TYPE_LOADER;
+                }
+            }
+        }else if(position == 9){
+            if (obj != null && obj.getProduct().is_o2o()) {
+                if(isQuestionAnswersReceived) {
+                    return TYPE_ASKUS;
+                }else{
+                    return TYPE_LOADER;
+                }
+            }else{
                 if (similarProducts != null && similarProducts.size() > 0) {
                     return TYPE_SIMILAR_PRODUCTS;
                 } else if (products != null && products.size() > 0) {
@@ -1482,7 +1789,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     return TYPE_LOADER;
                 }
             }
-        } else if (position == 9) {
+        } else if (position == 10) {
             if (obj != null && obj.getProduct().is_o2o()) {
                 if (similarProducts != null && similarProducts.size() > 0) {
                     return TYPE_SIMILAR_PRODUCTS;
@@ -1499,7 +1806,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             }
 
-        } else if (position == 10) {
+        } else if (position == 11) {
             if (products != null && products.size() > 0) {
                 return TYPE_RECENTLY_VIEWED_PRODUCTS;
             } else {
@@ -1508,6 +1815,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         } else {
             return TYPE_LOADER;
         }
+
 
     }
 
@@ -1667,6 +1975,45 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    public class ProductAskUsViewHolder extends RecyclerView.ViewHolder {
+        CustomEdittext search;
+        CustomTextView postQry,questionCount;
+        LinearLayout searchLayout,noQuestionLayout,firstQuestionLayout,secondQuestionLayout,seeAllLayout;
+        CustomTextView answerText,postedByText,replyByText,reviewUsefulText,reviewNotUseful,foundUsefullCount,wasReviewUseful,
+                answerText2,postedByText2,replyByText2,reviewUsefulText2,reviewNotUseful2,foundUsefullCount2,wasReviewUseful2;
+        CustomTextViewBold questionText,questionText2;
+
+        public ProductAskUsViewHolder(View itemView) {
+            super(itemView);
+            search = (CustomEdittext)itemView.findViewById(R.id.search_edittext);
+            searchLayout = (LinearLayout) itemView.findViewById(R.id.search_layout);
+            noQuestionLayout = (LinearLayout) itemView.findViewById(R.id.no_question_layout);
+            postQry= (CustomTextView) itemView.findViewById(R.id.post_query_btn);
+            questionText = (CustomTextViewBold)itemView.findViewById(R.id.question_text);
+            answerText = (CustomTextView)itemView.findViewById(R.id.answer_text);
+            postedByText = (CustomTextView)itemView.findViewById(R.id.posted_by_text);
+            replyByText = (CustomTextView)itemView.findViewById(R.id.reply_text);
+            foundUsefullCount = (CustomTextView)itemView.findViewById(R.id.useful_count_text);
+            reviewUsefulText = (CustomTextView)itemView.findViewById(R.id.reply_useful);
+            reviewNotUseful = (CustomTextView)itemView.findViewById(R.id.reply_not_useful);
+            questionText2 = (CustomTextViewBold)itemView.findViewById(R.id.question_text2);
+            answerText2 = (CustomTextView)itemView.findViewById(R.id.answer_text2);
+            postedByText2 = (CustomTextView)itemView.findViewById(R.id.posted_by_text2);
+            replyByText2 = (CustomTextView)itemView.findViewById(R.id.reply_text2);
+            foundUsefullCount2 = (CustomTextView)itemView.findViewById(R.id.useful_count_text2);
+            reviewUsefulText2 = (CustomTextView)itemView.findViewById(R.id.reply_useful2);
+            reviewNotUseful2 = (CustomTextView)itemView.findViewById(R.id.reply_not_useful2);
+            firstQuestionLayout = (LinearLayout)itemView.findViewById(R.id.first_question_layout);
+            secondQuestionLayout= (LinearLayout)itemView.findViewById(R.id.second_question_layout);
+            wasReviewUseful = (CustomTextView)itemView.findViewById(R.id.was_review_useful);
+            wasReviewUseful2 = (CustomTextView)itemView.findViewById(R.id.was_review_useful2);
+            seeAllLayout = (LinearLayout)itemView.findViewById(R.id.see_all_layout);
+            questionCount = (CustomTextView)itemView.findViewById(R.id.question_count);
+        }
+    }
+
+
+
     public class ProductSimilarProductsHolder extends RecyclerView.ViewHolder {
 
         RecyclerView recyclerView;
@@ -1680,6 +2027,9 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             viewAllLayout = (LinearLayout)v.findViewById(R.id.viewall_layout);
         }
     }
+
+
+
 
     OnViewsClickedListener mListener;
 
@@ -1698,6 +2048,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
         void onMarkFavorite();
 
         void onMarkUnFavorite();
+
+        void onReviewMarkUseful(int answerId,int is_useful);
 
     }
 
