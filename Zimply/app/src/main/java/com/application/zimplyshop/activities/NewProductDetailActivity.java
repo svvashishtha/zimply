@@ -50,6 +50,12 @@ import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.ScrollCustomizedLayoutManager;
 import com.google.android.gms.analytics.ecommerce.Product;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -87,6 +93,13 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     private int visibleItemCount;
     private int pastVisiblesItems;
     private int totalItemCount;
+    HomeProductObj obj;
+    private GoogleApiClient mClient;
+
+    String baseAppUri = "android-app://com.application.zimplyshop/http/m.zimply.in/product/";
+    String baseWebUri = "http://m.zimply.in/product/";
+    Uri WEB_URL;
+    Uri APP_URI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +148,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
         findViewById(R.id.null_case_image).setOnClickListener(this);
         GetRequestManager.getInstance().addCallbacks(this);
         UploadManager.getInstance().addCallback(this);
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
         loadData();
     }
 
@@ -166,7 +181,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 }
             }
         }, 500);
-        if(adapter!=null && !AppPreferences.isUserLogIn(this)){
+        if (adapter != null && !AppPreferences.isUserLogIn(this)) {
             new GetDataFromCache().execute();
         }
     }
@@ -195,7 +210,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
     public void loadData() {
         requestTime = System.currentTimeMillis();
         String url = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_REQUETS_URL + "?id=" + productId
-                + "&width=" + (width/2) + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
+                + "&width=" + (width / 2) + "&thumb=60" + (AppPreferences.isUserLogIn(this) ? "&userid=" + AppPreferences.getUserID(this) : "");
         GetRequestManager.getInstance().makeAyncRequest(url, PRODUCT_DETAIL_REQUEST_TAG,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL);
     }
@@ -213,8 +228,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             showLoadingView();
             (findViewById(R.id.bottom_action_container)).setVisibility(View.GONE);
             changeViewVisiblity(productDetailList, View.GONE);
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)){
-            isLoading=true;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+            isLoading = true;
         }
 
     }
@@ -292,16 +307,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             if (adapter != null) {
                 adapter.addSimilarProducts(((SimilarProductsListObject) obj).getProducts());
             }
-            if(AppPreferences.isUserLogIn(this)) {
+            if (AppPreferences.isUserLogIn(this)) {
                 loadRecentlyViewed();
-            }else{
+            } else {
                 new GetDataFromCache().execute();
             }
-            isLoading=false;
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)){
+            isLoading = false;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)) {
 
-            if(adapter!=null){
-                adapter.addRecentlyViewed(((SimilarProductsListObject)obj).getProducts());
+            if (adapter != null) {
+                adapter.addRecentlyViewed(((SimilarProductsListObject) obj).getProducts());
                 adapter.setIsFooterRemoved(true);
             }
         }
@@ -309,9 +324,10 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     NewProductDetailAdapter adapter;
 
-    boolean isLoading,isRequestAllowed;
+    boolean isLoading, isRequestAllowed;
 
     public void addAdapterData(HomeProductObj obj) {
+        this.obj = obj;
         toolbarTitle.setText(obj.getProduct().getName());
         adapter = new NewProductDetailAdapter(this, width, height, obj);
         productDetailList.setAdapter(adapter);
@@ -367,8 +383,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         .findFirstVisibleItemPosition();
 
                 if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
-                        && !isLoading ) {
-                    if(!isSimilarProductsLoaded) {
+                        && !isLoading) {
+                    if (!isSimilarProductsLoaded) {
                         loadSimilarProductsRequest();
                     }
                 }
@@ -428,16 +444,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             String pincode = AppPreferences.getSavedPincode(this);
             checkPincodeAvailability(false, pincode);
         }
-
+        setUpIndexingApi(obj);
 
     }
 
 
-    public void loadRecentlyViewed(){
+    public void loadRecentlyViewed() {
         int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
         String finalUrl = AppApplication.getInstance().getBaseUrl() + PRODUCT_DESCRIPTION_RECENT_PRODUCTS_URL + "?userid=" + AppPreferences.getUserID(this)
                 + "&width=" + width + "&size=5&page=1";
-        GetRequestManager.getInstance().makeAyncRequest(finalUrl,RECENT_PRODUCT_REQUEST,
+        GetRequestManager.getInstance().makeAyncRequest(finalUrl, RECENT_PRODUCT_REQUEST,
                 ObjectTypes.OBJECT_TYPE_PRODUCT_DETAIL_SIMILAR_PRODUCTS);
     }
 
@@ -571,16 +587,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)){
-            if(AppPreferences.isUserLogIn(this)) {
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+            if (AppPreferences.isUserLogIn(this)) {
                 loadRecentlyViewed();
-            }else{
+            } else {
                 new GetDataFromCache().execute();
             }
-            isLoading=false;
-        }else if(!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)){
+            isLoading = false;
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(RECENT_PRODUCT_REQUEST)) {
 
-            if(adapter!=null){
+            if (adapter != null) {
                 adapter.setIsFooterRemoved(true);
             }
         }
@@ -920,12 +936,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                         } else {
                             Intent intent = new Intent(NewProductDetailActivity.this, ProductCheckoutActivity.class);
                             intent.putExtra("OrderSummaryFragment", false);
-                            try{
+                            try {
                                 ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
                                         "Go to cart(from bottom button)", "Product Description Page");
 
-                            }catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             intent.putExtra("buying_channel", BUYING_CHANNEL_ONLINE);
@@ -968,8 +983,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 }
                 try {
                     ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Add-To-Cart", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -1001,12 +1015,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                             .setCheckoutStep(2)
                             .setCheckoutOptions("Buy Now");
                     ZTracker.checkOutGaEvents(productAction, product, getApplicationContext());
-                    try{
+                    try {
                         ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
                                 "Buy Now", "Product Description Page");
 
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     if (AppPreferences.isUserLogIn(NewProductDetailActivity.this)) {
@@ -1036,12 +1049,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                     shareIntent.putExtra("product_url", "/shop-product/");
                     shareIntent.putExtra("short_url", "www.zimply.in/shop-product/" + productSlug + "?pid=" + productId);
                     ZTracker.logGaCustomEvent(NewProductDetailActivity.this, "Share-Product", adapter.getObj().getProduct().getName(), adapter.getObj().getProduct().getCategory(), adapter.getObj().getProduct().getSku());
-                    try{
+                    try {
                         ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
                                 "Share Product", "Product Description Page");
 
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     startActivity(shareIntent);
@@ -1051,12 +1063,11 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 break;
             case R.id.cart_icon:
                 Intent intent = new Intent(this, ProductCheckoutActivity.class);
-                try{
+                try {
                     ZTracker.logGAEvent(NewProductDetailActivity.this, adapter.getObj().getProduct().getName() + " Sku " + adapter.getObj().getProduct().getSku(),
                             "Go to cart(From toolbar)", "Product Description Page");
 
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 intent.putExtra("OrderSummaryFragment", false);
@@ -1147,7 +1158,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             try {
                 int userId = 1;
                 result = RecentProductsDBWrapper.getProducts(userId);
-            } catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 result = RecentProductsDBWrapper.getProducts(1);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1157,14 +1168,67 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
         @Override
         protected void onPostExecute(Object result) {
-            if(!isDestroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0 ) {
+            if (!isDestroyed && result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0) {
                 adapter.addRecentlyViewed((ArrayList<BaseProductListObject>) result);
 
             }
-            if(adapter!=null)
+            if (adapter != null)
                 adapter.setIsFooterRemoved(true);
         }
 
     }
 
+    private void setUpIndexingApi(final HomeProductObj obj) {
+        // Construct the Action performed by the user
+        if (obj != null && mClient != null) {
+            mClient.connect();
+            APP_URI = Uri.parse(baseAppUri + "?pid=" + productId);
+            WEB_URL = Uri.parse(baseWebUri + "?pid=" + productId);
+            Action viewAction = Action.newAction(Action.TYPE_VIEW, obj.getProduct().getName(), WEB_URL, APP_URI);
+
+            // Call the App Indexing API start method after the view has
+            // completely
+            // rendered
+            // Call the App Indexing API view method
+            PendingResult<Status> result = AppIndex.AppIndexApi.start(mClient, viewAction);
+
+            result.setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    if (status.isSuccess()) {
+                        CommonLib.ZLog("ProductDetailsActivity", "App Indexing API: Recorded product " + obj.getProduct().getName() + " view successfully.");
+                    } else {
+                        CommonLib.ZLog("ProductDetailsActivity", "App Indexing API: There was an error recording the product view." + status.toString());
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onStop() {
+
+        // Call end() and disconnect the client
+
+      /* final Uri APP_URI = Uri.parse(baseAppUri + slug); */
+        if (obj != null) {
+            Action viewAction = Action.newAction(Action.TYPE_VIEW, obj.getProduct().getName(), APP_URI);
+            PendingResult<Status> result = AppIndex.AppIndexApi.end(mClient, viewAction);
+
+            result.setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    if (status.isSuccess()) {
+                        CommonLib.ZLog("NewProductDetailsActivity", "App Indexing API: Recorded product " + obj.getProduct().getName() + " view end successfully.");
+                    } else {
+                        CommonLib.ZLog("NewProductDetailsActivity", "App Indexing API: There was an error recording the product view." + status.toString());
+                    }
+
+                }
+            });
+        }
+        if (mClient != null)
+            mClient.disconnect();
+        super.onStop();
+    }
 }
