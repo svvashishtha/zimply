@@ -330,7 +330,6 @@ public class SettingsPage extends BaseActivity implements UploadManagerCallback,
 
             @Override
             public void sendPasswordRequest(String newPassword, String oldPassword) {
-//todo add request here
                 String url = AppApplication.getInstance().getBaseUrl() + "zimply-auth/change-password/";
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
                 list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(SettingsPage.this)));

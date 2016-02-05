@@ -457,7 +457,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
 
     private void nextFragment() {
         if (mActivity != null) {
-
+//todo change NewAppPaymentOptions to AppPaymentOptions
             Intent intent = new Intent(getActivity(), NewAppPaymentOptionsActivity.class);
             intent.putExtra("total_amount", cartObject.getCart().getTotal_price());
             intent.putExtra("order_id", orderId);

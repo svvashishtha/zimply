@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -109,6 +111,21 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
         setListeners();
         UploadManager.getInstance().addCallback(this);
         GetRequestManager.getInstance().addCallbacks(this);
+        new Handler().postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextInputLayout)findViewById(R.id.phone_layout)).setHint(getResources().getString(R.string.enter_phone));
+                        ((TextInputLayout)findViewById(R.id.email_layout)).setHint(getResources().getString(R.string.enter_mail));
+                        ((TextInputLayout)findViewById(R.id.name_layout)).setHint(getResources().getString(R.string.enter_name));
+                        ((TextInputLayout)findViewById(R.id.address_line1_layout)).setHint(getResources().getString(R.string.address_line1));
+                        ((TextInputLayout)findViewById(R.id.address_line2_layout)).setHint(getResources().getString(R.string.address_line2));
+                        ((TextInputLayout)findViewById(R.id.pincode_layout)).setHint(getResources().getString(R.string.pin_code_et_hint));
+                        ((TextInputLayout)findViewById(R.id.city_layout)).setHint(getResources().getString(R.string.select_city));
+                        ((TextInputLayout)findViewById(R.id.state_layout)).setHint(getResources().getString(R.string.select_state));
+                    }
+                }, 1000
+        );
     }
 
     private boolean checkEmailFormat(CharSequence target) {

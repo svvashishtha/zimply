@@ -55,6 +55,7 @@
                     <com.application.zimplyshop.widgets.CustomTextViewBold
                         android:id="@+id/name_user"
                         android:layout_width="wrap_content"
+                        android:layout_margin="@dimen/margin_small"
                         android:layout_height="wrap_content"
                         android:text="Name"
 
@@ -67,12 +68,14 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_content_mail"
                         android:drawablePadding="@dimen/margin_mini"
+                        android:layout_margin="@dimen/margin_mini"
                         android:text="email@eamil.com"
                         android:textColor="@color/white" />
 
                     <com.application.zimplyshop.widgets.CustomTextView
                         android:id="@+id/number_user"
                         android:layout_width="wrap_content"
+                        android:layout_margin="@dimen/margin_mini"
                         android:layout_height="wrap_content"
                         android:text="0000000000"
                         android:textColor="@color/white" />

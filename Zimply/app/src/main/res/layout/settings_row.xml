@@ -237,7 +237,7 @@
                 android:background="@drawable/z_blue_btn_without_rad_bg"
                 android:text="@string/retry_in"
                 android:textColor="@color/white"
-                android:textSize="@dimen/font_xlarge" />
+                android:textSize="@dimen/font_large" />
 
             <com.application.zimplyshop.widgets.CustomButton
                 android:id="@+id/edit_number"
@@ -249,7 +249,7 @@
                 android:background="@drawable/gray_btn_bg"
                 android:text="@string/edit_number"
                 android:textColor="@color/white"
-                android:textSize="@dimen/font_xlarge" />
+                android:textSize="@dimen/font_large" />
         </LinearLayout>
 
         <View

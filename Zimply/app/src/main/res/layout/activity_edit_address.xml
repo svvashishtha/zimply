@@ -9,9 +9,10 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingTop="?attr/actionBarSize"
+        android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/white"
         android:clickable="true"
+        android:isScrollContainer="false"
         android:clipToPadding="false"
         android:padding="@dimen/margin_small"
         android:scrollbars="vertical">
@@ -27,6 +28,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
+                android:id="@+id/phone_layout"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small">
 
@@ -34,7 +36,6 @@
                     android:id="@+id/phone"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/enter_phone"
                     android:inputType="phone"
                     android:maxLength="10"
                     android:maxLines="1"
@@ -47,6 +48,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
+                android:id="@+id/email_layout"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small">
 
@@ -54,7 +56,6 @@
                     android:id="@+id/email"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/enter_mail"
                     android:inputType="textEmailAddress|textAutoComplete"
                     android:maxLines="1"
                     android:padding="@dimen/size12"
@@ -67,6 +68,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/name_layout"
                 android:layout_marginBottom="@dimen/margin_small">
 
                 <com.application.zimplyshop.widgets.CustomEdittext
@@ -74,7 +76,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
 
-                    android:hint="@string/enter_name"
                     android:inputType="textPersonName|textAutoCorrect"
                     android:maxLines="1"
                     android:padding="@dimen/size12"
@@ -87,6 +88,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/address_line1_layout"
                 android:layout_marginBottom="@dimen/margin_small">
 
                 <com.application.zimplyshop.widgets.CustomEdittext
@@ -94,7 +96,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left|top"
-                    android:hint="@string/address_line1"
                     android:inputType="textPostalAddress|textAutoCorrect"
                     android:lines="2"
                     android:padding="@dimen/size12"
@@ -106,6 +107,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/address_line2_layout"
                 android:layout_marginBottom="@dimen/margin_small">
 
                 <com.application.zimplyshop.widgets.CustomEdittext
@@ -113,7 +115,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left|top"
-                    android:hint="@string/address_line2"
                     android:inputType="textPostalAddress|textAutoCorrect"
                     android:lines="2"
                     android:padding="@dimen/size12"
@@ -125,13 +126,13 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/pincode_layout"
                 android:layout_marginBottom="@dimen/margin_small">
 
                 <com.application.zimplyshop.widgets.CustomEdittext
                     android:id="@+id/pincode"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/pin_code_et_hint"
                     android:inputType="number"
                     android:maxLength="6"
                     android:maxLines="1"
@@ -150,13 +151,13 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/city_layout"
                     android:layout_marginBottom="@dimen/margin_small">
 
                     <com.application.zimplyshop.widgets.CustomEdittext
                         android:id="@+id/city"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/select_city"
                         android:inputType="textAutoCorrect"
                         android:maxLines="1"
                         android:padding="@dimen/size12"
@@ -176,13 +177,13 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/state_layout"
                 android:layout_marginBottom="@dimen/margin_small">
 
                 <com.application.zimplyshop.widgets.CustomEdittext
                     android:id="@+id/state"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/select_state"
                     android:inputType="textAutoCorrect"
                     android:maxLines="1"
                     android:padding="@dimen/size12"
