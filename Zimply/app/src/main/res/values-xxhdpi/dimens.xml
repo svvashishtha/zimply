@@ -9,7 +9,9 @@
     <dimen name="margin_mini">4dp</dimen>
     <dimen name="margin_midsmall">12dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_14">13dp</dimen>
     <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_xlarge">44dp</dimen>
     <dimen name="margin_xxlarge">48dp</dimen>
     <!-- Text Sizes -->
     <dimen name="font_mini">12sp</dimen>

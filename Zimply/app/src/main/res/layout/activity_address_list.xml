@@ -10,8 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/actionbar_bg"
-        app:theme="@style/Toolbar_Theme" />
+        android:layout_gravity="top"
+        android:background="@drawable/actionbar_bg" />
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

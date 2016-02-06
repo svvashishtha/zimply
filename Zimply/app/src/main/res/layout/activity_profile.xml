@@ -24,6 +24,7 @@
                     android:id="@+id/background_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:src="@drawable/ic_user_secondary"
                     android:scaleType="centerCrop" />
 
                 <View
@@ -50,6 +51,7 @@
                         android:id="@+id/profile_pic"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:src="@drawable/ic_user_secondary"
                         app:border="false" />
 
                     <com.application.zimplyshop.widgets.CustomTextViewBold
@@ -66,7 +68,6 @@
                         android:id="@+id/email_user"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_content_mail"
                         android:drawablePadding="@dimen/margin_mini"
                         android:layout_margin="@dimen/margin_mini"
                         android:text="email@eamil.com"
@@ -81,14 +82,14 @@
                         android:textColor="@color/white" />
                 </LinearLayout>
             </FrameLayout>
-            <com.application.zimplyshop.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/my_questions_view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height48"
                 android:layout_margin="@dimen/margin_small"
                 android:background="@drawable/dropshadowcard"
-                android:drawableLeft="@drawable/ic_settings"
-                android:drawablePadding="@dimen/margin_midsmall"
+                android:drawableLeft="@drawable/ic_question"
+                android:drawablePadding="@dimen/margin_14"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/margin_midsmall"
@@ -111,17 +112,16 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/margin_midsmall"
-                        android:layout_marginRight="@dimen/margin_mini"
-                        android:src="@drawable/ic_location_blue" />
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:src="@drawable/location_big" />
 
-                    <com.application.zimplyshop.widgets.CustomTextView
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:drawablePadding="@dimen/margin_small"
                         android:gravity="left|center_vertical"
 
-                        android:paddingLeft="@dimen/margin_midsmall"
+                        android:paddingLeft="@dimen/margin_small"
                         android:text="My Address"
                         android:textSize="@dimen/font_large" />
 
@@ -152,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:layout_marginLeft="@dimen/margin_xxlarge"
+                    android:layout_marginLeft="@dimen/margin_xlarge"
                     android:layout_marginTop="@dimen/margin_small"
                     android:text="Name"
                     android:textSize="@dimen/font_large" />
@@ -161,7 +161,7 @@
                     android:id="@+id/address_line1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_xxlarge"
+                    android:layout_marginLeft="@dimen/margin_xlarge"
                     android:text="Name"
                     android:textSize="@dimen/font_medium" />
 
@@ -169,7 +169,7 @@
                     android:id="@+id/address_line2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_xxlarge"
+                    android:layout_marginLeft="@dimen/margin_xlarge"
                     android:text="Name"
                     android:textSize="@dimen/font_medium" />
 
@@ -178,21 +178,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:layout_marginLeft="@dimen/margin_xxlarge"
+                    android:layout_marginLeft="@dimen/margin_xlarge"
                     android:layout_marginTop="@dimen/margin_small"
                     android:text="Name"
                     android:textSize="@dimen/font_medium" />
                 </LinearLayout>
             </LinearLayout>
 
-            <com.application.zimplyshop.widgets.CustomTextView
+            <com.application.zimplyshop.widgets.CustomTextViewBold
                 android:id="@+id/settings_view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height48"
                 android:layout_margin="@dimen/margin_small"
                 android:background="@drawable/dropshadowcard"
                 android:drawableLeft="@drawable/ic_settings"
-                android:drawablePadding="@dimen/margin_midsmall"
+                android:drawablePadding="@dimen/margin_medium"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/margin_midsmall"

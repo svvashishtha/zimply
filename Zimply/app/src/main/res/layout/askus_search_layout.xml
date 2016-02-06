@@ -16,5 +16,5 @@
         android:hint="@string/have_a_query_text"
         android:drawableLeft="@drawable/ic_action_action_search_menu"
         android:textColorHint="@color/zhl_darker"
-        android:background="@drawable/square_border_dark"/>
+        android:background="@drawable/white_card_rectangle"/>
 </LinearLayout>

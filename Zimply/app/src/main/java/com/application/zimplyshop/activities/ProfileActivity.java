@@ -48,20 +48,20 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
         mainView = findViewById(R.id.mainView);
         backgroundImage = (ImageView) findViewById(R.id.background_image);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Profile");
+        toolbar.setTitle("My Account");
         setStatusBarColor(R.color.blue_header_pressed);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_back_white));
-       // setStatusBarColor(ProfileActivity.this,R.color.z_rate_btn_blue_pressed_color);
+        // setStatusBarColor(ProfileActivity.this,R.color.z_rate_btn_blue_pressed_color);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);*/
         setLoadingVariables();
-        ((CustomTextView)findViewById(R.id.my_questions_view)).setOnClickListener(new View.OnClickListener() {
+        ((CustomTextViewBold) findViewById(R.id.my_questions_view)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this,MyQuestionsActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, MyQuestionsActivity.class);
                 startActivity(intent);
             }
         });
@@ -83,8 +83,10 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, r.getDisplayMetrics());
         float density = getResources().getDisplayMetrics().density;
         float dp = 100 / density;
-        new ImageLoaderManager(this).setImageFromUrl(AppPreferences.getUserPhoto(this), propic, "users", (int) dp, (int) dp, false, false);
-        new ImageLoaderManager(this).setImageFromUrl(AppPreferences.getUserPhoto(this), backgroundImage, "users", (int) px * 8, (int) px * 4, true, false);
+        if (AppPreferences.getUserPhoto(this) != null && AppPreferences.getUserPhoto(this).length() > 0) {
+            new ImageLoaderManager(this).setImageFromUrl(AppPreferences.getUserPhoto(this), propic, "users", (int) dp, (int) dp, false, false);
+            new ImageLoaderManager(this).setImageFromUrl(AppPreferences.getUserPhoto(this), backgroundImage, "users", (int) px * 8, (int) px * 4, true, false);
+        }
         loadData();
     }
 
@@ -182,14 +184,13 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_all:
-                if(((CustomTextView)v).getText().toString().equalsIgnoreCase("Add New"))
-                {
+                if (((CustomTextView) v).getText().toString().equalsIgnoreCase("Add New")) {
                     Intent intent = new Intent(ProfileActivity.this, EditAddressActivity.class);
                     startActivity(intent);
+                } else {
+                    Intent intent = new Intent(ProfileActivity.this, AddressListActivity.class);
+                    startActivity(intent);
                 }
-                else{
-                Intent intent = new Intent(ProfileActivity.this, AddressListActivity.class);
-                startActivity(intent);}
                 break;
             case R.id.settings_view:
                 Intent settingIntent = new Intent(ProfileActivity.this, SettingsPage.class);
@@ -206,8 +207,7 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
                 showView();
                 mainView.setVisibility(View.VISIBLE);
                 fillAddressView(AllUsers.getInstance().getObjs().get(0));
-            } else
-            {
+            } else {
                 addressViewSecondary.setVisibility(View.GONE);
                 viewAll.setText("Add New");
             }

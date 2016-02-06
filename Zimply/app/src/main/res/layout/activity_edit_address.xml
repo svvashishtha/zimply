@@ -7,14 +7,17 @@
 
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/white"
         android:clickable="true"
         android:isScrollContainer="true"
         android:clipToPadding="false"
-        android:padding="@dimen/margin_small"
+        android:paddingTop="@dimen/margin_small"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
+        android:layout_marginBottom="58dp"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -23,7 +26,6 @@
             android:background="@color/white"
             android:clickable="true"
             android:clipToPadding="false"
-
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -220,7 +222,7 @@
     <LinearLayout
         android:id="@+id/save_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/z_item_height_48"
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/size10"
         android:layout_marginLeft="@dimen/size10"

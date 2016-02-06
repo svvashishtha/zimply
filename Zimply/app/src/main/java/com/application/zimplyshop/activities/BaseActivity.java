@@ -275,7 +275,8 @@ public class BaseActivity extends AppCompatActivity
 
     public void showNullCaseView(String text) {
         if (PAGE_TYPE == AppConstants.PAGE_TYPE_WISHLIST || PAGE_TYPE == AppConstants.PAGE_TYPE_ORDER || PAGE_TYPE == AppConstants.PAGE_TYPE_BOOKINGS
-                || PAGE_TYPE == AppConstants.PAGE_TYPE_NETWORK_NO_WIFI || PAGE_TYPE == AppConstants.PAGE_TYPE_PRODUCT || PAGE_TYPE == AppConstants.PAGE_TYPE_NOTIFICATION) {
+                || PAGE_TYPE == AppConstants.PAGE_TYPE_NETWORK_NO_WIFI || PAGE_TYPE == AppConstants.PAGE_TYPE_PRODUCT || PAGE_TYPE == AppConstants.PAGE_TYPE_NOTIFICATION
+                || PAGE_TYPE == AppConstants.PAGE_TYPE_MESSAGE) {
             quoteText.setVisibility(View.GONE);
 
             gifLoadingView.setVisibility(View.GONE);
@@ -337,6 +338,14 @@ public class BaseActivity extends AppCompatActivity
 
                 }
                 //((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_notification));
+            }else if (PAGE_TYPE == AppConstants.PAGE_TYPE_MESSAGE) {
+                try{
+                    ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_empty_messages, getDisplayMetrics().widthPixels, getDisplayMetrics().heightPixels));
+                }catch (Exception e)
+                {
+                    ((ImageView)findViewById(R.id.null_case_image)).setImageBitmap(CommonLib.getBitmap(BaseActivity.this, R.drawable.ic_empty_messages, getResources().getDimensionPixelSize(R.dimen.product_img_size_new), getResources().getDimensionPixelSize(R.dimen.product_img_size_new)));
+                }
+                // ((ImageView) findViewById(R.id.null_case_image)).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_empty_booking));
             }
         } else {
             nullCaseLayout.setVisibility(View.GONE);

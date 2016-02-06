@@ -810,8 +810,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
             spannablecontent.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 15, spannablecontent.length(), 0);
             userName.setText(spannablecontent);
             backgroundImg.setImageBitmap(CommonLib.getBitmap(this, R.drawable.ic_user_profile_bg, width, width));
-            findViewById(R.id.drawer_user_container).setOnClickListener(this);
+
         }
+        findViewById(R.id.drawer_user_container).setOnClickListener(this);
 
     }
 
@@ -1003,6 +1004,10 @@ public class HomeActivity extends BaseActivity implements OnClickListener,
                     isToLoginPage = true;
                     mDrawer.closeDrawers();
                     startActivity(loginIntent);
+                }
+                else{
+                    Intent intent = new Intent(HomeActivity.this,ProfileActivity.class);
+                    startActivity(intent);
                 }
             case R.id.user_img:
                 if (!AppPreferences.isUserLogIn(this)) {

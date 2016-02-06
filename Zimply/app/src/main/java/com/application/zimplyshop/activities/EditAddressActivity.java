@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AddressObject;
+import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -46,6 +47,7 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
     private ProgressDialog zProgressDialog;
     private int editPosition = -1;
     private boolean isEditAddress;
+    boolean isDestroyed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,6 +277,7 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
             } else {
                 AllUsers.getInstance().getObjs().add(0, addressObject);
             }
+            EditAddressActivity.this.finish();
         }
     }
 
@@ -285,10 +288,10 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag.equalsIgnoreCase(RequestTags.CHECKPINCODEREQUESTTAG)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.CHECKPINCODEREQUESTTAG) && !isDestroyed) {
             zProgressDialog = ProgressDialog.show(context, null, "Checking availability.Please Wait..");
         }
-        if (requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_PINCODE)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_PINCODE) && !isDestroyed) {
             zProgressDialog = ProgressDialog.show(context, null, "Getting details.Please Wait..");
         }
         // findViewById(R.id.progress_container).setVisibility(View.VISIBLE);
@@ -297,7 +300,7 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
-        if (requestTag.equalsIgnoreCase(RequestTags.CHECKPINCODEREQUESTTAG)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.CHECKPINCODEREQUESTTAG) && !isDestroyed) {
             if (zProgressDialog != null) {
                 zProgressDialog.dismiss();
                 if (((boolean) obj)) {
@@ -311,7 +314,7 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
                 }
                 CommonLib.hideKeyBoard((Activity) context, findViewById(R.id.pincode));
             }
-        } else if (requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_PINCODE)) {
+        } else if (requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_PINCODE) && !isDestroyed) {
             if (zProgressDialog != null) {
                 zProgressDialog.dismiss();
             }
@@ -334,17 +337,22 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if (requestTag != null && requestTag.equals(RequestTags.PRODUCT_DETAIL_REQUEST_TAG)) {
+        if (requestTag != null && requestTag.equals(RequestTags.PRODUCT_DETAIL_REQUEST_TAG) && !isDestroyed) {
             // findViewById(R.id.progress_container).setVisibility(View.GONE);
             showNetworkErrorView();
             if (CommonLib.isNetworkAvailable(context))
                 Toast.makeText(context, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(context, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
-        } else if (requestTag != null && requestTag.equals(RequestTags.GET_CITY_FROM_PINCODE)) {
+        } else if (requestTag != null && requestTag.equals(RequestTags.GET_CITY_FROM_PINCODE) && !isDestroyed) {
             if (zProgressDialog != null) {
+
                 zProgressDialog.dismiss();
             }
+            if (CommonLib.isNetworkAvailable(context))
+                Toast.makeText(context, ((ErrorObject)obj).getErrorMessage(), Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(context, "Internet not available. Please try again", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -367,5 +375,12 @@ public class EditAddressActivity extends BaseActivity implements RequestTags, Up
                 findViewById(R.id.save).performClick();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        isDestroyed = true;
+        UploadManager.getInstance().removeCallback(this);
+        super.onDestroy();
     }
 }

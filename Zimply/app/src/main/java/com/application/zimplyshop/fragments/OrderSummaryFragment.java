@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.application.zimplyshop.R;
-import com.application.zimplyshop.activities.NewAppPaymentOptionsActivity;
+import com.application.zimplyshop.activities.AppPaymentOptionsActivity;
 import com.application.zimplyshop.activities.ProductCheckoutActivity;
 import com.application.zimplyshop.adapters.CartItemListAdapter;
 import com.application.zimplyshop.application.AppApplication;
@@ -458,7 +458,7 @@ public class OrderSummaryFragment extends ZFragment implements GetRequestListene
     private void nextFragment() {
         if (mActivity != null) {
 //todo change NewAppPaymentOptions to AppPaymentOptions
-            Intent intent = new Intent(getActivity(), NewAppPaymentOptionsActivity.class);
+            Intent intent = new Intent(getActivity(), AppPaymentOptionsActivity.class);
             intent.putExtra("total_amount", cartObject.getCart().getTotal_price());
             intent.putExtra("order_id", orderId);
             intent.putExtra("name", shippingAddress.getName());

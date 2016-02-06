@@ -562,6 +562,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, AskUsActivity.class);
                         intent.putExtra("id", obj.getProduct().getId());
+                        intent.putExtra("name", obj.getProduct().getName());
                         intent.putExtra("fragment_type", 2);
                         mContext.startActivity(intent);
                     }
@@ -574,12 +575,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
             }else if(quesAnsObjs.size() == 1){
                 holderPro.searchLayout.setVisibility(View.VISIBLE);
 
-                holderPro.search.setHint("Have a query? Search for answer or Post it");
+                holderPro.search.setHint("Have a question? Search for answer or Post it");
                 holderPro.search.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, AskUsActivity.class);
                         intent.putExtra("id", obj.getProduct().getId());
+                        intent.putExtra("name", obj.getProduct().getName());
                         mContext.startActivity(intent);
                     }
                 });
@@ -590,6 +592,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, AskUsActivity.class);
                         intent.putExtra("id",obj.getProduct().getId());
+                        intent.putExtra("name", obj.getProduct().getName());
                         mContext.startActivity(intent);
                     }
                 });
@@ -600,11 +603,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 isSecondQuestion = false;
             }else{
                 holderPro.searchLayout.setVisibility(View.VISIBLE);
+                holderPro.search.setHint("Have a question? Search for answer or Post it");
                 holderPro.search.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, AskUsActivity.class);
                         intent.putExtra("id", obj.getProduct().getId());
+                        intent.putExtra("name", obj.getProduct().getName());
                         mContext.startActivity(intent);
                     }
                 });
@@ -615,6 +620,7 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, AskUsActivity.class);
                         intent.putExtra("id",obj.getProduct().getId());
+                        intent.putExtra("name", obj.getProduct().getName());
                         mContext.startActivity(intent);
                     }
                 });
@@ -672,26 +678,48 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 holderPro.reviewUsefulText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        quesAnsObjs.get(0).getAns().get(0).setIs_useful(1);
-                        notifyItemChanged(position);
-                        if(mListener!=null) {
-                           mListener.onReviewMarkUseful(quesAnsObjs.get(0).getAns().get(0).getId(),1);
+                        if(AppPreferences.isUserLogIn(mContext)) {
+                            quesAnsObjs.get(0).getAns().get(0).setIs_useful(1);
+                            quesAnsObjs.get(0).getAns().get(0).setHelpful(quesAnsObjs.get(0).getAns().get(0).getHelpful() + 1);
+                            quesAnsObjs.get(0).getAns().get(0).setTotal(quesAnsObjs.get(0).getAns().get(0).getTotal()+1);
+                            notifyItemChanged(position);
+                            if (mListener != null) {
+                                mListener.onReviewMarkUseful(quesAnsObjs.get(0).getAns().get(0).getId(), 1);
+                            }
+                        }else{
+                            Toast.makeText(mContext, "Please login to continue", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(mContext, BaseLoginSignupActivity.class);
+                            intent.putExtra("inside", true);
+                            mContext.startActivity(intent);
                         }
                     }
                 });
                 holderPro.reviewNotUseful.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(quesAnsObjs.get(0).getAns().get(0).getIs_useful() == 0){
-                            quesAnsObjs.get(0).getAns().get(0).setIs_useful(-1);
+                        if (AppPreferences.isUserLogIn(mContext)) {
 
-                        }else{
-                            quesAnsObjs.get(0).getAns().get(0).setIs_useful(0);
-                            if(mListener!=null) {
-                                mListener.onReviewMarkUseful(quesAnsObjs.get(0).getAns().get(0).getId(),0);
+                            if (quesAnsObjs.get(0).getAns().get(0).getIs_useful() == 0) {
+                                quesAnsObjs.get(0).getAns().get(0).setIs_useful(-1);
+
+                                quesAnsObjs.get(0).getAns().get(0).setTotal(quesAnsObjs.get(0).getAns().get(0).getTotal() - 1);
+
+                            } else {
+                                quesAnsObjs.get(0).getAns().get(0).setIs_useful(0);
+
+                                quesAnsObjs.get(0).getAns().get(0).setTotal(quesAnsObjs.get(0).getAns().get(0).getTotal()+1);
+                                if (mListener != null) {
+                                    mListener.onReviewMarkUseful(quesAnsObjs.get(0).getAns().get(0).getId(), 0);
+                                }
                             }
+                            notifyItemChanged(position);
                         }
-                        notifyItemChanged(position);
+                    else{
+                        Toast.makeText(mContext, "Please login to continue", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(mContext, BaseLoginSignupActivity.class);
+                        intent.putExtra("inside", true);
+                        mContext.startActivity(intent);
+                       }
                     }
                 });
             }
@@ -726,13 +754,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                     holderPro.reviewNotUseful2.setText("No");
                 }else if(quesAnsObjs.get(1).getAns().get(0).getIs_useful() == 0){
                     holderPro.wasReviewUseful2.setText("You didn't found this answer useful.");
-                    holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.text_color1));
+                    holderPro.wasReviewUseful2.setTextColor(mContext.getResources().getColor(R.color.text_color1));
                     holderPro.reviewNotUseful2.setText("Change");
-                    holderPro.reviewNotUseful.setTextColor(mContext.getResources().getColor(R.color.z_rate_btn_blue_color));
+                    holderPro.reviewNotUseful2.setTextColor(mContext.getResources().getColor(R.color.z_rate_btn_blue_color));
                     holderPro.reviewUsefulText2.setVisibility(View.GONE);
                 }else {
                     holderPro.wasReviewUseful2.setText("You found this answer useful.");
-                    holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.btn_green_color_normal));
+                    holderPro.wasReviewUseful2.setTextColor(mContext.getResources().getColor(R.color.btn_green_color_normal));
                     holderPro.reviewUsefulText2.setVisibility(View.GONE);
                     holderPro.reviewNotUseful2.setVisibility(View.GONE);
                 }
@@ -740,26 +768,46 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 holderPro.reviewUsefulText2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        quesAnsObjs.get(1).getAns().get(0).setIs_useful(1);
-                        if(mListener!=null) {
-                            mListener.onReviewMarkUseful(quesAnsObjs.get(1).getAns().get(0).getId(),1);
+                        if(AppPreferences.isUserLogIn(mContext)) {
+                            quesAnsObjs.get(1).getAns().get(0).setIs_useful(1);
+                            quesAnsObjs.get(1).getAns().get(0).setHelpful(quesAnsObjs.get(1).getAns().get(0).getHelpful() + 1);
+                            quesAnsObjs.get(1).getAns().get(0).setTotal(quesAnsObjs.get(1).getAns().get(0).getTotal()+1);
+                            if (mListener != null) {
+                                mListener.onReviewMarkUseful(quesAnsObjs.get(1).getAns().get(0).getId(), 1);
+                            }
+                            notifyItemChanged(position);
+                        }else{
+                            Toast.makeText(mContext, "Please login to continue", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(mContext, BaseLoginSignupActivity.class);
+                            intent.putExtra("inside", true);
+                            mContext.startActivity(intent);
                         }
                     }
                 });
                 holderPro.reviewNotUseful2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(AppPreferences.isUserLogIn(mContext)) {
+                            if (quesAnsObjs.get(1).getAns().get(0).getIs_useful() == 0) {
+                                quesAnsObjs.get(1).getAns().get(0).setIs_useful(-1);
 
-                        if(quesAnsObjs.get(1).getAns().get(0).getIs_useful() == 0){
-                            quesAnsObjs.get(1).getAns().get(0).setIs_useful(-1);
+                                quesAnsObjs.get(1).getAns().get(0).setTotal(quesAnsObjs.get(1).getAns().get(0).getTotal() - 1);
 
-                        }else{
-                            quesAnsObjs.get(1).getAns().get(0).setIs_useful(0);
-                            if(mListener!=null) {
-                                mListener.onReviewMarkUseful(quesAnsObjs.get(1).getAns().get(0).getId(),0);
+                            } else {
+                                quesAnsObjs.get(1).getAns().get(0).setIs_useful(0);
+
+                                quesAnsObjs.get(1).getAns().get(0).setTotal(quesAnsObjs.get(1).getAns().get(0).getTotal()+1);
+                                if (mListener != null) {
+                                    mListener.onReviewMarkUseful(quesAnsObjs.get(1).getAns().get(0).getId(), 0);
+                                }
                             }
+                            notifyItemChanged(position);
+                        }else{
+                            Toast.makeText(mContext, "Please login to continue", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(mContext, BaseLoginSignupActivity.class);
+                            intent.putExtra("inside", true);
+                            mContext.startActivity(intent);
                         }
-                        notifyItemChanged(position);
                     }
                 });
             }

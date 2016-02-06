@@ -1,6 +1,9 @@
 package com.application.zimplyshop.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -16,14 +19,16 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.AskUsActivity;
+import com.application.zimplyshop.activities.BaseLoginSignupActivity;
 import com.application.zimplyshop.baseobjects.PostQuestionReceivedObject;
 import com.application.zimplyshop.baseobjects.QuestionAnswerObject;
+import com.application.zimplyshop.preferences.AppPreferences;
 import com.application.zimplyshop.widgets.CustomEdittext;
 import com.application.zimplyshop.widgets.CustomTextView;
 import com.application.zimplyshop.widgets.CustomTextViewBold;
@@ -46,9 +51,12 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     ArrayList<QuestionAnswerObject> objs;
 
-    public AskUsQuestionsAdapter(Context context){
+    int displayWidth;
+
+    public AskUsQuestionsAdapter(Context context,int displayWidth){
         mContext = context;
         objs = new ArrayList<>();
+        this.displayWidth = displayWidth;
     }
 
 
@@ -100,9 +108,12 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holderPro.questionText.setText(objs.get(position - 2).getQues().getQuestion());
             /*SpannableString answer = new SpannableString("A: "+objs.get(position-2).getAns().get(0).getQuestion());
             answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);*/
-            holderPro.answerText.setText(objs.get(position-2).getAns().get(0).getQuestion());
+            holderPro.answerText.setText(objs.get(position - 2).getAns().get(0).getQuestion());
 
-            //  makeTextViewResizable(holderPro.answerText, 3, objs.get(position-2).getAns().get(0).getQuestion(),false);
+           //   makeTextViewResizable(holderPro.answerText, 3, "View More", false);
+           /* if(getLineCount(objs.get(position-2).getAns().get(0).getQuestion()) >3){
+
+            }*/
 
             if(objs.get(position-2).getAns().get(0).getTotal() != 0) {
                 holderPro.foundUsefullCount.setVisibility(View.VISIBLE);
@@ -146,26 +157,45 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holderPro.reviewUsefulText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    objs.get(position-2).getAns().get(0).setIs_useful(1);
-                    if(mListener!=null){
-                        mListener.onReviewMarkUseful(objs.get(position-2).getAns().get(0).getId(),1);
+                    if(AppPreferences.isUserLogIn(mContext)) {
+
+                        objs.get(position - 2).getAns().get(0).setIs_useful(1);
+                        objs.get(position - 2).getAns().get(0).setHelpful(objs.get(position - 2).getAns().get(0).getHelpful()+1);
+                        objs.get(position - 2).getAns().get(0).setTotal(objs.get(position - 2).getAns().get(0).getTotal()+1);
+                        if (mListener != null) {
+                            mListener.onReviewMarkUseful(objs.get(position - 2).getAns().get(0).getId(), 1);
+                        }
+                        notifyItemChanged(position);
+                    }else{
+                        Toast.makeText(mContext, "Please login to continue", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(mContext, BaseLoginSignupActivity.class);
+                        intent.putExtra("inside", true);
+                        mContext.startActivity(intent);
                     }
-                    notifyItemChanged(position);
                 }
             });
             holderPro.reviewNotUseful.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(objs.get(position-2).getAns().get(0).getIs_useful() == 0){
-                        objs.get(position-2).getAns().get(0).setIs_useful(-1);
 
-                    }else{
-                        objs.get(position-2).getAns().get(0).setIs_useful(0);
-                        if(mListener!=null){
-                            mListener.onReviewMarkUseful(objs.get(position-2).getAns().get(0).getId(),0);
+                    if(AppPreferences.isUserLogIn(mContext)) {
+                        if (objs.get(position - 2).getAns().get(0).getIs_useful() == 0) {
+                            objs.get(position - 2).getAns().get(0).setIs_useful(-1);
+                            objs.get(position - 2).getAns().get(0).setTotal(objs.get(position - 2).getAns().get(0).getTotal()-1);
+                        } else {
+                            objs.get(position - 2).getAns().get(0).setIs_useful(0);
+                            objs.get(position - 2).getAns().get(0).setTotal(objs.get(position - 2).getAns().get(0).getTotal()+1);
+                            if (mListener != null) {
+                                mListener.onReviewMarkUseful(objs.get(position - 2).getAns().get(0).getId(), 0);
+                            }
                         }
+                        notifyItemChanged(position);
+                    }else{
+                        Toast.makeText(mContext, "Please login to continue", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(mContext, BaseLoginSignupActivity.class);
+                        intent.putExtra("inside", true);
+                        mContext.startActivity(intent);
                     }
-                    notifyItemChanged(position);
                 }
             });
 
@@ -198,11 +228,23 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 holderQuery.postBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((AskUsActivity)mContext).showPostQuestionsFragment();
+                        if (AppPreferences.isUserLogIn(mContext)) {
+                            if (mListener != null) {
+                                mListener.setLastSavedQuestions(objs);
+                            }
+                            ((AskUsActivity) mContext).showPostQuestionsFragment();
+                        } else {
+                            Toast.makeText(mContext, "Please login to continue", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(mContext, BaseLoginSignupActivity.class);
+                            intent.putExtra("inside", true);
+                            mContext.startActivity(intent);
+                        }
                     }
                 });
             }
         }else if(getItemViewType(position) == TYPE_SEARCH_CONTAINER){
+
+            ((AskUsSearchViewHolder) holder).editText.setHint("Have a question? Search for answer or Post it");
             ((AskUsSearchViewHolder)holder).editText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -223,6 +265,16 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             });
         }
+    }
+
+    public int getLineCount(String textString){
+        Rect bounds = new Rect();
+        Paint paint = new Paint();
+        paint.setTextSize(mContext.getResources().getDimension(R.dimen.font_medium));
+        paint.getTextBounds(textString, 0, textString.length(), bounds);
+        int width = (int) Math.ceil( bounds.width());
+        float value = (width/displayWidth);
+        return (value>=1)?(int)value:1;
     }
 
     public void addData(ArrayList<QuestionAnswerObject> objs){
@@ -351,50 +403,47 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         void onDeleteClick();
         void onReviewMarkUseful(int questionId,int isUseful);
         void onSearchParam(String text);
+        void setLastSavedQuestions(ArrayList<QuestionAnswerObject> objs);
     }
 
     public  void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
-
-        if (tv.getTag() == null) {
-            tv.setTag(tv.getText());
-        }
-        ViewTreeObserver vto = tv.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @SuppressWarnings("deprecation")
-            @Override
-            public void onGlobalLayout() {
-
-                ViewTreeObserver obs = tv.getViewTreeObserver();
-                obs.removeGlobalOnLayoutListener(this);
-                if (maxLine == 0) {
-                    int lineEndIndex = tv.getLayout().getLineEnd(0);
-                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
-                    tv.setText(text);
-                    tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    tv.setText(
-                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
-                                    viewMore), TextView.BufferType.SPANNABLE);
-                } else if (maxLine > 0 && tv.getLineCount() >= maxLine) {
-                    int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
-                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
-                    tv.setText(text);
-                    tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    tv.setText(
-                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
-                                    viewMore), TextView.BufferType.SPANNABLE);
-                } else {
-                    int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
-                    String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
-                    tv.setText(text);
-                    tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    tv.setText(
-                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
-                                    viewMore), TextView.BufferType.SPANNABLE);
-                }
+        try {
+            if (tv.getTag() == null) {
+                tv.setTag(tv.getText());
             }
-        });
 
+            if (maxLine == 0) {
+                int lineEndIndex = tv.getTag().toString().length() / getLineCount(tv.getText().toString());
+                String text = tv.getTag().toString().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                tv.setText(text);
+                tv.setMovementMethod(LinkMovementMethod.getInstance());
+                tv.setText(
+                        addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                viewMore), TextView.BufferType.SPANNABLE);
+            } else if (maxLine > 0 && getLineCount(tv.getText().toString()) >= maxLine) {
+                int lineEndIndex = (maxLine * tv.getTag().toString().length()) / getLineCount(tv.getTag().toString());
+                String text = tv.getTag().toString().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                tv.setText(text);
+                tv.setMovementMethod(LinkMovementMethod.getInstance());
+                tv.setText(
+                        addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                viewMore), TextView.BufferType.SPANNABLE);
+            }else if(maxLine > 0 && getLineCount(tv.getText().toString()) < maxLine){
+                String text = tv.getTag().toString().subSequence(0, tv.getTag().toString().length()).toString();// + " " + expandText;
+                tv.setText(text);
+
+            } else {
+                int lineEndIndex = tv.getTag().toString().length();
+                String text = tv.getTag().toString().subSequence(0, lineEndIndex).toString() + " " + expandText;
+                tv.setText(text);
+                tv.setMovementMethod(LinkMovementMethod.getInstance());
+                tv.setText(
+                        addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
+                                viewMore), TextView.BufferType.SPANNABLE);
+            }
+        }catch(Exception e){
+
+        }
     }
 
     private  SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,

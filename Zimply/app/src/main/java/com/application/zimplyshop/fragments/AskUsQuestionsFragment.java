@@ -95,11 +95,15 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
 
     ArrayList<QuestionAnswerObject> questions;
 
+
+
+
     public void setAdapterData(ArrayList<QuestionAnswerObject> objs){
 
         if (recyclerView.getAdapter() == null) {
 
-            AskUsQuestionsAdapter adapter = new AskUsQuestionsAdapter(getActivity());
+            int width = getDisplayMetrics().widthPixels-(4*getResources().getDimensionPixelSize(R.dimen.margin_medium));
+            AskUsQuestionsAdapter adapter = new AskUsQuestionsAdapter(getActivity(),width);
 
             recyclerView.setAdapter(adapter);
             recyclerView
@@ -145,9 +149,13 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
                     list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(getActivity())));
                     list.add(new BasicNameValuePair("is_useful", is_useful+""));
 
-                    UploadManager.getInstance().makeAyncRequest(url, REVIEW_ANSWER_TAG, answerId+ "",
+                    UploadManager.getInstance().makeAyncRequest(url, REVIEW_ANSWER_TAG, answerId + "",
                             ObjectTypes.OBJECT_TYPE_REVIEW_ANSWER, answerId, list, null);
 
+                }
+                public void setLastSavedQuestions(ArrayList<QuestionAnswerObject>  objs){
+                        questions = new ArrayList<>();
+                    questions.addAll(objs);
                 }
 
                 @Override
@@ -177,10 +185,7 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
         ((AskUsQuestionsAdapter) recyclerView.getAdapter())
                 .addData(objs);
         ((AskUsQuestionsAdapter) recyclerView.getAdapter()).setPostedQuestion(((AskUsActivity) getActivity()).getReceviedObj());
-        if(questions == null){
-            questions = new ArrayList<>();
-        }
-        questions.addAll(objs);
+
     }
 
 
@@ -192,6 +197,7 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
         super.onActivityCreated(savedInstanceState);
         productId = getArguments().getInt("id");
         GetRequestManager.getInstance().addCallbacks(this);
+        if(questions == null)
         loadData();
 
     }
@@ -379,7 +385,9 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.retry_layout:
-                loadData();
+                if(isRequestFailed) {
+                    loadData();
+                }
                 break;
         }
 

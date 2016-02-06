@@ -1,10 +1,12 @@
 package com.application.zimplyshop.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -35,11 +37,11 @@ import java.util.List;
 /**
  * Created by Umesh Lohani on 2/5/2016.
  */
-public class MyQuestionsActivity extends BaseActivity implements GetRequestListener,AppConstants,RequestTags,UploadManagerCallback{
+public class MyQuestionsActivity extends BaseActivity implements GetRequestListener, AppConstants, RequestTags, UploadManagerCallback {
 
     RecyclerView questionsList;
 
-    boolean isRequestAllowed,isLoading;
+    boolean isRequestAllowed, isLoading, isNotification;
 
     String nextUrl;
 
@@ -48,16 +50,19 @@ public class MyQuestionsActivity extends BaseActivity implements GetRequestListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_toolbar_layout);
-        questionsList = (RecyclerView)findViewById(R.id.categories_list);
+        questionsList = (RecyclerView) findViewById(R.id.categories_list);
         questionsList.setLayoutManager(new LinearLayoutManager(this));
         questionsList.addItemDecoration(new CartSpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_small)));
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        PAGE_TYPE = AppConstants.PAGE_TYPE_MESSAGE;
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         setLoadingVariables();
         setStatusBarColor();
+
+        isNotification = getIntent().getBooleanExtra("is_notification", false);
         retryLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,13 +76,31 @@ public class MyQuestionsActivity extends BaseActivity implements GetRequestListe
         loadData();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-    public void loadData(){
+    @Override
+    public void onBackPressed() {
+        if (isNotification) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            this.finish();
+            startActivity(intent);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void loadData() {
         String url;
-        if(nextUrl == null) {
+        if (nextUrl == null) {
             url = AppApplication.getInstance().getBaseUrl() + AppConstants.MY_QUESTION_LIST_URL + "?userid=" + AppPreferences.getUserID(this);
-        }else{
-            url = AppApplication.getInstance().getBaseUrl()+nextUrl;
+        } else {
+            url = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
         GetRequestManager.getInstance().makeAyncRequest(url, RequestTags.MY_QUESTIONS_REQUEST_TAG, ObjectTypes.OBJECT_TYPE_MY_QUESTIONS);
     }
@@ -91,20 +114,20 @@ public class MyQuestionsActivity extends BaseActivity implements GetRequestListe
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(MY_QUESTIONS_REQUEST_TAG)){
-            if(questionsList==null || questionsList.getAdapter()==null || questionsList.getAdapter().getItemCount() == 0) {
+        if (!isDestroyed && requestTag.equalsIgnoreCase(MY_QUESTIONS_REQUEST_TAG)) {
+            if (questionsList == null || questionsList.getAdapter() == null || questionsList.getAdapter().getItemCount() == 0) {
                 showLoadingView();
                 changeViewVisiblity(questionsList, View.GONE);
-            }else{
+            } else {
 
             }
-            isLoading=true;
+            isLoading = true;
         }
     }
 
     @Override
     public void onRequestCompleted(String requestTag, Object obj) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(MY_QUESTIONS_REQUEST_TAG)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(MY_QUESTIONS_REQUEST_TAG)) {
             if (((MyQuestionListObject) obj).getAll().size() == 0) {
                 if (questionsList.getAdapter() == null
                         || questionsList.getAdapter().getItemCount() == 1) {
@@ -141,12 +164,13 @@ public class MyQuestionsActivity extends BaseActivity implements GetRequestListe
                     isRequestAllowed = true;
                 }
             }
-            isLoading=false;
+            isLoading = false;
         }
     }
 
-    int visibleItemCount,totalItemCount,pastVisiblesItems;
-    public void setAdapterData(ArrayList<MyQuestionAnswerObject> objs){
+    int visibleItemCount, totalItemCount, pastVisiblesItems;
+
+    public void setAdapterData(ArrayList<MyQuestionAnswerObject> objs) {
         if (questionsList.getAdapter() == null) {
 
             MyQuestionListAdapter adapter = new MyQuestionListAdapter(this);
@@ -200,13 +224,13 @@ public class MyQuestionsActivity extends BaseActivity implements GetRequestListe
             ((MyQuestionListAdapter) questionsList.getAdapter()).setOnBtnClickListener(new MyQuestionListAdapter.OnBtnClickListener() {
 
                 public void onReviewMarkUseful(int answerId, int is_useful) {
-                    String url = AppApplication.getInstance().getBaseUrl()+REVIEW_ANSWER_URL;
+                    String url = AppApplication.getInstance().getBaseUrl() + REVIEW_ANSWER_URL;
                     List<NameValuePair> list = new ArrayList<NameValuePair>();
-                    list.add(new BasicNameValuePair("ans_id", answerId+ ""));
+                    list.add(new BasicNameValuePair("ans_id", answerId + ""));
                     list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(MyQuestionsActivity.this)));
-                    list.add(new BasicNameValuePair("is_useful", is_useful+""));
+                    list.add(new BasicNameValuePair("is_useful", is_useful + ""));
 
-                    UploadManager.getInstance().makeAyncRequest(url, REVIEW_ANSWER_TAG, answerId+ "",
+                    UploadManager.getInstance().makeAyncRequest(url, REVIEW_ANSWER_TAG, answerId + "",
                             ObjectTypes.OBJECT_TYPE_REVIEW_ANSWER, answerId, list, null);
 
                 }
@@ -218,7 +242,7 @@ public class MyQuestionsActivity extends BaseActivity implements GetRequestListe
 
     @Override
     public void onRequestFailed(String requestTag, Object obj) {
-        if(!isDestroyed && requestTag.equalsIgnoreCase(MY_QUESTIONS_REQUEST_TAG)){
+        if (!isDestroyed && requestTag.equalsIgnoreCase(MY_QUESTIONS_REQUEST_TAG)) {
             if (questionsList.getAdapter() == null
                     || questionsList.getAdapter().getItemCount() == 1) {
                 showNetworkErrorView();
@@ -233,7 +257,7 @@ public class MyQuestionsActivity extends BaseActivity implements GetRequestListe
 
                 }
 
-                ((MyQuestionListAdapter)questionsList.getAdapter())
+                ((MyQuestionListAdapter) questionsList.getAdapter())
                         .removeItem();
                 isRequestAllowed = false;
             }
@@ -242,6 +266,7 @@ public class MyQuestionsActivity extends BaseActivity implements GetRequestListe
     }
 
     boolean isDestroyed;
+
     @Override
     protected void onDestroy() {
         isDestroyed = true;

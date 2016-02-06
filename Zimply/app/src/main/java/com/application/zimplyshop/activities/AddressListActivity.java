@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.NewAdressSelectionAdapter;
@@ -24,12 +28,11 @@ public class AddressListActivity extends BaseActivity {
         mContext = AddressListActivity.this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.z_text_color_light));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Choose Address");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setTitle(null);
+        addToolbarView(toolbar);
         recyclerView = (RecyclerView) findViewById(R.id.category_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.margin_medium)));
@@ -39,6 +42,22 @@ public class AddressListActivity extends BaseActivity {
         setAdapterData();
     }
 
+    private void addToolbarView(Toolbar toolbar) {
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.common_toolbar_text_layout, null);
+        TextView titleText = (TextView) view.findViewById(R.id.title_textview);
+        titleText.setText("My Addresses");
+        toolbar.addView(view);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return true;
+    }
 
     public void setAdapterData() {
         if (recyclerView.getAdapter() == null) {
@@ -63,8 +82,8 @@ public class AddressListActivity extends BaseActivity {
                 public void editExistingAddress(int pos) {
 
                     Intent intent = new Intent(AddressListActivity.this, EditAddressActivity.class);
-                    intent.putExtra("edit_position",pos);
-                    intent.putExtra("addressObject",AllUsers.getInstance().getObjs().get(pos));
+                    intent.putExtra("edit_position", pos);
+                    intent.putExtra("addressObject", AllUsers.getInstance().getObjs().get(pos));
                     startActivity(intent);
                 }
             });
@@ -73,4 +92,9 @@ public class AddressListActivity extends BaseActivity {
         ((NewAdressSelectionAdapter) recyclerView.getAdapter()).addData(AllUsers.getInstance().getObjs());
     }
 
+    @Override
+    protected void onResume() {
+        ((NewAdressSelectionAdapter) recyclerView.getAdapter()).addData(AllUsers.getInstance().getObjs());
+        super.onResume();
+    }
 }

@@ -21,7 +21,7 @@ import com.application.zimplyshop.serverapis.RequestTags;
 /**
  * Created by Umesh Lohani on 2/1/2016.
  */
-public class AskUsActivity extends BaseActivity implements GetRequestListener,AppConstants,RequestTags{
+public class AskUsActivity extends BaseActivity implements GetRequestListener, AppConstants, RequestTags {
 
     String nextUrl;
 
@@ -35,72 +35,77 @@ public class AskUsActivity extends BaseActivity implements GetRequestListener,Ap
 
     String ASK_US_QUESTIONS_TAG = "questionstag";
     String POST_QUESTION_TAG = "postquestionstag";
+
+    String productName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.askus_layout);
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         addToolbarView(toolbar);
         setSupportActionBar(toolbar);
-
-        productId = getIntent().getIntExtra("id",0);
+        productName = getIntent().getStringExtra("name");
+        productId = getIntent().getIntExtra("id", 0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if(getIntent().getIntExtra("fragment_type",1) == 1) {
+        if (getIntent().getIntExtra("fragment_type", 1) == 1) {
             isPostFragmentFirst = false;
             showQuestionsFragment();
-        }else{
+        } else {
             isPostFragmentFirst = true;
             showPostQuestionsFragmentFirst();
         }
     }
 
-    BaseFragment questionsFragment,postQuestionFragment;
-    int fragmentType ;
+    BaseFragment questionsFragment, postQuestionFragment;
+    int fragmentType;
 
     int FRAGMENT_TYPE_QUESTIONS = 1;
     int FRAGMENT_TYPE_POST_QUESTION = 2;
 
-    public void showQuestionsFragmentAfterReplace(){
-        if(questionsFragment == null){
+    public void showQuestionsFragmentAfterReplace() {
+        if (questionsFragment == null) {
             fragmentType = FRAGMENT_TYPE_QUESTIONS;
             Bundle bundle = new Bundle();
-            bundle.putInt("id",productId);
+            bundle.putInt("id", productId);
             questionsFragment = AskUsQuestionsFragment.newInstance(bundle);
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, questionsFragment, ASK_US_QUESTIONS_TAG).commit();
     }
-    public void showQuestionsFragment(){
-        if(questionsFragment == null){
+
+    public void showQuestionsFragment() {
+        if (questionsFragment == null) {
             fragmentType = FRAGMENT_TYPE_QUESTIONS;
             Bundle bundle = new Bundle();
-            bundle.putInt("id",productId);
+            bundle.putInt("id", productId);
             questionsFragment = AskUsQuestionsFragment.newInstance(bundle);
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.container, questionsFragment, ASK_US_QUESTIONS_TAG).commit();
     }
 
-    public void deleteQuestionRequest(){
+    public void deleteQuestionRequest() {
         receviedObj = null;
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()== android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void showPostQuestionsFragmentFirst(){
-        if(postQuestionFragment == null){
+    public void showPostQuestionsFragmentFirst() {
+        if (postQuestionFragment == null) {
             fragmentType = FRAGMENT_TYPE_POST_QUESTION;
             Bundle bundle = new Bundle();
-            bundle.putInt("id",productId);
+            bundle.putInt("id", productId);
+            bundle.putString("name",productName);
             postQuestionFragment = PostQuestionFragment.newInstance(bundle);
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -108,11 +113,12 @@ public class AskUsActivity extends BaseActivity implements GetRequestListener,Ap
     }
 
 
-    public void showPostQuestionsFragment(){
-        if(postQuestionFragment == null){
+    public void showPostQuestionsFragment() {
+        if (postQuestionFragment == null) {
             fragmentType = FRAGMENT_TYPE_POST_QUESTION;
             Bundle bundle = new Bundle();
-            bundle.putInt("id",productId);
+            bundle.putInt("id", productId);
+            bundle.putString("name", productName);
             postQuestionFragment = PostQuestionFragment.newInstance(bundle);
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -122,12 +128,13 @@ public class AskUsActivity extends BaseActivity implements GetRequestListener,Ap
     }
 
     //Edited question
-    public void showPostQuestionsFragment(PostQuestionReceivedObject obj){
+    public void showPostQuestionsFragment(PostQuestionReceivedObject obj) {
 
         fragmentType = FRAGMENT_TYPE_POST_QUESTION;
         Bundle bundle = new Bundle();
-        bundle.putInt("id",productId);
-        bundle.putSerializable("question",obj);
+        bundle.putInt("id", productId);
+        bundle.putString("name", productName);
+        bundle.putSerializable("question", obj);
         postQuestionFragment = PostQuestionFragment.newInstance(bundle);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -138,20 +145,20 @@ public class AskUsActivity extends BaseActivity implements GetRequestListener,Ap
 
 
     private void addToolbarView(Toolbar toolbar) {
-        View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, toolbar,false);
         ((TextView) view.findViewById(R.id.title_textview)).setText("Ask Us");
         toolbar.addView(view);
     }
 
-    public PostQuestionReceivedObject getReceviedObj(){
+    public PostQuestionReceivedObject getReceviedObj() {
         return receviedObj;
     }
 
-    public void setPostedQuestion(PostQuestionReceivedObject obj){
+    public void setPostedQuestion(PostQuestionReceivedObject obj) {
         this.receviedObj = obj;
-        if(!isPostFragmentFirst) {
+        if (!isPostFragmentFirst) {
             onBackPressed();
-        }else{
+        } else {
             isPostFragmentFirst = false;
             showQuestionsFragmentAfterReplace();
         }

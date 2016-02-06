@@ -22,6 +22,7 @@ import android.widget.RemoteViews;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.HomeActivity;
+import com.application.zimplyshop.activities.MyQuestionsActivity;
 import com.application.zimplyshop.activities.NewProductDetailActivity;
 import com.application.zimplyshop.activities.ProductCheckoutActivity;
 import com.application.zimplyshop.activities.ProductListingActivity;
@@ -108,6 +109,9 @@ public class GcmNotificationManager implements AppConstants {
         }else if(type == NOTIFICATION_TYPE_CART_PAGE){
             notificationIntent = new Intent(mContext, ProductCheckoutActivity.class);
             notificationIntent.putExtra("OrderSummaryFragment", false);
+            notificationIntent.putExtra("is_notification", true);
+        }else if(type == NOTIFICATION_TYPE_MY_QUESTIONS){
+            notificationIntent = new Intent(mContext, MyQuestionsActivity.class);
             notificationIntent.putExtra("is_notification", true);
         } else {
             notificationIntent = new Intent(mContext, HomeActivity.class);
