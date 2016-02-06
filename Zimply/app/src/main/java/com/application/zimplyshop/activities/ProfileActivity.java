@@ -56,7 +56,13 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_back_white));
         //getSupportActionBar().setDisplayShowTitleEnabled(false);*/
         setLoadingVariables();
-
+        ((CustomTextView)findViewById(R.id.my_questions_view)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this,MyQuestionsActivity.class);
+                startActivity(intent);
+            }
+        });
         propic = (CircularImageView) findViewById(R.id.profile_pic);
         nameOfUser = (CustomTextViewBold) findViewById(R.id.name_user);
         emailUser = (CustomTextView) findViewById(R.id.email_user);

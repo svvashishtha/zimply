@@ -138,8 +138,7 @@ public class AskUsActivity extends BaseActivity implements GetRequestListener,Ap
 
 
     private void addToolbarView(Toolbar toolbar) {
-        View view = LayoutInflater.from(this).inflate(
-                R.layout.common_toolbar_text_layout, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.common_toolbar_text_layout, null);
         ((TextView) view.findViewById(R.id.title_textview)).setText("Ask Us");
         toolbar.addView(view);
     }
@@ -149,7 +148,6 @@ public class AskUsActivity extends BaseActivity implements GetRequestListener,Ap
     }
 
     public void setPostedQuestion(PostQuestionReceivedObject obj){
-
         this.receviedObj = obj;
         if(!isPostFragmentFirst) {
             onBackPressed();

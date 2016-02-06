@@ -14,6 +14,7 @@ import com.application.zimplyshop.baseobjects.FavListObject;
 import com.application.zimplyshop.baseobjects.HomeProductObj;
 import com.application.zimplyshop.baseobjects.ImageObject;
 import com.application.zimplyshop.baseobjects.LatestBookingObject;
+import com.application.zimplyshop.baseobjects.MyQuestionListObject;
 import com.application.zimplyshop.baseobjects.MyWishListObject;
 import com.application.zimplyshop.baseobjects.OffersObject;
 import com.application.zimplyshop.baseobjects.ParentCategory;
@@ -944,6 +945,8 @@ public class ParserClass implements ObjectTypes {
                 return new Gson().fromJson(JSONUtils.getJSONObject(JSONUtils.getJSONObject(responseString),"ques").toString(), PostQuestionReceivedObject.class);
             case OBJECT_TYPE_DELETE_QUESTION:
                 return JSONUtils.getStringfromJSON(JSONUtils.getJSONObject(responseString),"success");
+            case OBJECT_TYPE_MY_QUESTIONS:
+                return new Gson().fromJson(responseString, MyQuestionListObject.class);
             default:
                 return null;
         }

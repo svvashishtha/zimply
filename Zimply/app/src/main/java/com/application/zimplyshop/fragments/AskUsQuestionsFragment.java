@@ -3,6 +3,7 @@ package com.application.zimplyshop.fragments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,6 +55,10 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
     int visibleItemCount,totalItemCount,pastVisiblesItems;
 
     boolean isLoading,isDestroyed;
+
+    AsyncTask mAsynTask;
+
+    boolean isSearching,isDataRefreshed;
 
 
     @Override
@@ -127,21 +132,7 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
                             super.onScrollStateChanged(recyclerView, newState);
                         }
                     });
-            /*((GridLayoutManager) productList.getLayoutManager())
-                    .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                        @Override
-                        public int getSpanSize(int position) {
-                            switch (productList
-                                    .getAdapter().getItemViewType(position)) {
-                                case 0:
-                                    return 1;
-                                case 1:
-                                    return 2;
-                                default:
-                                    return -1;
-                            }
-                        }
-                    });*/
+
             ((AskUsQuestionsAdapter) recyclerView.getAdapter()).setOnBtnClickListener(new AskUsQuestionsAdapter.OnBtnClickListener() {
                 @Override
                 public void onDeleteClick() {
@@ -158,16 +149,42 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
                             ObjectTypes.OBJECT_TYPE_REVIEW_ANSWER, answerId, list, null);
 
                 }
+
+                @Override
+                public void onSearchParam(String text) {
+                    if(text.trim().length()>0){
+                        if(mAsynTask!=null){
+                            mAsynTask.cancel(true);
+                        }
+                        isSearching = true;
+                        isDataRefreshed=true;
+                        searchString = text.trim();
+                        nextUrl = null;
+                        loadData();
+                    }else{
+                        if(mAsynTask!=null){
+                            mAsynTask.cancel(true);
+                        }
+                        isSearching = false;
+                        nextUrl = null;
+                        isDataRefreshed=true;
+                        searchString =null;
+                        loadData();
+                    }
+                }
             });
         }
         ((AskUsQuestionsAdapter) recyclerView.getAdapter())
                 .addData(objs);
-        ((AskUsQuestionsAdapter) recyclerView.getAdapter()).setPostedQuestion(((AskUsActivity)getActivity()).getReceviedObj());
+        ((AskUsQuestionsAdapter) recyclerView.getAdapter()).setPostedQuestion(((AskUsActivity) getActivity()).getReceviedObj());
         if(questions == null){
             questions = new ArrayList<>();
         }
         questions.addAll(objs);
     }
+
+
+
 
     int productId;
     @Override
@@ -221,17 +238,23 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
         isDestroyed = true;
         super.onDestroy();
     }
+    String searchString=null;
 
     public void loadData(){
         String finalUrl;
         if (nextUrl == null) {
-            finalUrl = AppApplication.getInstance().getBaseUrl()+ASKUS_QUESTIONS_URL+"?product_id="+productId+"&size=10"
-                    +(AppPreferences.isUserLogIn(getActivity())?"&userid="+AppPreferences.getUserID(getActivity()):"") ;
+            if(!isSearching) {
+
+                finalUrl = AppApplication.getInstance().getBaseUrl() + ASKUS_QUESTIONS_URL + "?product_id=" + productId + "&size=10"
+                        + (AppPreferences.isUserLogIn(getActivity()) ? "&userid=" + AppPreferences.getUserID(getActivity()) : "");
+            }else{
+                finalUrl = AppApplication.getInstance().getBaseUrl() + ASKUS_QUESTIONS_SEARCH_URL + "?query="+searchString+"&product_id=" + productId + "&size=10"
+                        + (AppPreferences.isUserLogIn(getActivity()) ? "&userid=" + AppPreferences.getUserID(getActivity()) : "");
+            }
         } else {
             finalUrl = AppApplication.getInstance().getBaseUrl() + nextUrl;
         }
-        GetRequestManager.getInstance().makeAyncRequest(finalUrl,
-                ASKUS_QUESTIONS_REQUEST_TAG ,
+        mAsynTask = GetRequestManager.getInstance().makeAyncRequest(finalUrl, ASKUS_QUESTIONS_REQUEST_TAG ,
                 ObjectTypes.OBJECT_TYPES_ASKUS_QUESTIONS);
 
     }
@@ -243,7 +266,10 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
             if(recyclerView.getAdapter()==null || recyclerView.getAdapter().getItemCount() == 0){
                 showLoadingView();
                 changeViewVisiblity(recyclerView,View.GONE);
+            }else if(isDataRefreshed){
+                ((AskUsQuestionsAdapter)recyclerView.getAdapter()).showFooter();
             }
+            isLoading=true;
         }
 
     }
@@ -287,6 +313,10 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
                     isRequestAllowed = true;
                 }
             }
+            if(isDataRefreshed){
+                isDataRefreshed=false;
+            }
+            isLoading=false;
         }
     }
 
@@ -312,6 +342,9 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
                 isRequestAllowed = false;
             }
             isLoading = false;
+            if(isDataRefreshed){
+                isDataRefreshed=false;
+            }
         }
     }
 

@@ -221,6 +221,11 @@
             android:name=".activities.AskUsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.MyQuestionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
 
         <activity
             android:name=".activities.NewProductDetailActivity"

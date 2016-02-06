@@ -3,13 +3,22 @@ package com.application.zimplyshop.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.Html;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.AskUsActivity;
@@ -45,7 +54,14 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     OnBtnClickListener mListener;
 
-
+    public void showFooter(){
+        isFooterRemoved = false;
+        int size=objs.size();
+        objs.clear();
+        // notifyDataSetChanged();
+        //  notifyItemRangeChanged(1,getItemCount()-2);
+        notifyItemRangeRemoved(2,size);
+    }
 
 
     @Override
@@ -79,12 +95,15 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(getItemViewType(position) == TYPE_QUESTIONS_LAYOUT){
             QuestionAnswerViewHolder holderPro = (QuestionAnswerViewHolder)holder;
-            SpannableString question = new SpannableString("Q: "+objs.get(position - 2).getQues().getQuestion());
-            question.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);
-            holderPro.questionText.setText(question);
-            SpannableString answer = new SpannableString("A: "+objs.get(position-2).getAns().get(0).getQuestion());
-            answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);
-            holderPro.answerText.setText(answer);
+            /*SpannableString question = new SpannableString("Q: "+objs.get(position - 2).getQues().getQuestion());
+            question.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);*/
+            holderPro.questionText.setText(objs.get(position - 2).getQues().getQuestion());
+            /*SpannableString answer = new SpannableString("A: "+objs.get(position-2).getAns().get(0).getQuestion());
+            answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);*/
+            holderPro.answerText.setText(objs.get(position-2).getAns().get(0).getQuestion());
+
+            //  makeTextViewResizable(holderPro.answerText, 3, objs.get(position-2).getAns().get(0).getQuestion(),false);
+
             if(objs.get(position-2).getAns().get(0).getTotal() != 0) {
                 holderPro.foundUsefullCount.setVisibility(View.VISIBLE);
                 holderPro.foundUsefullCount.setText(objs.get(position - 2).getAns().get(0).helpful + " out of " + objs.get(position - 2).getAns().get(0).getTotal() + " found this helpful");
@@ -96,22 +115,30 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             postedBy.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)), 11, postedBy.length(), 0);
             holderPro.postedByText.setText(postedBy);
 
+
             SpannableString repliedBy= new SpannableString("Replied By "+objs.get(position-2).getAns().get(0).getName());
             repliedBy.setSpan(new StyleSpan(Typeface.ITALIC), 11, repliedBy.length(), 0);
             repliedBy.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.heading_text_color)),12,repliedBy.length(),0);
             holderPro.replyByText.setText(repliedBy);
             if(objs.get(position-2).getAns().get(0).getIs_useful() == -1){
                 holderPro.wasReviewUseful.setText("Was this answer useful?");
+                holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.text_color1));
                 holderPro.reviewUsefulText.setVisibility(View.VISIBLE);
+
                 holderPro.reviewUsefulText.setText("Yes");
+                holderPro.reviewUsefulText.setTextColor(mContext.getResources().getColor(R.color.btn_green_color_normal));
                 holderPro.reviewNotUseful.setVisibility(View.VISIBLE);
                 holderPro.reviewNotUseful.setText("No");
+                holderPro.reviewNotUseful.setTextColor(mContext.getResources().getColor(R.color.red_text_color));
             }else if(objs.get(position-2).getAns().get(0).getIs_useful() == 0){
                 holderPro.wasReviewUseful.setText("You didn't found this answer useful.");
+                holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.text_color1));
                 holderPro.reviewNotUseful.setText("Change");
+                holderPro.reviewNotUseful.setTextColor(mContext.getResources().getColor(R.color.z_rate_btn_blue_color));
                 holderPro.reviewUsefulText.setVisibility(View.GONE);
             }else {
                 holderPro.wasReviewUseful.setText("You found this answer useful.");
+                holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.btn_green_color_normal));
                 holderPro.reviewUsefulText.setVisibility(View.GONE);
                 holderPro.reviewNotUseful.setVisibility(View.GONE);
             }
@@ -176,7 +203,25 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 });
             }
         }else if(getItemViewType(position) == TYPE_SEARCH_CONTAINER){
+            ((AskUsSearchViewHolder)holder).editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String input = s.toString();
+                    if(mListener!=null) {
+                        mListener.onSearchParam(input);
+                    }
+                }
+            });
         }
     }
 
@@ -219,7 +264,11 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             if(objs.size()>0){
                 return TYPE_QUESTIONS_LAYOUT;
             }else{
-                return TYPE_NO_QUESTION_YET_LAYOUT;
+                if(isFooterRemoved) {
+                    return TYPE_NO_QUESTION_YET_LAYOUT;
+                }else{
+                    return TYPE_LOADER;
+                }
             }
         }else if(position == objs.size()+2){
             return TYPE_LOADER;
@@ -301,5 +350,81 @@ public class AskUsQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public interface OnBtnClickListener{
         void onDeleteClick();
         void onReviewMarkUseful(int questionId,int isUseful);
+        void onSearchParam(String text);
+    }
+
+    public  void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
+
+        if (tv.getTag() == null) {
+            tv.setTag(tv.getText());
+        }
+        ViewTreeObserver vto = tv.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+
+                ViewTreeObserver obs = tv.getViewTreeObserver();
+                obs.removeGlobalOnLayoutListener(this);
+                if (maxLine == 0) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(0);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);
+                } else if (maxLine > 0 && tv.getLineCount() >= maxLine) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);
+                } else {
+                    int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
+                    String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);
+                }
+            }
+        });
+
+    }
+
+    private  SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
+                                                                            final int maxLine, final String spanableText, final boolean viewMore) {
+        String str = strSpanned.toString();
+        SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
+
+        if (str.contains(spanableText)) {
+            ssb.setSpan(new ClickableSpan() {
+
+                @Override
+                public void onClick(View widget) {
+
+                    if (viewMore) {
+                        tv.setLayoutParams(tv.getLayoutParams());
+                        tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        tv.invalidate();
+                        makeTextViewResizable(tv, -1, "View Less", false);
+                    } else {
+                        tv.setLayoutParams(tv.getLayoutParams());
+                        tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        tv.invalidate();
+                        makeTextViewResizable(tv, 3, "View More", true);
+                    }
+
+                }
+            }, str.indexOf(spanableText), str.indexOf(spanableText) + spanableText.length(), 0);
+
+        }
+        return ssb;
+
     }
 }

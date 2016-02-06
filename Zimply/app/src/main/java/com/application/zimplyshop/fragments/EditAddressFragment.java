@@ -21,6 +21,7 @@ import com.application.zimplyshop.R;
 import com.application.zimplyshop.activities.ProductCheckoutActivity;
 import com.application.zimplyshop.application.AppApplication;
 import com.application.zimplyshop.baseobjects.AddressObject;
+import com.application.zimplyshop.baseobjects.ErrorObject;
 import com.application.zimplyshop.extras.AppConstants;
 import com.application.zimplyshop.extras.ObjectTypes;
 import com.application.zimplyshop.managers.GetRequestListener;
@@ -423,6 +424,8 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
                 CommonLib.hideKeyBoard(mActivity, view.findViewById(R.id.pincode));
             }
         } else if (!destroyed && requestTag.equalsIgnoreCase(RequestTags.GET_CITY_FROM_PINCODE)) {
+
+
             if (zProgressDialog != null) {
                 zProgressDialog.dismiss();
             }
@@ -456,6 +459,7 @@ public class EditAddressFragment extends ZFragment implements UploadManagerCallb
             if (zProgressDialog != null) {
                 zProgressDialog.dismiss();
             }
+            Toast.makeText(getActivity(),((ErrorObject)obj).getErrorMessage(),Toast.LENGTH_SHORT);
         }
     }
 

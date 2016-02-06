@@ -78,6 +78,8 @@ public interface AppConstants {
 
     String ASKUS_QUESTIONS_URL = "ecommerce/ques-ans/";
 
+    String ASKUS_QUESTIONS_SEARCH_URL = "ecommerce/search-ques/";
+
     String POST_QUESTION_URL = "ecommerce/add-ques/";
 
     String DELETE_QUESTION_URL = "ecommerce/delete-ques/";

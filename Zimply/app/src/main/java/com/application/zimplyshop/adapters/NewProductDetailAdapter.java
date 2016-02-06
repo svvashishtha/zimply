@@ -573,6 +573,8 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 isSecondQuestion=false;
             }else if(quesAnsObjs.size() == 1){
                 holderPro.searchLayout.setVisibility(View.VISIBLE);
+
+                holderPro.search.setHint("Have a query? Search for answer or Post it");
                 holderPro.search.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -623,13 +625,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 isSecondQuestion = true;
             }
             if(isFirstQuestion){
-                SpannableString question = new SpannableString("Q: "+quesAnsObjs.get(0).getQues().getQuestion());
-                question.setSpan(new StyleSpan(Typeface.BOLD),0,2,0);
-                holderPro.questionText.setText(question);
+                /*SpannableString question = new SpannableString("Q: "+quesAnsObjs.get(0).getQues().getQuestion());
+                question.setSpan(new StyleSpan(Typeface.BOLD),0,2,0);*/
+                holderPro.questionText.setText(quesAnsObjs.get(0).getQues().getQuestion());
 
-                SpannableString answer = new SpannableString("A: "+quesAnsObjs.get(0).getAns().get(0).getQuestion());
-                answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);
-                holderPro.answerText.setText(answer);
+                /*SpannableString answer = new SpannableString("A: "+quesAnsObjs.get(0).getAns().get(0).getQuestion());
+                answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);*/
+                holderPro.answerText.setText(quesAnsObjs.get(0).getAns().get(0).getQuestion());
 
                 //holderPro.answerText.setText(quesAnsObjs.get(0).getAns().get(0).getQuestion());
 
@@ -647,16 +649,22 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 if(quesAnsObjs.get(0).getAns().get(0).getIs_useful() == -1){
                     holderPro.wasReviewUseful.setText("Was this answer useful?");
+                    holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.text_color1));
                     holderPro.reviewUsefulText.setVisibility(View.VISIBLE);
                     holderPro.reviewUsefulText.setText("Yes");
+                    holderPro.reviewUsefulText.setTextColor(mContext.getResources().getColor(R.color.btn_green_color_normal));
                     holderPro.reviewNotUseful.setVisibility(View.VISIBLE);
                     holderPro.reviewNotUseful.setText("No");
+                    holderPro.reviewNotUseful.setTextColor(mContext.getResources().getColor(R.color.red_text_color));
                 }else if(quesAnsObjs.get(0).getAns().get(0).getIs_useful() == 0){
                     holderPro.wasReviewUseful.setText("You didn't found this answer useful.");
+                    holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.text_color1));
                     holderPro.reviewNotUseful.setText("Change");
+                    holderPro.reviewNotUseful.setTextColor(mContext.getResources().getColor(R.color.z_rate_btn_blue_color));
                     holderPro.reviewUsefulText.setVisibility(View.GONE);
                 }else {
                     holderPro.wasReviewUseful.setText("You found this answer useful.");
+                    holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.btn_green_color_normal));
                     holderPro.reviewUsefulText.setVisibility(View.GONE);
                     holderPro.reviewNotUseful.setVisibility(View.GONE);
                 }
@@ -688,13 +696,13 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
                 });
             }
             if(isSecondQuestion){
-                SpannableString question = new SpannableString("Q: "+quesAnsObjs.get(1).getQues().getQuestion());
-                question.setSpan(new StyleSpan(Typeface.BOLD),0,2,0);
-                holderPro.questionText2.setText(question);
+                /*SpannableString question = new SpannableString("Q: "+quesAnsObjs.get(1).getQues().getQuestion());
+                question.setSpan(new StyleSpan(Typeface.BOLD),0,2,0);*/
+                holderPro.questionText2.setText(quesAnsObjs.get(1).getQues().getQuestion());
 
-                SpannableString answer = new SpannableString("A: "+quesAnsObjs.get(1).getAns().get(0).getQuestion());
-                answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);
-                holderPro.answerText2.setText(answer);
+                /*SpannableString answer = new SpannableString("A: "+quesAnsObjs.get(1).getAns().get(0).getQuestion());
+                answer.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, 0);*/
+                holderPro.answerText2.setText(quesAnsObjs.get(1).getAns().get(0).getQuestion());
 
                 SpannableString postedBy= new SpannableString("Posted by: "+quesAnsObjs.get(1).getQues().getName());
                 postedBy.setSpan(new StyleSpan(Typeface.ITALIC), 10, postedBy.length(), 0);
@@ -710,16 +718,21 @@ public class NewProductDetailAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 if(quesAnsObjs.get(1).getAns().get(0).getIs_useful() == -1){
                     holderPro.wasReviewUseful2.setText("Was this answer useful?");
+                    holderPro.wasReviewUseful2.setTextColor(mContext.getResources().getColor(R.color.text_color1));
                     holderPro.reviewUsefulText2.setVisibility(View.VISIBLE);
                     holderPro.reviewUsefulText2.setText("Yes");
+                    holderPro.reviewUsefulText2.setTextColor(mContext.getResources().getColor(R.color.btn_green_color_normal));
                     holderPro.reviewNotUseful2.setVisibility(View.VISIBLE);
                     holderPro.reviewNotUseful2.setText("No");
                 }else if(quesAnsObjs.get(1).getAns().get(0).getIs_useful() == 0){
                     holderPro.wasReviewUseful2.setText("You didn't found this answer useful.");
+                    holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.text_color1));
                     holderPro.reviewNotUseful2.setText("Change");
+                    holderPro.reviewNotUseful.setTextColor(mContext.getResources().getColor(R.color.z_rate_btn_blue_color));
                     holderPro.reviewUsefulText2.setVisibility(View.GONE);
                 }else {
                     holderPro.wasReviewUseful2.setText("You found this answer useful.");
+                    holderPro.wasReviewUseful.setTextColor(mContext.getResources().getColor(R.color.btn_green_color_normal));
                     holderPro.reviewUsefulText2.setVisibility(View.GONE);
                     holderPro.reviewNotUseful2.setVisibility(View.GONE);
                 }

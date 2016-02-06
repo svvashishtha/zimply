@@ -49,56 +49,87 @@
                 android:layout_marginBottom="@dimen/margin_small"
                 android:background="@drawable/dropshadowcard"
                 android:layout_height="match_parent">
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal">
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
 
-                <com.application.zimplyshop.widgets.CustomTextViewBold
-                    android:id="@+id/question_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/heading_text_color"
-                    android:text="@string/post_question_text"
-                    android:textSize="@dimen/font_medium"/>
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/posted_by_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_mini"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:textColor="@color/text_color2"
-                    android:text="Posted By"
-                    android:textSize="@dimen/font_small"/>
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/useful_count_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:layout_marginTop="@dimen/margin_mini"
-                    android:textColor="@color/text_color2"
-                    android:text="Posted By"
-                    android:textSize="@dimen/font_small"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/heading_text_color"
+                        android:text="Q:"
+                        android:textSize="@dimen/font_medium"/>
+                    <LinearLayout android:layout_width="match_parent"
+                                  android:orientation="vertical"
+                                  android:layout_marginLeft="@dimen/margin_mini"
+                                  android:layout_height="wrap_content">
+                        <com.application.zimplyshop.widgets.CustomTextViewBold
+                            android:id="@+id/question_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/heading_text_color"
+                            android:text="@string/post_question_text"
+                            android:textSize="@dimen/font_medium"/>
+                        <com.application.zimplyshop.widgets.CustomTextView
+                            android:id="@+id/posted_by_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_mini"
+                            android:textColor="@color/text_color2"
+                            android:text="Posted By"
+                            android:textSize="@dimen/font_small"/>
+                        <com.application.zimplyshop.widgets.CustomTextView
+                            android:id="@+id/useful_count_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_mini"
+                            android:textColor="@color/text_color2"
+                            android:text="Posted By"
+                            android:textSize="@dimen/font_small"/>
+
+                    </LinearLayout>
+                </LinearLayout>
 
                 <View android:layout_width="match_parent"
                       android:layout_height="1dp"
                       android:layout_marginTop="@dimen/margin_mini"
                       android:background="@color/separator_color"
                     ></View>
+                <LinearLayout android:layout_width="match_parent"
+                              android:orientation="horizontal"
+                              android:layout_height="wrap_content"
+                              android:layout_marginTop="@dimen/margin_mini">
 
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/answer_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_mini"
-                    android:textColor="@color/text_color2"
-                    android:text="Posted By"
-                    android:textSize="@dimen/font_medium"/>
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/reply_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:textColor="@color/text_color2"
-                    android:text="Posted By"
-                    android:textSize="@dimen/font_small"/>
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_mini"
+                        android:textColor="@color/heading_text_color"
+                        android:text="A:"
+                        android:textSize="@dimen/font_medium"/>
+                    <LinearLayout android:layout_width="match_parent"
+                                  android:orientation="vertical"
+                                  android:layout_marginLeft="@dimen/margin_mini"
+                                  android:layout_height="wrap_content">
+                        <com.application.zimplyshop.widgets.CustomTextView
+                            android:id="@+id/answer_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_mini"
+                            android:textColor="@color/text_color2"
+                            android:text="Posted By"
+                            android:textSize="@dimen/font_medium"/>
+                        <com.application.zimplyshop.widgets.CustomTextView
+                            android:id="@+id/reply_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:textColor="@color/text_color2"
+                            android:text="Posted By"
+                            android:textSize="@dimen/font_small"/>
+
+                    </LinearLayout>
+                </LinearLayout>
                 <View android:layout_width="match_parent"
                       android:layout_height="1dp"
                       android:layout_marginTop="@dimen/margin_small"
@@ -150,56 +181,89 @@
                 android:paddingTop="@dimen/margin_small"
                 android:background="@drawable/dropshadowcard"
                 android:layout_height="match_parent">
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal">
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/heading_text_color"
+                        android:text="Q:"
+                        android:textSize="@dimen/font_medium"/>
+                    <LinearLayout android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_marginLeft="@dimen/margin_mini"
+                                  android:orientation="vertical">
 
-                <com.application.zimplyshop.widgets.CustomTextViewBold
-                    android:id="@+id/question_text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                        <com.application.zimplyshop.widgets.CustomTextViewBold
+                            android:id="@+id/question_text2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/heading_text_color"
+                            android:text="@string/post_question_text"
+                            android:textSize="@dimen/font_medium"/>
+                        <com.application.zimplyshop.widgets.CustomTextView
+                            android:id="@+id/posted_by_text2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_mini"
+                            android:textColor="@color/text_color2"
+                            android:text="Posted By"
+                            android:textSize="@dimen/font_small"/>
+                        <com.application.zimplyshop.widgets.CustomTextView
+                            android:id="@+id/useful_count_text2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_mini"
+                            android:textColor="@color/text_color2"
+                            android:text="Posted By"
+                            android:textSize="@dimen/font_small"/>
 
-                    android:textColor="@color/heading_text_color"
-                    android:text="@string/post_question_text"
-                    android:textSize="@dimen/font_medium"/>
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/posted_by_text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:layout_marginTop="@dimen/margin_mini"
-                    android:textColor="@color/text_color2"
-                    android:text="Posted By"
-                    android:textSize="@dimen/font_small"/>
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/useful_count_text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_mini"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:textColor="@color/text_color2"
-                    android:text="Posted By"
-                    android:textSize="@dimen/font_small"/>
+                    </LinearLayout>
+                </LinearLayout>
                 <View android:layout_width="match_parent"
                       android:layout_height="1dp"
                       android:layout_marginTop="@dimen/margin_mini"
                       android:background="@color/separator_color">
 
                 </View>
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/answer_text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_mini"
-                    android:textColor="@color/text_color2"
-                    android:text="Posted By"
-                    android:textSize="@dimen/font_medium"/>
-                <com.application.zimplyshop.widgets.CustomTextView
-                    android:id="@+id/reply_text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_mini"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:textColor="@color/text_color2"
-                    android:text="Posted By"
-                    android:textSize="@dimen/font_small"/>
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:layout_marginTop="@dimen/margin_mini">
+                    <com.application.zimplyshop.widgets.CustomTextViewBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/margin_mini"
+                        android:textColor="@color/heading_text_color"
+                        android:text="A:"
+                        android:textSize="@dimen/font_medium"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_marginLeft="@dimen/margin_mini"
+                                  android:orientation="vertical">
+                        <com.application.zimplyshop.widgets.CustomTextView
+                            android:id="@+id/answer_text2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_mini"
+                            android:textColor="@color/text_color2"
+                            android:text="Posted By"
+                            android:textSize="@dimen/font_medium"/>
+                        <com.application.zimplyshop.widgets.CustomTextView
+                            android:id="@+id/reply_text2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_mini"
+                            android:textColor="@color/text_color2"
+                            android:text="Posted By"
+                            android:textSize="@dimen/font_small"/>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -257,7 +321,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/filter_item_text_selector"
                     android:text="NO"
-                    android:textAllCaps="true"
                     android:textSize="@dimen/font_small"/>
                 <com.application.zimplyshop.widgets.CustomTextView
                     android:id="@+id/see_all"
@@ -267,7 +330,6 @@
                     android:textColor="@color/z_rate_btn_blue_color"
                     android:gravity="center"
                     android:text="See All"
-                    android:textAllCaps="true"
                     android:textSize="@dimen/font_small"/>
             </LinearLayout>
         </LinearLayout>
