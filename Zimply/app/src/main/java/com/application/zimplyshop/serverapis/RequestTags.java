@@ -41,6 +41,9 @@ public interface RequestTags {
     String NON_LOGGED_IN_CART_CACHE = "nonloggedincartcache";
     String USER_WISHLIST = "userwishlist";
     String NOTIFICATION_LIST_REQUEST_TAG = "notificationlistrequesttag";
+    String ASKUS_QUESTIONS_REQUEST_TAG = "askusquestionsrequesttag";
+    String MY_QUESTIONS_REQUEST_TAG = "myquestionsreuesttag";
+
 
     int SIGNUP_REQUEST_TAG_BASE = 0x01;
     int SIGNUP_REQUEST_TAG_SIGNUP = 0x02;
@@ -64,6 +67,10 @@ public interface RequestTags {
     int CHANGE_PASSWORD = 0x0013;
     int NOTIFY_ME_TAG = 0x0014;
     int NOTIFICATION_SWITCH_TAG_INT = 0x0015;
+    int POST_QUESTION_REQUEST_TAG = 0x0016;
+    int DELETE_QUESTION_REQUEST_TAG = 0x0017;
+    int REVIEW_ANSWER_TAG = 0x0018;
+
     String GET_PHOTO_SINGLE = "getSinglePhotoObject";
     String GET_CITY_FROM_LL = "getCityformLL";
     String REMOVE_FROM_CART = "removeFromCart";

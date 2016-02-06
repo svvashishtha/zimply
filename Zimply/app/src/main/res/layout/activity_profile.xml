@@ -81,7 +81,19 @@
                         android:textColor="@color/white" />
                 </LinearLayout>
             </FrameLayout>
-
+            <com.application.zimplyshop.widgets.CustomTextView
+                android:id="@+id/my_questions_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height48"
+                android:layout_margin="@dimen/margin_small"
+                android:background="@drawable/dropshadowcard"
+                android:drawableLeft="@drawable/ic_settings"
+                android:drawablePadding="@dimen/margin_midsmall"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/margin_midsmall"
+                android:text="My Questions"
+                android:textSize="@dimen/font_large" />
             <LinearLayout
                 android:id="@+id/address_view"
                 android:layout_width="match_parent"
@@ -188,7 +200,6 @@
                 android:textSize="@dimen/font_large" />
 
         </LinearLayout>
-
 
     </ScrollView>
     <include layout="@layout/progress_layout" />

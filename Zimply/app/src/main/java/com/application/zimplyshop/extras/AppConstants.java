@@ -64,6 +64,8 @@ public interface AppConstants {
     String GET_ORDER_SUMMARY_URL = "ecommerce/order-summ/";
     String GET_CITY_FROM_PINCODE = "ecommerce/get-city/";
     String GET_BANNER_REQUEST = "explore/get-banner/";
+    String MY_QUESTION_LIST_URL = "/ecommerce/ques-ans-user/";
+
 
     String FILTER_CATEGORY_FRAGMENT_TAG = "filtercategoryfragmenttag";
     String FILTER_SUBCATEGORY_FRAGMENT_TAG = "filtersubcategoryfragmenttag";
@@ -73,6 +75,16 @@ public interface AppConstants {
     String ARTICLE_SORT_CATEGROY_DIALOG_TAG = "articlesortfiltercategorydialogtag";
 
     String OFFERS_LIST_URL = "explore/shop/";
+
+    String ASKUS_QUESTIONS_URL = "ecommerce/ques-ans/";
+
+    String ASKUS_QUESTIONS_SEARCH_URL = "ecommerce/search-ques/";
+
+    String POST_QUESTION_URL = "ecommerce/add-ques/";
+
+    String DELETE_QUESTION_URL = "ecommerce/delete-ques/";
+
+    String REVIEW_ANSWER_URL = "ecommerce/add-response/";
 
     int TYPE_CATEGORY = 1;
     int TYPE_SUB_CATEGORY = 2;

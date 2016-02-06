@@ -158,18 +158,22 @@ public class BaseActivity extends AppCompatActivity
 
     }
     public void showToast(String message) {
-        if (toast == null) {
-            toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        try {
+            if (toast == null) {
+                toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+            }
+            toast.setText(message);
+            //toast.setDuration(Toast.LENGTH_SHORT);
+            toast.show();
+        }catch (Exception e){
+
         }
-        toast.setText(message);
-        //toast.setDuration(Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            this.finish();
+            //this.finish();
         }
         return super.onOptionsItemSelected(item);
     }

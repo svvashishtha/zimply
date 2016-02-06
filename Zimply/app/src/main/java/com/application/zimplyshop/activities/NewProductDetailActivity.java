@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.application.zimplyshop.R;
 import com.application.zimplyshop.adapters.NewProductDetailAdapter;
 import com.application.zimplyshop.application.AppApplication;
+import com.application.zimplyshop.baseobjects.AskUsQuestionsObject;
 import com.application.zimplyshop.baseobjects.BaseCartProdutQtyObj;
 import com.application.zimplyshop.baseobjects.BaseProductListObject;
 import com.application.zimplyshop.baseobjects.ErrorObject;
@@ -75,7 +76,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     public long productId;
 
-    boolean isScannedProduct;
+    boolean isScannedProduct,isAskUsQuestionsLoaded;
 
     int width, height, widthSimilarProducts;
     double requestTime;
@@ -228,7 +229,7 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             showLoadingView();
             (findViewById(R.id.bottom_action_container)).setVisibility(View.GONE);
             changeViewVisiblity(productDetailList, View.GONE);
-        } else if (!isDestroyed && requestTag.equalsIgnoreCase(PRODUCT_DETAIL_SIMILAR_PRODUCTS_REQUEST_TAG)) {
+        } else if (!isDestroyed && requestTag.equalsIgnoreCase(ASKUS_QUESTIONS_REQUEST_TAG+1)) {
             isLoading = true;
         }
 
@@ -319,6 +320,16 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
                 adapter.addRecentlyViewed(((SimilarProductsListObject) obj).getProducts());
                 adapter.setIsFooterRemoved(true);
             }
+
+        }else if(!isDestroyed && requestTag.equalsIgnoreCase(ASKUS_QUESTIONS_REQUEST_TAG+1)){
+            isAskUsQuestionsLoaded=true;
+            if (adapter != null) {
+                adapter.addQuesAnsObjs(((AskUsQuestionsObject) obj).getAll(),((AskUsQuestionsObject) obj).getCount());
+            }
+            if(!isSimilarProductsLoaded){
+                loadSimilarProductsRequest();
+            }
+            isLoading = false;
         }
     }
 
@@ -358,6 +369,19 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             public void onMarkUnFavorite() {
                 makeUnLikeRequest();
             }
+
+            @Override
+            public void onReviewMarkUseful(int answerId, int is_useful) {
+                String url = AppApplication.getInstance().getBaseUrl()+REVIEW_ANSWER_URL;
+                List<NameValuePair> list = new ArrayList<NameValuePair>();
+                list.add(new BasicNameValuePair("ans_id", answerId+ ""));
+                list.add(new BasicNameValuePair("userid", AppPreferences.getUserID(NewProductDetailActivity.this)));
+                list.add(new BasicNameValuePair("is_useful", is_useful+""));
+
+                UploadManager.getInstance().makeAyncRequest(url, REVIEW_ANSWER_TAG, adapter.getObj().getProduct().getId() + "",
+                        OBJECT_TYPE_REVIEW_ANSWER, adapter.getObj(), list, null);
+
+            }
         });
         ((ScrollCustomizedLayoutManager) productDetailList.getLayoutManager()).setScrollEnabled(true);
         productDetailList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -384,8 +408,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
                 if ((visibleItemCount + pastVisiblesItems) >= totalItemCount
                         && !isLoading) {
-                    if (!isSimilarProductsLoaded) {
-                        loadSimilarProductsRequest();
+                    if(!isAskUsQuestionsLoaded){
+                        loadAskUsData();
                     }
                 }
 
@@ -448,6 +472,12 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
 
     }
 
+    public void loadAskUsData(){
+        String url = AppApplication.getInstance().getBaseUrl() +ASKUS_QUESTIONS_URL+"?page=1&size=2&product_id="+adapter.getObj().getProduct().getId()+(AppPreferences.isUserLogIn(this)?"&userid="+AppPreferences.getUserID(this):"");
+        GetRequestManager.getInstance().makeAyncRequest(url, ASKUS_QUESTIONS_REQUEST_TAG+1,
+                ObjectTypes.OBJECT_TYPES_ASKUS_QUESTIONS);
+
+    }
 
     public void loadRecentlyViewed() {
         int width = (getDisplayMetrics().widthPixels - (3 * getResources().getDimensionPixelSize(R.dimen.margin_small))) / 3;
@@ -599,6 +629,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             if (adapter != null) {
                 adapter.setIsFooterRemoved(true);
             }
+        }else if(!isDestroyed && requestTag.equalsIgnoreCase(ASKUS_QUESTIONS_REQUEST_TAG+1)){
+            loadSimilarProductsRequest();
         }
     }
 
@@ -839,6 +871,8 @@ public class NewProductDetailActivity extends BaseActivity implements AppConstan
             // isLoading = true;
         } else if (!isDestroyed && requestType == NOTIFY_ME_TAG) {
             progressDialog = ProgressDialog.show(this, null, "Loading. Please wait...");
+        } else if(!isDestroyed && requestType == REVIEW_ANSWER_TAG){
+            //progressDialog = ProgressDialog.show(this, null, "Loading. Please wait...");
         }
     }
 

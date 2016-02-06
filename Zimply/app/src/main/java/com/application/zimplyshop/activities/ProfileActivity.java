@@ -58,7 +58,13 @@ public class ProfileActivity extends BaseActivity implements GetRequestListener,
        // setStatusBarColor(ProfileActivity.this,R.color.z_rate_btn_blue_pressed_color);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);*/
         setLoadingVariables();
-
+        ((CustomTextView)findViewById(R.id.my_questions_view)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this,MyQuestionsActivity.class);
+                startActivity(intent);
+            }
+        });
         propic = (CircularImageView) findViewById(R.id.profile_pic);
         nameOfUser = (CustomTextViewBold) findViewById(R.id.name_user);
         emailUser = (CustomTextView) findViewById(R.id.email_user);
