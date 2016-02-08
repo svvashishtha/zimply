@@ -69,7 +69,7 @@ public class NewAdressSelectionAdapter extends RecyclerView.Adapter<RecyclerView
         if (getItemViewType(position) == TYPE_DATA) {
             ((AddressHolder) holder).address.setText(addressObjectArrayList.get(position - 1).getName() + ", "
                     + addressObjectArrayList.get(position - 1).getLine1() + ", "
-                    + ((addressObjectArrayList.get(position - 1).getLine2() != null) ?
+                    + ((addressObjectArrayList.get(position - 1).getLine2() != null  && addressObjectArrayList.get(position - 1).getLine2().length() > 0) ?
                     addressObjectArrayList.get(position - 1).getLine2() + ", " : "") +
                     addressObjectArrayList.get(position - 1).getCity() + "\nPincode-" +
                     addressObjectArrayList.get(position - 1).getPincode());
