@@ -224,6 +224,7 @@ public class AskUsQuestionsFragment extends BaseFragment implements GetRequestLi
         String url = AppApplication.getInstance().getBaseUrl()+DELETE_QUESTION_URL;
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("ques_id",((AskUsActivity)getActivity()).getReceviedObj().getId() +""));
+        list.add(new BasicNameValuePair("userid",AppPreferences.getUserID(getActivity())));
         UploadManager.getInstance().addCallback(this);
         UploadManager.getInstance().makeAyncRequest(url, DELETE_QUESTION_REQUEST_TAG, productId + "",
                 ObjectTypes.OBJECT_TYPE_DELETE_QUESTION, productId, list, null);
