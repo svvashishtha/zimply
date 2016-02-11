@@ -70,16 +70,16 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
 
             boolean exists = false;
 
-            for(BaseProductListObject product: users) {
-                if(product.getId() == user.getId())
+            for (BaseProductListObject product : users) {
+                if (product.getId() == user.getId())
                     exists = true;
             }
 
 
-            if(exists) {
-                result = (int) db.update(CACHE_TABLE_NAME, values, TYPE + "=?", new String[] {user.getId()+""});
+            if (exists) {
+                result = (int) db.update(CACHE_TABLE_NAME, values, TYPE + "=?", new String[]{user.getId() + ""});
 
-                CommonLib.ZLog("zuser addusers if ", userId + " : " +  user.getId() +"=?");
+                CommonLib.ZLog("zuser addusers if ", userId + " : " + user.getId() + "=?");
 
             } else {
                 /*if(users.size()==10){
@@ -97,14 +97,13 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
 
             db.close();
             this.close();
-        }
-        catch(Exception E) {
+        } catch (Exception E) {
             try {
                 this.close();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            result = - 1;
+            result = -1;
         }
         return result;
         // Closing database connection
@@ -117,15 +116,14 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         Cursor cursor = null;
         ArrayList<BaseProductListObject> queries = new ArrayList<BaseProductListObject>();
 
-        try{
+        try {
             db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
-            cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, USERID,TIMESTAMP,TYPE,BUNDLE }, /*CITYID + "=? AND " +*/ USERID + "=?",
-                    new String[] { /*Integer.toString(cityId),*/ Integer.toString(userId) }, null, null, TIMESTAMP + " DESC", "6");
+            cursor = db.query(CACHE_TABLE_NAME, new String[]{ID, USERID, TIMESTAMP, TYPE, BUNDLE}, /*CITYID + "=? AND " +*/ USERID + "=?",
+                    new String[]{ /*Integer.toString(cityId),*/ Integer.toString(userId)}, null, null, TIMESTAMP + " DESC", "6");
             if (cursor != null)
                 cursor.moveToFirst();
 
-            for (int i=1;i<cursor.getCount();i++)
-            {
+            for (int i = 1; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 location = (BaseProductListObject) GetRequestManager.Deserialize_Object(cursor.getBlob(4), "");
                 queries.add(location);
@@ -135,23 +133,18 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
             db.close();
             this.close();
             return queries;
-        }
-        catch (SQLiteException e) {
+        } catch (SQLiteException e) {
 
             this.close();
-        }
-        catch(Exception E)
-        {
+        } catch (Exception E) {
             try {
                 cursor.close();
                 db.close();
                 this.close();
-            }
-            catch(Exception ec) {
+            } catch (Exception ec) {
                 try {
                     db.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     this.close();
                 }
                 this.close();
@@ -160,8 +153,8 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         return queries;
     }
 
-    public CacheProductListObject getProducts(int userId,long timeStamp,int limit) {
-        CacheProductListObject resultObj=new CacheProductListObject();
+    public CacheProductListObject getProducts(int userId, long timeStamp, int limit) {
+        CacheProductListObject resultObj = new CacheProductListObject();
 
         BaseProductListObject location;
         this.getReadableDatabase();
@@ -169,19 +162,18 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         Cursor cursor = null;
         ArrayList<BaseProductListObject> queries = new ArrayList<BaseProductListObject>();
 
-        try{
+        try {
             db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
-            cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, USERID,TIMESTAMP,TYPE,BUNDLE }, USERID + "=? AND "+TIMESTAMP+"<?",
-                    new String[] {  Integer.toString(userId),timeStamp+"" }, null, null, TIMESTAMP + " DESC", limit+"");
+            cursor = db.query(CACHE_TABLE_NAME, new String[]{ID, USERID, TIMESTAMP, TYPE, BUNDLE}, USERID + "=? AND " + TIMESTAMP + "<?",
+                    new String[]{Integer.toString(userId), timeStamp + ""}, null, null, TIMESTAMP + " DESC", limit + "");
             if (cursor != null)
                 cursor.moveToFirst();
 
-            for (int i=0;i<cursor.getCount();i++)
-            {
+            for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 location = (BaseProductListObject) GetRequestManager.Deserialize_Object(cursor.getBlob(4), "");
                 queries.add(location);
-                if(i==cursor.getCount()-1){
+                if (i == cursor.getCount() - 1) {
                     resultObj.setTimeStamp(cursor.getLong(cursor.getColumnIndex(TIMESTAMP)));
                 }
             }
@@ -190,23 +182,18 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
             db.close();
             this.close();
             return resultObj;
-        }
-        catch (SQLiteException e) {
+        } catch (SQLiteException e) {
 
             this.close();
-        }
-        catch(Exception E)
-        {
+        } catch (Exception E) {
             try {
                 cursor.close();
                 db.close();
                 this.close();
-            }
-            catch(Exception ec) {
+            } catch (Exception ec) {
                 try {
                     db.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     this.close();
                 }
                 this.close();
@@ -215,52 +202,6 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         return resultObj;
     }
 
-
-    public int getProductCount(int userId) {
-       int count=0;
-
-        BaseProductListObject location;
-        this.getReadableDatabase();
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        ArrayList<BaseProductListObject> queries = new ArrayList<BaseProductListObject>();
-
-        try{
-            db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
-            cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, USERID,TIMESTAMP,TYPE,BUNDLE }, null,
-                    null, null, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                count = cursor.getCount();
-            }
-            cursor.close();
-            db.close();
-            this.close();
-            return count;
-        }
-        catch (SQLiteException e) {
-
-            this.close();
-        }
-        catch(Exception E)
-        {
-            try {
-                cursor.close();
-                db.close();
-                this.close();
-            }
-            catch(Exception ec) {
-                try {
-                    db.close();
-                }
-                catch (Exception e) {
-                    this.close();
-                }
-                this.close();
-            }
-        }
-        return count;
-    }
 
     public int removeUsers(int userId) {
 
@@ -275,19 +216,18 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
 
             db.close();
             this.close();
-        }
-        catch(Exception E) {
+        } catch (Exception E) {
             try {
                 this.close();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            result = - 1;
+            result = -1;
         }
         return result;
     }
 
-    public int removeProducts(int productId,int userId) {
+    public int removeProducts(int productId, int userId) {
 
         int result = -1;
         try {
@@ -295,25 +235,24 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
 
             SQLiteDatabase db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READWRITE, null);
 
-            result = db.delete(CACHE_TABLE_NAME, TYPE+"=?", new String[]{productId+""});
+            result = db.delete(CACHE_TABLE_NAME, TYPE + "=?", new String[]{productId + ""});
             CommonLib.ZLog("zuser product delete", productId);
 
             db.close();
             this.close();
-        }
-        catch(Exception E) {
+        } catch (Exception E) {
             try {
                 this.close();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            result = - 1;
+            result = -1;
         }
         return result;
     }
 
     public int getProductCount(int userId) {
-        int count=0;
+        int count = 0;
 
         BaseProductListObject location;
         this.getReadableDatabase();
@@ -321,9 +260,9 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
         Cursor cursor = null;
         ArrayList<BaseProductListObject> queries = new ArrayList<BaseProductListObject>();
 
-        try{
+        try {
             db = ctx.openOrCreateDatabase("/data/data/com.application.zimplyshop/databases/" + DATABASE_NAME, SQLiteDatabase.OPEN_READONLY, null);
-            cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, USERID,TIMESTAMP,TYPE,BUNDLE }, null,
+            cursor = db.query(CACHE_TABLE_NAME, new String[]{ID, USERID, TIMESTAMP, TYPE, BUNDLE}, null,
                     null, null, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -333,23 +272,18 @@ public class RecentProductsDBManager extends SQLiteOpenHelper {
             db.close();
             this.close();
             return count;
-        }
-        catch (SQLiteException e) {
+        } catch (SQLiteException e) {
 
             this.close();
-        }
-        catch(Exception E)
-        {
+        } catch (Exception E) {
             try {
                 cursor.close();
                 db.close();
                 this.close();
-            }
-            catch(Exception ec) {
+            } catch (Exception ec) {
                 try {
                     db.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     this.close();
                 }
                 this.close();
